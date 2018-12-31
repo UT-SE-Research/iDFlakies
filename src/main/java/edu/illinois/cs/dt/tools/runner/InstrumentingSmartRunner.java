@@ -8,22 +8,14 @@ import com.reedoei.testrunner.runner.TestInfoStore;
 import com.reedoei.testrunner.util.ExecutionInfo;
 import com.reedoei.testrunner.util.ExecutionInfoBuilder;
 import com.reedoei.testrunner.util.TempFiles;
-import edu.illinois.cs.dt.tools.diagnosis.instrumentation.JavaAgent;
-import edu.illinois.cs.dt.tools.diagnosis.instrumentation.StaticFieldPathManager;
-import edu.illinois.cs.dt.tools.diagnosis.instrumentation.StaticTracer;
-import edu.illinois.cs.dt.tools.diagnosis.instrumentation.TracerMode;
-import org.apache.maven.project.MavenProject;
 import scala.collection.immutable.Stream;
 import scala.util.Failure;
 import scala.util.Try;
 
-import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 public class InstrumentingSmartRunner extends SmartRunner {
-    private final String javaAgent;
     private Path outputPath;
 
     public static InstrumentingSmartRunner fromRunner(final Runner runner) {
@@ -40,9 +32,6 @@ public class InstrumentingSmartRunner extends SmartRunner {
                                      final String cp, final Map<String, String> env, final Path outputPath) {
         super(testFramework, infoStore, cp, env, outputPath);
 
-        final URL url = JavaAgent.class.getProtectionDomain().getCodeSource().getLocation();
-        this.javaAgent = url.getFile();
-
     }
 
     @Override
@@ -54,15 +43,7 @@ public class InstrumentingSmartRunner extends SmartRunner {
             builder = executionInfoBuilder;
         }
 
-        if (!StaticTracer.mode().equals(TracerMode.NONE) && javaAgent != null) {
-            return super.execution(testOrder,
-                    builder
-                            .addProperty("statictracer.tracer_path", String.valueOf(StaticFieldPathManager.modePath(StaticTracer.mode())))
-                            .javaAgent(Paths.get(javaAgent)));
-        } else {
-            return super.execution(testOrder,
-                    builder);
-        }
+        return super.execution(testOrder, builder);
     }
 
     @Override

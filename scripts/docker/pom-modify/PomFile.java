@@ -299,7 +299,7 @@ public class PomFile {
                             dependency.appendChild(depGroupId);
 
                             Node depArtifactId = doc.createElement("artifactId");
-                            depArtifactId.setTextContent("dt-fixing-tools");
+                            depArtifactId.setTextContent("idflakies");
                             dependency.appendChild(depArtifactId);
 
                             Node depVersion = doc.createElement("version");

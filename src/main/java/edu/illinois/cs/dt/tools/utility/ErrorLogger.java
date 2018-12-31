@@ -1,7 +1,6 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
-import edu.illinois.cs.dt.tools.diagnosis.DiagnoserPathManager;
 import org.apache.maven.project.MavenProject;
 
 import java.io.FileOutputStream;
@@ -12,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 
 public class ErrorLogger {
@@ -36,15 +34,6 @@ public class ErrorLogger {
         return relativePath.toString().replace("/", "-");
     }
 
-    public void writeSubjectProperties() throws IOException {
-        final Properties properties = new Properties();
-        properties.setProperty("subject.coordinates", coordinates);
-        properties.setProperty("subject.name", subjectName(project));
-
-        Files.createDirectories(DiagnoserPathManager.subjectProperties().getParent());
-        properties.store(new FileOutputStream(DiagnoserPathManager.subjectProperties().toFile()), "");
-    }
-
     public <T> Optional<T> runAndLogError(final Callable<T> callable) {
         try {
             return Optional.ofNullable(callable.call());
@@ -58,12 +47,12 @@ public class ErrorLogger {
                         try {
                             System.out.println("COPY_FAILING_TEST_OUTPUT: " + path.toAbsolutePath());
 
-                            final Path dest = DiagnoserPathManager.cachePath().resolve(path.getFileName());
+                            final Path dest = PathManager.cachePath().resolve(path.getFileName());
 
                             if (Files.exists(dest)) {
-                                Files.copy(path, DiagnoserPathManager.cachePath().resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                                Files.copy(path, PathManager.cachePath().resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);
                             } else {
-                                Files.copy(path, DiagnoserPathManager.cachePath().resolve(path.getFileName()));
+                                Files.copy(path, PathManager.cachePath().resolve(path.getFileName()));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

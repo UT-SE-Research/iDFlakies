@@ -5,7 +5,6 @@ import com.reedoei.testrunner.data.results.Result;
 import com.reedoei.testrunner.data.results.TestRunResult;
 import com.reedoei.testrunner.runner.Runner;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
-import edu.illinois.cs.dt.tools.minimizer.TestMinimizer;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,16 +37,12 @@ public class TestRun {
         return testRunId;
     }
 
-    public boolean verify(final String name, final Runner runner, final Path path) {
-        return verify(name, runner, null, path);
-    }
-
-    public boolean verify(final String dt, final Runner runner, final TestMinimizer minimizer, final Path path) {
+    public boolean verify(final String dt, final Runner runner, final Path path) {
         return IntStream.range(0, VERIFY_ROUNDS)
-                .allMatch(i -> verifyRound(dt, runner, minimizer, path, i));
+                .allMatch(i -> verifyRound(dt, runner, path, i));
     }
 
-    private boolean verifyRound(final String dt, final Runner runner, final TestMinimizer minimizer, final Path path, final int i) {
+    private boolean verifyRound(final String dt, final Runner runner, final Path path, final int i) {
         System.out.printf("Verifying %s, status: expected %s", dt, this.result);
         Result result = null;
         try {
@@ -66,12 +61,7 @@ public class TestRun {
             }
         } catch (Exception ignored) {}
 
-        if (minimizer != null) {
-            System.out.printf(", got %s, minimizer got %s\n", result, minimizer.expected());
-            return this.result.equals(result) && this.result.equals(minimizer.expected());
-        } else {
-            System.out.printf(", got %s\n", result);
-            return this.result.equals(result);
-        }
+        System.out.printf(", got %s\n", result);
+        return this.result.equals(result);
     }
 }
