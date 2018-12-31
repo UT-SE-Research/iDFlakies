@@ -1,0 +1,39 @@
+#!/usr/bin/env swipl
+
+:- initialization(main, main).
+
+:- use_module(library(filesex)).
+:- use_module(library(achelois)).
+
+main(Argv) :-
+    Argv = [Path, OutputPath|_] -> gather_results(Path, OutputPath);
+
+    format('Usage: ./gather-results <path> <output path>~n').
+
+not_target(P) :- not(atom_concat(_, 'target', P)).
+
+module_key(ProjectRoot, ModuleDir, ModuleKey) :-
+    file_base_name(ProjectRoot, BaseName),
+    relative_file_name(ModuleDir, ProjectRoot, RelPath),
+
+    % Replace / with - in name
+    atomic_list_concat(Parts, '/', RelPath),
+    include(\=(''), Parts, NonEmptyParts),
+    atomic_list_concat([BaseName|NonEmptyParts], '-', ModuleKey).
+
+gather_results(Path, Destination) :-
+    forall(
+        (
+            walk(Path, not_target, File),
+            endswith(File, '.dtfixingtools')
+        ),
+        (
+            file_directory_name(File, ModuleDir),
+            module_key(Path, ModuleDir, ModuleKey),
+
+            directory_file_path(Destination, ModuleKey, CopyDest),
+            writeln(CopyDest),
+
+            copy_directory(File, CopyDest), !
+        )).
+

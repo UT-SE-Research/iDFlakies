@@ -1,0 +1,17 @@
+#!/usr/bin/env swipl
+
+:- initialization(main, main).
+
+main([ProjectRoot, ModuleDir]) :-
+    module_key(ProjectRoot, ModuleDir, OutputDirName),
+    writeln(OutputDirName).
+
+module_key(ProjectRoot, ModuleDir, ModuleKey) :-
+    file_base_name(ProjectRoot, BaseName),
+    relative_file_name(ModuleDir, ProjectRoot, RelPath),
+
+    % Replace / with - in name
+    atomic_list_concat(Parts, '/', RelPath),
+    include(\=(''), Parts, NonEmptyParts),
+    atomic_list_concat([BaseName|NonEmptyParts], '-', ModuleKey).
+

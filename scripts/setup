@@ -1,0 +1,7 @@
+#!/usr/bin/env swipl
+
+:- initialization(main, main).
+
+main(_Argv) :-
+    pack_install('https://github.com/ReedOei/achelois/archive/0.4.6.zip', [interactive(false)]).
+

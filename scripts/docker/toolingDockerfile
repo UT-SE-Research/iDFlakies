@@ -1,0 +1,14 @@
+# docker build -t toolingdetectorbase:latest - < toolingDockerfile
+
+# Start from the base detect image
+FROM detectorbase:latest
+
+WORKDIR /home/awshi2
+USER awshi2
+
+## Install the tooling
+RUN \
+  git clone https://github.com/ReedOei/testrunner && \
+  cd testrunner/ && /home/awshi2/apache-maven/bin/mvn clean install && cd /home/awshi2 && \
+  git clone https://github.com/ReedOei/dt-fixing-tools && \
+  cd dt-fixing-tools/ && /home/awshi2/apache-maven/bin/mvn clean install && cd /home/awshi2
