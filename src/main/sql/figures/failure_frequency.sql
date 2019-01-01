@@ -7,14 +7,14 @@ from
     select fti.subject_name, test_name, count(*) as failures
     from flaky_test_info fti
     inner join detection_round dr on fti.detection_round_id = dr.id
-    where dr.round_type <> 'flaky'
+    where dr.round_type <> 'original'
     group by fti.subject_name, test_name
   ) ti
   inner join
   (
     select dr.subject_name, count(*) as rounds
     from detection_round dr
-    where dr.round_type <> 'flaky'
+    where dr.round_type <> 'original'
     group by dr.subject_name
   ) si on ti.subject_name = si.subject_name
   inner join flaky_test_classification ftc on ti.test_name = ftc.test_name

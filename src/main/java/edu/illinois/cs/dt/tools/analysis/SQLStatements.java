@@ -41,7 +41,7 @@ public class SQLStatements {
     public static final Path COUNT_PROJECTS_WITH_ODNO = Paths.get("src/main/sql/figures/count_projects_with_odno.sql");
     public static final Path COUNT_MODULES_WITH_ODNO = Paths.get("src/main/sql/figures/count_modules_with_odno.sql");
     public static final Path COUNT_FLAKY = Paths.get("src/main/sql/figures/count_flaky.sql");
-    public static final Path PROBABILITY_FAILURE = Paths.get("src/main/sql/figures/failure-frequency.sql");
+    public static final Path PROBABILITY_FAILURE = Paths.get("src/main/sql/figures/failure_frequency.sql");
     public static final Path TOTAL_NO_ORIG_AND_RANDOM = Paths.get("src/main/sql/figures/total_no_original_and_random.sql");
     public static final Path COUNT_TESTS_BY_ROUND_TYPE = Paths.get("src/main/sql/figures/count_tests_by_round_type.sql");
     public static final Path PROBABILITY_FIND_FLAKY = Paths.get("src/main/sql/figures/probability_find_flaky.sql");
@@ -54,7 +54,7 @@ public class SQLStatements {
 
     public static final Path COUNT_PROJECT_FLAKY_TESTS = Paths.get("src/main/sql/figures/count_project_flaky_test.sql") ;
     public static final Path COUNT_MODULE_FLAKY_TESTS = Paths.get("src/main/sql/figures/count_module_flaky_test.sql");
-    public static final Path FLAKY_TEST_BY_TECHNIQUE = Paths.get("src/main/sql/tables/flaky-test-by-technique.sql");
+    public static final Path FLAKY_TEST_BY_TECHNIQUE = Paths.get("src/main/sql/tables/flaky_test_by_technique.sql");
     public static final Path FAILURE_PROB_PER_TEST_PER_RUN = Paths.get("src/main/sql/tables/failure_prob_per_test_per_run.sql");
     public static final Path FAILURE_PROB_BY_ROUND = Paths.get("src/main/sql/tables/failure_prob_by_round.sql");
 

@@ -18,8 +18,8 @@ insert into flaky_test_classification
 select info.subject_name,
        info.test_name,
        case
-         when info.flaky_runs > 0 then 'flaky' -- If it was EVER flaky, then we should consider it a flaky test
-        else 'random'
+         when info.flaky_runs > 0 then 'NO' -- If it was EVER NO, then we should consider it an NO test
+        else 'OD'
       end as flaky_type
 from
 (
@@ -101,8 +101,8 @@ inner join
 
 insert into detection_round_failures
 select dr.id, dr.round_type,
-       sum(case when ftc.flaky_type = 'flaky' then 1 else 0 end),
-       sum(case when ftc.flaky_type = 'random' then 1 else 0 end)
+       sum(case when ftc.flaky_type = 'NO' then 1 else 0 end),
+       sum(case when ftc.flaky_type = 'OD' then 1 else 0 end)
 from detection_round dr
 left join flaky_test_list ftl on dr.unfiltered_id = ftl.flaky_test_list_id
 left join flaky_test ft on ftl.flaky_test_id = ft.id

@@ -218,7 +218,7 @@ public class Analysis extends StandardMain {
             !FileUtil.readFile(path.resolve("error")).contains(NoPassingOrderException.class.getSimpleName())) {
 //            insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
 
-            insertDetectionResults(name, "flaky", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+            insertDetectionResults(name, "original", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertDetectionResults(name, "random", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertDetectionResults(name, "random-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertDetectionResults(name, "reverse", path.resolve(DetectorPathManager.DETECTION_RESULTS));

@@ -8,12 +8,12 @@ import edu.illinois.cs.dt.tools.detection.filters.UniqueFilter;
 
 import java.util.List;
 
-public class FlakyDetector extends ExecutingDetector {
+public class OriginalDetector extends ExecutingDetector {
     private final List<String> tests;
     private TestRunResult origResult;
 
-    public FlakyDetector(final Runner runner, final int rounds, final List<String> tests, final TestRunResult origResult) {
-        super(runner, rounds, "flaky");
+    public OriginalDetector(final Runner runner, final int rounds, final List<String> tests, final TestRunResult origResult) {
+        super(runner, rounds, "original");
 
         this.tests = tests;
         this.origResult = origResult;
@@ -21,8 +21,8 @@ public class FlakyDetector extends ExecutingDetector {
         addFilter(new UniqueFilter());
     }
 
-    public FlakyDetector(final Runner runner, final int rounds, final List<String> tests) {
-        super(runner, rounds, "flaky");
+    public OriginalDetector(final Runner runner, final int rounds, final List<String> tests) {
+        super(runner, rounds, "original");
 
         this.tests = tests;
         this.origResult = DetectorUtil.originalResults(tests, runner);

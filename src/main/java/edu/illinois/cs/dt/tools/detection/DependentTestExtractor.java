@@ -104,7 +104,7 @@ public class DependentTestExtractor extends StandardMain {
     }
 
     private void save(final String subjectName, final DependentTestList extracted) throws IOException {
-        final Path outputFile = outputPath.resolve(subjectName + "-dt-lists.json");
+        final Path outputFile = outputPath.resolve(subjectName + "-" + DetectorPathManager.FLAKY_LIST_PATH.getFileName());
 
         if (Files.exists(outputFile)) {
             try {

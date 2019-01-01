@@ -33,7 +33,7 @@ cd /home/awshi2/${slug}
 /home/awshi2/dt-fixing-tools/scripts/docker/pom-modify/modify-project.sh .
 
 echo "*******************REED************************"
-echo "Downloading known dt-lists.json for ${slug}"
+echo "Downloading known flaky-lists.json for ${slug}"
 bash /home/awshi2/dt-fixing-tools/scripts/docker/download-dt-lists.sh
 
 # Run the plugin, get module test times

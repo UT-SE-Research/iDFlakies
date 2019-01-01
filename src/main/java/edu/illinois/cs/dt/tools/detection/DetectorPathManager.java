@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class DetectorPathManager extends PathManager {
     public static final Path DETECTION_RESULTS = Paths.get("detection-results");
-    public static final Path DT_LIST_PATH  = Paths.get("dt-lists.json");
+    public static final Path FLAKY_LIST_PATH = Paths.get("flaky-lists.json");
     public static final Path ORIGINAL_ORDER = Paths.get("original-order");
     public static final Path ERROR = Paths.get("error");
     public static final Path ORIGINAL_RESULTS_LOG = Paths.get("original-results-ids");
@@ -19,7 +19,7 @@ public class DetectorPathManager extends PathManager {
     }
 
     public static Path detectionFile() {
-        return detectionResults().resolve(DT_LIST_PATH);
+        return detectionResults().resolve(FLAKY_LIST_PATH);
     }
 
     public static Path pathWithRound(final Path path, final String testName, final int round) {

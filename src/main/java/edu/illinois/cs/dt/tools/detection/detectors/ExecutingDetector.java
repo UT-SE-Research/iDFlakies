@@ -83,7 +83,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         FileUtil.makeDirectoryDestructive(dir);
 
         final Path listPath = dir.resolve("list.txt");
-        final Path dtListPath = dir.resolve(DetectorPathManager.DT_LIST_PATH);
+        final Path dtListPath = dir.resolve(DetectorPathManager.FLAKY_LIST_PATH);
 
         final DependentTestList dtList = new DependentTestList(detect());
         System.out.println(); // End the progress line.

@@ -3,8 +3,8 @@ select i.slug, i.flaky_original,
 	   i.flaky_random_class, i.random_random_class,
 	   i.flaky_rev, i.random_rev,
 	   i.flaky_rev_class, i.random_rev_class,
-	   ifnull(fcount.n, 0) as flaky_n,
-	   ifnull(rcount.n, 0) as random_n,
+	   ifnull(fcount.n, 0) as no_n,
+	   ifnull(rcount.n, 0) as od_n,
 	   ifnull(fcount.n, 0) + ifnull(rcount.n, 0) as all_n
 from
 (
@@ -58,12 +58,12 @@ left join
 	from flaky_test_counts ftc
 	inner join subject s on s.name = ftc.subject_name
 	group by slug, flaky_type
-) fcount on fcount.slug = i.slug and fcount.flaky_type = 'flaky'
+) fcount on fcount.slug = i.slug and fcount.flaky_type = 'NO'
 left join
 (
 	select slug, flaky_type, sum(number) as n
 	from flaky_test_counts ftc
 	inner join subject s on s.name = ftc.subject_name
 	group by slug, flaky_type
-) rcount on rcount.slug = i.slug and rcount.flaky_type = 'random'
+) rcount on rcount.slug = i.slug and rcount.flaky_type = 'OD'
 

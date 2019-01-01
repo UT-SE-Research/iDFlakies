@@ -1,7 +1,6 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
 import com.reedoei.testrunner.configuration.Configuration;
-import com.reedoei.testrunner.runner.Runner;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 
 import java.util.List;
@@ -20,8 +19,8 @@ public class DetectorFactory {
             return new RandomDetector(detectorType(), runner, rounds, tests);
         } else if (detectorType().startsWith("reverse")) {
             return new ReverseDetector(runner, rounds, detectorType(), tests);
-        } else if (detectorType().equals("flaky")) {
-            return new FlakyDetector(runner, rounds, tests);
+        } else if (detectorType().equals("original")) {
+            return new OriginalDetector(runner, rounds, tests);
         } else if (detectorType().equals("smart-shuffle")) {
             return new SmartShuffleDetector(runner, rounds, tests, detectorType());
         }
