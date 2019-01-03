@@ -38,7 +38,7 @@ for line in $(cat "$subject_list"); do
     slug=$(echo ${line} | cut -d',' -f1 | rev | cut -d'/' -f1-2 | rev)
     sha=$(echo $line | cut -f2 -d",")
 
-    if ! grep -q "$slug" "$subject_list_loc"; then
+    if ! grep -Eq "$slug," "$subject_list_loc"; then
         mkdir -p "temp-subject"
         download_path="temp-subject/$slug"
         git clone "https://github.com/$slug" "temp-subject/$slug" &> /dev/null

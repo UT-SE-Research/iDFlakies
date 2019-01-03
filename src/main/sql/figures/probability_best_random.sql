@@ -1,4 +1,4 @@
-select round(avg(100.0 * cast(i.same_best_random as float) / i.t), 1)
+select round(avg(100.0 * cast(i.same_best_no as float) / i.t), 1)
 from
 (
 	select dr.subject_name,
@@ -14,6 +14,6 @@ from
 		inner join detection_round dr on drf.detection_round_id = dr.id
 		group by dr.subject_name
 	) i on dr.subject_name = i.subject_name
-	where i.best_random > 0 and dr.round_type <> 'original'
+	where i.best_od > 0 and dr.round_type <> 'original'
 	group by dr.subject_name
 ) i

@@ -143,7 +143,7 @@ public class Analysis extends StandardMain {
 
             String[] strings;
             while ((strings = reader.readNext()) != null) {
-                if (strings.length == 2) {
+                if (strings.length >= 2) {
                     insertSubjectRaw(strings[0], strings[1]);
                 }
             }

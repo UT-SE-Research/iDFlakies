@@ -239,7 +239,6 @@ group by cr.test_name;
 create view flaky_test_info as
 select distinct uft.detection_round_id,
                 uft.subject_name,
---                 uft.flaky_type as round_type,
                 case
                   -- this means that it was filtered out for being flaky and is NOT dependent
                   when fft.test_name is null then 'NO'

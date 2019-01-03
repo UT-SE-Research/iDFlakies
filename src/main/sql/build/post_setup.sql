@@ -25,8 +25,6 @@ from
 (
   select fti.subject_name,
          fti.test_name,
-  sum(case when fti.round_type = 'random' then 1 else 0 end) as random_rounds,
-  sum(case when fti.round_type = 'random-class' then 1 else 0 end) as random_class_rounds,
   sum(ifnull(cbt.total_runs, 0)) as all_confirmation_rounds,
   sum(case
     -- If total_runs is null, there were never any confirmation rounds (so it must be a flaky test)

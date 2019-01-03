@@ -1,4 +1,4 @@
-select round(avg(100.0 * cast(i.same_best_flaky as float) / i.t), 1)
+select round(avg(100.0 * cast(i.same_best_no as float) / i.t), 1)
 from
 (
 	select dr.subject_name,
