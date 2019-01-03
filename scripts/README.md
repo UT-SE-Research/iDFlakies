@@ -1,9 +1,30 @@
-# Detector
+# TODO: Update this to include information on how to generate the database
 
-The data is available in two formats: the database, and the raw data.
+# Overview
+
+The scripts in this directory are used to run the pipeline and subsequently generate the database.
+The main script to run the pipeline is `create_and_run_dockers.sh`, and can be run as follows:
+
+```
+bash create_and_run_dockers.sh <path to csv> <round num> <timeout (seconds)>
+```
+
+where `<path to csv>` is a csv file containing lines of `github url,sha`.
+
+To generate the database, you can run:
+
+```
+bash build-database.sh <output dir> <database path> <path to subject csv>
+```
+
+The `<path to subject csv>` should be the path to the `csv` file used above.
+The `<output dir>` is the directory containing all the output from every subject.
+The `<database path>` is the path to write out the database to after it has been built.
+
+# Database
 
 The database may be used to more easily explore the dataset.
-All the information found in the database comes from the raw files described below, but some information from the raw files is omitted in the database (i.e., the full output log of each test run, and the tack traces from failing tests), as it is not generally useful for querying, and greatly increases the size of the database.
+All the information found in the database comes from the raw files described below, but some information from the raw files is omitted in the database (i.e., the full output log of each test run, and the stack traces from failing tests), as it is not generally useful for querying, and greatly increases the size of the database.
 
 ## Database Format
 
