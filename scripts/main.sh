@@ -1,5 +1,7 @@
 #!/bin/bash
 
+TOOL_REPO="iDFlakies"
+
 # Argument Parsing
 if [[ $1 == "" ]] || [[ $2 == "" ]]; then
     echo "arg1 - github project repository"
@@ -15,13 +17,13 @@ project_repository=$1
 project_path=${working_dir}/$2
 project_module_path=${project_path}/$3
 
-# Dt-Fixing-Tools
+# idFlakies
 cd ${working_dir}
-if [ ! -d "dt-fixing-tools" ]; then
-    echo "Error. Please run the main.sh inside https://github.com/ReedOei/dt-fixing-tools"
+if [ ! -d "$TOOL_REPO" ]; then
+    echo "Error. Please run the main.sh inside https://github.com/idflakies/iDFlakies"
     exit
 fi
-cd dt-fixing-tools
+cd "$TOOL_REPO"
 mvn install
 
 # TestRunner
@@ -41,7 +43,7 @@ cd ${project_path}
 { time -p mvn test -fn |& tee mvn-test.log ;} 2> mvn-test-time.log
 
 # Run Necessary Setup Scripts
-cd ${working_dir}/dt-fixing-tools/scripts/docker/pom-modify
+cd ${working_dir}/$TOOL_REPO/scripts/docker/pom-modify
 bash ./modify-project.sh ${project_module_path}
 
 # Run Plugin

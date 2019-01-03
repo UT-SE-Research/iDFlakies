@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_USERNAME="idflakies"
+TOOL_REPO="iDFlakies"
+
 git rev-parse HEAD
 
 date
@@ -19,15 +22,15 @@ rounds=$2
 timeout=$3
 
 # Setup prolog stuff
-cd /home/awshi2/dt-fixing-tools/scripts/
+cd "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/"
 ./setup
 
 # Set environment up, just in case
 source ~/.bashrc
 
 # Incorporate tooling into the project, using Java XML parsing
-cd /home/awshi2/${slug}
-/home/awshi2/dt-fixing-tools/scripts/docker/pom-modify/modify-project.sh .
+cd "/home/$SCRIPT_USERNAME/${slug}"
+/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/pom-modify/modify-project.sh .
 
 # Run the plugin, get module test times
 echo "*******************REED************************"
@@ -38,7 +41,7 @@ date
 MVNOPTIONS="-Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dmaven.javadoc.skip=true"
 
 # Optional timeout... In practice our tools really shouldn't need 1hr to parse a project's surefire reports.
-timeout 1h /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Dtestplugin.className=edu.illinois.cs.dt.tools.utility.ModuleTestTimePlugin -fn -B -e |& tee module-test-time.log
+timeout 1h /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Dtestplugin.className=edu.illinois.cs.dt.tools.utility.ModuleTestTimePlugin -fn -B -e |& tee module-test-time.log
 
 
 # Run the plugin, reversing the original order (reverse class and methods)
@@ -46,7 +49,7 @@ timeout 1h /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS}
 # echo "Running testplugin for reversing the original order"
 # date
 
-# timeout 4000s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse -fn -B -e |& tee reverse_original.log
+# timeout 4000s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse -fn -B -e |& tee reverse_original.log
 
 
 # Run the plugin, reversing the original order (reverse class)
@@ -54,7 +57,7 @@ timeout 1h /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS}
 # echo "Running testplugin for reversing the class order"
 # date
 
-# timeout 4000s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse-class -fn -B -e |& tee reverse_class.log
+# timeout 4000s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse-class -fn -B -e |& tee reverse_class.log
 
 
 # Run the plugin, original order
@@ -62,7 +65,7 @@ timeout 1h /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS}
 # echo "Running testplugin for original"
 # date
 
-# timeout 3600s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=3600 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=original -fn -B -e |& tee original.log
+# timeout 3600s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=3600 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=original -fn -B -e |& tee original.log
 
 
 # Run the plugin, random class first, method second
@@ -70,7 +73,7 @@ echo "*******************REED************************"
 echo "Running testplugin for randomizemethods"
 date
 
-timeout ${timeout}s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -fn -B -e |& tee random_class_method.log
+timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -fn -B -e |& tee random_class_method.log
 
 
 # Run the plugin, random class only
@@ -78,20 +81,20 @@ timeout ${timeout}s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MV
 # echo "Running testplugin for randomizeclasses"
 # date
 
-# timeout ${timeout}s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=random-class -fn -B -e |& tee random_class.log
+# timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=random-class -fn -B -e |& tee random_class.log
 
 # Run the smart-shuffle (every test runs first and last)
-echo "*******************REED************************"
-echo "Running testplugin for smart-shuffle"
-date
-
-timeout ${timeout}s /home/awshi2/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=smart-shuffle -fn -B -e |& tee smart_shuffle.log
+#echo "*******************REED************************"
+#echo "Running testplugin for smart-shuffle"
+#date
+#
+#timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=smart-shuffle -fn -B -e |& tee smart_shuffle.log
 
 
 # Gather the results, put them up top
-RESULTSDIR=/home/awshi2/output/
+RESULTSDIR=/home/$SCRIPT_USERNAME/output/
 mkdir -p ${RESULTSDIR}
-/home/awshi2/dt-fixing-tools/scripts/gather-results $(pwd) ${RESULTSDIR}
+/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/gather-results $(pwd) ${RESULTSDIR}
 mv module_test_time.log ${RESULTSDIR}
 mv original.log ${RESULTSDIR}
 mv random_class_method.log ${RESULTSDIR}

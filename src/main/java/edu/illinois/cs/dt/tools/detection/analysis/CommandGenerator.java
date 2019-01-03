@@ -45,20 +45,20 @@ public class CommandGenerator extends StandardMain {
         System.out.println(commandQuery("numProjsResults", SQLStatements.COUNT_PROJECTS_RESULTS));
 
         System.out.println(commandQuery("numProjODTests",
-                sqlite.statement(SQLStatements.COUNT_PROJECTS_WITH_FLAKY).param("random")));
+                sqlite.statement(SQLStatements.COUNT_PROJECTS_WITH_FLAKY).param("OD")));
         System.out.println(commandQuery("numModuleODTests",
-                sqlite.statement(SQLStatements.COUNT_MODULES_WITH_FLAKY).param("random")));
+                sqlite.statement(SQLStatements.COUNT_MODULES_WITH_FLAKY).param("OD")));
 
         System.out.println(commandQuery("numProjNOTests",
-                sqlite.statement(SQLStatements.COUNT_PROJECTS_WITH_FLAKY).param("flaky")));
+                sqlite.statement(SQLStatements.COUNT_PROJECTS_WITH_FLAKY).param("NO")));
         System.out.println(commandQuery("numModuleNOTests",
-                sqlite.statement(SQLStatements.COUNT_MODULES_WITH_FLAKY).param("flaky")));
+                sqlite.statement(SQLStatements.COUNT_MODULES_WITH_FLAKY).param("NO")));
 
         System.out.println(commandQuery("numProjODNOTests", SQLStatements.COUNT_PROJECTS_WITH_ODNO));
         System.out.println(commandQuery("numModuleODNOTests", SQLStatements.COUNT_PROJECTS_WITH_ODNO));
 
-        final int numOdTests = query(sqlite.statement(SQLStatements.COUNT_FLAKY).param("random"));
-        final int numNoTests = query(sqlite.statement(SQLStatements.COUNT_FLAKY).param("flaky"));
+        final int numOdTests = query(sqlite.statement(SQLStatements.COUNT_FLAKY).param("OD"));
+        final int numNoTests = query(sqlite.statement(SQLStatements.COUNT_FLAKY).param("NO"));
         System.out.println(command("numODTests", String.valueOf(numOdTests)));
         System.out.println(command("numNOTests", String.valueOf(numNoTests)));
 
@@ -95,21 +95,21 @@ public class CommandGenerator extends StandardMain {
         System.out.println(commandQuery("percBestODOrder", "\\%", sqlite.statement(SQLStatements.PROBABILITY_BEST_RANDOM)));
         System.out.println(commandQuery("percBestNOOrder", "\\%", sqlite.statement(SQLStatements.PROBABILITY_BEST_FLAKY)));
 
-        final int numNOTestOrig = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("flaky").param("flaky"));
-        final int numNOTestRandClassMethod = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("flaky").param("random"));
-        final int numNOTestRandClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("flaky").param("random-class"));
-        final int numNOTestReverse = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("flaky").param("reverse"));
-        final int numNOTestReverseClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("flaky").param("reverse-class"));
+        final int numNOTestOrig = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("original"));
+        final int numNOTestRandClassMethod = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("random"));
+        final int numNOTestRandClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("random-class"));
+        final int numNOTestReverse = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("reverse"));
+        final int numNOTestReverseClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("reverse-class"));
         System.out.println(command("numNOTestOrig", String.valueOf(numNOTestOrig)));
         System.out.println(command("numNOTestRandClassMethod", String.valueOf(numNOTestRandClassMethod)));
         System.out.println(command("numNOTestRandClass", String.valueOf(numNOTestRandClass)));
         System.out.println(command("numNOTestReverse", String.valueOf(numNOTestReverse)));
         System.out.println(command("numNOTestReverseClass", String.valueOf(numNOTestReverseClass)));
 
-        final int numODTestReverse = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("random").param("reverse"));
-        final int numODTestReverseClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("random").param("reverse-class"));
-        final int numODTestRandClassMethod = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("random").param("random"));
-        final int numODTestRandClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("random").param("random-class"));
+        final int numODTestReverse = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("reverse"));
+        final int numODTestReverseClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("reverse-class"));
+        final int numODTestRandClassMethod = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("random"));
+        final int numODTestRandClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("random-class"));
         System.out.println(command("numODTestReverse", String.valueOf(numODTestReverse)));
         System.out.println(command("numODTestReverseClass", String.valueOf(numODTestReverseClass)));
         System.out.println(command("numODTestRandClassMethod", String.valueOf(numODTestRandClassMethod)));

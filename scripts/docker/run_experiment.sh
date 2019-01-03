@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_USERNAME="idflakies"
+TOOL_REPO="iDFlakies"
+
 # This script is the entry point script that is run inside of the Docker image
 # for running the experiment for a single project
 
@@ -16,10 +19,10 @@ if [[ "$4" =~ "$/" ]]; then
     script_to_run="$4"
 elif [[ -z "$4" ]]; then
     # The default is run_project.sh
-    script_to_run="/home/awshi2/dt-fixing-tools/scripts/docker/run_project.sh"
+    script_to_run="/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/run_project.sh"
 else
     # otherwise, assume it's relative to the docker directory
-    script_to_run="/home/awshi2/dt-fixing-tools/scripts/docker/$4"
+    script_to_run="/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/$4"
 fi
 
 slug=$1
@@ -30,24 +33,24 @@ git rev-parse HEAD
 date
 
 # Update all tooling
-su - awshi2 -c "cd /home/awshi2/dt-fixing-tools/; git pull"
+su - "$SCRIPT_USERNAME" -c "cd /home/$SCRIPT_USERNAME/$TOOL_REPO/; git pull"
 
-echo "*******************REED************************"
+echo "*******************IDFLAKIES DEBUG************************"
 echo "Running update.sh"
 date
-su - awshi2 -c "/home/awshi2/dt-fixing-tools/scripts/docker/update.sh"
+su - "$SCRIPT_USERNAME" -c "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/update.sh"
 
 # Copy the test time log, if it is in the old location. Probably can remove this line if all containers are new.
 
-if [[ -e "/home/awshi2/mvn-test-time.log" ]] && [[ ! -e "/home/awshi2/$slug/mvn-test-time.log" ]]; then
-    cp "/home/awshi2/mvn-test-time.log" "/home/awshi2/$slug"
+if [[ -e "/home/$SCRIPT_USERNAME/mvn-test-time.log" ]] && [[ ! -e "/home/$SCRIPT_USERNAME/$slug/mvn-test-time.log" ]]; then
+    cp "/home/$SCRIPT_USERNAME/mvn-test-time.log" "/home/$SCRIPT_USERNAME/$slug"
 fi
 
-# Start the script using the awshi2 user
-su - awshi2 -c "$script_to_run ${slug} ${rounds} ${timeout}"
+# Start the script using the $SCRIPT_USERNAME user
+su - "$SCRIPT_USERNAME" -c "$script_to_run ${slug} ${rounds} ${timeout}"
 
 # Change permissions of results and copy outside the Docker image (assume outside mounted under /Scratch)
 modifiedslug=$(echo ${slug} | sed 's;/;.;' | tr '[:upper:]' '[:lower:]')
-cp -r /home/awshi2/output/ /Scratch/${modifiedslug}_output/
+cp -r "/home/$SCRIPT_USERNAME/output/" "/Scratch/${modifiedslug}_output/"
 chown -R $(id -u):$(id -g) /Scratch/${modifiedslug}_output/
 chmod -R 777 /Scratch/${modifiedslug}_output/

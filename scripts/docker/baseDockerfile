@@ -33,11 +33,11 @@ RUN \
 # Use oracleJDK8 as default
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-# Set up user (awshi2)
-RUN useradd -ms /bin/bash -c "awshi2" awshi2 && echo "awshi2:docker" | chpasswd && adduser awshi2 sudo
-USER awshi2
+# Set up user (idflakies)
+RUN useradd -ms /bin/bash -c "idflakies" idflakies && echo "idflakies:docker" | chpasswd && adduser idflakies sudo
+USER idflakies
 
-WORKDIR /home/awshi2/
+WORKDIR /home/idflakies/
 
 # Install Maven 3.5.4 locally for user
 RUN \

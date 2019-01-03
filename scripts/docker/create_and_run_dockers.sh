@@ -18,7 +18,7 @@ script="$4"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-echo "*******************REED************************"
+echo "*******************IDFLAKIES DEBUG************************"
 echo "Making base image"
 date
 
@@ -28,7 +28,7 @@ if  [ $?  == 1 ]; then
     docker build -t detectorbase:latest - < baseDockerfile
 fi
 
-echo "*******************REED************************"
+echo "*******************IDFLAKIES DEBUG************************"
 echo "Making tooling image"
 date
 
@@ -50,7 +50,7 @@ for line in $(cat ${projfile}); do
     image=detector-${modifiedslug}:latest
     docker inspect ${image} > /dev/null 2>&1
     if [ $? == 1 ]; then
-        echo "*******************REED************************"
+        echo "*******************IDFLAKIES DEBUG************************"
         echo "Building docker image for project"
         date
         bash build_docker_image.sh ${image} ${modifiedslug}
