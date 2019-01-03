@@ -1,5 +1,3 @@
-# TODO: Update this to include information on how to generate the database
-
 # Overview
 
 The scripts in this directory are used to run the pipeline and subsequently generate the database.
