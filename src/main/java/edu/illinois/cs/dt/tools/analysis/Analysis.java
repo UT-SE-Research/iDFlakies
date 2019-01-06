@@ -223,10 +223,7 @@ public class Analysis extends StandardMain {
             insertDetectionResults(name, "random-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertDetectionResults(name, "reverse", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertDetectionResults(name, "reverse-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertDetectionResults(name, "smart-shuffle", path.resolve(DetectorPathManager.DETECTION_RESULTS));
 
-            insertVerificationResults(name, "smart-shuffle-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "smart-shuffle-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertVerificationResults(name, "random-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertVerificationResults(name, "random-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertVerificationResults(name, "reverse-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));

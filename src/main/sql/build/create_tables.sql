@@ -166,16 +166,6 @@ create table detection_round_failures
   od_found integer not null
 );
 
-create table minimize_test_result
-(
-  id integer primary key,
-  test_name text not null,
-  expected_run_str_id text not null,
-  expected_result text not null,
-  order_hash text not null,
-  operation_time_id integer not null
-);
-
 create table operation_time
 (
   id integer primary key,
@@ -183,14 +173,6 @@ create table operation_time
   end_time integer not null,
   elapsed_time real not null
 );
-
-create table polluter_data
-(
-  id integer primary key,
-  minimize_test_result_id integer not null,
-  dependencies text not null
-);
-
 
 create view subject_info as
 select s.name as name,
@@ -289,3 +271,4 @@ select ftc.test_name, ftc.flaky_type,
 from flaky_test_classification as ftc
 inner join confirmation_runs as cr on ftc.test_name = cr.test_name
 group by ftc.test_name, ftc.flaky_type, cr.round_type;
+

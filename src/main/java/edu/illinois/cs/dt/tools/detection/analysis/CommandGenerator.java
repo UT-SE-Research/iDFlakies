@@ -37,7 +37,6 @@ public class CommandGenerator extends StandardMain {
     protected void run() throws Exception {
         final NumberFormat percentInstance = NumberFormat.getPercentInstance();
         percentInstance.setMaximumFractionDigits(1);
-        percentInstance.setMaximumIntegerDigits(1);
 
         System.out.println(commandQuery("numTests", SQLStatements.COUNT_TESTS));
         System.out.println(commandQuery("numModules", SQLStatements.COUNT_MODULES));
@@ -122,6 +121,8 @@ public class CommandGenerator extends StandardMain {
 
         System.out.println(commandQuery("numProjFlakyTests", SQLStatements.COUNT_PROJECT_FLAKY_TESTS));
         System.out.println(commandQuery("numModuleFlakyTests", SQLStatements.COUNT_MODULE_FLAKY_TESTS));
+
+        System.out.println(commandQuery("percFailFlakyTests", "\\%", sqlite.statement(SQLStatements.PERC_FAIL_FLAKY_TESTS)));
     }
 
     private int query(final Path path) throws SQLException {

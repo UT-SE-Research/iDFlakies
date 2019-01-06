@@ -61,6 +61,8 @@ public class SQLStatements {
     public static final Path PERC_RUN_FAIL_OD = Paths.get("src/main/sql/figures/perc_run_fail_od.sql");
     public static final Path PERC_RUN_FAIL_NO = Paths.get("src/main/sql/figures/perc_run_fail_no.sql");
 
+    public static final Path PERC_FAIL_FLAKY_TESTS = Paths.get("src/main/sql/figures/perc_fail_flaky_tests.sql");
+
     static {
         ensureExists(INSERT_RAW_SUBJECT);
 
@@ -112,6 +114,8 @@ public class SQLStatements {
 
         ensureExists(PERC_RUN_FAIL_OD);
         ensureExists(PERC_RUN_FAIL_NO);
+
+        ensureExists(PERC_FAIL_FLAKY_TESTS);
     }
 
     private static void ensureExists(final Path p) {

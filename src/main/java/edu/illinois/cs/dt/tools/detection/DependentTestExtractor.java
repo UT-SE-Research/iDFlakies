@@ -17,6 +17,7 @@ import edu.illinois.cs.dt.tools.utility.TestRunParser;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,16 +64,24 @@ public class DependentTestExtractor extends StandardMain {
             System.out.println("[INFO] Extracting results from " + resultsFolder + " (" + i + " of " + allResultsFolders.size() + ")");
             final Optional<String> subjectNameOpt = readProjectName(resultsFolder);
 
+            final String subjectName;
             if (subjectNameOpt.isPresent()) {
-                save(subjectNameOpt.get(), extract(subjectNameOpt.get(), resultsFolder));
+                subjectName = subjectNameOpt.get();
             } else {
                 System.out.println("[WARNING] No subject.properties in " + resultsFolder);
-                final String subjName = StringUtils.strip(resultsFolder.getFileName().toString().replace("/", "-"), "-");
-                save(subjName, extract(subjName, resultsFolder));
+                subjectName = StringUtils.strip(resultsFolder.getFileName().toString().replace("/", "-"), "-");
+            }
+
+            if (!Files.exists(outputFilePath(subjectName))) {
+                save(subjectName, extract(subjectName, resultsFolder));
             }
 
             System.out.println();
         }
+    }
+
+    private Path outputFilePath(final String subjectName) {
+        return outputPath.resolve(subjectName + "-" + DetectorPathManager.FLAKY_LIST_PATH.getFileName());
     }
 
     private Optional<String> readProjectName(final Path resultsFolder) {
@@ -104,7 +113,7 @@ public class DependentTestExtractor extends StandardMain {
     }
 
     private void save(final String subjectName, final DependentTestList extracted) throws IOException {
-        final Path outputFile = outputPath.resolve(subjectName + "-" + DetectorPathManager.FLAKY_LIST_PATH.getFileName());
+        final Path outputFile = outputFilePath(subjectName);
 
         if (Files.exists(outputFile)) {
             try {
@@ -122,7 +131,9 @@ public class DependentTestExtractor extends StandardMain {
 
         System.out.println("[INFO] Writing dt list to (" + extracted.size() + " tests) to: " + outputFile);
 
-        Files.write(outputFile, new Gson().toJson(extracted).getBytes());
+        try (final FileWriter writer = new FileWriter(outputFile.toFile())) {
+            new Gson().toJson(extracted, writer);
+        }
     }
 
     public DependentTestList extract(final String subjectName, final Path path) throws IOException {
@@ -177,6 +188,7 @@ public class DependentTestExtractor extends StandardMain {
                     if (!testRun.result().equals(Result.PASS)) {
                         System.out.println("Creating dependent test entry (expected: " + testRun.result() + ")");
                         dependentTests.add(new DependentTest(testName, passingRun, testRun));
+                        break;
                     }
                 }
             });

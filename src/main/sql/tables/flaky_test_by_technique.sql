@@ -29,12 +29,12 @@ from
 		   case when rev.test_name is null then 0 else 1 end as rev_found,
 		   case when rev_class.test_name is null then 0 else 1 end as rev_class_found
 	  from flaky_test_classification ftc
-	  left join flaky_test_failures flaky on ftc.test_name = flaky.test_name and flaky.round_type = 'flaky'
+	  left join flaky_test_failures flaky on ftc.test_name = flaky.test_name and flaky.round_type = 'original'
 	  left join flaky_test_failures rand on ftc.test_name = rand.test_name and rand.round_type = 'random'
 	  left join flaky_test_failures rand_class on ftc.test_name = rand_class.test_name and rand_class.round_type = 'random-class'
 	  left join flaky_test_failures rev on ftc.test_name = rev.test_name and rev.round_type = 'reverse'
 	  left join flaky_test_failures rev_class on ftc.test_name = rev_class.test_name and rev_class.round_type = 'reverse-class'
-	) f on f.subject_name = ftc.subject_name and f.test_name = ftc.test_name and f.flaky_type = 'flaky'
+	) f on f.subject_name = ftc.subject_name and f.test_name = ftc.test_name and f.flaky_type = 'NO'
 	left join
 	(
 	  select ftc.subject_name, ftc.test_name, ftc.flaky_type,
@@ -44,12 +44,12 @@ from
 		   case when rev.test_name is null then 0 else 1 end as rev_found,
 		   case when rev_class.test_name is null then 0 else 1 end as rev_class_found
 	  from flaky_test_classification ftc
-	  left join flaky_test_failures flaky on ftc.test_name = flaky.test_name and flaky.round_type = 'flaky'
+	  left join flaky_test_failures flaky on ftc.test_name = flaky.test_name and flaky.round_type = 'original'
 	  left join flaky_test_failures rand on ftc.test_name = rand.test_name and rand.round_type = 'random'
 	  left join flaky_test_failures rand_class on ftc.test_name = rand_class.test_name and rand_class.round_type = 'random-class'
 	  left join flaky_test_failures rev on ftc.test_name = rev.test_name and rev.round_type = 'reverse'
 	  left join flaky_test_failures rev_class on ftc.test_name = rev_class.test_name and rev_class.round_type = 'reverse-class'
-	) r on r.subject_name = ftc.subject_name and r.test_name = ftc.test_name and r.flaky_type = 'random'
+	) r on r.subject_name = ftc.subject_name and r.test_name = ftc.test_name and r.flaky_type = 'OD'
 	group by s.slug
 ) i
 left join
