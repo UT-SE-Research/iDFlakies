@@ -1,8 +1,13 @@
-select i.slug, i.flaky_original,
-	   i.flaky_random, i.random_random,
-	   i.flaky_random_class, i.random_random_class,
-	   i.flaky_rev, i.random_rev,
-	   i.flaky_rev_class, i.random_rev_class,
+select i.slug,
+       case when ifnull(orig.number, 0) = 0 then '-' else i.flaky_original end,
+       case when ifnull(random.number, 0) = 0 then '-' else i.flaky_random end,
+       case when ifnull(random.number, 0) = 0 then '-' else i.random_random end,
+       case when ifnull(rc.number, 0) = 0 then '-' else i.flaky_random_class end,
+       case when ifnull(rc.number, 0) = 0 then '-' else i.random_random_class end,
+       case when ifnull(rev.number, 0) = 0 then '-' else i.flaky_rev end,
+       case when ifnull(rev.number, 0) = 0 then '-' else i.random_rev end,
+       case when ifnull(revc.number, 0) = 0 then '-' else i.flaky_rev_class end,
+       case when ifnull(revc.number, 0) = 0 then '-' else i.random_rev_class end,
 	   ifnull(fcount.n, 0) as no_n,
 	   ifnull(rcount.n, 0) as od_n,
 	   ifnull(fcount.n, 0) + ifnull(rcount.n, 0) as all_n
@@ -58,12 +63,53 @@ left join
 	from flaky_test_counts ftc
 	inner join subject s on s.name = ftc.subject_name
 	group by slug, flaky_type
-) fcount on fcount.slug = i.slug and fcount.flaky_type = 'NO'
+) fcount on lower(fcount.slug) = lower(i.slug) and fcount.flaky_type = 'NO'
 left join
 (
 	select slug, flaky_type, sum(number) as n
 	from flaky_test_counts ftc
 	inner join subject s on s.name = ftc.subject_name
 	group by slug, flaky_type
-) rcount on rcount.slug = i.slug and rcount.flaky_type = 'OD'
+) rcount on lower(rcount.slug) = lower(i.slug) and rcount.flaky_type = 'OD'
+left join
+(
+    select s.slug, sum(nr.number) as number
+    from num_rounds nr
+    inner join subject s on nr.name = s.name
+    where nr.round_type = 'original'
+    group by s.slug
+) orig on orig.slug = i.slug
+left join
+(
+    select s.slug, sum(nr.number) as number
+    from num_rounds nr
+    inner join subject s on nr.name = s.name
+    where nr.round_type = 'random'
+    group by s.slug
+) random on random.slug = i.slug
+left join
+(
+    select s.slug, sum(nr.number) as number
+    from num_rounds nr
+    inner join subject s on nr.name = s.name
+    where nr.round_type = 'random-class'
+    group by s.slug
+) rc on rc.slug = i.slug
+left join
+(
+    select s.slug, sum(nr.number) as number
+    from num_rounds nr
+    inner join subject s on nr.name = s.name
+    where nr.round_type = 'reverse'
+    group by s.slug
+) rev on rev.slug = i.slug
+left join
+(
+    select s.slug, sum(nr.number) as number
+    from num_rounds nr
+    inner join subject s on nr.name = s.name
+    where nr.round_type = 'reverse-class'
+    group by s.slug
+) revc on revc.slug = i.slug
+order by i.slug;
 
