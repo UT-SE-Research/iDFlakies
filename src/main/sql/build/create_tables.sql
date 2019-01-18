@@ -174,12 +174,14 @@ create table operation_time
   elapsed_time real not null
 );
 
-create view subject_info as
-select s.name as name,
-       max(trr.test_count) as test_count
-from subject as s
-inner join test_run_result as trr on trr.subject_name = s.name
-group by s.name;
+create table subject_info
+(
+  id integer primary key,
+  name text not null,
+  test_count integer not null,
+
+  foreign key(name) references subject(name)
+);
 
 create view unfiltered_flaky_tests as
 select dr.id as detection_round_id,

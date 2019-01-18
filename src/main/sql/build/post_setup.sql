@@ -1,3 +1,15 @@
+insert into subject_info (name, test_count)
+select s.name,
+       ifnull(oo.test_count, -1)
+from subject as s
+left join
+(
+  -- Optimization to group first
+  select subject_name, count(*) as test_count
+  from original_order
+  group by subject_name
+) oo on s.name = oo.subject_name;
+
 insert into confirmation_runs
 select p.test_name,
        p.round_type,

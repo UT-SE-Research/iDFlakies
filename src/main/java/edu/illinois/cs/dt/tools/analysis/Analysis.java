@@ -10,6 +10,7 @@ import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.detection.NoPassingOrderException;
+import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
@@ -216,7 +217,7 @@ public class Analysis extends StandardMain {
         // If we got a no passing order exception, don't insert any of the other results
         if (!Files.exists(path.resolve("error")) ||
             !FileUtil.readFile(path.resolve("error")).contains(NoPassingOrderException.class.getSimpleName())) {
-//            insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
+            insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
 
             insertDetectionResults(name, "original", path.resolve(DetectorPathManager.DETECTION_RESULTS));
             insertDetectionResults(name, "random", path.resolve(DetectorPathManager.DETECTION_RESULTS));
@@ -489,5 +490,4 @@ public class Analysis extends StandardMain {
             }
         });
     }
-
 }
