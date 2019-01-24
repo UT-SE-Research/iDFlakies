@@ -215,25 +215,22 @@ public class Analysis extends StandardMain {
         }
 
         // If we got a no passing order exception, don't insert any of the other results
-        if (!Files.exists(path.resolve("error")) ||
-            !FileUtil.readFile(path.resolve("error")).contains(NoPassingOrderException.class.getSimpleName())) {
-            insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
+        insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
 
-            insertDetectionResults(name, "original", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertDetectionResults(name, "random", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertDetectionResults(name, "random-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertDetectionResults(name, "reverse", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertDetectionResults(name, "reverse-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "original", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "random", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "random-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "reverse", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "reverse-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
 
-            insertVerificationResults(name, "random-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "random-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "reverse-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "reverse-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "random-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "random-class-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "reverse-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-            insertVerificationResults(name, "reverse-class-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        }
+        insertVerificationResults(name, "random-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-class-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-class-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
 
 //        sqlite.save();
 
