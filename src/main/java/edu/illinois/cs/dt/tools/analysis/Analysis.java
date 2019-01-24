@@ -6,14 +6,16 @@ import com.reedoei.eunomia.collections.ListEx;
 import com.reedoei.eunomia.io.files.FileUtil;
 import com.reedoei.eunomia.util.StandardMain;
 import com.reedoei.testrunner.data.results.Result;
+import com.reedoei.testrunner.data.results.TestResult;
 import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
-import edu.illinois.cs.dt.tools.detection.NoPassingOrderException;
+import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
+import edu.illinois.cs.dt.tools.utility.TestRunParser;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.FileInputStream;
@@ -27,8 +29,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -369,18 +375,79 @@ public class Analysis extends StandardMain {
         System.out.println("[INFO] Inserting " + roundType + " detection results for " + name
                 + " (" + paths.size() + " results)");
 
-        for (int i = 0; Files.exists(detectionResults.resolve("round" + i + ".json")); i++) {
+        final Set<String> knownFlakyTests = new HashSet<>();
 
+        int i;
+        for (i = 0; Files.exists(detectionResults.resolve("round" + i + ".json")); i++) {
             final Path p = detectionResults.resolve("round" + i  + ".json");
             final int roundNumber = roundNumber(p.getFileName().toString());
 
             try {
                 final DetectionRound round = new Gson().fromJson(FileUtil.readFile(p), DetectionRound.class);
+
+                knownFlakyTests.addAll(round.unfilteredTests().names());
+
                 insertDetectionRound(name, roundType, roundNumber, round);
             } catch (IOException | SQLException e) {
                 throw new RuntimeException(e);
             }
         }
+
+        if (roundType.equals("original")) {
+            insertOriginalResults(name, i, knownFlakyTests, path.getParent());
+        }
+    }
+
+    private void insertOriginalResults(final String subjectName, final int prevRoundNum,
+                                       final Set<String> knownFlakyTests, final Path path) throws IOException {
+        final Path results = path.resolve(RunnerPathManager.TEST_RUNS).resolve("results");
+        final Path originalOrderPath = path.resolve(DetectorPathManager.ORIGINAL_ORDER);
+
+        if (!Files.exists(originalOrderPath)) {
+            System.out.println("[WARNING] No original order for " + subjectName + " at " + originalOrderPath);
+            return;
+        }
+
+        if (!Files.isDirectory(results)) {
+            System.out.println("[WARNING] No directory " + results + " for " + subjectName);
+            return;
+        }
+
+        final List<String> originalOrder = Files.readAllLines(originalOrderPath);
+        final TestRunResult passing = passingRun(originalOrder);
+
+        final AtomicInteger counter = new AtomicInteger(prevRoundNum);
+
+        new TestRunParser(results).testRunResults()
+                .filter(trr -> trr.testOrder().equals(originalOrder))
+                .map(trr -> {
+                    final List<DependentTest> result = DetectorUtil.flakyTests(passing, trr, true);
+                    return new DetectionRound(Collections.singletonList(trr.id()), result,
+                            result.stream().filter(t -> !knownFlakyTests.contains(t.name())).collect(Collectors.toList()),
+                            -1);
+                })
+                .forEach(dr -> {
+                    try {
+                        insertDetectionRound(subjectName, "original", counter.incrementAndGet(), dr);
+                    } catch (IOException | SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    // This method exists only for the purpose of creating an all passing run that can be passed
+    // into the method to compare/generate the flaky tests
+    private TestRunResult passingRun(final List<String> originalOrder) {
+        final Map<String, TestResult> testOutcomes = new HashMap<>();
+
+        for (final String testName : originalOrder) {
+            testOutcomes.put(testName, new TestResult(testName, Result.PASS, -1, new StackTraceElement[0]));
+        }
+
+        return new TestRunResult("the id is unimportant and should never be referenced",
+                originalOrder,
+                testOutcomes,
+                new HashMap<>());
     }
 
     private void insertDetectionRound(final String name, final String roundType,
