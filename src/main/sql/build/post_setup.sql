@@ -36,18 +36,17 @@ from
 (
   select fti.subject_name,
          fti.test_name,
-  sum(ifnull(cbt.total_runs, 0)) as all_confirmation_rounds,
-  sum(case
-    -- If total_runs is null, there were never any confirmation rounds (so it must be a flaky test)
-    when ifnull(cbt.total_runs, 0) > 0 and cbt.confirmed_runs = cbt.total_runs then 0
-    else 1
-    end) as flaky_runs,
-  count(*) as total_runs
+         sum(ifnull(cbt.total_runs, 0)) as all_confirmation_rounds,
+         sum(case
+           -- If total_runs is null, there were never any confirmation rounds (so it must be a flaky test)
+           when ifnull(cbt.total_runs, 0) > 0 and cbt.confirmed_runs = cbt.total_runs then 0
+           else 1
+           end) as flaky_runs,
+         count(*) as total_runs
   from flaky_test_info as fti
   left join confirmation_by_test as cbt on fti.test_name = cbt.test_name
   group by fti.subject_name, fti.test_name
-) as info
-inner join original_order o on info.subject_name = o.subject_name and info.test_name = o.test_name;
+) as info;
 
 insert into num_rounds
 select subject_name, round_type, count(*) as number
@@ -108,13 +107,12 @@ inner join
   group by subject_name, round_type
 ) t on i.round_type = t.round_type and i.subject_name = t.subject_name;
 
-insert into detection_round_failures
+insert into detection_round_failures (detection_round_id, round_type, no_found, od_found)
 select dr.id, dr.round_type,
-       sum(case when ftc.flaky_type = 'NO' then 1 else 0 end),
-       sum(case when ftc.flaky_type = 'OD' then 1 else 0 end)
+       sum(case when ftc.flaky_type = 'NO' then 1 else 0 end) as no_found,
+       sum(case when ftc.flaky_type = 'OD' then 1 else 0 end) as od_found
 from detection_round dr
-left join flaky_test_list ftl on dr.unfiltered_id = ftl.flaky_test_list_id
-left join flaky_test ft on ftl.flaky_test_id = ft.id
-left join flaky_test_classification ftc on ft.name = ftc.test_name
-group by dr.id, dr.round_type
+left join unfiltered_flaky_tests uft on dr.id = uft.detection_round_id
+left join flaky_test_classification ftc on uft.test_name = ftc.test_name
+group by dr.id, dr.round_type;
 

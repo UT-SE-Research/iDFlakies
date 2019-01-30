@@ -9,6 +9,8 @@ if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]]; then
     exit
 fi
 
+echo "Started at: $(date)"
+
 results_folder="$1"
 database="$2"
 subject_list="$3"
@@ -71,4 +73,6 @@ mvn install -DskipTests exec:java \
 # Now that we know the flaky tests, we want to mark whether they occurred in a class with @FixMethodOrder
 # They should have already all been downloaded above, so we just need to cd and check
 bash "$scripts_folder/update-fix-method-order.sh" "$database" "$subject_list"
+
+echo "Finished at: $(date)"
 

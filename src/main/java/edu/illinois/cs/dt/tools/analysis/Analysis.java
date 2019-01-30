@@ -192,35 +192,73 @@ public class Analysis extends StandardMain {
 
         insertModuleTestTime(slug, path.resolve(DetectorPathManager.DETECTION_RESULTS).resolve("module-test-time.csv"));
 
-        if (Files.exists(path.resolve(DetectorPathManager.ORIGINAL_ORDER))) {
-            if (!sqlite.checkExists("original_order", "subject_name", name)) {
-                final List<String> originalOrder = Files.readAllLines(path.resolve(DetectorPathManager.ORIGINAL_ORDER));
-                System.out.println("[INFO] Inserting original order for " + name + " (" + originalOrder.size() + " tests)");
-
-                final Procedure statement = sqlite.statement(SQLStatements.INSERT_ORIGINAL_ORDER);
-
-                statement.beginTransaction();
-
-                for (int i = 0; i < originalOrder.size(); i++) {
-                    statement
-                            .param(name)
-                            .param(originalOrder.get(i))
-                            .param(i).addBatch();
-                }
-
-                statement.executeBatch();
-                statement.commit();
-                statement.endTransaction();
-            }
-        } else {
-            System.out.println("[WARNING] No original order found at " + path.resolve(DetectorPathManager.ORIGINAL_ORDER));
-        }
-
         if (!sqlite.checkExists("subject", name)) {
             insertSubject(name, slug, path);
         }
 
+        final Path originalOrderPath = path.resolve(DetectorPathManager.ORIGINAL_ORDER);
+        if (!Files.exists(originalOrderPath)) {
+            System.out.println("[WARNING] No original order found at " + path.resolve(DetectorPathManager.ORIGINAL_ORDER));
+            return;
+        }
+
+        final List<String> originalOrder = Files.readAllLines(originalOrderPath);
+        if (!sqlite.checkExists("original_order", "subject_name", name)) {
+            System.out.println("[INFO] Inserting original order for " + name + " (" + originalOrder.size() + " tests)");
+
+            final Procedure statement = sqlite.statement(SQLStatements.INSERT_ORIGINAL_ORDER);
+
+            statement.beginTransaction();
+
+            for (int i = 0; i < originalOrder.size(); i++) {
+                statement
+                        .param(name)
+                        .param(originalOrder.get(i))
+                        .param(i).addBatch();
+            }
+
+            statement.executeBatch();
+            statement.commit();
+            statement.endTransaction();
+        }
+
+        final Path results = path.resolve(RunnerPathManager.TEST_RUNS);
+
+        if (!Files.isDirectory(results)) {
+            System.out.println("[WARNING] No directory " + results + " for " + name);
+            return;
+        }
+
+        final boolean foundPassing =
+            new TestRunParser(results)
+            .testRunResults()
+            .anyMatch(trr -> {
+                if (trr != null) {
+                    if (trr.testOrder().equals(originalOrder)) {
+                        System.out.println("[INFO] Found an original order run: " + trr.id());
+                        if (DetectorUtil.allPass(trr)) {
+                            System.out.println("[INFO] Found a passing order for " + name);
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            });
+
         // If we got a no passing order exception, don't insert any of the other results
+        if (!foundPassing) {
+            System.out.println("[WARNING] SKIPPING: No passing order found for: " + name);
+            for (final String detectorType : new String[] { "original", "random", "random-class", "reverse", "reverse-class"}) {
+                if (Files.isDirectory(path.resolve(DetectorPathManager.DETECTION_RESULTS).resolve(detectorType))) {
+                    System.out.println("[ERROR]: " + detectorType + " results for " + name + " at " + path.resolve(DetectorPathManager.DETECTION_RESULTS).resolve(detectorType));
+                }
+            }
+            return;
+        }
+
+        System.out.println("[INFO] Found passing order for: " + name);
+
         insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
 
         insertDetectionResults(name, "original", path.resolve(DetectorPathManager.DETECTION_RESULTS));
@@ -307,7 +345,7 @@ public class Analysis extends StandardMain {
 
         final ListEx<Path> paths = listFiles(testRunResults);
 
-        final int limit = maxTestRuns > 0 ? Math.min(maxTestRuns, paths.size()) : paths.size();
+        final int limit = Math.min(maxTestRuns, paths.size());
         System.out.println("[INFO] Inserting test runs for " + name + " (" + paths.size() + " runs, saving " + limit + ")");
 
         for (int i = 0; i < limit; i++) {
@@ -367,40 +405,44 @@ public class Analysis extends StandardMain {
     private void insertDetectionResults(final String name, final String roundType, final Path path) throws IOException {
         final Path detectionResults = path.resolve(roundType);
 
-        if (!Files.exists(detectionResults)) {
-            return;
-        }
-
-        final ListEx<Path> paths = listFiles(detectionResults);
-        System.out.println("[INFO] Inserting " + roundType + " detection results for " + name
-                + " (" + paths.size() + " results)");
+        int i = 0;
 
         final Set<String> knownFlakyTests = new HashSet<>();
+        final Set<String> addedRounds = new HashSet<>();
 
-        int i;
-        for (i = 0; Files.exists(detectionResults.resolve("round" + i + ".json")); i++) {
-            final Path p = detectionResults.resolve("round" + i  + ".json");
-            final int roundNumber = roundNumber(p.getFileName().toString());
+        if (Files.exists(detectionResults)) {
+            final ListEx<Path> paths = listFiles(detectionResults);
+            System.out.println("[INFO] Inserting " + roundType + " detection results for " + name
+                    + " (" + paths.size() + " results)");
 
-            try {
-                final DetectionRound round = new Gson().fromJson(FileUtil.readFile(p), DetectionRound.class);
+            for (i = 0; Files.exists(detectionResults.resolve("round" + i + ".json")); i++) {
+                final Path p = detectionResults.resolve("round" + i  + ".json");
+                final int roundNumber = roundNumber(p.getFileName().toString());
 
-                knownFlakyTests.addAll(round.unfilteredTests().names());
+                try {
+                    final DetectionRound round = new Gson().fromJson(FileUtil.readFile(p), DetectionRound.class);
 
-                insertDetectionRound(name, roundType, roundNumber, round);
-            } catch (IOException | SQLException e) {
-                throw new RuntimeException(e);
+                    if (round != null && round.unfilteredTests() != null && round.unfilteredTests().names() != null) {
+                        knownFlakyTests.addAll(round.unfilteredTests().names());
+                        addedRounds.addAll(round.testRunIds());
+                    }
+
+                    insertDetectionRound(name, roundType, roundNumber, round);
+                } catch (IOException | SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
         if (roundType.equals("original")) {
-            insertOriginalResults(name, i, knownFlakyTests, path.getParent());
+            insertOriginalResults(name, i, addedRounds, knownFlakyTests, path.getParent());
         }
     }
 
     private void insertOriginalResults(final String subjectName, final int prevRoundNum,
+                                       final Set<String> addedRounds,
                                        final Set<String> knownFlakyTests, final Path path) throws IOException {
-        final Path results = path.resolve(RunnerPathManager.TEST_RUNS).resolve("results");
+        final Path results = path.resolve(RunnerPathManager.TEST_RUNS);
         final Path originalOrderPath = path.resolve(DetectorPathManager.ORIGINAL_ORDER);
 
         if (!Files.exists(originalOrderPath)) {
@@ -413,26 +455,31 @@ public class Analysis extends StandardMain {
             return;
         }
 
+        System.out.println("[INFO] Trying to insert all original order runs from: " + path);
+
         final List<String> originalOrder = Files.readAllLines(originalOrderPath);
-        final TestRunResult passing = passingRun(originalOrder);
 
         final AtomicInteger counter = new AtomicInteger(prevRoundNum);
 
+        final TestRunResult passing = passingRun(originalOrder);
+
         new TestRunParser(results).testRunResults()
-                .filter(trr -> trr.testOrder().equals(originalOrder))
-                .map(trr -> {
-                    final List<DependentTest> result = DetectorUtil.flakyTests(passing, trr, true);
-                    return new DetectionRound(Collections.singletonList(trr.id()), result,
-                            result.stream().filter(t -> !knownFlakyTests.contains(t.name())).collect(Collectors.toList()),
-                            -1);
-                })
-                .forEach(dr -> {
-                    try {
-                        insertDetectionRound(subjectName, "original", counter.incrementAndGet(), dr);
-                    } catch (IOException | SQLException e) {
-                        throw new RuntimeException(e);
+            .forEach(trr -> {
+                if (trr != null) {
+                    if (trr.testOrder().equals(originalOrder) && !addedRounds.contains(trr.id())) {
+                        System.out.println("Found an original order to try to insert: " + trr.id());
+                        final List<DependentTest> result = DetectorUtil.flakyTests(passing, trr, true);
+                        final DetectionRound dr = new DetectionRound(Collections.singletonList(trr.id()), result,
+                                result.stream().filter(t -> !knownFlakyTests.contains(t.name())).collect(Collectors.toList()),
+                                -1);
+                        try {
+                            insertDetectionRound(subjectName, "original", counter.incrementAndGet(), dr);
+                        } catch (IOException | SQLException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                });
+                }
+            });
     }
 
     // This method exists only for the purpose of creating an all passing run that can be passed

@@ -36,7 +36,7 @@ public class SQLStatements {
     public static final Path COUNT_MODULES = Paths.get("src/main/sql/figures/count_modules.sql");
 
     public static final Path COUNT_PROJECTS_WITH_FLAKY = Paths.get("src/main/sql/figures/count_projects_with_flaky.sql");
-    public static final Path COUNT_MODULES_WITH_FLAKY = Paths.get("src/main/sql/figures/count_projects_with_flaky.sql");
+    public static final Path COUNT_MODULES_WITH_FLAKY = Paths.get("src/main/sql/figures/count_modules_with_flaky.sql");
 
     public static final Path COUNT_PROJECTS_WITH_ODNO = Paths.get("src/main/sql/figures/count_projects_with_odno.sql");
     public static final Path COUNT_MODULES_WITH_ODNO = Paths.get("src/main/sql/figures/count_modules_with_odno.sql");

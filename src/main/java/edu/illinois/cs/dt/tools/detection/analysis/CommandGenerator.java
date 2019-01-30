@@ -99,25 +99,25 @@ public class CommandGenerator extends StandardMain {
         final int numNOTestRandClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("random-class"));
         final int numNOTestReverse = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("reverse"));
         final int numNOTestReverseClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("NO").param("reverse-class"));
-        System.out.println(command("numNOTestOrig", String.valueOf(numNOTestOrig)));
-        System.out.println(command("numNOTestRandClassMethod", String.valueOf(numNOTestRandClassMethod)));
-        System.out.println(command("numNOTestRandClass", String.valueOf(numNOTestRandClass)));
-        System.out.println(command("numNOTestReverse", String.valueOf(numNOTestReverse)));
-        System.out.println(command("numNOTestReverseClass", String.valueOf(numNOTestReverseClass)));
+        // System.out.println(command("numNOTestOrig", String.valueOf(numNOTestOrig)));
+        // System.out.println(command("numNOTestRandClassMethod", String.valueOf(numNOTestRandClassMethod)));
+        // System.out.println(command("numNOTestRandClass", String.valueOf(numNOTestRandClass)));
+        // System.out.println(command("numNOTestReverse", String.valueOf(numNOTestReverse)));
+        // System.out.println(command("numNOTestReverseClass", String.valueOf(numNOTestReverseClass)));
 
         final int numODTestReverse = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("reverse"));
         final int numODTestReverseClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("reverse-class"));
         final int numODTestRandClassMethod = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("random"));
         final int numODTestRandClass = query(sqlite.statement(SQLStatements.COUNT_TESTS_BY_ROUND_TYPE).param("OD").param("random-class"));
-        System.out.println(command("numODTestReverse", String.valueOf(numODTestReverse)));
-        System.out.println(command("numODTestReverseClass", String.valueOf(numODTestReverseClass)));
-        System.out.println(command("numODTestRandClassMethod", String.valueOf(numODTestRandClassMethod)));
-        System.out.println(command("numODTestRandClass", String.valueOf(numODTestRandClass)));
+        // System.out.println(command("numODTestReverse", String.valueOf(numODTestReverse)));
+        // System.out.println(command("numODTestReverseClass", String.valueOf(numODTestReverseClass)));
+        // System.out.println(command("numODTestRandClassMethod", String.valueOf(numODTestRandClassMethod)));
+        // System.out.println(command("numODTestRandClass", String.valueOf(numODTestRandClass)));
 
-        System.out.println(command("numFlakyTestRandClassMethod", String.valueOf(numODTestRandClassMethod + numNOTestRandClassMethod)));
-        System.out.println(command("numFlakyTestRandClass", String.valueOf(numODTestRandClass + numNOTestRandClass)));
-        System.out.println(command("numFlakyTestReverse", String.valueOf(numODTestReverse + numNOTestReverse)));
-        System.out.println(command("numFlakyTestReverseClass", String.valueOf(numODTestReverseClass + numNOTestReverseClass)));
+        // System.out.println(command("numFlakyTestRandClassMethod", String.valueOf(numODTestRandClassMethod + numNOTestRandClassMethod)));
+        // System.out.println(command("numFlakyTestRandClass", String.valueOf(numODTestRandClass + numNOTestRandClass)));
+        // System.out.println(command("numFlakyTestReverse", String.valueOf(numODTestReverse + numNOTestReverse)));
+        // System.out.println(command("numFlakyTestReverseClass", String.valueOf(numODTestReverseClass + numNOTestReverseClass)));
 
         System.out.println(commandQuery("numProjFlakyTests", SQLStatements.COUNT_PROJECT_FLAKY_TESTS));
         System.out.println(commandQuery("numModuleFlakyTests", SQLStatements.COUNT_MODULE_FLAKY_TESTS));

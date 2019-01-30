@@ -40,7 +40,7 @@ public class TableGenerator extends StandardMain {
 
     @Override
     protected void run() throws Exception {
-        System.out.println(new SubjectInfoTable().generateTable());
+        // System.out.println(new SubjectInfoTable().generateTable());
 
         System.out.println(new SQLTable(sqlite.statement(SQLStatements.FLAKY_TEST_BY_TECHNIQUE)) {
             @Override
@@ -51,23 +51,23 @@ public class TableGenerator extends StandardMain {
             }
         }.generateTable());
 
-        System.out.println(new SQLTable(sqlite.statement(SQLStatements.FAILURE_PROB_PER_TEST_PER_RUN)) {
-            @Override
-            public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
-                return table.addTotalRow("Average", CellType.DEFAULT, true)
-                        .setupCell("slug", "Average", "\\textbf{Average}")
-                        .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
-            }
-        }.generateTable());
+        // System.out.println(new SQLTable(sqlite.statement(SQLStatements.FAILURE_PROB_PER_TEST_PER_RUN)) {
+        //     @Override
+        //     public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
+        //         return table.addTotalRow("Average", CellType.DEFAULT, true)
+        //                 .setupCell("slug", "Average", "\\textbf{Average}")
+        //                 .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
+        //     }
+        // }.generateTable());
 
-        System.out.println(new SQLTable(sqlite.statement(SQLStatements.FAILURE_PROB_BY_ROUND)) {
-            @Override
-            public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
-                return table.addTotalRow("Average", CellType.DEFAULT, true)
-                        .setupCell("slug", "Average", "\\textbf{Average}")
-                        .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
-            }
-        }.generateTable());
+        // System.out.println(new SQLTable(sqlite.statement(SQLStatements.FAILURE_PROB_BY_ROUND)) {
+        //     @Override
+        //     public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
+        //         return table.addTotalRow("Average", CellType.DEFAULT, true)
+        //                 .setupCell("slug", "Average", "\\textbf{Average}")
+        //                 .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
+        //     }
+        // }.generateTable());
     }
 
     private class SubjectInfoTable extends SQLTable {
