@@ -45,27 +45,27 @@ timeout 1h /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${M
 
 
 # Run the plugin, reversing the original order (reverse class and methods)
-# echo "*******************REED************************"
-# echo "Running testplugin for reversing the original order"
-# date
+echo "*******************REED************************"
+echo "Running testplugin for reversing the original order"
+date
 
-# timeout 4000s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse -fn -B -e |& tee reverse_original.log
+timeout 4000s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse -fn -B -e |& tee reverse_original.log
 
 
 # Run the plugin, reversing the original order (reverse class)
-# echo "*******************REED************************"
-# echo "Running testplugin for reversing the class order"
-# date
+echo "*******************REED************************"
+echo "Running testplugin for reversing the class order"
+date
 
-# timeout 4000s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse-class -fn -B -e |& tee reverse_class.log
+timeout 4000s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=4000 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=reverse-class -fn -B -e |& tee reverse_class.log
 
 
 # Run the plugin, original order
-# echo "*******************REED************************"
-# echo "Running testplugin for original"
-# date
+echo "*******************REED************************"
+echo "Running testplugin for original"
+date
 
-# timeout 3600s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=3600 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=original -fn -B -e |& tee original.log
+timeout 3600s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=3600 -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=original -fn -B -e |& tee original.log
 
 
 # Run the plugin, random class first, method second
@@ -77,18 +77,18 @@ timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testp
 
 
 # Run the plugin, random class only
-# echo "*******************REED************************"
-# echo "Running testplugin for randomizeclasses"
-# date
+echo "*******************REED************************"
+echo "Running testplugin for randomizeclasses"
+date
 
-# timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=random-class -fn -B -e |& tee random_class.log
+timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=random-class -fn -B -e |& tee random_class.log
 
 # Run the smart-shuffle (every test runs first and last)
-#echo "*******************REED************************"
-#echo "Running testplugin for smart-shuffle"
-#date
-#
-#timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=smart-shuffle -fn -B -e |& tee smart_shuffle.log
+echo "*******************REED************************"
+echo "Running testplugin for smart-shuffle"
+date
+
+timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=smart-shuffle -fn -B -e |& tee smart_shuffle.log
 
 
 # Gather the results, put them up top
