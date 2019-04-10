@@ -23,8 +23,29 @@ import java.util.stream.Stream;
 public class DetectorUtil {
 
     //
+    private static boolean analyzed = false;
+    private static List<String> passOriginalOrder = new ArrayList();
     private static List<String> NODs = new ArrayList();
     private static List<String> consistentlyFail = new ArrayList();
+
+    public static List<String> getPassOriginalOrder(){
+        if(analyzed){
+            throw new NoPassingOrderException("PassOriginalOrder haven't be created");
+        }
+        return passOriginalOrder;
+    }
+    public static List<String> getNODs(){
+        if(analyzed){
+            throw new NoPassingOrderException("NODs haven't be created");
+        }
+        return NODs;
+    }
+    public static List<String> consistentlyFail(){
+        if(analyzed){
+            throw new NoPassingOrderException("consistentlyFail haven't be created");
+        }
+        return consistentlyFail;
+    }
     //
 
     public static TestRunResult originalResults(final List<String> originalOrder, final Runner runner) {
@@ -65,7 +86,7 @@ public class DetectorUtil {
                     System.out.println(str);
                     TestResult temp = origResult.results().get(str); //get the test result for specific string from map
                     if(!(temp.result().equals(Result.PASS) || temp.result().equals(Result.SKIPPED))) {
-                        int timesOfFAIL = 1; // need to be modified
+                        int timesOfFAIL = 1;
                         if(record.containsKey(str)) {
                             timesOfFAIL += record.get(str);
                         }
@@ -96,20 +117,25 @@ public class DetectorUtil {
                 Integer value = record.get(str);
                 if(value >= tolerance) {
                     newOrder.remove(str);
+                    String typeOfRemovedTest;
                     if(value == originalOrderTries){
                         consistentlyFail.add(str);
+                        typeOfRemovedTest = "consistentlyFail";
                     } else {
                         NODs.add(str);
+                        typeOfRemovedTest = "NOD";
                     }
+                    System.out.println(str + " removed (" + typeOfRemovedTest + ")");
                     break; //depend on our configuration - delete xxx tests all together or one by one
                 }
             }
             //with newOrder, rerun the function
-            origResult = originalResults(newOrder, runner);
+            origResult = DetectorUtil.originalResults(newOrder, runner); //added "DetectorUtil." before originalResults
+            passOriginalOrder = newOrder;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //}
         } else {
-            System.out.println("-------------------------------[TEST RESULT]-------------------------------");
+            System.out.println("-------------------------------<TEST RESULT>-------------------------------");
             System.out.println("Passing Order");
             for (Iterator iter = newOrder.iterator(); iter.hasNext();) {
                 String str = (String) iter.next();
@@ -125,9 +151,8 @@ public class DetectorUtil {
                 String str = (String) iter.next();
                 System.out.println(str);
             }
-            System.out.println("-------------------------------[TEST RESULT]-------------------------------\"");
+            System.out.println("-------------------------------<TEST RESULT>-------------------------------\"");
         }
-
         return origResult;
     }
 
