@@ -1,9 +1,9 @@
 package edu.illinois.cs.dt.tools.detection.classifiers;
 
 import com.reedoei.eunomia.collections.ListUtil;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
 import edu.illinois.cs.dt.tools.utility.MD5;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.util.HashMap;
 import java.util.HashSet;

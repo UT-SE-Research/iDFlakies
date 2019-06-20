@@ -1,8 +1,8 @@
 package edu.illinois.cs.dt.tools.runner.data;
 
 import com.google.gson.Gson;
-import com.reedoei.testrunner.configuration.Configuration;
-import com.reedoei.testrunner.runner.Runner;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.runner.Runner;
 
 import java.nio.file.Path;
 

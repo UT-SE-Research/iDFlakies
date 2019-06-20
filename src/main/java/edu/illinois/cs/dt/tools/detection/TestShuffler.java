@@ -6,10 +6,10 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListUtil;
 import com.reedoei.eunomia.collections.RandomList;
 import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.testrunner.configuration.Configuration;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.utility.MD5;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.io.IOException;
 import java.nio.file.Files;

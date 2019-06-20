@@ -1,7 +1,7 @@
 package edu.illinois.cs.dt.tools.utility;
 
-import com.reedoei.testrunner.mavenplugin.TestPlugin;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
+import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
 import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 

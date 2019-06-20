@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListEx;
 import com.reedoei.eunomia.io.files.FileUtil;
 import com.reedoei.eunomia.util.StandardMain;
-import com.reedoei.testrunner.data.results.Result;
-import com.reedoei.testrunner.data.results.TestResult;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.analysis.ResultDirVisitor;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.testrunner.data.results.Result;
+import edu.illinois.cs.testrunner.data.results.TestResult;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.io.IOException;
 import java.nio.file.Files;

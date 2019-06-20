@@ -1,7 +1,7 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
-import com.reedoei.testrunner.configuration.Configuration;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 
 import java.util.List;
 

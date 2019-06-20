@@ -2,8 +2,8 @@ package edu.illinois.cs.dt.tools.runner;
 
 import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;

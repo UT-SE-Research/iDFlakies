@@ -1,9 +1,9 @@
 package edu.illinois.cs.dt.tools.detection.filters;
 
-import com.reedoei.testrunner.runner.Runner;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.detection.filters.Filter;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.testrunner.runner.Runner;
 
 import java.util.Random;
 

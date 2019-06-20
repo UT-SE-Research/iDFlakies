@@ -1,7 +1,7 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import com.google.common.base.Preconditions;
-import com.reedoei.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;

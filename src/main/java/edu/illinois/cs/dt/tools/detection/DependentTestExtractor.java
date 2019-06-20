@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListEx;
 import com.reedoei.eunomia.io.files.FileUtil;
 import com.reedoei.eunomia.util.StandardMain;
-import com.reedoei.testrunner.data.results.Result;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.analysis.ResultDirVisitor;
 import edu.illinois.cs.dt.tools.detection.classifiers.DependentClassifier;
 import edu.illinois.cs.dt.tools.detection.classifiers.NonorderClassifier;
@@ -14,6 +12,8 @@ import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
 import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.dt.tools.utility.TestRunParser;
+import edu.illinois.cs.testrunner.data.results.Result;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;

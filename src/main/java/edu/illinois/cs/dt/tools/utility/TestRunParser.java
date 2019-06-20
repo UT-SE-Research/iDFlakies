@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListEx;
 import com.reedoei.eunomia.collections.PairStream;
 import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.io.IOException;
 import java.nio.file.Files;

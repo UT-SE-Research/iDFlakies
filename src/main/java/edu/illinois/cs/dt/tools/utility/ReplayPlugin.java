@@ -2,12 +2,12 @@ package edu.illinois.cs.dt.tools.utility;
 
 import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.testrunner.configuration.Configuration;
-import com.reedoei.testrunner.data.results.TestRunResult;
-import com.reedoei.testrunner.mavenplugin.TestPlugin;
-import com.reedoei.testrunner.mavenplugin.TestPluginPlugin;
-import com.reedoei.testrunner.runner.Runner;
-import com.reedoei.testrunner.runner.RunnerFactory;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
+import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.runner.Runner;
+import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import org.apache.maven.project.MavenProject;
 import scala.Option;
 import scala.util.Try;

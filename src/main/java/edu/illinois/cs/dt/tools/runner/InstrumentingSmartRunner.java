@@ -1,13 +1,13 @@
 package edu.illinois.cs.dt.tools.runner;
 
-import com.reedoei.testrunner.data.framework.TestFramework;
-import com.reedoei.testrunner.data.results.TestRunResult;
-import com.reedoei.testrunner.runner.Runner;
-import com.reedoei.testrunner.runner.SmartRunner;
-import com.reedoei.testrunner.runner.TestInfoStore;
-import com.reedoei.testrunner.util.ExecutionInfo;
-import com.reedoei.testrunner.util.ExecutionInfoBuilder;
-import com.reedoei.testrunner.util.TempFiles;
+import edu.illinois.cs.testrunner.data.framework.TestFramework;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
+import edu.illinois.cs.testrunner.runner.Runner;
+import edu.illinois.cs.testrunner.runner.SmartRunner;
+import edu.illinois.cs.testrunner.runner.TestInfoStore;
+import edu.illinois.cs.testrunner.util.ExecutionInfo;
+import edu.illinois.cs.testrunner.util.ExecutionInfoBuilder;
+import edu.illinois.cs.testrunner.util.TempFiles;
 import scala.collection.immutable.Stream;
 import scala.util.Failure;
 import scala.util.Try;

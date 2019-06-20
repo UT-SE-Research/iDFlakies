@@ -1,7 +1,7 @@
 package edu.illinois.cs.dt.tools.detection.filters;
 
-import com.reedoei.testrunner.runner.SmartRunner;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.testrunner.runner.SmartRunner;
 
 public class FlakyFilter implements Filter {
     private final SmartRunner runner;

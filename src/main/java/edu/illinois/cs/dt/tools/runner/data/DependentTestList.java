@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListUtil;
 import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.testrunner.data.results.Result;
-import com.reedoei.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.data.results.Result;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

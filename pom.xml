@@ -34,9 +34,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.reedoei</groupId>
+            <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-maven-plugin</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>

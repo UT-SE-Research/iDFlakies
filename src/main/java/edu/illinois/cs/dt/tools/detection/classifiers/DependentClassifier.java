@@ -1,9 +1,9 @@
 package edu.illinois.cs.dt.tools.detection.classifiers;
 
-import com.reedoei.testrunner.data.results.Result;
-import com.reedoei.testrunner.data.results.TestResult;
-import com.reedoei.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
+import edu.illinois.cs.testrunner.data.results.Result;
+import edu.illinois.cs.testrunner.data.results.TestResult;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.util.HashMap;
 import java.util.HashSet;
