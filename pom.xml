@@ -9,6 +9,8 @@
     <version>1.0.0</version>
 
     <name>iDFlakies</name>
+    <description>A tool for detecting flaky tests</description>
+    <url>https://github.com/idflakies/iDFlakies</url>
 
     <developers>
         <developer>
