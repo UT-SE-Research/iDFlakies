@@ -20,3 +20,15 @@ bash create_and_run_dockers.sh <path to csv> <round num> <timeout (seconds)>
 
 The output is explained in depth in `scripts/README.md`
 
+# Cite
+
+If you use iDFlakies, please cite our corresponding [ICST paper](http://winglam2.web.engr.illinois.edu/publications/2019/LamETAL19iDFlakies.pdf):
+```
+@inproceedings{LamETAL2019ICST,
+    author    = {Lam, Wing and Oei, Reed and Shi, August and Marinov, Darko and Xie, Tao},
+    title     = {iDFlakies: {A} Framework for Detecting and Partially Classifying Flaky Tests},
+    booktitle = {12th {IEEE} Conference on Software Testing, Validation and Verification, {ICST} 2019, Xi'an, China, April 22-27, 2019},
+    pages     = {312--322},
+    year      = {2019},
+}
+```
