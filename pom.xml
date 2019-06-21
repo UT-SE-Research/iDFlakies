@@ -8,6 +8,36 @@
     <artifactId>idflakies</artifactId>
     <version>1.0.0</version>
 
+    <name>${project.artifactId></name>
+
+    <developers>
+        <developer>
+            <name>Wing Lam</name>
+            <email>winglam2@illinois.edu</email>
+        </developer>
+        <developer>
+            <name>Reed Oei</name>
+            <email>reedoei2@illinois.edu</email>
+        </developer>
+        <developer>
+            <name>August Shi</name>
+            <email>awshi2@illinois.edu</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>University of Illinois/NCSA Open Source License</name>
+            <url>https://opensource.org/licenses/NCSA</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:idflakies/iDFlakies.git</connection>
+        <developerConnection>scm:git:git@github.com:idflakies/iDFlakies.git</developerConnection>
+        <url>git@github.com:idflakies/iDFlakies.git</url>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
