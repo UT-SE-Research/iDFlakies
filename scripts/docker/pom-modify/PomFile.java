@@ -303,7 +303,7 @@ public class PomFile {
                             dependency.appendChild(depArtifactId);
 
                             Node depVersion = doc.createElement("version");
-                            depVersion.setTextContent("1.0.0-SNAPSHOT");
+                            depVersion.setTextContent("1.0.0");
                             dependency.appendChild(depVersion);
                         }
                         dependencies.appendChild(dependency);
