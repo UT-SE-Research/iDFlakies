@@ -13,10 +13,12 @@ import scala.util.Failure;
 import scala.util.Try;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class InstrumentingSmartRunner extends SmartRunner {
     private Path outputPath;
+    private String agent;
 
     public static InstrumentingSmartRunner fromRunner(final Runner runner) {
         if (runner instanceof SmartRunner) {
@@ -34,6 +36,10 @@ public class InstrumentingSmartRunner extends SmartRunner {
 
     }
 
+    public void setAgent(String agent) {
+        this.agent = agent;
+    }
+
     @Override
     public ExecutionInfo execution(final Stream<String> testOrder, final ExecutionInfoBuilder executionInfoBuilder) {
         final ExecutionInfoBuilder builder;
@@ -43,7 +49,12 @@ public class InstrumentingSmartRunner extends SmartRunner {
             builder = executionInfoBuilder;
         }
 
-        return super.execution(testOrder, builder);
+        // Attach the agent if it is set from the outside
+        if (this.agent != null) {
+            return super.execution(testOrder, builder.javaAgent(Paths.get(this.agent)));
+        } else{
+            return super.execution(testOrder, builder);
+        }
     }
 
     @Override

@@ -1,0 +1,4 @@
+Premain-Class: edu.illinois.cs.dt.tools.poldet.instrumentation.MainAgent
+Can-Retransform-Classes: true
+Can-Redefine-Classes: true
+Agent-Class: edu.illinois.cs.dt.tools.poldet.instrumentation.MainAgent
