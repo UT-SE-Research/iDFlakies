@@ -7,13 +7,9 @@ FROM ubuntu:16.04
 RUN \
   apt-get update && \
   apt-get install -y software-properties-common && \
-# Install oracleJDK8
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
+# Install openJDK8
   apt-get update && \
-  apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer && \
+  apt-get install -y openjdk-8-jdk && \
 # Install prolog
   apt-add-repository ppa:swi-prolog/stable && \
   apt-get update && \
@@ -28,10 +24,11 @@ RUN \
 # Install misc
   apt-get update && \
   apt-get install -y sudo && \
-  apt-get install -y vim
+  apt-get install -y vim && \
+  apt-get install -y wget
 
-# Use oracleJDK8 as default
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+# Use openJDK8 as default
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 
 # Set up user (idflakies)
 RUN useradd -ms /bin/bash -c "idflakies" idflakies && echo "idflakies:docker" | chpasswd && adduser idflakies sudo
