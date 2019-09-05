@@ -10,7 +10,7 @@ projfile=$1
 for line in $(cat ${projfile}); do
     # Create name of image for each project, then delete it
     slug=$(echo ${line} | cut -d',' -f1 | rev | cut -d'/' -f1-2 | rev)
-    modifiedslug=$(echo ${slug} | sed 's;/;.;' | tr '[:upper:]' '[:lower:]')
+    modifiedslug=$(echo ${slug} | gsed 's;/;.;' | tr '[:upper:]' '[:lower:]')
     image=detector-${modifiedslug}:latest
     docker rmi ${image} 2> /dev/null
 
