@@ -56,7 +56,7 @@ for line in $(cat "$subject_list"); do
         loc=$(echo $c | cut -f5 -d",")
         test_loc=$(echo $tc | cut -f5 -d",")
 
-        echo "$slug,$sha,$loc,$test_loc" |& tee -a "$subject_list_loc"
+        echo "$slug,$sha,$loc,$test_loc" 2>&1 | tee -a "$subject_list_loc"
     else
         echo "$slug already present"
     fi
