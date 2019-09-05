@@ -7,7 +7,7 @@ This repository contains tools for detecting/classifying flaky tests.
 The main script is located in `scripts/docker/create_and_run_dockers.sh`.
 To use the script, you will need a `csv` file containing the GitHub URL and SHA that you wish to run iDFlakies on, one per line. This tool also requires [cloc](https://github.com/AlDanial/cloc) to be installed.
 
-For Mac users, [gnu-sed](https://www.gnu.org/software/sed/) must be installed. There is also a mac version of the main script located in `scripts/docker/create_and_run_dockers_mac.sh`
+For Mac users, [gnu-sed](https://www.gnu.org/software/sed/) must be installed. There is also a Mac version of the main script located in `scripts/docker/create_and_run_dockers_mac.sh`
 
 For example:
 ```
@@ -34,3 +34,5 @@ If you use iDFlakies, please cite our corresponding [ICST paper](http://winglam2
     year      = {2019},
 }
 ```
+
+Additional information about the projects analyzed in the paper can be found [here](https://sites.google.com/view/flakytestdataset/home)
