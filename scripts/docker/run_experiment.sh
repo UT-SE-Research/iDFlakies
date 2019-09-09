@@ -15,7 +15,7 @@ if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]]; then
 fi
 
 # If it's an absolute path, just use it
-if [[ "$4" =~ "$/" ]]; then
+if [[ "$4" =~ ^/ ]]; then
     script_to_run="$4"
 elif [[ -z "$4" ]]; then
     # The default is run_project.sh
