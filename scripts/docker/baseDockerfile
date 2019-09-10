@@ -40,7 +40,7 @@ WORKDIR /home/idflakies/
 RUN \
   wget http://mirrors.ibiblio.org/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz && \
   tar -xzf apache-maven-3.5.4-bin.tar.gz && mv apache-maven-3.5.4/ apache-maven/ && \
-  echo 'export JAVA_HOME=/usr/lib/jvm/java-8-oracle' >> ~/.bashrc && \
+  echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/' >> ~/.bashrc && \
   echo 'export M2_HOME=${HOME}/apache-maven' >> ~/.bashrc && \
   echo 'export MAVEN_HOME=${HOME}/apache-maven' >> ~/.bashrc && \
   echo 'export PATH=${M2_HOME}/bin:${PATH}' >> ~/.bashrc

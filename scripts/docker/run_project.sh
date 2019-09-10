@@ -25,9 +25,6 @@ timeout=$3
 cd "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/"
 ./setup
 
-# Set environment up, just in case
-source ~/.bashrc
-
 # Incorporate tooling into the project, using Java XML parsing
 cd "/home/$SCRIPT_USERNAME/${slug}"
 /home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/pom-modify/modify-project.sh .
