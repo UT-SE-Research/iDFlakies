@@ -87,20 +87,11 @@ date
 
 timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -Ddetector.detector_type=smart-shuffle -fn -B -e |& tee smart_shuffle.log
 
-
 # Gather the results, put them up top
 RESULTSDIR=/home/$SCRIPT_USERNAME/output/
 mkdir -p ${RESULTSDIR}
 /home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/gather-results $(pwd) ${RESULTSDIR}
-mv module_test_time.log ${RESULTSDIR}
-mv original.log ${RESULTSDIR}
-mv random_class_method.log ${RESULTSDIR}
-mv random_class.log ${RESULTSDIR}
-mv reverse_original.log ${RESULTSDIR}
-mv reverse_class.log ${RESULTSDIR}
-mv mvn-test.log ${RESULTSDIR}
-mv mvn-test-time.log ${RESULTSDIR}
-
+mv *.log ${RESULTSDIR}/
 
 echo "*******************REED************************"
 echo "Finished run_project.sh"
