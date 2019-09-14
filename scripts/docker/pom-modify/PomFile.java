@@ -55,6 +55,9 @@ public class PomFile {
     private List<String> testClasses = new ArrayList<String>();
     private List<String> dependencyIds = new ArrayList<String>();
 
+    private static String iDFlakiesVersion;
+    private static boolean testrunnerPluginExists = false;
+
     public PomFile(String pom) {
         this.pom = pom;
         try {
@@ -82,6 +85,35 @@ public class PomFile {
 
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(pomFile);
+
+	    // If pom file already patched, stop right here
+	    NodeList plugins = doc.getElementsByTagName("plugin");
+	    pomPatched:
+	    for (int i = 0; i < plugins.getLength(); i++){
+		Node plugin = plugins.item(i);
+		if (!plugin.getParentNode().getParentNode().getNodeName().equals("build"))
+		    continue;
+		NodeList pluginChildren = plugin.getChildNodes();
+		boolean isFromIllinois = false;
+		boolean isTestrunnerPlugin = false;
+		for (int j = 0; j < pluginChildren.getLength(); j++){
+		    String pluginChildText = pluginChildren.item(j).getTextContent();
+		    if (pluginChildText.equals("edu.illinois.cs")){
+			isFromIllinois = true;
+		    }
+		    if (pluginChildText.equals("testrunner-maven-plugin")){
+			isTestrunnerPlugin = true;
+		    }
+		    if (isFromIllinois && isTestrunnerPlugin){
+			testrunnerPluginExists = true;
+			break pomPatched;
+		    }
+		}
+	    }
+	    if (testrunnerPluginExists){
+		return;
+	    }
+	    
 
             // First find groupId by looking at parent
             if (doc.getElementsByTagName("parent").getLength() == 1) {
@@ -303,7 +335,7 @@ public class PomFile {
                             dependency.appendChild(depArtifactId);
 
                             Node depVersion = doc.createElement("version");
-                            depVersion.setTextContent("1.0.0");
+                            depVersion.setTextContent(iDFlakiesVersion);
                             dependency.appendChild(depVersion);
                         }
                         dependencies.appendChild(dependency);
@@ -439,6 +471,11 @@ public class PomFile {
     }
 
     public static void main(String[] args) {
+	if (args.length != 1){
+	    System.out.print("Usage: java PomFile <iDFlakies version number>\n");
+	    return;
+	}
+	iDFlakiesVersion = args[0];
         InputStreamReader isReader = new InputStreamReader(System.in);
         BufferedReader bufReader = new BufferedReader(isReader);
         Map<String, PomFile> mapping = new HashMap<String, PomFile>();
@@ -447,6 +484,9 @@ public class PomFile {
             // First create objects out of all the pom.xml files passed in
             while ((input = bufReader.readLine()) != null) {
                 PomFile p = new PomFile(input);
+		if (testrunnerPluginExists){
+		    return;
+		}
                 mapping.put(p.getArtifactId(), p);
             }
 
