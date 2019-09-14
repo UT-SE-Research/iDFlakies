@@ -21,13 +21,15 @@ slug=$1
 rounds=$2
 timeout=$3
 
+iDFlakiesVersion=1.0.0
+
 # Setup prolog stuff
 cd "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/"
 ./setup
 
 # Incorporate tooling into the project, using Java XML parsing
 cd "/home/$SCRIPT_USERNAME/${slug}"
-/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/pom-modify/modify-project.sh .
+/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/docker/pom-modify/modify-project.sh . $iDFlakiesVersion
 
 # Run the plugin, get module test times
 echo "*******************REED************************"
