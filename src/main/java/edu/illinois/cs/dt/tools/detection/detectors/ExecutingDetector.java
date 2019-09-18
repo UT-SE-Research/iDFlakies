@@ -99,7 +99,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         private final long origStartTimeMs = System.currentTimeMillis();
         private long startTimeMs = System.currentTimeMillis();
         private long previousStopTimeMs = System.currentTimeMillis();
-	private boolean roundsAreTotal = Boolean.parseBoolean(Configuration.config().getProperty("detector.roundsemantics.total", "false"));
+	private boolean roundsAreTotal = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.roundsemantics.total", "false"));
 
         private int i = 0;
 
