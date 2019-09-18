@@ -21,8 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 
 public class GetMavenTestOrder extends StandardMain {
+
+    private boolean mvnTestMustPass = Boolean.parseBoolean(Configuration.config().getProperty("dt.mvn_test.must_pass","true"));
+    
     @Override
     protected void run() throws Exception {
         final List<String> classOrder = getClassOrder(mvnTestLog.toFile());
@@ -170,11 +174,13 @@ public class GetMavenTestOrder extends StandardMain {
         int errors = Integer.parseInt(rootElement.getAttribute("errors"));
         int failures = Integer.parseInt(rootElement.getAttribute("failures"));
 
-        if (errors != 0 || failures != 0) {
-            // errors/failures found in the test suite from running mvn test.
-            // this test suite should not proceed to use detectors
-            throw new RuntimeException("Failures or errors occurred in mvn test");
-        }
+	if (mvnTestMustPass){
+	    if (errors != 0 || failures != 0) {
+		// errors/failures found in the test suite from running mvn test.
+		// this test suite should not proceed to use detectors
+		throw new RuntimeException("Failures or errors occurred in mvn test");
+	    }
+	}
 
         className = rootElement.getAttribute("name");
         testTime = Double.parseDouble(rootElement.getAttribute("time"));
