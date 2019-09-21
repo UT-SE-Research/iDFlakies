@@ -1,13 +1,13 @@
 package edu.illinois.cs.dt.tools.poldet;
 
-import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.data.results.Result;
-import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.dt.tools.detection.DetectorPlugin;
 import edu.illinois.cs.dt.tools.poldet.instrumentation.MainAgent;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.utility.ErrorLogger;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.Result;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;

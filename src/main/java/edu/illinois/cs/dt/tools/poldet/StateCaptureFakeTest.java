@@ -36,13 +36,11 @@ public class StateCaptureFakeTest {
         }
 
         // Write it out
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(".dtfixingtools/loadedclasses"));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(".dtfixingtools/loadedclasses"))) {
             for (String clz : classes) {
                 writer.write(clz);
                 writer.write("\n");
             }
-            writer.close();
         } catch (IOException ex) {
         }
     }
@@ -66,8 +64,25 @@ public class StateCaptureFakeTest {
                 Class.forName(clz);
             } catch (Exception ex) {
                 // If cannot load, just move on
+            } catch (NoClassDefFoundError err) {
+                // If cannot load, just move on
             }
         }
+    }
+
+    @Test
+    public void before() {
+        StateCapture.captureBefore("candidate");
+    }
+
+    @Test
+    public void after() {
+        StateCapture.captureAfter("candidate");
+    }
+
+    @Test
+    public void checkHasPolluters() {
+        assertEquals(0, StateCapture.getPolluters().size());
     }
 
     @Test
@@ -82,5 +97,12 @@ public class StateCaptureFakeTest {
         } catch (IOException ex) {
         }
         assertEquals(0, StateCapture.getPolluters().size());
+    }
+
+    @Test
+    public void outputDifferingRoots() {
+        for (String root : StateCapture.getRoots()) {
+            System.out.println("ROOT: " + root);
+        }
     }
 }

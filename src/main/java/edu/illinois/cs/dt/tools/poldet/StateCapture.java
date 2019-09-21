@@ -46,6 +46,7 @@ public class StateCapture {
 
     private static LinkedHashMap<String, Object> beforeMapping = new LinkedHashMap<>();
     private static LinkedHashMap<String, Object> afterMapping = new LinkedHashMap<>();
+    private static Set<String> roots = new HashSet<>();
 
     private static Set<String> polluters = new HashSet<String>();
 
@@ -60,6 +61,10 @@ public class StateCapture {
 
     public static Set<String> getPolluters() {
         return polluters;
+    }
+
+    public static Set<String> getRoots() {
+        return roots;
     }
 
     public static void captureBefore(String testname) {
@@ -88,6 +93,9 @@ public class StateCapture {
             || className.startsWith("jdk.")
             || className.startsWith("org.junit.") // Skip JUnit stuff
             || className.startsWith("com.thoughtworks.xstream") // Skip XStream stuff
+            || className.startsWith("ch.qos.logback")   // Skip logging stuff
+            || className.startsWith("org.slf4j.impl")   // Skip logging stuff
+            || className.startsWith("org.mockito.internal.progress.SequenceNumber") // Skip some mockito stuff
             || className.startsWith("[")    // Skip array stuff
             || className.startsWith("edu.illinois.cs")) {
             return true;
@@ -281,16 +289,19 @@ public class StateCapture {
         return documentToString(after);
     }
 
-    private static void makeDifferenceReport(Difference difference, String xmlDoc, StringBuilder sb) {
+    // Finds the differences, makes the report in sb, returns the roots for convenience
+    private static Set<String> makeDifferenceReport(Difference difference, String xmlDoc, StringBuilder sb) {
         NodeDetail controlNode = difference.getControlNodeDetail();
         NodeDetail afterNode = difference.getTestNodeDetail();
               
+        Set<String> roots = new HashSet<String>();
+
         String diffXpath = controlNode.getXpathLocation();
         if (diffXpath == null) {
             diffXpath = afterNode.getXpathLocation();
             if (diffXpath == null) {
                 sb.append("NULL xpath\n");
-                return;
+                return roots;
             }
         }
         sb.append(controlNode.getXpathLocation());
@@ -308,6 +319,7 @@ public class StateCapture {
                 if (n != null) {
                     sb.append("Static root: ");
                     sb.append(n.getTextContent());
+                    roots.add(n.getTextContent());
                     sb.append("\n");
                     sb.append("AUGUST ID: " + difference.getId());
                     sb.append("\n");
@@ -316,6 +328,8 @@ public class StateCapture {
                 ex.printStackTrace();
             }
         }
+
+        return roots;
     }        
 
     private static void recordDiff(String testname) {
@@ -356,19 +370,21 @@ public class StateCapture {
                     }
                 });
 
+            roots = new HashSet<String>();
             for (Object object : differences) {
                 Difference difference = (Difference)object;
                 
                 sb.append("***********************\n");
                 sb.append(difference);
                 sb.append("\n~~~~\n");
-                makeDifferenceReport(difference, beforeState, sb);
+                roots.addAll(makeDifferenceReport(difference, beforeState, sb));
                 sb.append("***********************\n");
             }
 
             if (differences.size() > 0) {
                 polluters.add(testname);
             }
+            //System.out.println("TEST " + testname + " ROOTS " + roots);
         } catch (Exception e) {
             e.printStackTrace();
         }
