@@ -307,11 +307,6 @@ public class StateCapture {
                 return roots;
             }
         }
-        sb.append(controlNode.getXpathLocation());
-        sb.append("\n");
-        sb.append(afterNode.getXpathLocation());
-        sb.append("\n");
-
         String[] elems = diffXpath.split("/");
         if (elems.length >= 3) {
             diffXpath = "/" + elems[1] + "/" + elems[2];
@@ -320,11 +315,14 @@ public class StateCapture {
                 Node n = (Node) xPath.compile(diffXpath).evaluate(stringToXmlDocument(xmlDoc), XPathConstants.NODE);
                 n = n.getChildNodes().item(1);
                 if (n != null) {
+                    roots.add(n.getTextContent());
+
                     sb.append("Static root: ");
                     sb.append(n.getTextContent());
-                    roots.add(n.getTextContent());
                     sb.append("\n");
-                    sb.append("AUGUST ID: " + difference.getId());
+                    sb.append(controlNode.getXpathLocation());
+                    sb.append("\n");
+                    sb.append(afterNode.getXpathLocation());
                     sb.append("\n");
                 }
             } catch (Exception ex) {
@@ -378,9 +376,9 @@ public class StateCapture {
                 Difference difference = (Difference)object;
                 
                 sb.append("***********************\n");
-                sb.append(difference);
-                sb.append("\n~~~~\n");
                 roots.addAll(makeDifferenceReport(difference, beforeState, sb));
+                sb.append("\n~~~~\n");
+                sb.append(difference);
                 sb.append("***********************\n");
             }
 
