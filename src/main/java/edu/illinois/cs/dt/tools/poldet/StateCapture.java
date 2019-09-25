@@ -9,7 +9,10 @@ import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.io.BufferedWriter;
 import java.io.CharArrayReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -383,6 +386,15 @@ public class StateCapture {
 
             if (differences.size() > 0) {
                 polluters.add(testname);
+                // Output roots into file for the test
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(".dtfixingtools/" + testname));
+                    //writer.write(roots.toString());
+                    writer.write(sb.toString());
+                    writer.write("\n");
+                    writer.close();
+                } catch (IOException ex) {
+                }
             }
             //System.out.println("TEST " + testname + " ROOTS " + roots);
         } catch (Exception e) {
