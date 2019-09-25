@@ -4,7 +4,43 @@ This repository contains tools for detecting/classifying flaky tests.
 
 # Quickstart
 
+## Incorporating iDFlakies into Maven project
+
+After building the plugin, you can add the plugin to a Maven project by modifying the pom.xml.
+
+```xml
+<build>
+    ...
+    <plugins>
+        ...
+        <plugin>
+            <groupId>edu.illinois.cs</groupId>
+            <artifactId>testrunner-maven-plugin</artifactId>
+            <version>1.0</version>
+            <dependencies>
+                <dependency>
+                    <groupId>edu.illinois.cs</groupId>
+                    <artifactId>idflakies</artifactId>
+                    <version>1.0.1-SNAPSHOT</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <className>edu.illinois.cs.dt.tools.detection.DetectorPlugin</className>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Run the following command on the Maven project:
+```
+mvn testrunner:testplugin
+```
+
+## Running experiments
+
 The main script is located in `scripts/docker/create_and_run_dockers.sh`.
+You will need Docker running to use the script.
 To use the script, you will need a `csv` file containing the GitHub URL and SHA that you wish to run iDFlakies on, one per line.
 
 For example:
@@ -17,6 +53,9 @@ Once you have created the csv file, you can simply run:
 ```
 bash create_and_run_dockers.sh <path to csv> <round num> <timeout (seconds)>
 ```
+
+The script creates a new Docker image for each project/SHA, if one does not already exist.
+Otherwise, the script will reuse the existing Docker image for the project.
 
 The output is explained in depth in `scripts/README.md`
 
