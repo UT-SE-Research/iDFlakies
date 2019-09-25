@@ -76,69 +76,68 @@ public class PomFile {
 
     private void parseFields(String pom) {
         File pomFile = new File(pom);
-    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory
             .newInstance();
         dbFactory.setNamespaceAware(false);
         dbFactory.setValidating(false);
-    	DocumentBuilder dBuilder;
+        DocumentBuilder dBuilder;
 
         try {
 
             dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(pomFile);
 
-	    // If pom file already patched, stop right here
-	    NodeList plugins = doc.getElementsByTagName("plugin");
-	    for (int i = 0; i < plugins.getLength(); i++){
-		Node plugin = plugins.item(i);
-		if (!plugin.getParentNode().getParentNode().getNodeName().equals("build") &&
-		    !plugin.getParentNode().getParentNode().getParentNode().getNodeName().equals("project")){
-		    continue;
-		}
-		NodeList pluginChildren = plugin.getChildNodes();
-		boolean isFromIllinois = false;
-		boolean isTestrunnerPlugin = false;
-		for (int j = 0; j < pluginChildren.getLength(); j++){
-		    Node PC = pluginChildren.item(j);
-		    String pluginChildName = PC.getNodeName();
-		    String pluginChildText = PC.getTextContent();
-		    if (pluginChildName.equals("groupId") && pluginChildText.equals("edu.illinois.cs")){
-			isFromIllinois = true;
-		    }
-		    if (pluginChildName.equals("artifactId") && pluginChildText.equals("testrunner-maven-plugin")){
-			isTestrunnerPlugin = true;
-		    }
-		    if (pluginChildName.equals("dependencies")){
-			for (int k = 0; k < PC.getChildNodes().getLength(); k++){
-			    Node dependency = PC.getChildNodes().item(k);
-			    String groupId = "";
-			    String artifactId = "";
-			    for (int l = 0; l < dependency.getChildNodes().getLength(); l++){
-				if (dependency.getChildNodes().item(l).getNodeName().equals("groupId")){
-				    groupId = dependency.getChildNodes().item(l).getTextContent();
-				}
-				if (dependency.getChildNodes().item(l).getNodeName().equals("artifactId")){
-				    artifactId = dependency.getChildNodes().item(l).getTextContent();
-				}
-				if (dependency.getChildNodes().item(l).getNodeName().equals("version")){
-				    iDFlakiesPomVersion = dependency.getChildNodes().item(l).getTextContent();
-				}
-			    }
-			    if (groupId.equals("edu.illinois.cs") && artifactId.equals("idflakies")){
-				break;
-			    }
-			}
-		    }
-		}
-		if (isFromIllinois && isTestrunnerPlugin){
-		    testrunnerPluginExists = true;
-		    break;
-		}
-	    }
-	    if (testrunnerPluginExists){
-		return;
-	    }
-	    
+            // If pom file already patched, stop right here
+            NodeList plugins = doc.getElementsByTagName("plugin");
+            for (int i = 0; i < plugins.getLength(); i++) {
+                Node plugin = plugins.item(i);
+                if (!plugin.getParentNode().getParentNode().getNodeName().equals("build") &&
+                    !plugin.getParentNode().getParentNode().getParentNode().getNodeName().equals("project")) {
+                    continue;
+                }
+                NodeList pluginChildren = plugin.getChildNodes();
+                boolean isFromIllinois = false;
+                boolean isTestrunnerPlugin = false;
+                for (int j = 0; j < pluginChildren.getLength(); j++) {
+                    Node pc = pluginChildren.item(j);
+                    String pluginChildName = pc.getNodeName();
+                    String pluginChildText = pc.getTextContent();
+                    if (pluginChildName.equals("groupId") && pluginChildText.equals("edu.illinois.cs")) {
+                        isFromIllinois = true;
+                    }
+                    if (pluginChildName.equals("artifactId") && pluginChildText.equals("testrunner-maven-plugin")) {
+                        isTestrunnerPlugin = true;
+                    }
+                    if (pluginChildName.equals("dependencies")) {
+                        for (int k = 0; k < pc.getChildNodes().getLength(); k++) {
+                            Node dependency = pc.getChildNodes().item(k);
+                            String groupId = "";
+                            String artifactId = "";
+                            for (int l = 0; l < dependency.getChildNodes().getLength(); l++) {
+                                if (dependency.getChildNodes().item(l).getNodeName().equals("groupId")) {
+                                    groupId = dependency.getChildNodes().item(l).getTextContent();
+                                }
+                                if (dependency.getChildNodes().item(l).getNodeName().equals("artifactId")) {
+                                    artifactId = dependency.getChildNodes().item(l).getTextContent();
+                                }
+                                if (dependency.getChildNodes().item(l).getNodeName().equals("version")) {
+                                    iDFlakiesPomVersion = dependency.getChildNodes().item(l).getTextContent();
+                                }
+                            }
+                            if (groupId.equals("edu.illinois.cs") && artifactId.equals("idflakies")) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (isFromIllinois && isTestrunnerPlugin) {
+                    testrunnerPluginExists = true;
+                    break;
+                }
+            }
+            if (testrunnerPluginExists) {
+                return;
+            }
 
             // First find groupId by looking at parent
             if (doc.getElementsByTagName("parent").getLength() == 1) {
@@ -284,11 +283,11 @@ public class PomFile {
     // Rewrite contents of own pom.xml, augmented with information about dependency srcs and dependency outputs
     public void rewrite(Set<String> dependencySrcs, Set<String> outputDirectories) {
         File pomFile = new File(this.pom);
-    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory
             .newInstance();
         dbFactory.setNamespaceAware(false);
         dbFactory.setValidating(false);
-    	DocumentBuilder dBuilder;
+        DocumentBuilder dBuilder;
 
         try {
             dBuilder = dbFactory.newDocumentBuilder();
@@ -496,11 +495,11 @@ public class PomFile {
     }
 
     public static void main(String[] args) {
-	if (args.length != 1){
-	    System.out.print("Usage: java PomFile <iDFlakies version number>\n");
-	    return;
-	}
-	iDFlakiesVersion = args[0];
+        if (args.length != 1) {
+            System.out.print("Usage: java PomFile <iDFlakies version number>\n");
+            return;
+        }
+        iDFlakiesVersion = args[0];
         InputStreamReader isReader = new InputStreamReader(System.in);
         BufferedReader bufReader = new BufferedReader(isReader);
         Map<String, PomFile> mapping = new HashMap<String, PomFile>();
@@ -509,10 +508,10 @@ public class PomFile {
             // First create objects out of all the pom.xml files passed in
             while ((input = bufReader.readLine()) != null) {
                 PomFile p = new PomFile(input);
-		if (testrunnerPluginExists){
-		    System.out.print(String.format("[WARNING] Skipped inserting dependency on iDFlakies %s. Dependency on version %s found in pom file.\n",iDFlakiesVersion,iDFlakiesPomVersion));
-		    return;
-		}
+                if (testrunnerPluginExists){
+                    System.out.print(String.format("[WARNING] Skipped inserting dependency on iDFlakies %s. Dependency on version %s found in pom file.\n",iDFlakiesVersion,iDFlakiesPomVersion));
+                    return;
+                }
                 mapping.put(p.getArtifactId(), p);
             }
 
