@@ -4,9 +4,9 @@ This repository contains tools for detecting/classifying flaky tests.
 
 # Quickstart
 
-## Incorporating iDFlakies into Maven project
+## Running iDFlakies tool on a Maven project
 
-After building the plugin, you can add the plugin to a Maven project by modifying the pom.xml.
+After building and installing the plugin, one can add the plugin to a Maven project by modifying its pom.xml with the following.
 
 ```xml
 <build>
@@ -32,16 +32,20 @@ After building the plugin, you can add the plugin to a Maven project by modifyin
 </build>
 ```
 
-Run the following command on the Maven project:
+One can then run iDFlakies on the Maven project with the following command.
 ```
-mvn testrunner:testplugin
+mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10
 ```
 
-## Running experiments
+iDFlakies configuration options:
+* ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://winglam2.web.engr.illinois.edu/publications/2019/LamETAL19iDFlakies.pdf)
+* ```dt.randomize.rounds``` - Number of times to run the test suite
+
+
+## Running iDFlakies framework
 
 The main script is located in `scripts/docker/create_and_run_dockers.sh`.
-You will need Docker running to use the script.
-To use the script, you will need a `csv` file containing the GitHub URL and SHA that you wish to run iDFlakies on, one per line.
+To use the script, you will need Docker installed and a `csv` file containing the GitHub URL and SHA that you wish to run iDFlakies on with one subject per line.
 
 For example:
 ```
@@ -57,7 +61,8 @@ bash create_and_run_dockers.sh <path to csv> <round num> <timeout (seconds)>
 The script creates a new Docker image for each project/SHA, if one does not already exist.
 Otherwise, the script will reuse the existing Docker image for the project.
 
-The output is explained in depth in `scripts/README.md`
+The output of iDFlakies is explained in depth in `scripts/README.md` and the csv files used to evaluate iDFlakies are in `scripts/docker/icst-dataset`.
+
 
 # Cite
 
