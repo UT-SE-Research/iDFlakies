@@ -112,10 +112,16 @@ public class StateCapture {
             return new LinkedHashMap<>();
         }
 
-        LinkedHashMap<String, Object> nameToInstance = new LinkedHashMap<String, Object>();;
+        LinkedHashMap<String, Object> nameToInstance = new LinkedHashMap<String, Object>();
 
         List<String> classes = new ArrayList<String>();
         Class[] loadedClasses = MainAgent.getInstrumentation().getAllLoadedClasses();
+        Arrays.sort(loadedClasses, new Comparator<Class>() {
+            @Override
+            public int compare(Class a, Class b) {
+                return a.toString().compareTo(b.toString());
+            }
+        });
         for (Class clz : loadedClasses) {
             // Skip if one of our classes or top-level stuff
             String className = clz.getName();
@@ -133,12 +139,19 @@ public class StateCapture {
                 //continue;
             }
 
-            for (Field f : allFields) {
+            List<Field> listFields = new ArrayList<Field>(allFields);
+            Collections.sort(listFields, new Comparator<Field>() {
+                @Override
+                public int compare(Field a, Field b) {
+                    return a.toString().compareTo(b.toString());
+                }
+            });
+            for (Field f : listFields) {
                 String fieldName = getFieldFQN(f);
 
                 // If a field is final and has a primitive type there's no point to capture it.
                 if (Modifier.isStatic(f.getModifiers()) 
-                    && !(Modifier.isFinal(f.getModifiers()) &&  f.getType().isPrimitive())) {
+                    && !(Modifier.isFinal(f.getModifiers()) && f.getType().isPrimitive())) {
                     try {
                         f.setAccessible(true);
                         nameToInstance.put(fieldName, f.get(null));
@@ -334,14 +347,22 @@ public class StateCapture {
     }        
 
     private static void recordDiff(String testname) {
+        // Tweak the after mapping to only have mapping for fields that exist in before as well
+        LinkedHashMap<String, Object> filteredAfterMapping = new LinkedHashMap<>();
+        for (String field : beforeMapping.keySet()) {
+            if (afterMapping.containsKey(field)) {
+                filteredAfterMapping.put(field, afterMapping.get(field));
+            }
+        }
+
         // Serialize everything
         String beforeState = serializeRoots(beforeMapping);
         Set<String> beforeRoots = new HashSet<String>(beforeMapping.keySet());
-        String afterState = serializeRoots(afterMapping);
-        Set<String> afterRoots = new HashSet<String>(afterMapping.keySet());
+        String afterState = serializeRoots(filteredAfterMapping);
+        Set<String> afterRoots = new HashSet<String>(filteredAfterMapping.keySet());
 
         // Returns a new afterState only having the roots that are common with the beforeState
-        afterState = checkAdded(beforeState, beforeRoots, afterState, afterRoots);
+        //afterState = checkAdded(beforeState, beforeRoots, afterState, afterRoots);
 
         try {
             boolean statesAreSame = beforeState.equals(afterState);
