@@ -156,7 +156,7 @@ public class StateCapture {
                 String fieldName = getFieldFQN(f);
 
                 // If a field is final and has a primitive type there's no point to capture it.
-                if (Modifier.isStatic(f.getModifiers()) 
+                if (Modifier.isStatic(f.getModifiers())
                     && !(Modifier.isFinal(f.getModifiers()) && f.getType().isPrimitive())) {
                     try {
                         f.setAccessible(true);
@@ -176,7 +176,7 @@ public class StateCapture {
     }
 
     private static Document stringToXmlDocument(String str) {
-        try {           
+        try {
             CharArrayReader rdr = new CharArrayReader(str.toCharArray());
             InputSource is = new InputSource(rdr);
             Document doc = dBuilder.parse(is);
@@ -193,7 +193,7 @@ public class StateCapture {
     private static String documentToString(Document doc) {
         try{
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");        
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             StringWriter sw = new StringWriter();
             StreamResult result = new StreamResult(sw);
             DOMSource source = new DOMSource(doc);
@@ -219,7 +219,7 @@ public class StateCapture {
         StringBuilder out = new StringBuilder();
         char current;
 
-        if (in == null || ("".equals(in))) 
+        if (in == null || ("".equals(in)))
             return "";
         for (int i = 0; i < in.length(); i++) {
             current = in.charAt(i);
@@ -257,7 +257,7 @@ public class StateCapture {
                 stateToSerialize.put(k, state.get(k));
             }
             s = xstream.toXML(stateToSerialize);
-            s = sanitizeXmlChars(s); 
+            s = sanitizeXmlChars(s);
         } catch (Exception e) {
             // In case serialization fails, mark the StateCapture for this test
             // as dirty, meaning it should be ignored
@@ -280,7 +280,7 @@ public class StateCapture {
     }
 
     // If there are any extra fields in after not in before, add them
-    private static String checkAdded(String beforeState, Set<String> beforeRoots, 
+    private static String checkAdded(String beforeState, Set<String> beforeRoots,
                               String afterState, Set<String> afterRoots) {
         Set<String> rootsDifference = new HashSet<String>(afterRoots);
         rootsDifference.removeAll(beforeRoots);
@@ -308,7 +308,7 @@ public class StateCapture {
         if (ls.getLength() == 1) {
             root.removeChild(ls.item(0));
         }
-        
+
         return documentToString(after);
     }
 
@@ -316,7 +316,7 @@ public class StateCapture {
     private static Set<String> makeDifferenceReport(Difference difference, String xmlDoc, StringBuilder sb) {
         NodeDetail controlNode = difference.getControlNodeDetail();
         NodeDetail afterNode = difference.getTestNodeDetail();
-              
+
         Set<String> roots = new HashSet<String>();
 
         String diffXpath = controlNode.getXpathLocation();
@@ -330,7 +330,7 @@ public class StateCapture {
         String[] elems = diffXpath.split("/");
         if (elems.length >= 3) {
             diffXpath = "/" + elems[1] + "/" + elems[2];
-            try {                 
+            try {
                 XPath xPath =  XPathFactory.newInstance().newXPath();
                 Node n = (Node) xPath.compile(diffXpath).evaluate(stringToXmlDocument(xmlDoc), XPathConstants.NODE);
                 n = n.getChildNodes().item(1);
@@ -351,7 +351,7 @@ public class StateCapture {
         }
 
         return roots;
-    }        
+    }
 
     private static void recordDiff(String testname) {
         // Tweak the after mapping to only have mapping for fields that exist in before as well
@@ -425,7 +425,7 @@ public class StateCapture {
             /*roots = new HashSet<String>();
             for (Object object : differences) {
                 Difference difference = (Difference)object;
-                
+
                 sb.append("***********************\n");
                 roots.addAll(makeDifferenceReport(difference, beforeState, sb));
                 sb.append("\n~~~~\n");
