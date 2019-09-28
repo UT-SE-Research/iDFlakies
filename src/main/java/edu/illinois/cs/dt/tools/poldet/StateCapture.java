@@ -47,8 +47,8 @@ import org.xml.sax.InputSource;
 
 public class StateCapture {
 
-    private static LinkedHashMap<String, Object> beforeMapping = new LinkedHashMap<>();
-    private static LinkedHashMap<String, Object> afterMapping = new LinkedHashMap<>();
+    private static LinkedHashMap<String, String> beforeMapping = new LinkedHashMap<>();
+    private static LinkedHashMap<String, String> afterMapping = new LinkedHashMap<>();
     private static Set<String> roots = new HashSet<>();
 
     private static Set<String> polluters = new HashSet<String>();
@@ -99,6 +99,9 @@ public class StateCapture {
             || className.startsWith("ch.qos.logback")   // Skip logging stuff
             || className.startsWith("org.slf4j.impl")   // Skip logging stuff
             || className.startsWith("org.mockito.internal.progress.SequenceNumber") // Skip some mockito stuff
+            || className.startsWith("org.mockito.internal")                         // Skip some mockito stuff
+            || className.startsWith("org.mockito.cglib")                            // Skip some mockito stuff
+            || className.contains("$$")     // Skip proxy stuff
             || className.startsWith("[")    // Skip array stuff
             || className.startsWith("edu.illinois.cs")) {
             return true;
@@ -106,13 +109,13 @@ public class StateCapture {
         return false;
     }
 
-    private static LinkedHashMap<String, Object> capture() {
+    private static LinkedHashMap<String, String> capture() {
         if (MainAgent.getInstrumentation() == null) {
             System.out.println("NO INSTRUMENTATION");
             return new LinkedHashMap<>();
         }
 
-        LinkedHashMap<String, Object> nameToInstance = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, String> nameToInstance = new LinkedHashMap<>();
 
         List<String> classes = new ArrayList<String>();
         Class[] loadedClasses = MainAgent.getInstrumentation().getAllLoadedClasses();
@@ -146,6 +149,9 @@ public class StateCapture {
                     return a.toString().compareTo(b.toString());
                 }
             });
+
+            // Serialize contents right now, to get a snapshot
+            XStream xstream = getXStreamInstance();
             for (Field f : listFields) {
                 String fieldName = getFieldFQN(f);
 
@@ -154,7 +160,8 @@ public class StateCapture {
                     && !(Modifier.isFinal(f.getModifiers()) && f.getType().isPrimitive())) {
                     try {
                         f.setAccessible(true);
-                        nameToInstance.put(fieldName, f.get(null));
+                        String xmlRep = sanitizeXmlChars(xstream.toXML(f.get(null)));
+                        nameToInstance.put(fieldName, xmlRep);
                     } catch (NoClassDefFoundError e) {
                         // Case of reflection not being able to find class, is in external library?
                         continue;
@@ -328,11 +335,11 @@ public class StateCapture {
                 Node n = (Node) xPath.compile(diffXpath).evaluate(stringToXmlDocument(xmlDoc), XPathConstants.NODE);
                 n = n.getChildNodes().item(1);
                 if (n != null) {
-                    roots.add(n.getTextContent());
+                    //roots.add(n.getTextContent());
 
-                    sb.append("Static root: ");
-                    sb.append(n.getTextContent());
-                    sb.append("\n");
+                    //sb.append("Static root: ");
+                    //sb.append(n.getTextContent());
+                    //sb.append("\n");
                     sb.append(controlNode.getXpathLocation());
                     sb.append("\n");
                     sb.append(afterNode.getXpathLocation());
@@ -348,7 +355,7 @@ public class StateCapture {
 
     private static void recordDiff(String testname) {
         // Tweak the after mapping to only have mapping for fields that exist in before as well
-        LinkedHashMap<String, Object> filteredAfterMapping = new LinkedHashMap<>();
+        LinkedHashMap<String, String> filteredAfterMapping = new LinkedHashMap<>();
         for (String field : beforeMapping.keySet()) {
             if (afterMapping.containsKey(field)) {
                 filteredAfterMapping.put(field, afterMapping.get(field));
@@ -356,26 +363,33 @@ public class StateCapture {
         }
 
         // Serialize everything
-        String beforeState = serializeRoots(beforeMapping);
-        Set<String> beforeRoots = new HashSet<String>(beforeMapping.keySet());
-        String afterState = serializeRoots(filteredAfterMapping);
-        Set<String> afterRoots = new HashSet<String>(filteredAfterMapping.keySet());
+        //String beforeState = serializeRoots(beforeMapping);
+        //Set<String> beforeRoots = new HashSet<String>(beforeMapping.keySet());
+        //String afterState = serializeRoots(filteredAfterMapping);
+        //Set<String> afterRoots = new HashSet<String>(filteredAfterMapping.keySet());
 
         // Returns a new afterState only having the roots that are common with the beforeState
         //afterState = checkAdded(beforeState, beforeRoots, afterState, afterRoots);
 
         try {
-            boolean statesAreSame = beforeState.equals(afterState);
+            StringBuilder sb = new StringBuilder(); // To keep track of logging
 
-            // create a string builder
-            StringBuilder sb = new StringBuilder();
-            sb.append(statesAreSame);
-            sb.append("\n");
+            // For each static root, compare the XML representation
+            int pollutedRoots = 0;
+            for (String root : beforeMapping.keySet()) {
+                String beforeState = beforeMapping.get(root);
+                String afterState = filteredAfterMapping.get(root);
 
-            Diff diff = new Diff(beforeState, afterState);
-            DetailedDiff detDiff = new DetailedDiff(diff);
-            List differences = detDiff.getAllDifferences();
-            Collections.sort(differences, new Comparator() {
+                boolean statesAreSame = beforeState.equals(afterState);
+                if (statesAreSame) {
+                    continue;
+                }
+
+                // Compute the differences for this root
+                Diff diff = new Diff(beforeState, afterState);
+                DetailedDiff detDiff = new DetailedDiff(diff);
+                List differences = detDiff.getAllDifferences();
+                Collections.sort(differences, new Comparator() {
                     public int compare(Object o1, Object o2) {
                         Difference d1 = (Difference)o1;
                         Difference d2 = (Difference)o2;
@@ -392,7 +406,23 @@ public class StateCapture {
                     }
                 });
 
-            roots = new HashSet<String>();
+                // Output the differences
+                if (differences.size() > 0) {
+                    pollutedRoots++;
+                    sb.append("***********************\n");
+                    sb.append("ROOT " + root + " HAS DIFFERENCE");
+                    sb.append("\n~~~~~~~~~~~~~~~\n");
+                    for (Object object : differences) {
+                        Difference difference = (Difference)object;
+                        makeDifferenceReport(difference, beforeState, sb);
+                        sb.append(difference);
+                        sb.append("\n~~~~\n");
+                    }
+                    sb.append("***********************\n");
+                }
+            }
+
+            /*roots = new HashSet<String>();
             for (Object object : differences) {
                 Difference difference = (Difference)object;
                 
@@ -401,9 +431,9 @@ public class StateCapture {
                 sb.append("\n~~~~\n");
                 sb.append(difference);
                 sb.append("***********************\n");
-            }
+            }*/
 
-            if (differences.size() > 0) {
+            if (pollutedRoots > 0) {
                 polluters.add(testname);
                 // Output roots into file for the test
                 try {
