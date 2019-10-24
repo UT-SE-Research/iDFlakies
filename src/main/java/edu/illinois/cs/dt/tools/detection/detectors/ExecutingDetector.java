@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     protected Runner runner;
+    private boolean countOnlyFirstFailure = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.count.only.first.failure", "false"));
 
     protected int rounds;
     private List<Filter> filters = new ArrayList<>();
@@ -50,7 +51,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     }
 
     public DetectionRound makeDts(final TestRunResult intended, final TestRunResult revealed) {
-        final List<DependentTest> result = DetectorUtil.flakyTests(intended, revealed, true);
+        final List<DependentTest> result = DetectorUtil.flakyTests(intended, revealed, countOnlyFirstFailure);
 
         return new DetectionRound(Collections.singletonList(revealed.id()),
                 result,
