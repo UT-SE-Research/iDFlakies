@@ -21,7 +21,7 @@ slug=$1
 rounds=$2
 timeout=$3
 
-iDFlakiesVersion=1.0.0
+iDFlakiesVersion=1.0.1-SNAPSHOT
 
 # Setup prolog stuff
 cd "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/"
