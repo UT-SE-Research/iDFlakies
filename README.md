@@ -16,7 +16,7 @@ After building and installing the plugin, one can add the plugin to a Maven proj
         <plugin>
             <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-maven-plugin</artifactId>
-            <version>1.0</version>
+            <version>1.0.1</version>
             <dependencies>
                 <dependency>
                     <groupId>edu.illinois.cs</groupId>
