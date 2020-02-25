@@ -7,10 +7,7 @@ This repository contains tools for detecting/classifying flaky tests.
 ## Using iDFlakies on a Maven project
 
 One may use iDFlakies by just getting it from Maven Central or building it themselves.
-
-### Getting iDFlakies from Maven Central
-
-Add the plugin to a Maven project by modifying its pom.xml with the following.
+Add the following plugin to a Maven project by modifying its pom.xml with the following.
 
 ```xml
 <build>
@@ -25,7 +22,10 @@ Add the plugin to a Maven project by modifying its pom.xml with the following.
                 <dependency>
                     <groupId>edu.illinois.cs</groupId>
                     <artifactId>idflakies</artifactId>
+                    <!-- Use iDFlakies from Maven Central -->
                     <version>1.0.1</version>
+                    <!-- Use the following version instead if you build iDFlakies locally and want to use the locally built version. -->
+                    <!-- <version>1.0.2-SNAPSHOT</version> -->
                 </dependency>
             </dependencies>
             <configuration>
@@ -36,37 +36,7 @@ Add the plugin to a Maven project by modifying its pom.xml with the following.
 </build>
 ```
 
-### Building iDFlakies
-
-After building and installing the plugin, one can add the plugin to a Maven project by modifying its pom.xml with the following.
-
-```xml
-<build>
-    ...
-    <plugins>
-        ...
-        <plugin>
-            <groupId>edu.illinois.cs</groupId>
-            <artifactId>testrunner-maven-plugin</artifactId>
-            <version>1.0</version>
-            <dependencies>
-                <dependency>
-                    <groupId>edu.illinois.cs</groupId>
-                    <artifactId>idflakies</artifactId>
-                    <version>1.0.2-SNAPSHOT</version>
-                </dependency>
-            </dependencies>
-            <configuration>
-                <className>edu.illinois.cs.dt.tools.detection.DetectorPlugin</className>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
-
-### Running iDFlakies
-
-Once iDFlakies is setup, one can then run iDFlakies on the Maven project with the following command.
+Once iDFlakies is added to a Maven project, one can then run iDFlakies on the project with the following command.
 ```
 mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10
 ```
