@@ -4,9 +4,10 @@ This repository contains tools for detecting/classifying flaky tests.
 
 # Quickstart
 
-## Running iDFlakies tool on a Maven project
+## Using iDFlakies on a Maven project
 
-After building and installing the plugin, one can add the plugin to a Maven project by modifying its pom.xml with the following.
+One may use iDFlakies by just getting it from Maven Central or building it themselves.
+Add the following plugin to a Maven project by modifying its pom.xml with the following.
 
 ```xml
 <build>
@@ -21,7 +22,10 @@ After building and installing the plugin, one can add the plugin to a Maven proj
                 <dependency>
                     <groupId>edu.illinois.cs</groupId>
                     <artifactId>idflakies</artifactId>
-                    <version>1.0.1-SNAPSHOT</version>
+                    <!-- Use iDFlakies from Maven Central -->
+                    <version>1.0.1</version>
+                    <!-- Use the following version instead if you build iDFlakies locally and want to use the locally built version. -->
+                    <!-- <version>1.0.2-SNAPSHOT</version> -->
                 </dependency>
             </dependencies>
             <configuration>
@@ -32,7 +36,7 @@ After building and installing the plugin, one can add the plugin to a Maven proj
 </build>
 ```
 
-One can then run iDFlakies on the Maven project with the following command.
+Once iDFlakies is added to a Maven project, one can then run iDFlakies on the project with the following command.
 ```
 mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10
 ```
