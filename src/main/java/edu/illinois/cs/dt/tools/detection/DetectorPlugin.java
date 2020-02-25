@@ -132,7 +132,7 @@ public class DetectorPlugin extends TestPlugin {
         return (long) timeout; // Allocate time proportionally
     }
 
-    private double readRealTime(final Path path) throws IOException {
+    private static double readRealTime(final Path path) throws IOException {
         for (final String line : Lists.reverse(Files.readAllLines(path))) {
             final String[] split = line.split(" ");
 
