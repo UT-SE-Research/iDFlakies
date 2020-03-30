@@ -2,6 +2,8 @@
 
 This repository contains tools for detecting/classifying flaky tests.
 
+More details about iDFlakies can be found in its [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf) and [website](https://sites.google.com/view/flakytestdataset).
+
 # Quickstart
 
 ## Using iDFlakies on a Maven project
@@ -67,7 +69,7 @@ mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.rand
 ```
 
 iDFlakies configuration options:
-* ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://winglam2.web.engr.illinois.edu/publications/2019/LamETAL19iDFlakies.pdf)
+* ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf)
 * ```dt.randomize.rounds``` - Number of times to run the test suite
 
 
@@ -95,7 +97,7 @@ The output of iDFlakies is explained in depth in `scripts/README.md` and the csv
 
 # Cite
 
-If you use iDFlakies, please cite our corresponding [ICST paper](http://winglam2.web.engr.illinois.edu/publications/2019/LamETAL19iDFlakies.pdf):
+If you use iDFlakies, please cite our corresponding [ICST paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf):
 ```
 @inproceedings{LamETAL2019ICST,
     author    = {Lam, Wing and Oei, Reed and Shi, August and Marinov, Darko and Xie, Tao},
