@@ -51,6 +51,7 @@ su - "$SCRIPT_USERNAME" -c "$script_to_run ${slug} ${rounds} ${timeout}"
 
 # Change permissions of results and copy outside the Docker image (assume outside mounted under /Scratch)
 modifiedslug=$(echo ${slug} | sed 's;/;.;' | tr '[:upper:]' '[:lower:]')
-cp -r "/home/$SCRIPT_USERNAME/output/" "/Scratch/${modifiedslug}_output/"
-chown -R $(id -u):$(id -g) /Scratch/${modifiedslug}_output/
-chmod -R 777 /Scratch/${modifiedslug}_output/
+mkdir -p "/Scratch/${modifiedslug}_output/misc-output/"
+cp -r "/home/$SCRIPT_USERNAME/output/" "/Scratch/${modifiedslug}_output/misc-output/"
+chown -R $(id -u):$(id -g) /Scratch/${modifiedslug}_output/misc-output/
+chmod -R 777 /Scratch/${modifiedslug}_output/misc-output/
