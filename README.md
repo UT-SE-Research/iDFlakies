@@ -112,7 +112,7 @@ To see all of the flaky tests detected by iDFlakies one can refer simply to the 
 The file lists all the flaky tests detected for each round of each configuration (e.g., `com.github.kevinsawicki.http.HttpRequestTest.basicProxyAuthentication,./lib/detection-results/random/round0.json`).
 Note that multiple rounds may detect the same test.
 
-To see more information about a specific test (e.g., the category of the test, the ordering of tests in that round), please see the JSON file(s) that detected the test.
+To see more information about a specific test (e.g., a passing and failing ordering of the test), please see the JSON file(s) that detected the test.
 The output of iDFlakies is explained in depth in `scripts/README.md` and the csv files used to evaluate iDFlakies are in `scripts/docker/icst-dataset`.
 
 # Cite
