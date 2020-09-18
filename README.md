@@ -109,7 +109,7 @@ An example of the log and output directory generated can be found in the [here](
 Note that due to the inherent nondeterminism of the tool (e.g., use of random test orderings) and flaky tests, the log and output directory generated from another run may not exactly match the example log and output directory.
 
 To see all of the flaky tests detected by iDFlakies one can refer simply to the `scripts/docker/all-output/kevinsawicki.http-request_output/all_flaky_tests_list.csv` file.
-The file lists all the flaky tests detected for each round of each configuration (e.g., com.github.kevinsawicki.http.HttpRequestTest.basicProxyAuthentication,./lib/detection-results/random/round0.json).
+The file lists all the flaky tests detected for each round of each configuration (e.g., `com.github.kevinsawicki.http.HttpRequestTest.basicProxyAuthentication,./lib/detection-results/random/round0.json`).
 Note that multiple rounds may detect the same test.
 
 To see more information about a specific test (e.g., the category of the test, the ordering of tests in that round), please see the JSON file(s) that detected the test.
