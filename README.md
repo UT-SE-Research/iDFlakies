@@ -65,35 +65,53 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
 Once iDFlakies is added to a Maven project, one can then run iDFlakies on the project with the following command.
 
 ```shell
-mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10
+mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
 
 iDFlakies configuration options:
-* ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf)
-* ```dt.randomize.rounds``` - Number of times to run the test suite
+* ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf). Default is ```random``` (random-class-method).
+* ```dt.randomize.rounds``` - Number of times to run the test suite. Default is ```20```.
+* ```dt.detector.original_order.all_must_pass``` - Controls whether iDFlakies must use an original order of tests where all of them pass or not. Default is ```true``` (i.e., iDFlakies will exit if within three runs of the test suite, it does observe all tests to pass in one of the runs).
 
 
 ## Running iDFlakies framework
 
 The main script is located in `scripts/docker/create_and_run_dockers.sh`.
-To use the script, you will need Docker installed and a `csv` file containing the GitHub URL and SHA that you wish to run iDFlakies on with one subject per line.
+To use the script, you will need Docker and Python (e.g., Python version 2.7.17) installed and a `csv` file containing the GitHub URL and SHA that you wish to run iDFlakies on with one subject per line.
 
 For example:
 ```
-https://github.com/bonnyfone/vectalign,3393c5ee3440a48d5e7cec04bb6e2f0da532ba51
+https://github.com/kevinsawicki/http-request,2d62a3e9da726942a93cf16b6e91c0187e6c0136
 ```
 
 Once you have created the csv file, you can simply run:
 
-```
+```shell
 bash create_and_run_dockers.sh <path to csv> <round num> <timeout (seconds)>
 ```
 
 The script creates a new Docker image for each project/SHA, if one does not already exist.
 Otherwise, the script will reuse the existing Docker image for the project.
+When the script starts up the Docker container, it will checkout this repository (or update it to the latest version if it is already checked out).
+To make changes to the scripts and tools and have them be used within the container, one may need to change `scripts/docker/update.sh`.
 
+### Example
+
+```shell
+cd scripts/docker
+bash create_and_run_dockers.sh icst-dataset/comprehensive-individual-split/kevinsawicki.http-request.csv 10 1000000
+```
+
+This example takes about 22 minutes to run.
+Running the above will output `scripts/docker/all-output/kevinsawicki.http-request_output` as soon as iDFlakies is running.
+An example of the log and output directory generated can be found in the [here](https://drive.google.com/drive/folders/1sVf0PNKjZbDG5wlZnYWkhTuQYiNNZrTv).
+Note that due to the inherent nondeterminism of the tool (e.g., use of random test orderings) and flaky tests, the log and output directory generated from another run may not exactly match the example log and output directory.
+
+To see all of the flaky tests detected by iDFlakies one can refer simply to the `scripts/docker/all-output/kevinsawicki.http-request_output/all_flaky_tests_list.csv` file.
+The file lists all the flaky tests detected for each round of each configuration (e.g., com.github.kevinsawicki.http.HttpRequestTest.basicProxyAuthentication,./lib/detection-results/random/round0.json).
+Note that multiple rounds may detect the same test.
+To see more information about a specific test (e.g., the category of the test, the ordering of tests in that round), please see the JSON file(s) that detected the test.
 The output of iDFlakies is explained in depth in `scripts/README.md` and the csv files used to evaluate iDFlakies are in `scripts/docker/icst-dataset`.
-
 
 # Cite
 
