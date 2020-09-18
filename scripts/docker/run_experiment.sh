@@ -63,3 +63,16 @@ chmod -R 777 /Scratch/all-output/${modifiedslug}_output/
 
 chown $(id -u):$(id -g) /Scratch/all-output/
 chmod 777 /Scratch/all-output/
+
+set +x
+cd /Scratch/all-output/${modifiedslug}_output
+OLD_IFS=$IFS
+IFS=$'\n';
+rm -f all_flaky_tests_list.csv 
+for round_file in $(find -type f -name "round*.json"); do
+    for test_name in $(python -m json.tool $round_file | grep \"name\": | sort -u | cut -d':' -f2 | cut -d'"' -f2 ); do
+	echo $test_name,$round_file >> all_flaky_tests_list.csv;
+    done
+done
+sort -u -o all_flaky_tests_list.csv all_flaky_tests_list.csv
+cd -
