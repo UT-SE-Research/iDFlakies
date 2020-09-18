@@ -32,7 +32,7 @@ cd "/home/$SCRIPT_USERNAME/${slug}"
 /home/$SCRIPT_USERNAME/$TOOL_REPO/pom-modify/modify-project.sh . $iDFlakiesVersion
 
 # Run the plugin, get module test times
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for getting module test time"
 date
 
@@ -40,14 +40,14 @@ modifiedslug=$(echo ${slug} | sed 's;/;.;' | tr '[:upper:]' '[:lower:]')
 
 # Set global mvn options for skipping things
 MVNOPTIONS="-Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dmaven.javadoc.skip=true"
-IDF_OPTIONS="-Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -fn -B -e -Ddt.cache.absolute.path=/Scratch/all-output/${modifiedslug}_output"
+IDF_OPTIONS="-Ddt.detector.original_order.all_must_pass=false -Ddetector.timeout=${timeout} -Ddt.randomize.rounds=${rounds} -fn -B -e -Ddt.cache.absolute.path=/Scratch/all-output/${modifiedslug}_output"
 
 # Optional timeout... In practice our tools really shouldn't need 1hr to parse a project's surefire reports.
 timeout 1h /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} -Dtestplugin.className=edu.illinois.cs.dt.tools.utility.ModuleTestTimePlugin -fn -B -e -Ddt.cache.absolute.path=/Scratch/all-output/${modifiedslug}_output |& tee module_test_time.log
 
 
 # Run the plugin, reversing the original order (reverse class and methods)
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for reversing the original order"
 date
 
@@ -55,7 +55,7 @@ timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testp
 
 
 # Run the plugin, reversing the original order (reverse class)
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for reversing the class order"
 date
 
@@ -63,7 +63,7 @@ timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testp
 
 
 # Run the plugin, original order
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for original"
 date
 
@@ -71,7 +71,7 @@ timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testp
 
 
 # Run the plugin, random class first, method second
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for randomizemethods"
 date
 
@@ -79,14 +79,14 @@ timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testp
 
 
 # Run the plugin, random class only
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for randomizeclasses"
 date
 
 timeout ${timeout}s /home/$SCRIPT_USERNAME/apache-maven/bin/mvn testrunner:testplugin ${MVNOPTIONS} ${IDF_OPTIONS} -Ddetector.detector_type=random-class |& tee random_class.log
 
 # Run the smart-shuffle (every test runs first and last)
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Running testplugin for smart-shuffle"
 date
 
@@ -98,7 +98,7 @@ mkdir -p ${RESULTSDIR}
 /home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/gather-results $(pwd) ${RESULTSDIR}
 mv *.log ${RESULTSDIR}/
 
-echo "*******************REED************************"
+echo "*******************iDFLAKIES************************"
 echo "Finished run_project.sh"
 date
 
