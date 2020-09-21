@@ -1,0 +1,75 @@
+[INFO] Building jar: /home/winglam2/iDFlakies/target/idflakies-1.0.2-javadoc.jar
+[INFO]
+[INFO] >>> maven-source-plugin:3.0.0:jar (default) > generate-sources @ idflakies >>>
+[INFO]
+[INFO] <<< maven-source-plugin:3.0.0:jar (default) < generate-sources @ idflakies <<<
+[INFO]
+[INFO]
+[INFO] --- maven-source-plugin:3.0.0:jar (default) @ idflakies ---
+[INFO] Building jar: /home/winglam2/iDFlakies/target/idflakies-1.0.2-sources.jar
+[INFO]
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ idflakies ---
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2.jar to /home/winglam2/.m2/repository/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar
+[INFO] Installing /home/winglam2/iDFlakies/pom.xml to /home/winglam2/.m2/repository/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2-javadoc.jar to /home/winglam2/.m2/repository/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2-sources.jar to /home/winglam2/.m2/repository/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar
+[INFO]
+[INFO] --- maven-gpg-plugin:1.6:sign (sign-artifacts) @ idflakies ---
+[INFO]
+[INFO] --- nexus-staging-maven-plugin:1.6.7:deploy (injected-nexus-deploy) @ idflakies ---
+[INFO] Performing local staging (local stagingDirectory="/home/winglam2/iDFlakies/target/nexus-staging/staging")...
+[INFO]  + Using server credentials "ossrh" from Maven settings.
+[INFO]  * Connected to Nexus at https://oss.sonatype.org:443/, is version 2.14.18-01 and edition "Professional"
+[INFO]  * Using staging profile ID "7a90d7a1dcda77" (matched by Nexus).
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2.jar to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar
+[INFO] Installing /home/winglam2/iDFlakies/pom.xml to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2-javadoc.jar to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2-sources.jar to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2.jar.asc to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar.asc
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2.pom.asc to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom.asc
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2-javadoc.jar.asc to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar.asc
+[INFO] Installing /home/winglam2/iDFlakies/target/idflakies-1.0.2-sources.jar.asc to /home/winglam2/iDFlakies/target/nexus-staging/staging/7a90d7a1dcda77/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar.asc
+[INFO] Performing remote staging...
+[INFO]
+[INFO]  * Remote staging into staging profile ID "7a90d7a1dcda77"
+[INFO]  * Created staging repository with ID "eduillinois-1031".
+[INFO]  * Staging repository at https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031
+[INFO]  * Uploading locally staged artifacts to profile edu.illinois
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar (128 kB at 325 kB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom (6.5 kB at 37 kB/s)
+Downloading from ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/maven-metadata.xml
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/maven-metadata.xml
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/maven-metadata.xml (304 B at 1.2 kB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar.asc
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.jar.asc (473 B at 8.3 kB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar.asc
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar.asc (473 B at 8.4 kB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-javadoc.jar (321 kB at 1.2 MB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar.asc
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar.asc (473 B at 8.3 kB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom.asc
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2.pom.asc (473 B at 8.2 kB/s)
+Uploading to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar
+Uploaded to ossrh: https://oss.sonatype.org:443/service/local/staging/deployByRepositoryId/eduillinois-1031/edu/illinois/cs/idflakies/1.0.2/idflakies-1.0.2-sources.jar (62 kB at 358 kB/s)
+[INFO]  * Upload of locally staged artifacts finished.
+[INFO]  * Closing staging repository with ID "eduillinois-1031".
+
+Waiting for operation to complete...
+...........
+
+[INFO] Remote staged 1 repositories, finished with success.
+[INFO] Remote staging repositories are being released...
+
+Waiting for operation to complete...
+.......
+
+[INFO] Remote staging repositories released.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 01:17 min
+[INFO] Finished at: 2020-09-18T20:05:50-05:00
+[INFO] ------------------------------------------------------------------------

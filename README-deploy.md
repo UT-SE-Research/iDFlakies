@@ -71,3 +71,5 @@ Modify the `~/.m2/settings.xml` on your machine
 Run `mvn clean deploy -P release` to deploy and then wait about 1 day and the new version should be available on [Maven central](https://mvnrepository.com/artifact/edu.illinois.cs/idflakies) .
 
 Last deploy was done on asedl in `~/iDFlakies-deploy`.
+
+An example of the log from deploying is in `deploy.log`.
