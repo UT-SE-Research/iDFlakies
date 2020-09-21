@@ -6,7 +6,7 @@
 
     <groupId>edu.illinois.cs</groupId>
     <artifactId>idflakies</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <name>iDFlakies</name>
     <description>A tool for detecting flaky tests</description>

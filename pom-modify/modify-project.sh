@@ -1,12 +1,12 @@
 #!/bin/bash
 
 ARTIFACT_ID="idflakies"
-ARTIFACT_VERSION="1.0.1"
+ARTIFACT_VERSION="1.0.2"
 CONFIGURATION_CLASS="edu.illinois.cs.dt.tools.detection.DetectorPlugin"
 
 if [[ $1 == "" ]]; then
     echo "arg1 - the path to the project, where high-level pom.xml is"
-    echo "arg2 - (Optional) Custom version for the artifact (e.g., 1.0.1, 1.0.2-SNAPSHOT). Default is $ARTIFACT_VERSION"
+    echo "arg2 - (Optional) Custom version for the artifact (e.g., 1.0.2, 1.0.3-SNAPSHOT). Default is $ARTIFACT_VERSION"
     exit
 fi
 
