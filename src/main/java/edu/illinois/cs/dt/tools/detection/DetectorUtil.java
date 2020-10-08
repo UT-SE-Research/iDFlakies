@@ -95,4 +95,35 @@ public class DetectorUtil {
         }
         return result;
     }
+
+    public static List<DependentTest> flakyTimeTests(final TestRunResult intended,
+                                                     final TestRunResult revealed,
+                                                     final boolean onlyFirstFailure) {
+        final List<DependentTest> result = new ArrayList<>();
+
+        for (final Map.Entry<String, TestResult> entry : intended.results().entrySet()) {
+            final String testName = entry.getKey();
+            final TestResult intendedResult = entry.getValue();
+            final Double intendedTime = intendedResult.time();
+            final Map<String, TestResult> revealedResults = revealed.results();
+
+            if (revealedResults.containsKey(testName)) {
+                final TestResult revealedResult = revealedResults.get(testName);
+                final Double revealedTime = revealedResult.time();
+                // Mark as "flaky" if time is different by 1 + 50% seconds, and the result is the same still (just time differs)
+                if ((Math.abs(revealedTime - intendedTime) > 1 + (0.5 * intendedTime))
+                    && (revealedResult.result().equals(intendedResult.result()))) {
+                    result.add(new DependentTest(testName,
+                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intended.id()),
+                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealed.id())));
+
+                    if (onlyFirstFailure) {
+                        // Only keep the first failure, if any
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }

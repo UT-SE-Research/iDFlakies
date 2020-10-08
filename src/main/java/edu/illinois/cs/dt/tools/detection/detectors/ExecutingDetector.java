@@ -29,14 +29,14 @@ import java.util.stream.Stream;
 
 public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     protected Runner runner;
-    private boolean countOnlyFirstFailure = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.count.only.first.failure", "false"));
+    protected boolean countOnlyFirstFailure = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.count.only.first.failure", "false"));
 
     protected int rounds;
     private List<Filter> filters = new ArrayList<>();
     protected final String name;
     protected final AtomicInteger absoluteRound = new AtomicInteger(0);
 
-    private final Stopwatch stopwatch = Stopwatch.createUnstarted();
+    protected final Stopwatch stopwatch = Stopwatch.createUnstarted();
 
     public ExecutingDetector(final Runner runner, final int rounds, final String name) {
         this.runner = runner;
@@ -70,7 +70,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         return Streams.stream(new RunnerIterator());
     }
 
-    private Stream<DependentTest> filter(List<DependentTest> dts, final int absoluteRound) {
+    protected Stream<DependentTest> filter(List<DependentTest> dts, final int absoluteRound) {
         if (!dts.isEmpty()) {
             for (final Filter filter : filters) {
                 dts = dts.stream().filter(t -> filter.keep(t, absoluteRound)).collect(Collectors.toList());

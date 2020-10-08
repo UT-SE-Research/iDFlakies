@@ -23,6 +23,8 @@ public class DetectorFactory {
             return new OriginalDetector(runner, rounds, tests);
         } else if (detectorType().equals("smart-shuffle")) {
             return new SmartShuffleDetector(runner, rounds, tests, detectorType());
+        } else if (detectorType().equals("flaky-time")) {
+            return new RandomTimeDetector("time", runner, rounds, tests);
         }
 
         return new RandomDetector("random", runner, rounds, tests);
