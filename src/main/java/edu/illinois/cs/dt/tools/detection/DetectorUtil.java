@@ -32,8 +32,8 @@ public class DetectorUtil {
             origResult = runner.runList(originalOrder).get();
 
             try {
-                Files.write(DetectorPathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(),
-                        Files.exists(DetectorPathManager.originalOrderPath()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+                Files.write(DetectorPathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(), Files.exists(DetectorPathManager.originalOrderPath()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+//                Files.write(DetectorPathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(), StandardOpenOption.CREATE);
             } catch (IOException ignored) {}
 
             if (allPass(origResult)) {

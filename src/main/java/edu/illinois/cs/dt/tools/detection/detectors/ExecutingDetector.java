@@ -2,6 +2,9 @@ package edu.illinois.cs.dt.tools.detection.detectors;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Streams;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.reedoei.eunomia.io.VerbosePrinter;
 import com.reedoei.eunomia.io.files.FileUtil;
 import com.reedoei.eunomia.string.StringUtil;
@@ -15,13 +18,13 @@ import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -91,6 +94,22 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         System.out.println(); // End the progress line.
 
         print(String.format("[INFO] Found %d tests, writing list to %s and dt lists to %s\n", dtList.size(), listPath, dtListPath));
+
+        // *** keeping track of previous tests for next run ***
+        System.out.println(DetectorPathManager.ORIGINAL_ORDER.toString());
+        Scanner read = new Scanner(new File(".dtfixingtools/original-order"));
+        read.useDelimiter("\n");
+        List<String> tests = new ArrayList<>();
+        while (read.hasNext())
+        {
+            tests.add(read.nextLine());
+        }
+        read.close();
+        // write new test order to file
+        Gson gson = new Gson();
+        Type gsonType = new TypeToken<List>(){}.getType();
+        String gsonString = gson.toJson(tests,gsonType);
+        Files.write(DetectorPathManager.PREVIOUS_TESTS, gsonString.getBytes());
 
         Files.write(dtListPath, dtList.toString().getBytes());
         Files.write(listPath, StringUtil.unlines(dtList.names()).getBytes());

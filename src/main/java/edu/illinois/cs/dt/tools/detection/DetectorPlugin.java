@@ -227,13 +227,6 @@ public class DetectorPlugin extends TestPlugin {
                 Files.createDirectories(outputPath);
                 Files.write(DetectorPathManager.originalOrderPath(), String.join(System.lineSeparator(), tests).getBytes());
 
-                // *** want all method+tests in JSON form ***
-                // Files.createDirectories(DetectorPathManager.PREVIOUS_TESTS);
-                Gson gson = new Gson();
-                Type gsonType = new TypeToken<List>(){}.getType();
-                String gsonString = gson.toJson(tests,gsonType);
-                Files.write(DetectorPathManager.PREVIOUS_TESTS, gsonString.getBytes());
-
                 final Detector detector = DetectorFactory.makeDetector(runner, tests, rounds);
                 TestPluginPlugin.info("Created dependent test detector (" + detector.getClass() + ").");
 
@@ -253,7 +246,9 @@ public class DetectorPlugin extends TestPlugin {
     }
 
     public static List<String> getOriginalOrder(final MavenProject mavenProject) throws IOException {
-        return getOriginalOrder(mavenProject, false);
+//        return getOriginalOrder(mavenProject, false);
+        // *** we want tests to be pulled from the project every run of iDFlakies ***
+        return getOriginalOrder(mavenProject, true);
     }
 
     public static List<String> getOriginalOrder(final MavenProject mavenProject, boolean ignoreExisting) throws IOException {
