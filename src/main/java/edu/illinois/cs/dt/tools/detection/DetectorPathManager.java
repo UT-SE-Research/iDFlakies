@@ -13,6 +13,7 @@ public class DetectorPathManager extends PathManager {
     public static final Path ORIGINAL_RESULTS_LOG = Paths.get("original-results-ids");
     public static final Path MVN_TEST_LOG = Paths.get("mvn-test.log");
     public static final Path MVN_TEST_TIME_LOG = Paths.get("mvn-test-time.log");
+    public static final Path PREVIOUS_TESTS = Paths.get("previous-tests.json");
 
     public static Path detectionResults() {
         return path(DETECTION_RESULTS);

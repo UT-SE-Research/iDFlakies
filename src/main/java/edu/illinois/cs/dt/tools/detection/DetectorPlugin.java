@@ -31,6 +31,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
 public class DetectorPlugin extends TestPlugin {
     private final Path outputPath;
     private String coordinates;
@@ -222,6 +226,13 @@ public class DetectorPlugin extends TestPlugin {
             if (!tests.isEmpty()) {
                 Files.createDirectories(outputPath);
                 Files.write(DetectorPathManager.originalOrderPath(), String.join(System.lineSeparator(), tests).getBytes());
+
+                // *** want all method+tests in JSON form ***
+                // Files.createDirectories(DetectorPathManager.PREVIOUS_TESTS);
+                Gson gson = new Gson();
+                Type gsonType = new TypeToken<List>(){}.getType();
+                String gsonString = gson.toJson(tests,gsonType);
+                Files.write(DetectorPathManager.PREVIOUS_TESTS, gsonString.getBytes());
 
                 final Detector detector = DetectorFactory.makeDetector(runner, tests, rounds);
                 TestPluginPlugin.info("Created dependent test detector (" + detector.getClass() + ").");

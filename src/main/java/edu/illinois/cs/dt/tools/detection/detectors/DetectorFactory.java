@@ -23,6 +23,8 @@ public class DetectorFactory {
             return new OriginalDetector(runner, rounds, tests);
         } else if (detectorType().equals("smart-shuffle")) {
             return new SmartShuffleDetector(runner, rounds, tests, detectorType());
+        } else if (detectorType().equals("incremental")) {
+            return new IncrementalDetector(detectorType(), runner, rounds, tests);
         }
 
         return new RandomDetector("random", runner, rounds, tests);
