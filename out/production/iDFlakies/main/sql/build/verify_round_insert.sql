@@ -1,0 +1,22 @@
+insert into verify_round
+(
+  subject_name,
+  round_number,
+  test_run_result_str_id,
+  round_type,
+  verify_round_number,
+  test_name,
+  expected_result,
+  result
+)
+values
+(
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?
+)

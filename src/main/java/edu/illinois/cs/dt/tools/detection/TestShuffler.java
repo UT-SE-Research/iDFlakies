@@ -35,6 +35,9 @@ public class TestShuffler {
     private final Set<String> newTestsRan = new HashSet<>();
     private boolean overwritten = false;
 
+    //Variable to keep track of which new tests have been processed
+    private int processedIndex = 0;
+
     public TestShuffler(final String type, final int rounds, final List<String> tests) {
         this.type = type;
         this.tests = tests;
@@ -97,13 +100,25 @@ public class TestShuffler {
                     // if there are new tests, run them at the front and back
                     List<String> testOrder = new ArrayList<>();
                      if(!newTestsRan.contains("Front")){
-                        testOrder.addAll(newTests);
+                        if(newTests.size() > 1) {
+                            //Put one of the tests at the front
+                            testOrder.add(newTests.get(processedIndex));
+                            newTests.remove(processedIndex);
+
+                            testOrder.addAll(newTests); //TODO randomize the other ones
+                        }
+                        else {
+                            testOrder.addAll(newTests);
+                        }
 //                    testOrder.addAll(jsonMap.keySet());
                         testOrder.addAll(jsonMap);
                          newTestsRan.add("Front");
                     } else if(newTestsRan.contains("Front") && !newTestsRan.contains("Back")){
                         testOrder.addAll(jsonMap);
+                        testOrder.add(newTests.get(processedIndex));
+                        newTests.remove(processedIndex);
                         testOrder.addAll(newTests);
+                        processedIndex++;
                         newTestsRan.add("Back");
                     } else{
                          return generateShuffled();
