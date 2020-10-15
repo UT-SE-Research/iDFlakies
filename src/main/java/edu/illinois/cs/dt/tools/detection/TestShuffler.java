@@ -115,11 +115,11 @@ public class TestShuffler {
                          newTestsRan.add("Front");
                     } else if(newTestsRan.contains("Front") && !newTestsRan.contains("Back")){
                         testOrder.addAll(jsonMap);
-                        testOrder.add(newTests.get(processedIndex));
-                        newTests.remove(processedIndex);
+                        String newTest = newTests.remove(processedIndex);
                         testOrder.addAll(newTests);
+                        testOrder.add(newTest);
                         processedIndex++;
-                        newTestsRan.add("Back");
+                        newTestsRan.remove("Front");
                     } else{
                          return generateShuffled();
                      }
@@ -129,9 +129,11 @@ public class TestShuffler {
                     Type gsonType = new TypeToken<List>(){}.getType();
                     String gsonString = gson.toJson(testOrder,gsonType);
                     if(!overwritten){
+                        System.out.println(gsonString);
                         Files.write(DetectorPathManager.NEWTEST_TESTORDER, gsonString.getBytes());
                         overwritten = true;
                     } else{
+                        System.out.println(gsonString);
                         Files.write(DetectorPathManager.NEWTEST_TESTORDER, gsonString.getBytes(), StandardOpenOption.APPEND);
                     }
 
