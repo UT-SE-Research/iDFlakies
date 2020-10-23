@@ -120,6 +120,9 @@ public class TestShuffler {
             if(newTests.isEmpty()){
                 System.out.println("***No new tests found, just shuffling tests***");
                 return generateShuffled();
+            } else if(processedIndex >= newTests.size()){
+                System.out.println("***No new tests left to process, just shuffling tests***");
+                return generateShuffled();
             } else {
                 System.out.println("***New tests were found***");
                 // if there are new tests, run them at the front and back
@@ -141,8 +144,12 @@ public class TestShuffler {
                 } else if(newTestsRan.contains("Front") && !newTestsRan.contains("Back")){
                     testOrder.addAll(jsonMap);
                     String newTest = newTests.remove(processedIndex);
-                    testOrder.addAll(newTests);
-                    testOrder.add(newTest);
+                    if (!(newTests.size()>0)) {
+                        testOrder.add(newTest);
+                    } else{
+                        testOrder.addAll(newTests);
+                        testOrder.add(newTest);
+                    }
                     processedIndex++;
                     newTestsRan.remove("Front");
                 } else{
