@@ -146,8 +146,8 @@ public class DetectorUtil {
                 if ((Math.abs(revealedTime - intendedTime) > 1 + (0.5 * intendedTime))
                     && (revealedResult.result().equals(intendedResult.result()))) {
                     result.add(new DependentTest(testName,
-                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intended.id()),
-                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealed.id())));
+                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intendedResult.time(), intended.id()),
+                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealedResult.time(), revealed.id())));
 
                     if (onlyFirstFailure) {
                         // Only keep the first failure, if any
