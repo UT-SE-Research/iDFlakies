@@ -32,7 +32,7 @@ public class DependentClassifier implements Classifier {
                 results.add(result.result());
 
                 final Set<TestRun> runs = dependentRuns.getOrDefault(testName, new HashSet<>());
-                runs.add(new TestRun(testRunResult.testOrder(), result.result(), testRunResult.id()));
+                runs.add(new TestRun(testRunResult.testOrder(), result.result(), result.time(), testRunResult.id()));
                 dependentRuns.put(testName, runs);
             }
 

@@ -33,7 +33,7 @@ public class NonorderClassifier implements Classifier {
                     flaky.add(testName);
                 }
             } else {
-                runs.put(orderHash, new TestRun(testRunResult.testOrder(), result.result(), testRunResult.id()));
+                runs.put(orderHash, new TestRun(testRunResult.testOrder(), result.result(), result.time(), testRunResult.id()));
                 knownRuns.put(testName, runs);
             }
         });

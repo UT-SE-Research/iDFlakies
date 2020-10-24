@@ -80,11 +80,11 @@ public class DetectorUtil {
             final Map<String, TestResult> revealedResults = revealed.results();
 
             if (revealedResults.containsKey(testName)) {
-                final Result revealedResult = revealedResults.get(testName).result();
-                if (!revealedResult.equals(intendedResult.result())) {
+                final TestResult revealedResult = revealedResults.get(testName);
+                if (!revealedResult.result().equals(intendedResult.result())) {
                     result.add(new DependentTest(testName,
-                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intended.id()),
-                            new TestRun(before(revealed.testOrder(), testName), revealedResult, revealed.id())));
+                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intendedResult.time(), intended.id()),
+                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealedResult.time(), revealed.id())));
 
                     if (onlyFirstFailure) {
                         // Only keep the first failure, if any
@@ -114,8 +114,8 @@ public class DetectorUtil {
                 if ((Math.abs(revealedTime - intendedTime) > 1 + (0.5 * intendedTime))
                     && (revealedResult.result().equals(intendedResult.result()))) {
                     result.add(new DependentTest(testName,
-                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intended.id()),
-                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealed.id())));
+                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intendedResult.time(), intended.id()),
+                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealedResult.time(), revealed.id())));
 
                     if (onlyFirstFailure) {
                         // Only keep the first failure, if any

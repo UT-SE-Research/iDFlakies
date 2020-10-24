@@ -52,7 +52,7 @@ public class DependentTestList {
             final List<String> modifiedOrder =
                     ListUtil.read(modifiedOrderLine.replace("when executed after: ", ""));
 
-            dts.add(new DependentTest(test, new TestRun(originalOrder, intended, "unknown"), new TestRun(modifiedOrder, revealed, "unknown")));
+            dts.add(new DependentTest(test, new TestRun(originalOrder, intended, -1.0, "unknown"), new TestRun(modifiedOrder, revealed, -1.0, "unknown")));
         }
 
         return new DependentTestList(dts);

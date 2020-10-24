@@ -2,7 +2,9 @@ package edu.illinois.cs.dt.tools.detection.detectors;
 
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
+import edu.illinois.cs.dt.tools.detection.filters.ConfirmationTimeFilter;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
@@ -15,6 +17,11 @@ public class RandomTimeDetector extends RandomDetector {
 
     public RandomTimeDetector(final String type, final Runner runner, final int rounds, final List<String> tests) {
         super(type, runner, rounds, tests);
+        if (runner instanceof InstrumentingSmartRunner) {
+            addFilter(new ConfirmationTimeFilter(name, tests, (InstrumentingSmartRunner) runner));
+        } else {
+            addFilter(new ConfirmationTimeFilter(name, tests, InstrumentingSmartRunner.fromRunner(runner)));
+        }
     }
 
     @Override

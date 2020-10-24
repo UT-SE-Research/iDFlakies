@@ -40,4 +40,8 @@ public class DependentTest {
     public boolean verify(final Runner runner, final Path path) {
         return intended.verify(name, runner, path) && revealed.verify(name, runner, path);
     }
+
+    public boolean verifyTime(final Runner runner, final Path path) {
+        return intended.verifyTime(name, runner, path) && revealed.verifyTime(name, runner, path);
+    }
 }
