@@ -43,8 +43,7 @@ public class TestRun {
     }
 
     private boolean verifyRound(final String dt, final Runner runner, final Path path, final int i) {
-        System.out.printf("Verifying %s, status: expected %s", dt, this.result);
-        Result result = null;
+        Result newResult = null;
         try {
             final List<String> order = new ArrayList<>(this.order);
             if (!order.contains(dt)) {
@@ -52,7 +51,7 @@ public class TestRun {
             }
             final TestRunResult results = runner.runList(order).get();
 
-            result = results.results().get(dt).result();
+            newResult = results.results().get(dt).result();
 
             if (path != null) {
                 final Path outputPath = DetectorPathManager.pathWithRound(path, dt + "-" + this.result, i);
@@ -61,7 +60,8 @@ public class TestRun {
             }
         } catch (Exception ignored) {}
 
-        System.out.printf(", got %s\n", result);
-        return this.result.equals(result);
+        System.out.printf("Verified %s, status: expected %s, got %s\n",
+                          dt, this.result, newResult);
+        return this.result.equals(newResult);
     }
 }

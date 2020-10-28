@@ -97,10 +97,11 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     }
 
     private class RunnerIterator implements Iterator<DependentTest> {
+
         private final long origStartTimeMs = System.currentTimeMillis();
         private long startTimeMs = System.currentTimeMillis();
         private long previousStopTimeMs = System.currentTimeMillis();
-	private boolean roundsAreTotal = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.roundsemantics.total", "false"));
+        private boolean roundsAreTotal = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.roundsemantics.total", "false"));
 
         private int i = 0;
 
@@ -154,20 +155,18 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
             final double estimate = elapsed / (i + 1) * (rounds - i - 1) / 1000;
 
             if (!round.filteredTests().dts().isEmpty()) {
-                System.out.print(String.format("\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).\n",
-                        round.filteredTests().size(), ++i, rounds, elapsed / 1000, totalElapsed, estimate));
+                System.out.println(
+                        buildResultString(round.filteredTests().size(), ++i, rounds,
+                                          elapsed / 1000, totalElapsed, estimate));
                 result.addAll(round.filteredTests().dts());
-		if (!roundsAreTotal){
-		    i = 0;
-		}
+                if (!roundsAreTotal) {
+                    i = 0;
+                }
                 startTimeMs = System.currentTimeMillis();
             } else {
-		if (roundsAreTotal)
-		    System.out.print(String.format("\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).\n",
-						   round.filteredTests().size(), ++i, rounds, elapsed / 1000, totalElapsed, estimate));
-		else
-		    System.out.print(String.format("\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).",
-						   round.filteredTests().size(), ++i, rounds, elapsed / 1000, totalElapsed, estimate));
+                System.out.println(
+                        buildResultString(round.filteredTests().size(), ++i, rounds,
+                                          elapsed / 1000, totalElapsed, estimate));
             }
 
             absoluteRound.incrementAndGet();
@@ -181,5 +180,13 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
                 return null;
             }
         }
+    }
+
+    private static String buildResultString(
+            int testCnt, int currentRound, int totalRound,
+            double elapsedTimeSec, double totalTimeSec, double estimateTimeSec) {
+        return String.format("\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).",
+                             testCnt, currentRound, totalRound,
+                             elapsedTimeSec, totalTimeSec, estimateTimeSec);
     }
 }
