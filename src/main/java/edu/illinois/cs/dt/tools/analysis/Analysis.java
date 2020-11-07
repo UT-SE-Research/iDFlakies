@@ -493,8 +493,7 @@ public class Analysis extends StandardMain {
 
         return new TestRunResult("the id is unimportant and should never be referenced",
                 originalOrder,
-                testOutcomes,
-                new HashMap<>());
+                testOutcomes);
     }
 
     private void insertDetectionRound(final String name, final String roundType,
