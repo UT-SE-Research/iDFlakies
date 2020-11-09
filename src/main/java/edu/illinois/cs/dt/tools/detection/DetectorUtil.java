@@ -2,6 +2,7 @@ package edu.illinois.cs.dt.tools.detection;
 
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
+import edu.illinois.cs.dt.tools.runner.data.TestRunWithTime;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
@@ -114,8 +115,8 @@ public class DetectorUtil {
                 if ((Math.abs(revealedTime - intendedTime) > 1 + (0.5 * intendedTime))
                     && (revealedResult.result().equals(intendedResult.result()))) {
                     result.add(new DependentTest(testName,
-                            new TestRun(before(intended.testOrder(), testName), intendedResult.result(), intendedResult.time(), intended.id()),
-                            new TestRun(before(revealed.testOrder(), testName), revealedResult.result(), revealedResult.time(), revealed.id())));
+                            new TestRunWithTime(before(intended.testOrder(), testName), intendedResult.result(), intendedResult.time(), intended.fullTestTime(), intended.id()),
+                            new TestRunWithTime(before(revealed.testOrder(), testName), revealedResult.result(), revealedResult.time(), revealed.fullTestTime(), revealed.id())));
 
                     if (onlyFirstFailure) {
                         // Only keep the first failure, if any
