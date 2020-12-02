@@ -3,7 +3,7 @@ Relevant links:
 - https://central.sonatype.org/pages/working-with-pgp-signatures.html
 - https://central.sonatype.org/pages/releasing-the-deployment.html
 
-To deploy run the following
+To deploy for the first time, run the following
 
 ```shell
 export GPG_TTY=$(tty)
@@ -13,6 +13,7 @@ gpg2 --keyserver hkp://pool.sks-keyservers.net --send-keys XXXXXXXX # key is fro
 
 mvn versions:set -DnewVersion=1.0.2
 ```
+(You need not run the commands that start with `gpg` if you already generated a key before. You would need to run `export GPG...` and `mvn version...` though)
 
 Make the following changes to the pom.xml
 
@@ -34,7 +35,7 @@ index 175093b..f828eb9 100644
                             <execution>
 +                           <configuration>
 +                             <executable>gpg2</executable>
-+                             <passphrase>XXXXXXXX</passphrase> <!-- passphrase is set from --gen-key -->
++                             <passphrase>XXXXXXXX</passphrase> <!-- passphrase is set to public key outputted from gpg2 list-key -->
 +                           </configuration>
 			    <id>sign-artifacts</id>
 			    <phase>deploy</phase>
@@ -68,7 +69,7 @@ Modify the `~/.m2/settings.xml` on your machine
 	</servers>
 </settings>
 ```
-Run `mvn clean deploy -P release` to deploy and then wait about 1 day and the new version should be available on [Maven central](https://mvnrepository.com/artifact/edu.illinois.cs/idflakies) .
+Run `mvn clean deploy -P release` to deploy and then wait about 1 day and the new version should be available on [Maven central](https://mvnrepository.com/artifact/edu.illinois.cs/idflakies). Running `gpgconf --kill gpg-agent` between attempts to deploy may help if gpg was interrupted.
 
 Last deploy was done on asedl in `~/iDFlakies-deploy`.
 
