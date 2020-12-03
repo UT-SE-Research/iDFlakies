@@ -33,7 +33,7 @@ public class DetectorUtil {
 
             try {
                 Files.write(DetectorPathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(),
-                        Files.exists(DetectorPathManager.originalOrderPath()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+                        Files.exists(DetectorPathManager.originalResultsLog()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             } catch (IOException ignored) {}
 
             if (allPass(origResult)) {
