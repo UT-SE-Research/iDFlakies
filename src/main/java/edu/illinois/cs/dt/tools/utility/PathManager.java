@@ -2,7 +2,7 @@ package edu.illinois.cs.dt.tools.utility;
 
 import com.google.common.base.Preconditions;
 import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import org.apache.maven.project.MavenProject;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 public class PathManager {
     private static final String outputPath = Configuration.config().getProperty("dt.cache.absolute.path", "");
     public static Path modulePath() {
-        return TestPluginPlugin.mavenProject().getBasedir().toPath();
+        return TestPluginUtil.project.getBasedir().toPath();
     }
 
     private static MavenProject getMavenProjectParent(MavenProject mavenProject) {
@@ -26,7 +26,7 @@ public class PathManager {
     }
 
     public static Path parentPath() {
-        return getMavenProjectParent(TestPluginPlugin.mavenProject()).getBasedir().toPath();
+        return getMavenProjectParent(TestPluginUtil.project).getBasedir().toPath();
     }
 
     public static Path parentPath(final Path relative) {
@@ -37,7 +37,7 @@ public class PathManager {
     }
 
     public static Path cachePath() {
-	TestPluginPlugin.mojo().getLog().info("Accessing cachePath: " + outputPath);
+	TestPluginUtil.info("Accessing cachePath: " + outputPath);
 	if (outputPath == "") {
 	    return modulePath().resolve(".dtfixingtools");
 	} else {
@@ -45,7 +45,7 @@ public class PathManager {
 	    try {
 		Files.createDirectories(outputPathObj);
 	    } catch (IOException e) {
-		TestPluginPlugin.mojo().getLog().debug(e.getMessage());
+		TestPluginUtil.debug(e.getMessage());
 	    }
 	    return outputPathObj.resolve(modulePath().getFileName());
 	}

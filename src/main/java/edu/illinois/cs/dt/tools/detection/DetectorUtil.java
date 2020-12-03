@@ -6,7 +6,7 @@ import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class DetectorUtil {
             if (allMustPass) {
                 throw new NoPassingOrderException("No passing order for tests (" + originalOrderTries + " runs)");
             } else {
-                TestPluginPlugin.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
+                TestPluginUtil.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
             }
         }
 

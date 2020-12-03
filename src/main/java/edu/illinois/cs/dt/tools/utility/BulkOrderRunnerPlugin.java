@@ -5,8 +5,8 @@ import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
-import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import org.apache.maven.project.MavenProject;
@@ -42,7 +42,7 @@ public class BulkOrderRunnerPlugin extends TestPlugin {
                 run(runner, inputPath, outputPath);
             } else {
                 final String errorMsg = "Module is not using a supported test framework (probably not JUnit).";
-                TestPluginPlugin.info(errorMsg);
+                TestPluginUtil.info(errorMsg);
                 errorLogger.writeError(errorMsg);
             }
 
@@ -54,7 +54,7 @@ public class BulkOrderRunnerPlugin extends TestPlugin {
         final List<Path> collect = Files.list(inputPath).collect(Collectors.toList());
         for (int i = 0; i < collect.size(); i++) {
             final Path p = collect.get(i);
-            TestPluginPlugin.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
+            TestPluginUtil.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
             runOrder(runner, p, outputPath);
         }
     }

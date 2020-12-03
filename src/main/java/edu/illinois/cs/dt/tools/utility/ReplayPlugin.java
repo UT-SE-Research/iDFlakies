@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
-import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import org.apache.maven.project.MavenProject;
@@ -37,13 +37,13 @@ public class ReplayPlugin extends TestPlugin {
                 if (testRunResultTry.isSuccess()) {
                     Files.write(outputPath, new Gson().toJson(testRunResultTry.get()).getBytes());
                 } else {
-                    TestPluginPlugin.mojo().getLog().error(testRunResultTry.failed().get());
+                    TestPluginUtil.error(testRunResultTry.failed().get());
                 }
             } catch (IOException e) {
-                TestPluginPlugin.mojo().getLog().error(e);
+                TestPluginUtil.error(e);
             }
         } else {
-            TestPluginPlugin.mojo().getLog().info("Module is not using a supported test framework (probably not JUnit).");
+            TestPluginUtil.info("Module is not using a supported test framework (probably not JUnit).");
         }
     }
 
