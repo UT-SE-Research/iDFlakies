@@ -16,7 +16,7 @@ import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import edu.illinois.cs.testrunner.testobjects.TestLocator;
-import org.apache.maven.project.MavenProject;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import scala.collection.JavaConverters;
 
 import java.io.FileInputStream;
@@ -68,8 +68,8 @@ public class DetectorPlugin extends TestPlugin {
         return until(t, f, v -> f.apply(v) == null);
     }
 
-    private MavenProject getMavenProjectParent(MavenProject mavenProject) {
-        MavenProject parentProj = mavenProject;
+    private ProjectWrapper getMavenProjectParent(ProjectWrapper project) {
+        ProjectWrapper parentProj = project;
         while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
             parentProj = parentProj.getParent();
         }
@@ -89,8 +89,8 @@ public class DetectorPlugin extends TestPlugin {
         return result;
     }
 
-    private long moduleTimeout(final MavenProject mavenProject) throws IOException {
-        final MavenProject parent = getMavenProjectParent(mavenProject);
+    private long moduleTimeout(final ProjectWrapper project) throws IOException {
+        final ProjectWrapper parent = getMavenProjectParent(project);
 
         final Path timeCsv = parent.getBasedir().toPath().resolve("module-test-time.csv");
         Files.copy(timeCsv, DetectorPathManager.detectionResults().resolve("module-test-time.csv"), StandardCopyOption.REPLACE_EXISTING);
@@ -194,14 +194,14 @@ public class DetectorPlugin extends TestPlugin {
     }
 
     @Override
-    public void execute(final MavenProject mavenProject) {
-        final ErrorLogger logger = new ErrorLogger(mavenProject);
+    public void execute(final ProjectWrapper project) {
+        final ErrorLogger logger = new ErrorLogger(project);
         this.coordinates = logger.coordinates();
 
-        logger.runAndLogError(() -> detectorExecute(logger, mavenProject, moduleRounds(coordinates)));
+        logger.runAndLogError(() -> detectorExecute(logger, project, moduleRounds(coordinates)));
     }
 
-    private Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
+    private Void detectorExecute(final ErrorLogger logger, final ProjectWrapper project, final int rounds) throws IOException {
         Files.deleteIfExists(DetectorPathManager.errorPath());
         Files.createDirectories(DetectorPathManager.cachePath());
         Files.createDirectories(DetectorPathManager.detectionResults());
@@ -209,8 +209,8 @@ public class DetectorPlugin extends TestPlugin {
         // Currently there could two runners, one for JUnit 4 and one for JUnit 5
         // If the maven project has both JUnit 4 and JUnit 5 tests, two runners will
         // be returned
-        List<Runner> runners = RunnerFactory.allFrom(mavenProject);
-        runners = removeZombieRunners(runners, mavenProject);
+        List<Runner> runners = RunnerFactory.allFrom(project);
+        runners = removeZombieRunners(runners, project);
 
         if (runners.size() != 1) {
             String errorMsg;
@@ -232,7 +232,7 @@ public class DetectorPlugin extends TestPlugin {
         if (this.runner == null) {
             this.runner = InstrumentingSmartRunner.fromRunner(runners.get(0));
         }
-        final List<String> tests = getOriginalOrder(mavenProject, this.runner.framework());
+        final List<String> tests = getOriginalOrder(project, this.runner.framework());
 
         if (!tests.isEmpty()) {
             Files.createDirectories(outputPath);
@@ -249,27 +249,27 @@ public class DetectorPlugin extends TestPlugin {
         return null;
     }
 
-    private static List<String> locateTests(MavenProject mavenProject,
+    private static List<String> locateTests(ProjectWrapper project,
                                            TestFramework testFramework) {
         return JavaConverters.bufferAsJavaList(
-                TestLocator.tests(mavenProject, testFramework).toBuffer());
+                TestLocator.tests(project, testFramework).toBuffer());
     }
 
     public static List<String> getOriginalOrder(
-            final MavenProject mavenProject,
+            final ProjectWrapper project,
             TestFramework testFramework) throws IOException {
-        return getOriginalOrder(mavenProject, testFramework, false);
+        return getOriginalOrder(project, testFramework, false);
     }
 
     public static List<String> getOriginalOrder(
-            final MavenProject mavenProject,
+            final ProjectWrapper project,
             TestFramework testFramework,
             boolean ignoreExisting) throws IOException {
         if (!Files.exists(DetectorPathManager.originalOrderPath()) || ignoreExisting) {
             TestPluginUtil.info("Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
 
             try {
-                final Path surefireReportsPath = Paths.get(mavenProject.getBuild().getDirectory()).resolve("surefire-reports");
+                final Path surefireReportsPath = Paths.get(project.getBuildDirectory()).resolve("surefire-reports");
                 final Path mvnTestLog = DetectorPathManager.mvnTestLog();
 
                 if (Files.exists(mvnTestLog) && Files.exists(surefireReportsPath)) {
@@ -287,25 +287,25 @@ public class DetectorPlugin extends TestPlugin {
 
                     return tests;
                 } else {
-                    return locateTests(mavenProject, testFramework);
+                    return locateTests(project, testFramework);
                 }
             } catch (Exception ignored) {}
 
-            return locateTests(mavenProject, testFramework);
+            return locateTests(project, testFramework);
         } else {
             return Files.readAllLines(DetectorPathManager.originalOrderPath());
         }
     }
 
     private static List<Runner> removeZombieRunners(
-            List<Runner> runners, MavenProject mavenProject) throws IOException {
+            List<Runner> runners, ProjectWrapper project) throws IOException {
         // Some projects may include test frameworks without corresponding tests.
         // Filter out such zombie test frameworks (runners).
         // For example, a project have both JUnit 4 and 5 dependencies, but there is
         // no JUnit 4 tests. In such case, we need to remove the JUnit 4 runner.
         List<Runner> aliveRunners = new ArrayList<>();
         for (Runner runner : runners) {
-            if (locateTests(mavenProject, runner.framework()).size() > 0) {
+            if (locateTests(project, runner.framework()).size() > 0) {
                 aliveRunners.add(runner);
             }
         }

@@ -8,7 +8,7 @@ import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
 import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
-import org.apache.maven.project.MavenProject;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import scala.Option;
 import scala.util.Try;
 
@@ -22,8 +22,8 @@ public class ReplayPlugin extends TestPlugin {
     private Path replayPath;
 
     @Override
-    public void execute(final MavenProject mavenProject) {
-        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
+    public void execute(final ProjectWrapper project) {
+        final Option<Runner> runnerOption = RunnerFactory.from(project);
 
         if (runnerOption.isDefined()) {
             replayPath = Paths.get(Configuration.config().getProperty("replay.path"));

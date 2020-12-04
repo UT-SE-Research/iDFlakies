@@ -9,7 +9,7 @@ import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
 import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
-import org.apache.maven.project.MavenProject;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import scala.Option;
 import scala.util.Try;
 
@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 
 public class BulkOrderRunnerPlugin extends TestPlugin {
     @Override
-    public void execute(final MavenProject mavenProject) {
-        final ErrorLogger errorLogger = new ErrorLogger(mavenProject);
+    public void execute(final ProjectWrapper project) {
+        final ErrorLogger errorLogger = new ErrorLogger(project);
 
-        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
+        final Option<Runner> runnerOption = RunnerFactory.from(project);
 
         errorLogger.runAndLogError(() -> {
             Files.deleteIfExists(DetectorPathManager.errorPath());
