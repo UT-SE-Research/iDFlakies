@@ -97,7 +97,7 @@ public class RebuildDetectionRounds extends StandardMain {
             testResults.put(testName, new TestResult(testName, Result.PASS, 0, new StackTraceElement[0]));
         }
 
-        return new TestRunResult("id doesnt matter", originalOrder, testResults, new HashMap<>());
+        return new TestRunResult("id doesnt matter", originalOrder, testResults);
     }
 
     private Set<String> rebuildRounds(final List<String> originalOrder,
