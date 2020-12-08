@@ -46,7 +46,7 @@ public class DetectorUtil {
             if (allMustPass) {
                 throw new NoPassingOrderException("No passing order for tests (" + originalOrderTries + " runs)");
             } else {
-                TestPluginUtil.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
+                TestPluginUtil.project.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
             }
         }
 

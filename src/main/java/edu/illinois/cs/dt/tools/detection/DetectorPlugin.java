@@ -126,7 +126,7 @@ public class DetectorPlugin extends TestPlugin {
             }
         }
 
-        TestPluginUtil.info("TIMEOUT_CALCULATED: Giving " + coordinates + " " + timeout + " seconds to run for " +
+        TestPluginUtil.project.info("TIMEOUT_CALCULATED: Giving " + coordinates + " " + timeout + " seconds to run for " +
             DetectorFactory.detectorType());
 
         return (long) timeout; // Allocate time proportionally
@@ -158,25 +158,25 @@ public class DetectorPlugin extends TestPlugin {
                 final double totalTime = readRealTime(timeCsv);
                 final double mainTimeout = Configuration.config().getProperty("detector.timeout", 6 * 3600.0); // 6 hours
                 if (mainTimeout != 0) {
-                    TestPluginUtil.info("TIMEOUT_VALUE: Using a timeout of "
+                    TestPluginUtil.project.info("TIMEOUT_VALUE: Using a timeout of "
                                                           + mainTimeout + ", and that the total mvn test time is: " + totalTime);
 
                     timeoutRounds = (int) (mainTimeout / totalTime);
                 } else {
                     timeoutRounds = roundNum;
-                    TestPluginUtil.info("TIMEOUT_VALUE specified as 0. " +
+                    TestPluginUtil.project.info("TIMEOUT_VALUE specified as 0. " +
                                                           "Ignoring timeout and using number of rounds.");
                 }
             } else {
                 // Depending on the order in which the developers tell Maven to build modules, some projects like http-request
                 // may not be able to parse the mvn-test-time.log at the base module if other submodules are built first
                 timeoutRounds = roundNum;
-                TestPluginUtil.info("TIMEOUT_VALUE specified but cannot " +
+                TestPluginUtil.project.info("TIMEOUT_VALUE specified but cannot " +
                                                       "read mvn-test-time.log at: " + timeCsv.toString());
-                TestPluginUtil.info("Ignoring timeout and using number of rounds.");
+                TestPluginUtil.project.info("Ignoring timeout and using number of rounds.");
             }
         } else {
-            TestPluginUtil.info("No timeout specified. Using randomize.rounds: " + roundNum);
+            TestPluginUtil.project.info("No timeout specified. Using randomize.rounds: " + roundNum);
             timeoutRounds = roundNum;
         }
 
@@ -187,7 +187,7 @@ public class DetectorPlugin extends TestPlugin {
             rounds = Math.min(timeoutRounds, roundNum);
         }
 
-        TestPluginUtil.info("ROUNDS_CALCULATED: Giving " + coordinates + " "
+        TestPluginUtil.project.info("ROUNDS_CALCULATED: Giving " + coordinates + " "
                 + rounds + " rounds to run for " + DetectorFactory.detectorType());
 
         return rounds;
@@ -224,7 +224,7 @@ public class DetectorPlugin extends TestPlugin {
                     "This project contains both JUnit 4 and JUnit 5 tests, which currently"
                     + " is not supported by iDFlakies";
             }
-            TestPluginUtil.info(errorMsg);
+            TestPluginUtil.project.info(errorMsg);
             logger.writeError(errorMsg);
             return null;
         }
@@ -238,11 +238,11 @@ public class DetectorPlugin extends TestPlugin {
             Files.createDirectories(outputPath);
             Files.write(DetectorPathManager.originalOrderPath(), String.join(System.lineSeparator(), tests).getBytes());
             final Detector detector = DetectorFactory.makeDetector(this.runner, tests, rounds);
-            TestPluginUtil.info("Created dependent test detector (" + detector.getClass() + ").");
+            TestPluginUtil.project.info("Created dependent test detector (" + detector.getClass() + ").");
             detector.writeTo(outputPath);
         } else {
             String errorMsg = "Module has no tests, not running detector.";
-            TestPluginUtil.info(errorMsg);
+            TestPluginUtil.project.info(errorMsg);
             logger.writeError(errorMsg);
         }
 
@@ -266,7 +266,7 @@ public class DetectorPlugin extends TestPlugin {
             TestFramework testFramework,
             boolean ignoreExisting) throws IOException {
         if (!Files.exists(DetectorPathManager.originalOrderPath()) || ignoreExisting) {
-            TestPluginUtil.info("Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
+            TestPluginUtil.project.info("Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
 
             try {
                 final Path surefireReportsPath = Paths.get(project.getBuildDirectory()).resolve("surefire-reports");

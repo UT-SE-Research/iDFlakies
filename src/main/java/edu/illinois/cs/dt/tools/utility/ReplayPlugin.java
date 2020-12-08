@@ -37,13 +37,13 @@ public class ReplayPlugin extends TestPlugin {
                 if (testRunResultTry.isSuccess()) {
                     Files.write(outputPath, new Gson().toJson(testRunResultTry.get()).getBytes());
                 } else {
-                    TestPluginUtil.error(testRunResultTry.failed().get());
+                    TestPluginUtil.project.error(testRunResultTry.failed().get());
                 }
             } catch (IOException e) {
-                TestPluginUtil.error(e);
+                TestPluginUtil.project.error(e);
             }
         } else {
-            TestPluginUtil.info("Module is not using a supported test framework (probably not JUnit).");
+            TestPluginUtil.project.info("Module is not using a supported test framework (probably not JUnit).");
         }
     }
 

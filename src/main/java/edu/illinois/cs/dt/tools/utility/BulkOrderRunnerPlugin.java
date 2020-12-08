@@ -42,7 +42,7 @@ public class BulkOrderRunnerPlugin extends TestPlugin {
                 run(runner, inputPath, outputPath);
             } else {
                 final String errorMsg = "Module is not using a supported test framework (probably not JUnit).";
-                TestPluginUtil.info(errorMsg);
+                TestPluginUtil.project.info(errorMsg);
                 errorLogger.writeError(errorMsg);
             }
 
@@ -54,7 +54,7 @@ public class BulkOrderRunnerPlugin extends TestPlugin {
         final List<Path> collect = Files.list(inputPath).collect(Collectors.toList());
         for (int i = 0; i < collect.size(); i++) {
             final Path p = collect.get(i);
-            TestPluginUtil.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
+            TestPluginUtil.project.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
             runOrder(runner, p, outputPath);
         }
     }

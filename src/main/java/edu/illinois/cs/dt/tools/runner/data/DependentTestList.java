@@ -22,7 +22,7 @@ public class DependentTestList {
     }
 
     public static DependentTestList fromFile(final Path path) throws IOException {
-        TestPluginUtil.info("Reading dependent test list from " + path);
+        TestPluginUtil.project.info("Reading dependent test list from " + path);
         return new Gson().fromJson(FileUtil.readFile(path), DependentTestList.class);
     }
 
