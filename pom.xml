@@ -6,7 +6,7 @@
 
     <groupId>edu.illinois.cs</groupId>
     <artifactId>idflakies</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
 
     <name>iDFlakies</name>
     <description>A tool for detecting flaky tests</description>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-core-plugin</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
