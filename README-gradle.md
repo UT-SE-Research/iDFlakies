@@ -40,11 +40,11 @@ We can configure the build.gradle file manually instead. We need to follow the r
          ...
          classpath group: 'edu.illinois.cs',
          name: 'idflakies', 
-         version: '1.1.0-SNAPSHOT'
+         version: '1.2.0'
          
          classpath group: 'edu.illinois.cs',
          name: 'testrunner-gradle-plugin', 
-         version: '1.2-SNAPSHOT'
+         version: '1.2'
          ...
       }
    }
@@ -71,11 +71,11 @@ We can configure the build.gradle file manually instead. We need to follow the r
          ...
          classpath group: 'edu.illinois.cs',
          name: 'idflakies', 
-         version: '1.1.0-SNAPSHOT'
+         version: '1.2.0'
          
          classpath group: 'edu.illinois.cs',
          name: 'testrunner-gradle-plugin', 
-         version: '1.2-SNAPSHOT'
+         version: '1.2'
          ...
       }
    }
