@@ -5,11 +5,11 @@ import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
-import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
-import org.apache.maven.project.MavenProject;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import scala.Option;
 import scala.util.Try;
 
@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 
 public class BulkOrderRunnerPlugin extends TestPlugin {
     @Override
-    public void execute(final MavenProject mavenProject) {
-        final ErrorLogger errorLogger = new ErrorLogger(mavenProject);
+    public void execute(final ProjectWrapper project) {
+        final ErrorLogger errorLogger = new ErrorLogger(project);
 
-        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
+        final Option<Runner> runnerOption = RunnerFactory.from(project);
 
         errorLogger.runAndLogError(() -> {
             Files.deleteIfExists(DetectorPathManager.errorPath());
@@ -42,7 +42,7 @@ public class BulkOrderRunnerPlugin extends TestPlugin {
                 run(runner, inputPath, outputPath);
             } else {
                 final String errorMsg = "Module is not using a supported test framework (probably not JUnit).";
-                TestPluginPlugin.info(errorMsg);
+                TestPluginUtil.project.info(errorMsg);
                 errorLogger.writeError(errorMsg);
             }
 
@@ -54,7 +54,7 @@ public class BulkOrderRunnerPlugin extends TestPlugin {
         final List<Path> collect = Files.list(inputPath).collect(Collectors.toList());
         for (int i = 0; i < collect.size(); i++) {
             final Path p = collect.get(i);
-            TestPluginPlugin.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
+            TestPluginUtil.project.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
             runOrder(runner, p, outputPath);
         }
     }

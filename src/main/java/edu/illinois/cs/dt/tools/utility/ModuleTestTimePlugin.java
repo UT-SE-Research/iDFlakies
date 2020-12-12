@@ -1,8 +1,8 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
-import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
-import org.apache.maven.project.MavenProject;
+import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,13 +24,13 @@ public class ModuleTestTimePlugin  extends TestPlugin {
     }
 
     @Override
-    public void execute(final MavenProject mavenProject) {
-        this.coordinates = mavenProject.getGroupId() + ":" + mavenProject.getArtifactId() + ":" + mavenProject.getVersion();
+    public void execute(final ProjectWrapper project) {
+        this.coordinates = project.getGroupId() + ":" + project.getArtifactId() + ":" + project.getVersion();
 
-        final Path surefireReportsPath = Paths.get(mavenProject.getBuild().getDirectory()).resolve("surefire-reports");
+        final Path surefireReportsPath = Paths.get(project.getBuildDirectory()).resolve("surefire-reports");
         final Path mvnTestLog = DetectorPathManager.mvnTestLog();
         try {
-            final Path outputFile = Paths.get(getMavenProjectParent(mavenProject).getBasedir().getAbsolutePath(),
+            final Path outputFile = Paths.get(getMavenProjectParent(project).getBasedir().getAbsolutePath(),
                     "module-test-time.csv");
 
             final String outputStr = coordinates + "," + timeFrom(surefireReportsPath, mvnTestLog);
@@ -53,8 +53,8 @@ public class ModuleTestTimePlugin  extends TestPlugin {
         return 0.0;
     }
 
-    private MavenProject getMavenProjectParent(MavenProject mavenProject) {
-        MavenProject parentProj = mavenProject;
+    private ProjectWrapper getMavenProjectParent(ProjectWrapper project) {
+        ProjectWrapper parentProj = project;
         while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
             parentProj = parentProj.getParent();
         }
