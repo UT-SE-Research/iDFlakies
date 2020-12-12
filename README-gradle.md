@@ -52,10 +52,10 @@ We can configure the build.gradle file manually instead. We need to follow the r
 
 2. Then, add `apply plugin: 'testrunner'` to the build.gradle file. The location of this code snippet depends on whether build.gradle file has `allprojects{}` and `subprojects{}`. 
 
-   * If there are both `allprojects{}` and `subprojects{}` methods in gradle.build, then the `apply plugin: "testrunner"` command should be added to `allprojects{}` only.
-   * If only `allprojects{}`method is in gradle.build, the command is added to  `allprojects{}`
-   * If only `subprojects{}` method is in gradle.build, the command is added to both `subprojects{}` and outside of all the methods in the build file
-   * If there's no `allprojects{}` and `subprojects{}` in gradle.build, only add the command outside of all the methods
+   * If there are both `allprojects{}` and `subprojects{}` methods in gradle.build, then the `apply plugin: "testrunner"` command should be added to the end of  `subprojects{}` and the root (outside of all methods in the build file).
+   * If only `allprojects{}`method is in gradle.build, the command is added to  `allprojects{}` only
+   * If only `subprojects{}` method is in gradle.build, the command is added to both the end of `subprojects{}` and the root. 
+   * If there's no `allprojects{}` and `subprojects{}` in gradle.build, only add the command to the root.
 
    Here is an example where this code snippet is added outside of all methods.
 
@@ -83,8 +83,6 @@ We can configure the build.gradle file manually instead. We need to follow the r
    apply plugin: 'testrunner'
    ```
 
-In some projects, such as Caffeine (https://github.com/ben-manes/caffeine), we need to move the `apply plugin: 'testrunner'` code snippet in `allprojects{}` to the end of `subprojects{}`. 
-
 ### Running iDFlakies on Gradle project 
 
 After the build.gralde has been configured, one can run iDFlakies on the Gradle project with the following command: 
@@ -92,6 +90,7 @@ After the build.gralde has been configured, one can run iDFlakies on the Gradle 
 ```
 ./gradlew testplugin -Dtestplugin.className=edu.illinois.cs.dt.tools.detection.DetectorPlugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
+
 
 
 
