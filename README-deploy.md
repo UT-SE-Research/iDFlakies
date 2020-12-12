@@ -33,12 +33,12 @@ index 175093b..f828eb9 100644
 			<version>1.6</version>
 			<executions>
                             <execution>
-+                           <configuration>
-+                             <executable>gpg2</executable>
-+                             <passphrase>XXXXXXXX</passphrase> <!-- passphrase is set to public key outputted from gpg2 list-key -->
-+                           </configuration>
-			    <id>sign-artifacts</id>
-			    <phase>deploy</phase>
++                             <configuration>
++                               <executable>gpg2</executable>
++                               <passphrase>XXXXXXXX</passphrase> <!-- passphrase is set to public key outputted from gpg2 list-key -->
++                             </configuration>
+			      <id>sign-artifacts</id>
+			      <phase>deploy</phase>
 			<goals>
 ```
 
