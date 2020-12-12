@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListUtil;
 import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.testrunner.data.results.Result;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -22,7 +22,7 @@ public class DependentTestList {
     }
 
     public static DependentTestList fromFile(final Path path) throws IOException {
-        TestPluginUtil.project.info("Reading dependent test list from " + path);
+        TestPluginPlugin.info("Reading dependent test list from " + path);
         return new Gson().fromJson(FileUtil.readFile(path), DependentTestList.class);
     }
 

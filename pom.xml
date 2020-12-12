@@ -6,7 +6,7 @@
 
     <groupId>edu.illinois.cs</groupId>
     <artifactId>idflakies</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
 
     <name>iDFlakies</name>
     <description>A tool for detecting flaky tests</description>
@@ -67,8 +67,14 @@
     <dependencies>
         <dependency>
             <groupId>edu.illinois.cs</groupId>
-            <artifactId>testrunner-core-plugin</artifactId>
-            <version>1.2</version>
+            <artifactId>testrunner-maven-plugin</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-invoker</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
         <dependency>

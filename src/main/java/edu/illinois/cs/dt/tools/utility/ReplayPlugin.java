@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
+import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
-import edu.illinois.cs.testrunner.util.ProjectWrapper;
+import org.apache.maven.project.MavenProject;
 import scala.Option;
 import scala.util.Try;
 
@@ -22,8 +22,8 @@ public class ReplayPlugin extends TestPlugin {
     private Path replayPath;
 
     @Override
-    public void execute(final ProjectWrapper project) {
-        final Option<Runner> runnerOption = RunnerFactory.from(project);
+    public void execute(final MavenProject mavenProject) {
+        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
 
         if (runnerOption.isDefined()) {
             replayPath = Paths.get(Configuration.config().getProperty("replay.path"));
@@ -37,13 +37,13 @@ public class ReplayPlugin extends TestPlugin {
                 if (testRunResultTry.isSuccess()) {
                     Files.write(outputPath, new Gson().toJson(testRunResultTry.get()).getBytes());
                 } else {
-                    TestPluginUtil.project.error(testRunResultTry.failed().get());
+                    TestPluginPlugin.mojo().getLog().error(testRunResultTry.failed().get());
                 }
             } catch (IOException e) {
-                TestPluginUtil.project.error(e);
+                TestPluginPlugin.mojo().getLog().error(e);
             }
         } else {
-            TestPluginUtil.project.info("Module is not using a supported test framework (probably not JUnit).");
+            TestPluginPlugin.mojo().getLog().info("Module is not using a supported test framework (probably not JUnit).");
         }
     }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ARTIFACT_ID="idflakies"
-ARTIFACT_VERSION="1.2.0"
+ARTIFACT_VERSION="1.1.0"
 CONFIGURATION_CLASS="edu.illinois.cs.dt.tools.detection.DetectorPlugin"
 
 if [[ $1 == "" ]]; then

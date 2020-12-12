@@ -2,8 +2,8 @@ package edu.illinois.cs.dt.tools.utility;
 
 import com.google.common.base.Preconditions;
 import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
-import edu.illinois.cs.testrunner.util.ProjectWrapper;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import org.apache.maven.project.MavenProject;
 
 import java.io.IOException;
 
@@ -14,11 +14,11 @@ import java.nio.file.Paths;
 public class PathManager {
     private static final String outputPath = Configuration.config().getProperty("dt.cache.absolute.path", "");
     public static Path modulePath() {
-        return TestPluginUtil.project.getBasedir().toPath();
+        return TestPluginPlugin.mavenProject().getBasedir().toPath();
     }
 
-    private static ProjectWrapper getMavenProjectParent(ProjectWrapper project) {
-        ProjectWrapper parentProj = project;
+    private static MavenProject getMavenProjectParent(MavenProject mavenProject) {
+        MavenProject parentProj = mavenProject;
         while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
             parentProj = parentProj.getParent();
         }
@@ -26,7 +26,7 @@ public class PathManager {
     }
 
     public static Path parentPath() {
-        return getMavenProjectParent(TestPluginUtil.project).getBasedir().toPath();
+        return getMavenProjectParent(TestPluginPlugin.mavenProject()).getBasedir().toPath();
     }
 
     public static Path parentPath(final Path relative) {
@@ -37,7 +37,7 @@ public class PathManager {
     }
 
     public static Path cachePath() {
-	TestPluginUtil.project.info("Accessing cachePath: " + outputPath);
+	TestPluginPlugin.mojo().getLog().info("Accessing cachePath: " + outputPath);
 	if (outputPath == "") {
 	    return modulePath().resolve(".dtfixingtools");
 	} else {
@@ -45,7 +45,7 @@ public class PathManager {
 	    try {
 		Files.createDirectories(outputPathObj);
 	    } catch (IOException e) {
-		TestPluginUtil.project.debug(e.getMessage());
+		TestPluginPlugin.mojo().getLog().debug(e.getMessage());
 	    }
 	    return outputPathObj.resolve(modulePath().getFileName());
 	}
