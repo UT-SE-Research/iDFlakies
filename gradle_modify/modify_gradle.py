@@ -15,11 +15,11 @@ def modify(path):
     dependencies = """
     classpath group: 'edu.illinois.cs',
     name: 'idflakies', 
-    version: '1.2.0'
+    version: '1.1.0-SNAPSHOT'
     
     classpath group: 'edu.illinois.cs',
     name: 'testrunner-gradle-plugin', 
-    version: '1.2'
+    version: '1.2-SNAPSHOT'
 
     """
 
@@ -34,11 +34,11 @@ def modify(path):
         dependencies {
             classpath group: 'edu.illinois.cs',
             name: 'idflakies', 
-            version: '1.2.0'
+            version: '1.1.0-SNAPSHOT'
             
             classpath group: 'edu.illinois.cs',
             name: 'testrunner-gradle-plugin', 
-            version: '1.2'
+            version: '1.2-SNAPSHOT'
         }
     }
 
@@ -60,6 +60,8 @@ def modify(path):
     if ("allprojects{" in lines):
         allprojects = True
     
+    stack = []
+    isInSubproject = False 
     # add line to output by finding the location of repositories{}, buildscript{}
     for line in f.readlines():
         if (cnt < 3):
@@ -81,14 +83,27 @@ def modify(path):
                 cnt += 1
             if (buildscript and "dependencies {" in line):
                 dependency = True
+        
+        line_no_space = line.replace(" ", "")
+        if (subprojects and "subprojects{" in line_no_space.strip()):
+            # result += "apply plugin: 'testrunner' \n"
+            isInSubproject = True
+        if (isInSubproject):
+            for char in line_no_space.strip():
+                if (char == "{"):
+                    stack.append(char)
+                elif (char == "}" and stack[-1] == "{"):
+                    stack.pop()
+                elif (char == "}"):
+                    stack.append(char)
+            if (len(stack) == 0):
+                isInSubproject = False
+                result += "apply plugin: 'testrunner' \n"   
         result += line 
-        line = line.replace(" ", "")
-        if (subprojects and allprojects and "allprojects{" in line.strip()):
+        if (not subprojects and allprojects and "allprojects{" in line.strip()):
             result += "apply plugin: 'testrunner' \n"
-        elif (subprojects and not allprojects and "subprojects{" in line.strip()):
-            result += "apply plugin: 'testrunner' \n"
-
-    if (not allprojects):
+    
+    if (subprojects or not allprojects):
         result += "\napply plugin: 'testrunner'"
 
     output = open(path, "w")
