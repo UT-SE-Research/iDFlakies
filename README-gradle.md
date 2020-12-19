@@ -40,7 +40,7 @@ We can configure the build.gradle file manually instead. We need to follow the r
          ...
          classpath group: 'edu.illinois.cs',
          name: 'idflakies', 
-         version: '1.2.0'
+         version: '1.1.0'
          
          classpath group: 'edu.illinois.cs',
          name: 'testrunner-gradle-plugin', 
@@ -71,7 +71,7 @@ We can configure the build.gradle file manually instead. We need to follow the r
          ...
          classpath group: 'edu.illinois.cs',
          name: 'idflakies', 
-         version: '1.2.0'
+         version: '1.1.0'
          
          classpath group: 'edu.illinois.cs',
          name: 'testrunner-gradle-plugin', 
@@ -82,6 +82,7 @@ We can configure the build.gradle file manually instead. We need to follow the r
    
    apply plugin: 'testrunner'
    ```
+3. For each subproject with build.gradle file in its directory, append `apply plugin: 'testrunner'` to the end of the build.gradle in the subproject. 
 
 ### Running iDFlakies on Gradle project 
 
@@ -91,7 +92,7 @@ After the build.gralde has been configured, one can run iDFlakies on the Gradle 
 ./gradlew testplugin -Dtestplugin.className=edu.illinois.cs.dt.tools.detection.DetectorPlugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
 
-
-
-
-
+### Dependency Requirements
+1. Junit 4/5, due to the original iDFlakies' dependency requirement.
+2. Scala (if the project uses Scala): < 2.13, due to the original iDFlakies' dependency requirement and backward incompatibility for some Scala functions.
+3. Gradle (if kotlin is used): [5.0, 6.5.1], due to gradle internal bugs: https://github.com/gradle/gradle/issues/14727. Otherwise, there's no requirement on Gradle version. 

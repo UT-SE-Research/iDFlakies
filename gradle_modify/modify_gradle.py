@@ -15,11 +15,11 @@ def modify(path):
     dependencies = """
     classpath group: 'edu.illinois.cs',
     name: 'idflakies', 
-    version: '1.1.0-SNAPSHOT'
+    version: '1.1.0'
     
     classpath group: 'edu.illinois.cs',
     name: 'testrunner-gradle-plugin', 
-    version: '1.2-SNAPSHOT'
+    version: '1.2'
 
     """
 
@@ -34,11 +34,11 @@ def modify(path):
         dependencies {
             classpath group: 'edu.illinois.cs',
             name: 'idflakies', 
-            version: '1.1.0-SNAPSHOT'
+            version: '1.1.0'
             
             classpath group: 'edu.illinois.cs',
             name: 'testrunner-gradle-plugin', 
-            version: '1.2-SNAPSHOT'
+            version: '1.2'
         }
     }
 
@@ -110,18 +110,8 @@ def modify(path):
     output.write(result)
     output.close()
 
-
-def modifySubproject(path):
-    # append apply plugin to the end of the build file 
-    f = open(path, "a")
-    f.write("\napply plugin: 'testrunner' \n")
-    f.close()
-
-
 if __name__ == "__main__":
     for path in sys.stdin: 
         path = path.strip()
         print("modify: " + path)
         modify(path)
-
-
