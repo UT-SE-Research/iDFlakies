@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.thoughtworks.qdox:qdox:2.0-M7">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thoughtworks/qdox/qdox/2.0-M7/qdox-2.0-M7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thoughtworks/qdox/qdox/2.0-M7/qdox-2.0-M7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thoughtworks/qdox/qdox/2.0-M7/qdox-2.0-M7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

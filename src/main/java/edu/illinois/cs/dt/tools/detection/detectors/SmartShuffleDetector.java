@@ -35,4 +35,12 @@ public class SmartShuffleDetector extends ExecutingDetector {
 
         return makeDts(originalResults, runList(order));
     }
+
+    @Override
+    protected boolean triedAllOrders(int numTried) {
+        if(numTried >= shuffler.calculatePermutations()) {
+            return true;
+        }
+        return false;
+    }
 }

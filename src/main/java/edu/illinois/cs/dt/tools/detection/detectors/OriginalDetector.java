@@ -34,4 +34,9 @@ public class OriginalDetector extends ExecutingDetector {
     public DetectionRound results() throws Exception {
         return makeDts(origResult, runList(tests));
     }
+
+    @Override
+    protected boolean triedAllOrders(int numTried) {
+        return false;
+    }
 }

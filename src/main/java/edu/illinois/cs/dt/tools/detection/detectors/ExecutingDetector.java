@@ -96,6 +96,8 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         Files.write(listPath, StringUtil.unlines(dtList.names()).getBytes());
     }
 
+    protected abstract boolean triedAllOrders(int numTried);
+
     private class RunnerIterator implements Iterator<DependentTest> {
 
         private final long origStartTimeMs = System.currentTimeMillis();

@@ -1,14 +1,9 @@
 package edu.illinois.cs.dt.tools.detection;
 
+import com.google.common.math.IntMath;
 import com.reedoei.eunomia.collections.RandomList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SmartShuffler {
@@ -98,5 +93,21 @@ public class SmartShuffler {
         }
 
         return Optional.empty();
+    }
+
+    public long calculatePermutations() {
+        int numClasses = 0;
+        long numPermutations = 1;
+        Iterator<String> it = classToMethods.keySet().iterator();
+        while(it.hasNext()){
+            String className = it.next();
+            int numTests = classToMethods.get(className).size();
+            numPermutations *= IntMath.factorial(numTests);
+            numClasses++;
+        }
+
+        // formula
+        long maxPermutations = IntMath.factorial(numClasses) * numPermutations;
+        return maxPermutations;
     }
 }

@@ -41,4 +41,13 @@ public class RandomDetector extends ExecutingDetector {
 
         return makeDts(origResult, runList(fullTestOrder));
     }
+
+    @Override
+    protected boolean triedAllOrders(int numTried) {
+        long permutations = testShuffler.calculatePermutations();
+        if(numTried >= permutations) {
+            return true;
+        }
+        return false;
+    }
 }
