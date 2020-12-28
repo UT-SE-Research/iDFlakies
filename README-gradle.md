@@ -152,11 +152,12 @@ We can configure the build.gradle file manually instead. We need to follow the r
        ```
 3. For each subproject with build.gradle file in its directory, append `apply plugin: 'testrunner'` to the end of the build.gradle in each subproject. 
 ### Use locally built version of iDFlakies 
-The use of locally built version of iDFlakies needs the user to modify the dependency 
-Then go to iDFlakies root directory, and run: 
+Go to iDFlakies root directory, and run the following command to install iDFlakies locally: 
+
 ```
 mvn clean install
 ```
+Modify build.gradle according to the code snippet below. `MavenLocal()` should be added to make sure the plugin uses locally built iDFlakies. The version of the iDFlakies should be set to '1.2.0-SNAPSHOT'.
 ```groovy
 buildscript {
    repositories {
