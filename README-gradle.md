@@ -153,7 +153,6 @@ We can configure the build.gradle file manually instead. We need to follow the r
 3. For each subproject with build.gradle file in its directory, append `apply plugin: 'testrunner'` to the end of the build.gradle in each subproject. 
 ### Use locally built version of iDFlakies 
 Go to iDFlakies root directory, and run the following command to install iDFlakies locally: 
-
 ```
 mvn clean install
 ```
@@ -186,7 +185,5 @@ After the build.gradle has been configured, one can run iDFlakies on the Gradle 
 ```
 ./gradlew testplugin -Dtestplugin.className=edu.illinois.cs.dt.tools.detection.DetectorPlugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
-
 ### Projects in which the tool has been tested
-
 This [spreadsheet](https://docs.google.com/spreadsheets/d/1bTqDam7pAIlxLL44ZHzEktkEaKb3JN84hkF6XmIC-5s/edit#gid=0) shows all the projects we have tested, and their compatibility with the Gradle modify tool and the iDFlakies plugin. 
