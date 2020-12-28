@@ -56,25 +56,24 @@ We can configure the build.gradle file manually instead. We need to follow the r
        }
        
        allprojects {
-         repositories {
-         	mavenCentral()
+          repositories {
+             mavenCentral()
          }
        }
        
        subprojects {
-         apply plugin: 'maven'
-         apply plugin: 'signing'
-         apply plugin: 'checkstyle'
-         /* add apply plugin: "testrunner" to the end of the subproject{} */
-         apply plugin: 'testrunner'
+          apply plugin: 'maven'
+          apply plugin: 'signing'
+          apply plugin: 'checkstyle'
+          /* add apply plugin: "testrunner" to the end of the subproject{} */
+          apply plugin: 'testrunner'
        }
-         
+       
        /* add apply plugin: "testrunner" to the root */ 
        apply plugin: 'testrunner'
        ```
    * If only `allprojects{}`method is in gradle.build, the command is added to  `allprojects{}` only.
      * Example: 
-
        ```groovy
        buildscript {
           repositories {
@@ -93,17 +92,15 @@ We can configure the build.gradle file manually instead. We need to follow the r
        }
        
        allprojects {
-         repositories {
-         	mavenCentral()
-         }
-         /* add apply plugin: "testrunner" to the end of the allprojects{} only */
-         apply plugin: 'testrunner'
+          repositories {
+             mavenCentral()
+          }
+          /* add apply plugin: "testrunner" to the end of the allprojects{} only */
+          apply plugin: 'testrunner'
        }
        ```
    * If only `subprojects{}` method is in gradle.build, the command is added to both the end of `subprojects{}` and the root. 
-
      * Example: 
-
        ```groovy
        buildscript {
           repositories {
@@ -122,19 +119,18 @@ We can configure the build.gradle file manually instead. We need to follow the r
        }
        
        subprojects {
-         apply plugin: 'maven'
-         apply plugin: 'signing'
-         apply plugin: 'checkstyle'
-         /* add apply plugin: "testrunner" to the end of the subproject{} */
-         apply plugin: 'testrunner'
+          apply plugin: 'maven'
+          apply plugin: 'signing'
+          apply plugin: 'checkstyle'
+          /* add apply plugin: "testrunner" to the end of the subproject{} */
+          apply plugin: 'testrunner'
        }
        
        /* add apply plugin: "testrunner" to the root */ 
        apply plugin: 'testrunner'
        ```
    * If there's no `allprojects{}` and `subprojects{}` in gradle.build, only add the command to the root.
-     * Example: 
-
+     * Example:
        ```groovy
        buildscript {
           repositories {
@@ -185,7 +181,11 @@ buildscript {
 }
 ```
 ### Running iDFlakies on Gradle project 
-After the build.gralde has been configured, one can run iDFlakies on the Gradle project with the following command: 
+After the build.gradle has been configured, one can run iDFlakies on the Gradle project with the following command: 
 ```
 ./gradlew testplugin -Dtestplugin.className=edu.illinois.cs.dt.tools.detection.DetectorPlugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
+
+### Projects in which the tool has been tested
+
+This [spreadsheet](https://docs.google.com/spreadsheets/d/1bTqDam7pAIlxLL44ZHzEktkEaKb3JN84hkF6XmIC-5s/edit#gid=0) shows all the projects we have tested, and their compatibility with the Gradle modify tool and the iDFlakies plugin. 
