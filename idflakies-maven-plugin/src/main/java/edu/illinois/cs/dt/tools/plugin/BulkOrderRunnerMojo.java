@@ -1,0 +1,76 @@
+package edu.illinois.cs.dt.tools.plugin;
+
+import com.google.gson.Gson;
+import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
+import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+import edu.illinois.cs.dt.tools.utility.ErrorLogger;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.TestRunResult;
+import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
+import edu.illinois.cs.testrunner.mavenplugin.TestPluginPlugin;
+import edu.illinois.cs.testrunner.runner.Runner;
+import edu.illinois.cs.testrunner.runner.RunnerFactory;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.project.MavenProject;
+import scala.Option;
+import scala.util.Try;
+
+import java.awt.geom.RectangularShape;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Mojo(name = "bulk")
+public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
+
+    @Override
+    public void execute() {
+        final ErrorLogger errorLogger = new ErrorLogger(mavenProject);
+
+        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
+
+        errorLogger.runAndLogError(() -> {
+            Files.deleteIfExists(DetectorPathManager.errorPath(mavenProject.getBasedir()));
+            Files.createDirectories(DetectorPathManager.cachePath(mavenProject.getBasedir()));
+            Files.createDirectories(DetectorPathManager.detectionResults(mavenProject.getBasedir()));
+
+            if (runnerOption.isDefined()) {
+                final InstrumentingSmartRunner runner = InstrumentingSmartRunner.fromRunner(runnerOption.get(), mavenProject.getBasedir());
+
+                final Path inputPath = Paths.get(Configuration.config().getProperty("bulk_runner.input_dir"));
+                final Path outputPath = Paths.get(Configuration.config().getProperty("bulk_runner.output_dir"));
+
+                run(runner, inputPath, outputPath);
+            } else {
+                final String errorMsg = "Module is not using a supported test framework (probably not JUnit).";
+                TestPluginPlugin.info(errorMsg);
+                errorLogger.writeError(errorMsg);
+            }
+
+            return null;
+        });
+    }
+
+    private void run(final InstrumentingSmartRunner runner, final Path inputPath, final Path outputPath) throws IOException {
+        final List<Path> collect = Files.list(inputPath).collect(Collectors.toList());
+        for (int i = 0; i < collect.size(); i++) {
+            final Path p = collect.get(i);
+            TestPluginPlugin.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
+            runOrder(runner, p, outputPath);
+        }
+    }
+
+    private void runOrder(final InstrumentingSmartRunner runner, final Path orderPath, final Path outputPath)
+            throws IOException {
+        final List<String> tests = Files.readAllLines(orderPath);
+        final Try<TestRunResult> result = runner.runList(tests);
+
+        if (result.isSuccess()) {
+            Files.write(outputPath.resolve(orderPath.getFileName()),
+                    new Gson().toJson(result.get()).getBytes());
+        }
+    }
+}
