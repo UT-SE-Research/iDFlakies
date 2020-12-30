@@ -6,6 +6,8 @@ More details about iDFlakies can be found in its [paper](http://mir.cs.illinois.
 
 # Quickstart
 
+iDFlakies may work on Maven-based or Gradle-based projects. Instructions are [here](#Using-iDFlakies-on-a-Maven-project) for Maven-based projects and [here](https://github.com/idflakies/iDFlakies/blob/master/README-gradle.md) for Gradle-based projects.
+
 ## Using iDFlakies on a Maven project
 
 One may use iDFlakies on a specific Maven project by getting it from Maven Central or building it themselves.

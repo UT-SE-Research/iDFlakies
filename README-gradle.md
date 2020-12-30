@@ -4,9 +4,9 @@
 2. Scala (if the project uses Scala) version should be < 2.13, due to the original iDFlakies' dependency requirement and backward incompatibility for some Scala functions.
 3. Gradle (if kotlin is used): [5.0, 6.5.1], due to gradle internal bugs: https://github.com/gradle/gradle/issues/14727. Otherwise, there's no requirement on Gradle version. 
 ### Automatically setting up the build.gradle for iDFlakies
-Run the following command to  automatically setup the build.gradle for iDFlakies.
+Run the following command to automatically setup the build.gradle for iDFlakies.
 ```
-bash gradle_modify/modify_gradle.sh path_to_gradle_project
+bash gradle-modify/modify_gradle.sh path_to_gradle_project
 ```
 ### Manually setting up the build.gradle for iDFlakies
 We can configure the build.gradle file manually instead. We need to follow the rule listed below to successfully set up the project. 
@@ -36,7 +36,7 @@ We can configure the build.gradle file manually instead. We need to follow the r
    }
    ```
 2. Then, add `apply plugin: 'testrunner'` to the build.gradle file. The location of this code snippet depends on whether build.gradle file has `allprojects{}` and `subprojects{}`. 
-   * If there are both `allprojects{}` and `subprojects{}` methods in gradle.build, then the `apply plugin: "testrunner"` command should be added to the end of  `subprojects{}` and the root (outside of all methods in the build file).
+   * If there are both `allprojects{}` and `subprojects{}` methods in gradle.build, then the `apply plugin: "testrunner"` command should be added to the end of `subprojects{}` and the root (outside of all methods in the build file).
      * Example: 
        ```groovy
        buildscript {
@@ -186,4 +186,4 @@ After the build.gradle has been configured, one can run iDFlakies on the Gradle 
 ./gradlew testplugin -Dtestplugin.className=edu.illinois.cs.dt.tools.detection.DetectorPlugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
 ### Projects in which the tool has been tested
-This [spreadsheet](https://docs.google.com/spreadsheets/d/1bTqDam7pAIlxLL44ZHzEktkEaKb3JN84hkF6XmIC-5s/edit#gid=0) shows all the projects we have tested, and their compatibility with the Gradle modify tool and the iDFlakies plugin. 
+This [spreadsheet](https://docs.google.com/spreadsheets/d/1Jr5zbOZjKFI6a4ntHa0kzbF8-5AgnZEo3G7CUSFWjwA) shows all the projects we have tested, and their compatibility with the Gradle modify tool and the iDFlakies plugin.
