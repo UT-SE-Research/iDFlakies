@@ -34,10 +34,15 @@ public class ReverseDetector extends ExecutingDetector {
     }
 
     @Override
-    protected boolean triedAllOrders(int numTried) {
-        if(numTried >= 1) {
+    protected boolean triedAllOrders(int round) {
+        if(round >= 1) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void printToFile(){
+        testShuffler.saveOrders();
     }
 }

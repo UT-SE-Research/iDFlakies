@@ -1,6 +1,9 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
+import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.TestShuffler;
 import edu.illinois.cs.dt.tools.detection.filters.ConfirmationFilter;
@@ -9,7 +12,12 @@ import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Set;
 
 public class RandomDetector extends ExecutingDetector {
     private final List<String> tests;
@@ -43,11 +51,18 @@ public class RandomDetector extends ExecutingDetector {
     }
 
     @Override
-    protected boolean triedAllOrders(int numTried) {
+    protected boolean triedAllOrders(int rounds) {
         long permutations = testShuffler.calculatePermutations();
+        int numTried = testShuffler.ordersTried();
         if(numTried >= permutations) {
             return true;
         }
         return false;
     }
+
+    @Override
+    protected void printToFile(){
+        testShuffler.saveOrders();
+    }
+
 }

@@ -36,7 +36,10 @@ public class OriginalDetector extends ExecutingDetector {
     }
 
     @Override
-    protected boolean triedAllOrders(int numTried) {
+    protected boolean triedAllOrders(int round) {
         return false;
     }
+
+    @Override
+    protected void printToFile(){return;}
 }

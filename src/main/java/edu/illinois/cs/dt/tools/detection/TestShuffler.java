@@ -3,6 +3,8 @@ package edu.illinois.cs.dt.tools.detection;
 import com.google.common.collect.Lists;
 import com.google.common.math.IntMath;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.reedoei.eunomia.collections.ListUtil;
 import com.reedoei.eunomia.collections.RandomList;
 import com.reedoei.eunomia.io.files.FileUtil;
@@ -11,9 +13,13 @@ import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,11 +37,13 @@ public class TestShuffler {
 
     private final String type;
     private final List<String> tests;
-    private final Set<String> alreadySeenOrders = new HashSet<>();
+    private Set<String> alreadySeenOrders = new HashSet<>();
+    private int roundsRemaining;
 
     public TestShuffler(final String type, final int rounds, final List<String> tests) {
         this.type = type;
         this.tests = tests;
+        this.roundsRemaining = rounds;
 
         classToMethods = new HashMap<>();
 
@@ -47,6 +55,18 @@ public class TestShuffler {
             }
 
             classToMethods.get(className).add(test);
+        }
+
+        //Load all previous orders into alreadySeenOrders
+        try {
+            JsonReader getLocalJsonFile = new JsonReader(new FileReader(DetectorPathManager.previousOrders().toString()));
+            Type mapTokenType = new TypeToken<Set<String>>(){}.getType();
+            Set<String> jsonMapOrders = new Gson().fromJson(getLocalJsonFile, mapTokenType);
+            if(jsonMapOrders != null) {
+                alreadySeenOrders = jsonMapOrders;
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No previous orders tracked");
         }
     }
 
@@ -133,7 +153,21 @@ public class TestShuffler {
     }
 
     private List<String> generateShuffled() {
-        return generateWithClassOrder(new RandomList<>(classToMethods.keySet()).shuffled());
+        List<String> shuffledOrder = generateWithClassOrder(new RandomList<>(classToMethods.keySet()).shuffled());
+        String hashedOrder = MD5.md5(String.join("", shuffledOrder));
+        while(alreadySeenOrders.contains(hashedOrder)){
+            shuffledOrder = generateWithClassOrder(new RandomList<>(classToMethods.keySet()).shuffled());
+            hashedOrder = MD5.md5(String.join("", shuffledOrder));
+        }
+
+        alreadySeenOrders.add(hashedOrder);
+        roundsRemaining--;
+        if(roundsRemaining <= 0) {
+            saveOrders();
+        }
+
+        return shuffledOrder;
+        //return generateWithClassOrder(new RandomList<>(classToMethods.keySet()).shuffled());
     }
 
     private List<String> generateWithClassOrder(final List<String> classOrder) {
@@ -149,13 +183,28 @@ public class TestShuffler {
             }
         }
 
-        alreadySeenOrders.add(MD5.md5(String.join("", fullTestOrder)));
-
         return fullTestOrder;
     }
 
     private List<String> classOrder(final List<String> historicalOrder) {
         return historicalOrder.stream().map(TestShuffler::className).distinct().collect(Collectors.toList());
+    }
+
+    public int ordersTried(){
+        return alreadySeenOrders.size();
+    }
+
+    public void saveOrders(){
+        Gson gson = new Gson();
+        Type gsonType = new TypeToken<Set>(){}.getType();
+        String gsonString = gson.toJson(alreadySeenOrders, gsonType);
+        try {
+            System.out.println("Printing orders to file");
+            Files.write(DetectorPathManager.previousOrders(), gsonString.getBytes(),
+                    Files.exists(DetectorPathManager.previousOrders()) ? StandardOpenOption.WRITE : StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Deprecated

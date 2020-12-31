@@ -31,16 +31,22 @@ public class SmartShuffleDetector extends ExecutingDetector {
 
     @Override
     public DetectionRound results() throws Exception {
-        final List<String> order = shuffler.nextOrder();
+        final List<String> order = shuffler.generateOrder();
 
         return makeDts(originalResults, runList(order));
     }
 
     @Override
-    protected boolean triedAllOrders(int numTried) {
+    protected boolean triedAllOrders(int round) {
+        int numTried = shuffler.ordersTried();
         if(numTried >= shuffler.calculatePermutations()) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void printToFile(){
+        shuffler.saveOrders();
     }
 }
