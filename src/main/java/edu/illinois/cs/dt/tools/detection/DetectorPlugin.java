@@ -8,6 +8,7 @@ import edu.illinois.cs.dt.tools.detection.detectors.DetectorFactory;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.utility.ErrorLogger;
 import edu.illinois.cs.dt.tools.utility.GetMavenTestOrder;
+import edu.illinois.cs.dt.tools.utility.OperationTime;
 import edu.illinois.cs.dt.tools.utility.TestClassData;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.framework.TestFramework;
@@ -22,12 +23,16 @@ import scala.collection.JavaConverters;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.RuntimeException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -35,6 +40,7 @@ public class DetectorPlugin extends TestPlugin {
     private final Path outputPath;
     private String coordinates;
     private InstrumentingSmartRunner runner;
+    private static Map<Integer, List<String>> locateTestList = new HashMap<>();
 
     // Don't delete this.
     // This is actually used, provided you call this class via Maven (used by the testrunner plugin)
@@ -250,9 +256,23 @@ public class DetectorPlugin extends TestPlugin {
     }
 
     private static List<String> locateTests(ProjectWrapper project,
-                                           TestFramework testFramework) {
-        return JavaConverters.bufferAsJavaList(
-                TestLocator.tests(project, testFramework).toBuffer());
+					    TestFramework testFramework) {
+	int id = Objects.hash(project, testFramework);
+	if (!locateTestList.containsKey(id)) {
+	    TestPluginUtil.project.info("Locating tests...");
+	    try {
+		locateTestList.put(id,
+				   OperationTime.runOperation(() -> {
+					   return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
+				       }, (tests, time) -> {
+					   TestPluginUtil.project.info("Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
+					   return tests;
+				       }));
+	    } catch (Exception e) {
+		throw new RuntimeException(e);
+	    }
+	}
+	return locateTestList.get(id);
     }
 
     public static List<String> getOriginalOrder(

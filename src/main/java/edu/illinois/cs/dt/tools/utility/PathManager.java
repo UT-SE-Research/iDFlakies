@@ -37,10 +37,10 @@ public class PathManager {
     }
 
     public static Path cachePath() {
-	TestPluginUtil.project.info("Accessing cachePath: " + outputPath);
 	if (outputPath == "") {
 	    return modulePath().resolve(".dtfixingtools");
 	} else {
+	    TestPluginUtil.project.info("Accessing cachePath: " + outputPath);
 	    Path outputPathObj = Paths.get(outputPath);
 	    try {
 		Files.createDirectories(outputPathObj);
