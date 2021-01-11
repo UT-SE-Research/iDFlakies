@@ -59,6 +59,24 @@ public class TestShuffler {
         }
     }
 
+    public List<String> shuffledOrder(final int i,
+                                      final DetectionRound lastRandomDetectionRound,
+                                      final TestRunResult lastRandomResult,
+                                      final boolean useRevPassing) {
+        if (useRevPassing) {
+            return shuffledOrder(i);
+        } else {
+            List<String> revPassingOrder = Lists.reverse(lastRandomResult.testOrder());
+            String md5 = MD5.md5(String.join("", revPassingOrder));
+            if (alreadySeenOrders.contains(md5)) {
+                return shuffledOrder(i);
+            } else {
+                alreadySeenOrders.add(md5);
+                return revPassingOrder;
+            }
+        }
+    }
+
     public List<String> shuffledOrder(final int i) {
         if (type.startsWith("reverse")) {
             return reverseOrder();
@@ -67,8 +85,10 @@ public class TestShuffler {
         final Path historicalRun = DetectorPathManager.detectionRoundPath(historicalType(), i);
 
         try {
+            // look up whether a previous execution of the plugin generated orders for this round already
+            // if so, then run the same revealed order as before
             if (Files.exists(historicalRun)) {
-                    return generateHistorical(readHistorical(historicalRun));
+                return generateHistorical(readHistorical(historicalRun));
             }
         } catch (IOException ignored) {}
 
@@ -100,6 +120,7 @@ public class TestShuffler {
         if ("random-class".equals(type)) {
             return generateWithClassOrder(classOrder(historicalOrder));
         } else {
+            alreadySeenOrders.add(MD5.md5(String.join("", historicalOrder)));
             return historicalOrder;
         }
     }

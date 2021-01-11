@@ -14,6 +14,8 @@ import java.util.List;
 public class RandomDetector extends ExecutingDetector {
     private final List<String> tests;
     private TestRunResult origResult;
+    private TestRunResult lastRandomResult;
+    private DetectionRound lastRandomDetectionRound;
 
     private final TestShuffler testShuffler;
 
@@ -37,8 +39,14 @@ public class RandomDetector extends ExecutingDetector {
 
     @Override
     public DetectionRound results() throws Exception {
-        final List<String> fullTestOrder = testShuffler.shuffledOrder(absoluteRound.get());
-
-        return makeDts(origResult, runList(fullTestOrder));
+        lastRandomResult = runList(testShuffler.shuffledOrder(absoluteRound.get(),
+                                                              lastRandomDetectionRound,
+                                                              lastRandomResult,
+                                                              // if last detection round didn't find any *new* OD test, then reverse the (likely passing) order
+                                                              lastRandomDetectionRound == null || lastRandomResult == null || lastRandomDetectionRound.filteredTests().size() != 0));
+        // if we want to reverse a run with no failures or errors
+        // lastRandomResult.results().values().stream().anyMatch(testResult -> testResult.result() == Result.FAILURE || testResult.result() == Result.ERROR)
+        lastRandomDetectionRound = makeDts(origResult, lastRandomResult);
+        return lastRandomDetectionRound;
     }
 }
