@@ -60,7 +60,6 @@ public class TestShuffler {
     }
 
     public List<String> shuffledOrder(final int i,
-                                      final DetectionRound lastRandomDetectionRound,
                                       final TestRunResult lastRandomResult,
                                       final boolean useRevPassing) {
         if (useRevPassing) {

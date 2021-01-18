@@ -40,11 +40,10 @@ public class RandomDetector extends ExecutingDetector {
     @Override
     public DetectionRound results() throws Exception {
         lastRandomResult = runList(testShuffler.shuffledOrder(absoluteRound.get(),
-                                                              lastRandomDetectionRound,
                                                               lastRandomResult,
-                                                              // if last detection round didn't find any *new* OD test, then reverse the (likely passing) order
+                                                              // if last detection round didn't find any *new* OD test, then reverse the last (likely passing) order
                                                               lastRandomDetectionRound == null || lastRandomResult == null || lastRandomDetectionRound.filteredTests().size() != 0));
-        // if we want to reverse a run with no failures or errors
+        // if we want to reverse a run with no failures or errors, then replace the line above with the following
         // lastRandomResult.results().values().stream().anyMatch(testResult -> testResult.result() == Result.FAILURE || testResult.result() == Result.ERROR)
         lastRandomDetectionRound = makeDts(origResult, lastRandomResult);
         return lastRandomDetectionRound;
