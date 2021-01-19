@@ -39,7 +39,7 @@ public class SmartShuffleDetector extends ExecutingDetector {
     @Override
     protected boolean triedAllOrders(int round) {
         int numTried = shuffler.ordersTried();
-        if(numTried >= shuffler.calculatePermutations()) {
+        if (numTried >= shuffler.calculatePermutations()) {
             return true;
         }
         return false;

@@ -54,7 +54,7 @@ public class RandomDetector extends ExecutingDetector {
     protected boolean triedAllOrders(int rounds) {
         long permutations = testShuffler.calculatePermutations();
         int numTried = testShuffler.ordersTried();
-        if(numTried >= permutations) {
+        if (numTried >= permutations) {
             return true;
         }
         return false;

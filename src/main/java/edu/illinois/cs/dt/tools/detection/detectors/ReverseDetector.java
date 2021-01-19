@@ -35,7 +35,7 @@ public class ReverseDetector extends ExecutingDetector {
 
     @Override
     protected boolean triedAllOrders(int round) {
-        if(round >= 1) {
+        if (round >= 1) {
             return true;
         }
         return false;

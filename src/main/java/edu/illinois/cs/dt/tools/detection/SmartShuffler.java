@@ -152,7 +152,7 @@ public class SmartShuffler {
         int numClasses = 0;
         long numPermutations = 1;
         Iterator<String> it = classToMethods.keySet().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()){
             String className = it.next();
             int numTests = classToMethods.get(className).size();
             numPermutations *= IntMath.factorial(numTests);

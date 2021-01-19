@@ -96,11 +96,11 @@ public class TestShuffler {
     }
 
     public long calculatePermutations() {
-        if(type.equals("random-class-method")) {
+        if (type.equals("random-class-method")) {
             int numClasses = 0;
             long numPermutations = 1;
             Iterator<String> it = classToMethods.keySet().iterator();
-            while(it.hasNext()){
+            while (it.hasNext()){
                 String className = it.next();
                 int numTests = classToMethods.get(className).size();
                 numPermutations *= IntMath.factorial(numTests);
@@ -111,10 +111,10 @@ public class TestShuffler {
             long maxPermutations = IntMath.factorial(numClasses) * numPermutations;
             return maxPermutations;
         }
-        else if(type.equals("random-class")) {
+        else if (type.equals("random-class")) {
             int numClasses = 0;
             Iterator<String> it = classToMethods.keySet().iterator();
-            while(it.hasNext()){
+            while (it.hasNext()){
                 numClasses++;
             }
             return (long) IntMath.factorial(numClasses);
