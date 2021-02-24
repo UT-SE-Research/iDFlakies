@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,8 @@ public class DetectorPlugin extends TestPlugin {
     private String coordinates;
     private InstrumentingSmartRunner runner;
     private static Map<Integer, List<String>> locateTestList = new HashMap<>();
+    // useful for modules with JUnit 4 tests but depend on something in JUnit 5
+    private final boolean forceJUnit4 = Configuration.config().getProperty("dt.detector.forceJUnit4", false);
 
     // Don't delete this.
     // This is actually used, provided you call this class via Maven (used by the testrunner plugin)
@@ -219,20 +222,45 @@ public class DetectorPlugin extends TestPlugin {
         runners = removeZombieRunners(runners, project);
 
         if (runners.size() != 1) {
-            String errorMsg;
-            if (runners.size() == 0) {
-                errorMsg =
-                    "Module is not using a supported test framework (probably not JUnit), " +
-                    "or there is no test.";
+            if (forceJUnit4) {
+                Runner nrunner = null;
+                for (Runner runner : runners) {
+                    if (runner.framework().toString() == "JUnit") {
+                        nrunner = runner;
+                        break;
+                    }
+                }
+                if (nrunner != null) {
+                    runners = new ArrayList<>(Arrays.asList(nrunner));
+                } else {
+                    String errorMsg;
+                    if (runners.size() == 0) {
+                        errorMsg =
+                            "Module is not using a supported test framework (probably not JUnit), " +
+                            "or there is no test.";
+                    } else {
+                        errorMsg = "dt.detector.forceJUnit4 is true but no JUnit 4 runners found. Perhaps the project only contains JUnit 5 tests.";
+                    }
+                    TestPluginUtil.project.info(errorMsg);
+                    logger.writeError(errorMsg);
+                    return null;
+                }
             } else {
-                // more than one runner, currently is not supported.
-                errorMsg =
-                    "This project contains both JUnit 4 and JUnit 5 tests, which currently"
-                    + " is not supported by iDFlakies";
+                String errorMsg;
+                if (runners.size() == 0) {
+                    errorMsg =
+                        "Module is not using a supported test framework (probably not JUnit), " +
+                        "or there is no test.";
+                } else {
+                    // more than one runner, currently is not supported.
+                    errorMsg =
+                        "This project contains both JUnit 4 and JUnit 5 tests, which currently"
+                        + " is not supported by iDFlakies";
+                }
+                TestPluginUtil.project.info(errorMsg);
+                logger.writeError(errorMsg);
+                return null;
             }
-            TestPluginUtil.project.info(errorMsg);
-            logger.writeError(errorMsg);
-            return null;
         }
 
         if (this.runner == null) {
