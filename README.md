@@ -43,7 +43,7 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
         <plugin>
             <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-maven-plugin</artifactId>
-            <version>1.0</version>
+            <version>1.2</version>
             <dependencies>
                 <dependency>
                     <groupId>edu.illinois.cs</groupId>
