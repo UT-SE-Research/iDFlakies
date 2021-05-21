@@ -116,8 +116,8 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                         .findFirst()
                         .map(row -> Double.valueOf(row.get(1)))
                         .orElse(0.0);
-
-        final double mainTimeout = Configuration.config().getProperty("detector.timeout", 6 * 3600.0); // 6 hours
+        double x = 6 * 3600.0;
+        final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", Double.toString(x)));//Configuration.config().getProperty(); // 6 hours
 
         double timeout =
                 Math.max(2.0, moduleTime * mainTimeout / totalTime);
@@ -153,9 +153,13 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     public int moduleRounds(String coordinates) throws IOException {
-        final boolean hasRounds = Configuration.config().properties().getProperty("dt.randomize.rounds") != null;
-        final boolean hasTimeout = Configuration.config().properties().getProperty("detector.timeout") != null;
-        final int roundNum = Configuration.config().getProperty("dt.randomize.rounds", 20);
+        final boolean hasRounds = System.getProperty("dt.randomize.rounds") != null; // Configuration.config().properties().getProperty("dt.randomize.rounds") != null;
+        final boolean hasTimeout = System.getProperty("detector.timeout")!=null;    // Configuration.config().properties().getProperty("detector.timeout") != null;
+
+      //  final int roundNum = Configuration.config().getProperty("dt.randomize.rounds", 20);
+        final int roundNum = Integer.parseInt(System.getProperty("dt.randomize.rounds", "20"));
+
+     //   System.out.println(roundNum);
 
         final int timeoutRounds;
         if (hasTimeout) {
@@ -163,7 +167,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             if (Files.isReadable(timeCsv)) {
                 final double totalTime = readRealTime(timeCsv);
-                final double mainTimeout = Configuration.config().getProperty("detector.timeout", 6 * 3600.0); // 6 hours
+                final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", Double.toString(6 * 3600.0))); // Configuration.config().getProperty(); // 6 hours
                 if (mainTimeout != 0) {
 
                     Logger.getGlobal().log(Level.INFO, "TIMEOUT_VALUE: Using a timeout of " +
