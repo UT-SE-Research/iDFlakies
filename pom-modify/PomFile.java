@@ -200,15 +200,15 @@ public class PomFile {
             }
             {
                 Node artifactId = doc.createElement("artifactId");
-                artifactId.setTextContent("testrunner-maven-plugin");
+                artifactId.setTextContent("idflakies-maven-plugin");       //changed
                 plugin.appendChild(artifactId);
             }
             {
                 Node version = doc.createElement("version");
-                version.setTextContent("1.2.1");
+                version.setTextContent("2.0.0-SNAPSHOT");                        //changed
                 plugin.appendChild(version);
             }
-            {
+            /*{                                                          ////no longer needs this dependency/config?
                 Node dependencies = doc.createElement("dependencies");
                 {
                     Node dependency = doc.createElement("dependency");
@@ -237,7 +237,7 @@ public class PomFile {
                     configuration.appendChild(className);
                 }
                 plugin.appendChild(configuration);
-            }
+            }*/
             plugins.appendChild(plugin);
         }
     }
