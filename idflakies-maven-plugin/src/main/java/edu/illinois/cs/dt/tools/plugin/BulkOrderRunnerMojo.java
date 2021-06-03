@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.utility.ErrorLogger;
+import edu.illinois.cs.dt.tools.utility.Level;
+import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
@@ -46,7 +48,8 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
                 run(runner, inputPath, outputPath);
             } else {
                 final String errorMsg = "Module is not using a supported test framework (probably not JUnit).";
-                TestPluginUtil.project.info(errorMsg);
+                Logger.getGlobal().log(Level.INFO, errorMsg);
+               // TestPluginPlugin.info(errorMsg);
                 errorLogger.writeError(errorMsg);
             }
 
@@ -58,7 +61,8 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
         final List<Path> collect = Files.list(inputPath).collect(Collectors.toList());
         for (int i = 0; i < collect.size(); i++) {
             final Path p = collect.get(i);
-            TestPluginUtil.project.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
+            Logger.getGlobal().log(String.format("Running (%d of %d): %s", i, collect.size(), p));
+          //  TestPluginPlugin.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
             runOrder(runner, p, outputPath);
         }
     }

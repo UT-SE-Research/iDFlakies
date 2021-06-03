@@ -2,6 +2,8 @@ package edu.illinois.cs.dt.tools.utility;
 
 import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
+import edu.illinois.cs.dt.tools.utility.Level;
+import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
