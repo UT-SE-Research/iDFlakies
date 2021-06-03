@@ -26,8 +26,9 @@ public class ReplayPlugin extends TestPlugin {
         final Option<Runner> runnerOption = RunnerFactory.from(project);
 
         if (runnerOption.isDefined()) {
-            replayPath = Paths.get(Configuration.config().getProperty("replay.path"));
-            final Path outputPath = Paths.get(Configuration.config().properties().getProperty("replay.output_path"));
+            replayPath = Paths.get(System.getProperty("replay.path"));
+          //  final Path outputPath = Paths.get(Configuration.config().properties().getProperty("replay.output_path"));
+            final Path outputPath = Paths.get(System.getProperty("replay.output_path"));
 
             try {
                 final Runner runner = runnerOption.get(); // safe because we checked above

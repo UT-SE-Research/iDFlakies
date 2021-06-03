@@ -2,12 +2,15 @@ package edu.illinois.cs.dt.tools.detection;
 
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
+import edu.illinois.cs.dt.tools.utility.Level;
+import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +24,8 @@ import java.util.stream.Stream;
 public class DetectorUtil {
 
     public static TestRunResult originalResults(final File baseDir, final List<String> originalOrder, final Runner runner) {
-        final int originalOrderTries = Configuration.config().getProperty("dt.detector.original_order.retry_count", 3);
-        final boolean allMustPass = Configuration.config().getProperty("dt.detector.original_order.all_must_pass", true);
+        final int originalOrderTries = Integer.parseInt(System.getProperty("dt.detector.original_order.retry_count", "3"));
+        final boolean allMustPass = Boolean.parseBoolean(System.getProperty("dt.detector.original_order.all_must_pass", "true"));
 
         System.out.println("[INFO] Getting original results (" + originalOrder.size() + " tests).");
 
@@ -48,7 +51,9 @@ public class DetectorUtil {
             if (allMustPass) {
                 throw new NoPassingOrderException("No passing order for tests (" + originalOrderTries + " runs)");
             } else {
-                TestPluginUtil.project.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
+                Logger.getGlobal().log(Level.INFO, "No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
+                // 2nd approach: also doesnt work - TestPluginPlugin.mojo().getLog().info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
+              // initial: TestPluginPlugin.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
             }
         }
 

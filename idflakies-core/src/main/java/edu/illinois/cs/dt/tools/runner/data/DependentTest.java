@@ -7,7 +7,7 @@ import edu.illinois.cs.testrunner.runner.Runner;
 import java.nio.file.Path;
 
 public class DependentTest {
-    private static final boolean VERIFY_DTS = Configuration.config().getProperty("dt.verify", true);
+    private static final boolean VERIFY_DTS = Boolean.parseBoolean(System.getProperty("dt.verify", "true")); //Configuration.config().getProperty("dt.verify", true);
 
     private final String name;
 

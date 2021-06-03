@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class TestRun {
-    private static final int VERIFY_ROUNDS = Configuration.config().getProperty("dt.verify.rounds", 1);
+    private static final int VERIFY_ROUNDS = Integer.parseInt(System.getProperty("dt.verify.rounds", "1"));
 
     private final List<String> order;
     private final Result result;

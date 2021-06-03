@@ -8,11 +8,11 @@ import java.util.List;
 
 public class DetectorFactory {
     public static String detectorType() {
-        return Configuration.config().getProperty("detector.detector_type", "random");
+        return System.getProperty("detector.detector_type", "random");
     }
 
     public static Detector makeDetector(final InstrumentingSmartRunner runner, final File baseDir, final List<String> tests) {
-        return makeDetector(runner, baseDir, tests, Configuration.config().getProperty("dt.randomize.rounds", 20));
+        return makeDetector(runner, baseDir, tests, Integer.parseInt(System.getProperty("dt.randomize.rounds", "20")));
     }
 
     public static Detector makeDetector(final InstrumentingSmartRunner runner, final File baseDir, final List<String> tests, final int rounds) {
