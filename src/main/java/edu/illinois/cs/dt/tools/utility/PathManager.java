@@ -37,18 +37,18 @@ public class PathManager {
     }
 
     public static Path cachePath() {
-	if (outputPath == "") {
-	    return modulePath().resolve(".dtfixingtools");
-	} else {
-	    TestPluginUtil.project.info("Accessing cachePath: " + outputPath);
-	    Path outputPathObj = Paths.get(outputPath);
-	    try {
-		Files.createDirectories(outputPathObj);
-	    } catch (IOException e) {
-		TestPluginUtil.project.debug(e.getMessage());
-	    }
-	    return outputPathObj.resolve(modulePath().getFileName());
-	}
+        if (outputPath == "") {
+            return modulePath().resolve(".dtfixingtools");
+        } else {
+            TestPluginUtil.project.info("Accessing cachePath: " + outputPath);
+            Path outputPathObj = Paths.get(outputPath);
+            try {
+                Files.createDirectories(outputPathObj);
+            } catch (IOException e) {
+                TestPluginUtil.project.debug(e.getMessage());
+            }
+            return outputPathObj.resolve(modulePath().getFileName());
+        }
     }
 
     public static Path path(final Path relative) {
