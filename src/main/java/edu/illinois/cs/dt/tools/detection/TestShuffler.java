@@ -11,7 +11,6 @@ import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
