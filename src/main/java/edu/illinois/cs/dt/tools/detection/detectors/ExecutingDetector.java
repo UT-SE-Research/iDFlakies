@@ -96,6 +96,10 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         Files.write(listPath, StringUtil.unlines(dtList.names()).getBytes());
     }
 
+    protected abstract boolean triedAllOrders(int round);
+
+    protected abstract void printToFile();
+
     private class RunnerIterator implements Iterator<DependentTest> {
 
         private final long origStartTimeMs = System.currentTimeMillis();
@@ -109,10 +113,13 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
 
         @Override
         public boolean hasNext() {
-            while (i < rounds && result.isEmpty()) {
+            while (i < rounds && result.isEmpty() && !triedAllOrders(i)) {
                 generate();
             }
-
+            if(triedAllOrders(i)) {
+                System.out.println("All orders have been run, ending detector execution");
+                printToFile();
+            }
             return !result.isEmpty();
         }
 

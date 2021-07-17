@@ -32,4 +32,17 @@ public class ReverseDetector extends ExecutingDetector {
         final List<String> reversed = testShuffler.shuffledOrder(absoluteRound.get());
         return makeDts(origResult, runList(reversed));
     }
+
+    @Override
+    protected boolean triedAllOrders(int round) {
+        if (round >= 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void printToFile(){
+        testShuffler.saveOrders();
+    }
 }
