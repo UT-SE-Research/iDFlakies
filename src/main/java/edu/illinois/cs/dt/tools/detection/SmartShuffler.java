@@ -68,6 +68,7 @@ public class SmartShuffler {
 
             if (!foundExcludedTest) {
                 List<String> methodsShuffled = new ArrayList<>(methods);
+                Collections.sort(methods);
                 Collections.shuffle(methods, random);
                 order.addAll(methodsShuffled);
             }
@@ -86,6 +87,7 @@ public class SmartShuffler {
         // Add the first class, make sure the first test actually comes first
         if (first.isPresent()) {
             List<String> siblings = new ArrayList<>(testSiblings(first.get()));
+            Collections.sort(siblings);
             Collections.shuffle(siblings, random);
             order.addAll(siblings);
             order.remove(first.get());
@@ -97,6 +99,7 @@ public class SmartShuffler {
         // Add all tests from the last class, make sure the last test actually comes last
         if (last.isPresent()) {
             List<String> siblings = new ArrayList<>(testSiblings(last.get()));
+            Collections.sort(siblings);
             Collections.shuffle(siblings, random);
             order.addAll(siblings);
             order.remove(last.get());
@@ -112,6 +115,7 @@ public class SmartShuffler {
 
     private Optional<String> sample(final List<String> from, final Set<String> excluding) {
         List<String> fromShuffled = new ArrayList<>(from);
+        Collections.sort(fromShuffled);
         Collections.shuffle(fromShuffled, random);
         for (final String s : fromShuffled) {
             if (!excluding.contains(s)) {
