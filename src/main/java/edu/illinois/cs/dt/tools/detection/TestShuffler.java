@@ -4,21 +4,23 @@ import com.google.common.collect.Lists;
 import com.google.common.math.IntMath;
 import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListUtil;
-import com.reedoei.eunomia.collections.RandomList;
 import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,8 @@ public class TestShuffler {
     private final String type;
     private final List<String> tests;
     private final Set<String> alreadySeenOrders = new HashSet<>();
+
+    private final Random random;
 
     public TestShuffler(final String type, final int rounds, final List<String> tests) {
         this.type = type;
@@ -48,6 +52,15 @@ public class TestShuffler {
 
             classToMethods.get(className).add(test);
         }
+
+        // Set up Random instance using passed in seed, if available
+        int seed = 42;
+        try {
+            seed = Integer.parseInt(Configuration.config().getProperty("dt.seed", "42"));
+        } catch (NumberFormatException nfe) {
+            TestPluginUtil.project.info("dt.seed needs to be an integer, using default seed " + seed);
+        }
+        this.random = new Random(seed);
     }
 
     private String historicalType() {
@@ -125,7 +138,11 @@ public class TestShuffler {
     }
 
     private List<String> generateShuffled() {
-        return generateWithClassOrder(new RandomList<>(classToMethods.keySet()).shuffled());
+        // sort the classes alphabetically, then shuffle as to ensure deterministic randomness
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        Collections.sort(classes);
+        Collections.shuffle(classes, random);
+        return generateWithClassOrder(classes);
     }
 
     private List<String> generateWithClassOrder(final List<String> classOrder) {
@@ -137,7 +154,11 @@ public class TestShuffler {
                 fullTestOrder.addAll(classToMethods.get(className));
             } else {
                 // the standard "random" type, will shuffle both
-                fullTestOrder.addAll(new RandomList<>(classToMethods.get(className)).shuffled());
+                // sort the methods alphabetically, then shuffle as to ensure deterministic randomness
+                List<String> methods = classToMethods.get(className);
+                Collections.sort(methods);
+                Collections.shuffle(methods, random);
+                fullTestOrder.addAll(methods);
             }
         }
 
