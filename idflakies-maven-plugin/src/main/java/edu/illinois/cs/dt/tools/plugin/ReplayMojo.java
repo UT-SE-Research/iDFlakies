@@ -1,4 +1,4 @@
-package edu.illinois.cs.dt.tools.utility;
+package edu.illinois.cs.dt.tools.plugin;
 
 import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
@@ -6,11 +6,8 @@ import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
-import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import scala.Option;
 import scala.util.Try;
 
@@ -20,12 +17,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class ReplayPlugin extends TestPlugin {
+public class ReplayMojo extends AbstractIDFlakiesMojo {
     private Path replayPath;
 
     @Override
-    public void execute(final ProjectWrapper project) {
-        final Option<Runner> runnerOption = RunnerFactory.from(project);
+    public void execute() {
+        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
 
         if (runnerOption.isDefined()) {
             replayPath = Paths.get(System.getProperty("replay.path"));
@@ -40,13 +37,13 @@ public class ReplayPlugin extends TestPlugin {
                 if (testRunResultTry.isSuccess()) {
                     Files.write(outputPath, new Gson().toJson(testRunResultTry.get()).getBytes());
                 } else {
-                    TestPluginUtil.project.error(testRunResultTry.failed().get());
+                    getLog().error(testRunResultTry.failed().get());
                 }
             } catch (IOException e) {
-                TestPluginUtil.project.error(e);
+                getLog().error(e);
             }
         } else {
-            TestPluginUtil.project.info("Module is not using a supported test framework (probably not JUnit).");
+            Logger.getGlobal().log(Level.INFO, "Module is not using a supported test framework (probably not JUnit).");
         }
     }
 

@@ -1,7 +1,8 @@
 package edu.illinois.cs.dt.tools.detection;
 
 import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
+import edu.illinois.cs.dt.tools.utility.Level;
+import edu.illinois.cs.dt.tools.utility.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class SmartShuffler {
         try {
             seed = Integer.parseInt(Configuration.config().getProperty("dt.seed", "42"));
         } catch (NumberFormatException nfe) {
-            TestPluginUtil.project.info("dt.seed needs to be an integer, using default seed " + seed);
+            Logger.getGlobal().log(Level.INFO, "dt.seed needs to be an integer, using default seed " + seed);
         }
         this.random = new Random(seed);
     }

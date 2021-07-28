@@ -1,8 +1,6 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
-import edu.illinois.cs.testrunner.util.ProjectWrapper;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -12,12 +10,13 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import org.apache.maven.project.MavenProject;
 
 public class ErrorLogger {
     private final String coordinates;
-    private final ProjectWrapper project;
+    private final MavenProject project;
 
-    public ErrorLogger(final ProjectWrapper project) {
+    public ErrorLogger(final MavenProject project) {
         this.project = project;
         this.coordinates = project.getGroupId() + ":" + project.getArtifactId() + ":" + project.getVersion();
     }
@@ -26,7 +25,7 @@ public class ErrorLogger {
         return coordinates;
     }
 
-    private String subjectName(final ProjectWrapper project) {
+    private String subjectName(final MavenProject project) {
         final Path relativePath =
                 PathManager.parentPath(project).getParent().toAbsolutePath()
                         .relativize(project.getBasedir().toPath().toAbsolutePath());

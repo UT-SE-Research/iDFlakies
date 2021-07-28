@@ -8,8 +8,6 @@ import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
-import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -31,7 +29,7 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
     @Override
     public void execute() {
         final ErrorLogger errorLogger = new ErrorLogger(mavenProject);
-        final Option<Runner> runnerOption = RunnerFactory.from(project);
+        final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
 
         errorLogger.runAndLogError(() -> {
             Files.deleteIfExists(DetectorPathManager.errorPath(mavenProject.getBasedir()));
@@ -61,7 +59,7 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
         final List<Path> collect = Files.list(inputPath).collect(Collectors.toList());
         for (int i = 0; i < collect.size(); i++) {
             final Path p = collect.get(i);
-            Logger.getGlobal().log(String.format("Running (%d of %d): %s", i, collect.size(), p));
+            Logger.getGlobal().log(Level.INFO, String.format("Running (%d of %d): %s", i, collect.size(), p));
           //  TestPluginPlugin.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
             runOrder(runner, p, outputPath);
         }

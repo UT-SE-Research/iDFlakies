@@ -4,3 +4,7 @@ target/
 .*.swp
 *.o
 *.hi
+*Zone.Identifier
+.github/
+.idea/
+*.iml

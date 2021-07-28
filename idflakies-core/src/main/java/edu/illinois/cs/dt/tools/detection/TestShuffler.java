@@ -6,9 +6,10 @@ import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListUtil;
 import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
+import edu.illinois.cs.dt.tools.utility.Level;
+import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class TestShuffler {
         try {
             seed = Integer.parseInt(Configuration.config().getProperty("dt.seed", "42"));
         } catch (NumberFormatException nfe) {
-            TestPluginUtil.project.info("dt.seed needs to be an integer, using default seed " + seed);
+            Logger.getGlobal().log(Level.INFO, "dt.seed needs to be an integer, using default seed " + seed);
         }
         this.random = new Random(seed);
     }

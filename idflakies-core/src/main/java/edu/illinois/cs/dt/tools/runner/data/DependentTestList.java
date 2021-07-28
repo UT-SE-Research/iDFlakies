@@ -8,7 +8,6 @@ import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.data.results.Result;
-import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -27,7 +27,7 @@ public class ModuleTestTimeMojo  extends AbstractIDFlakiesMojo {
         final Path surefireReportsPath = Paths.get(mavenProject.getBuild().getDirectory()).resolve("surefire-reports");
         final Path mvnTestLog = DetectorPathManager.mvnTestLog(mavenProject);
         try {
-            final Path outputFile = Paths.get(getMavenProjectParent(project).getBasedir().getAbsolutePath(),
+            final Path outputFile = Paths.get(getMavenProjectParent(mavenProject).getBasedir().getAbsolutePath(),
                     "module-test-time.csv");
 
             final String outputStr = coordinates + "," + timeFrom(surefireReportsPath, mvnTestLog);
@@ -50,8 +50,8 @@ public class ModuleTestTimeMojo  extends AbstractIDFlakiesMojo {
         return 0.0;
     }
 
-    private ProjectWrapper getMavenProjectParent(ProjectWrapper project) {
-        ProjectWrapper parentProj = project;
+    private MavenProject getMavenProjectParent(MavenProject project) {
+        MavenProject parentProj = project;
         while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
             parentProj = parentProj.getParent();
         }

@@ -1,5 +1,6 @@
 package edu.illinois.cs.dt.tools.plugin;
 
+
 import com.google.common.collect.Lists;
 import com.opencsv.CSVReader;
 import com.reedoei.eunomia.collections.ListEx;
@@ -11,12 +12,14 @@ import edu.illinois.cs.dt.tools.utility.ErrorLogger;
 import edu.illinois.cs.dt.tools.utility.GetMavenTestOrder;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
+import edu.illinois.cs.dt.tools.utility.OperationTime;
 import edu.illinois.cs.dt.tools.utility.TestClassData;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.framework.TestFramework;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import edu.illinois.cs.testrunner.testobjects.TestLocator;
+
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -75,8 +78,8 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         return until(t, f, v -> f.apply(v) == null);
     }
 
-    private ProjectWrapper getMavenProjectParent(ProjectWrapper project) {
-        ProjectWrapper parentProj = project;
+    private MavenProject getMavenProjectParent(MavenProject project) {
+        MavenProject parentProj = project;
         while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
             parentProj = parentProj.getParent();
         }
@@ -96,8 +99,8 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         return result;
     }
 
-    private long moduleTimeout(final ProjectWrapper project) throws IOException {
-        final ProjectWrapper parent = getMavenProjectParent(project);
+    private long moduleTimeout(final MavenProject project) throws IOException {
+        final MavenProject parent = getMavenProjectParent(project);
 
         final Path timeCsv = parent.getBasedir().toPath().resolve("module-test-time.csv");
         Files.copy(timeCsv, DetectorPathManager.detectionResults(mavenProject.getBasedir()).resolve("module-test-time.csv"), StandardCopyOption.REPLACE_EXISTING);
@@ -213,7 +216,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         final ErrorLogger logger = new ErrorLogger(mavenProject);
         this.coordinates = logger.coordinates();
 
-        logger.runAndLogError(() -> detectorExecute(logger, project, moduleRounds(coordinates)));
+        logger.runAndLogError(() -> detectorExecute(logger, mavenProject, moduleRounds(coordinates)));
     }
 
     private Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
@@ -224,8 +227,8 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         // Currently there could two runners, one for JUnit 4 and one for JUnit 5
         // If the maven project has both JUnit 4 and JUnit 5 tests, two runners will
         // be returned
-        List<Runner> runners = RunnerFactory.allFrom(project);
-        runners = removeZombieRunners(runners, project);
+        List<Runner> runners = RunnerFactory.allFrom(mavenProject);
+        runners = removeZombieRunners(runners, mavenProject);
 
         if (runners.size() != 1) {
             if (forceJUnit4) {
@@ -247,7 +250,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                     } else {
                         errorMsg = "dt.detector.forceJUnit4 is true but no JUnit 4 runners found. Perhaps the project only contains JUnit 5 tests.";
                     }
-                    TestPluginUtil.project.info(errorMsg);
+                    Logger.getGlobal().log(Level.INFO, errorMsg);
                     logger.writeError(errorMsg);
                     return null;
                 }
@@ -263,19 +266,16 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                         "This project contains both JUnit 4 and JUnit 5 tests, which currently"
                         + " is not supported by iDFlakies";
                 }
-                TestPluginUtil.project.info(errorMsg);
+                Logger.getGlobal().log(Level.INFO, errorMsg);
                 logger.writeError(errorMsg);
                 return null;
             }
-            Logger.getGlobal().log(Level.INFO, errorMsg);
-            logger.writeError(errorMsg);
-            return null;
         }
 
         if (this.runner == null) {
             this.runner = InstrumentingSmartRunner.fromRunner(runners.get(0), mavenProject.getBasedir());
         }
-        final List<String> tests = getOriginalOrder(project, this.runner.framework());
+        final List<String> tests = getOriginalOrder(mavenProject, this.runner.framework());
 
         if (!tests.isEmpty()) {
             Files.createDirectories(outputPath);
@@ -292,17 +292,17 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         return null;
     }
 
-    private static List<String> locateTests(ProjectWrapper project,
+    private static List<String> locateTests(MavenProject project,
 					    TestFramework testFramework) {
 	int id = Objects.hash(project, testFramework);
 	if (!locateTestList.containsKey(id)) {
-	    TestPluginUtil.project.info("Locating tests...");
+        Logger.getGlobal().log(Level.INFO, "Locating tests...");
 	    try {
 		locateTestList.put(id,
 				   OperationTime.runOperation(() -> {
 					   return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
 				       }, (tests, time) -> {
-					   TestPluginUtil.project.info("Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
+                       Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
 					   return tests;
 				       }));
 	    } catch (Exception e) {
@@ -313,21 +313,21 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     public static List<String> getOriginalOrder(
-            final ProjectWrapper project,
+            final MavenProject project,
             TestFramework testFramework) throws IOException {
         return getOriginalOrder(project, testFramework, false);
     }
 
     public static List<String> getOriginalOrder(
-            final ProjectWrapper project,
+            final MavenProject project,
             TestFramework testFramework,
             boolean ignoreExisting) throws IOException {
-        if (!Files.exists(DetectorPathManager.originalOrderPath(mavenProject.getBasedir())) || ignoreExisting) {
+        if (!Files.exists(DetectorPathManager.originalOrderPath(project.getBasedir())) || ignoreExisting) {
             Logger.getGlobal().log(Level.INFO, "Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
 
             try {
-                final Path surefireReportsPath = Paths.get(mavenProject.getBuild().getDirectory()).resolve("surefire-reports");
-                final Path mvnTestLog = DetectorPathManager.mvnTestLog(mavenProject);
+                final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("surefire-reports");
+                final Path mvnTestLog = DetectorPathManager.mvnTestLog(project);
                 if (Files.exists(mvnTestLog) && Files.exists(surefireReportsPath)) {
                     final List<TestClassData> testClassData = new GetMavenTestOrder(surefireReportsPath, mvnTestLog).testClassDataList();
 
@@ -349,12 +349,12 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             return locateTests(project, testFramework);
         } else {
-            return Files.readAllLines(DetectorPathManager.originalOrderPath(mavenProject.getBasedir()));
+            return Files.readAllLines(DetectorPathManager.originalOrderPath(project.getBasedir()));
         }
     }
 
     private static List<Runner> removeZombieRunners(
-            List<Runner> runners, ProjectWrapper project) throws IOException {
+            List<Runner> runners, MavenProject project) throws IOException {
         // Some projects may include test frameworks without corresponding tests.
         // Filter out such zombie test frameworks (runners).
         // For example, a project have both JUnit 4 and 5 dependencies, but there is
