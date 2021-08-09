@@ -1,10 +1,9 @@
 #!/bin/bash
 
 if [[ ${1} == "" ]]; then           
-    echo "Please provide the the name of your csv file with the format "URL,SHA,MODULE" on each line."
+    echo "Please provide the the full path to your csv file with the format "URL,SHA,\(optional\)MODULE" on each line."
     exit
 fi
-
 
 
 
@@ -12,8 +11,8 @@ flag=0
 scriptDir=$(dirname $0)
 cd ${scriptDir}
 
-if [[ ! -f ${1}.csv ]]; then            				
-    echo "No such file exists in the current directory."      #should we mandate that the csv should be stored in this "scripts" folder along with this script?
+if [[ ! -f ${1} ]]; then            				
+    echo "No such csv exists in the given directory."
     exit
 fi
 
@@ -84,10 +83,9 @@ while IFS="," read -r URL SHA MODULE; do
             flag=1
         fi
     fi
-    cd ${scriptDir}
-    cd testing-script-results
+    cd ${scriptDir}/testing-script-results
 
-done < ${1}.csv
+done < ${1}
 
 
 exit ${flag}      #test flag functionality on a CI
