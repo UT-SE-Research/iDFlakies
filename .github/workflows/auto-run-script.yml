@@ -24,7 +24,7 @@ jobs:
           distribution: 'adopt'
           
       - name: Installs packages
-        run: mvn install
+        run: mvn install -B
         
       - name: Auto Run manyProjects.sh upon pushing to repo.
         run: bash scripts/manyProjects.sh scripts/idfProjects.csv
