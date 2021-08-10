@@ -17,8 +17,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          
       - name: Installs packages
         run: mvn install
         
-      #- name: Auto Run manyProjects.sh upon pushing to repo.
-       # run: bash iDFlakies/scripts/manyProjects.sh           #right path? do we specify branch or is it implied
+      - name: Auto Run manyProjects.sh upon pushing to repo.
+        run: bash scripts/manyProjects.sh
