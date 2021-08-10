@@ -21,9 +21,10 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '8'
+          distribution: .
           
       - name: Installs packages
         run: mvn install
         
       - name: Auto Run manyProjects.sh upon pushing to repo.
-        run: bash scripts/manyProjects.sh
+        run: bash scripts/manyProjects.sh scripts/idfProjects.csv
