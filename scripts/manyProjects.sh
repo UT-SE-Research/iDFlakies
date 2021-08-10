@@ -70,7 +70,7 @@ while IFS="," read -r URL SHA MODULE; do
         PL=""
     fi
 
-    mvn install -DskipTests ${PL} -am
+    mvn install -DskipTests ${PL} -am -B
 
     if [[ $? != 0 ]]; then
         echo "Installation of projects under ${URL} was not successful."
@@ -79,7 +79,7 @@ while IFS="," read -r URL SHA MODULE; do
 
         #5. Run the default test for each
 
-        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false ${PL}
+        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false ${PL} -B
         if [[ $? != 0 ]]; then
             echo "${URL} idflakies detect not successful."
             flag=1
