@@ -1,17 +1,18 @@
 #!/bin/bash
 
-if [[ ${1} == "" ]]; then           
-    echo "Please provide the the full path to your csv file with the format "URL,SHA,\(optional\)MODULE" on each line."
+if [[ ${1} == "" ]]; then
+    echo "Please provide the path to your csv file with the format "URL,SHA,\(optional\)MODULE" on each line. If no MODULE is being provided, make sure to end the line with a comma instead."
     exit
 fi
 
 
 
 flag=0
-scriptDir=$(dirname $0)
+scriptDir=$(pwd $(dirname $0))
+csvFile=$(pwd $(dirname $1))/$(basename $1)
 cd ${scriptDir}
 
-if [[ ! -f ${1} ]]; then            				
+if [[ ! -f ${csvFile} ]]; then
     echo "No such csv exists in the given directory."
     exit
 fi
@@ -44,7 +45,7 @@ while IFS="," read -r URL SHA MODULE; do
 
     cd ${starr[4]}
     projectDirectory=$(pwd)
-    git checkout ${SHA}
+    git checkout -f ${SHA}
 
 
 
@@ -55,7 +56,7 @@ while IFS="," read -r URL SHA MODULE; do
     cd ${scriptDir}
     cd ..
     cd pom-modify
-    bash ./modify-project.sh ${projectDirectory}
+    bash ./modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
 
 
 
@@ -65,11 +66,12 @@ while IFS="," read -r URL SHA MODULE; do
     cd ${projectDirectory}
     if [[ ${MODULE} != "" ]]; then
         PL="-pl ${MODULE}"
-    else 
+    else
         PL=""
     fi
 
     mvn install -DskipTests ${PL} -am
+
     if [[ $? != 0 ]]; then
         echo "Installation of projects under ${URL} was not successful."
         flag=1
@@ -85,7 +87,7 @@ while IFS="," read -r URL SHA MODULE; do
     fi
     cd ${scriptDir}/testing-script-results
 
-done < ${1}
+done < ${csvFile}
 
 
 exit ${flag}      #test flag functionality on a CI
