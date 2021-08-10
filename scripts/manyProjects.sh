@@ -8,8 +8,8 @@ fi
 
 
 flag=0
-scriptDir=$(pwd $(dirname $0))
-csvFile=$(pwd $(dirname $1))/$(basename $1)
+scriptDir=$(cd $(dirname $0); pwd)
+csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
 cd ${scriptDir}
 
 if [[ ! -f ${csvFile} ]]; then
