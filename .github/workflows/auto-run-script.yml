@@ -18,9 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Installs packages
-        run: pwd
-        
-        #run: mvn install
+        run: mvn install
         
       #- name: Auto Run manyProjects.sh upon pushing to repo.
        # run: bash iDFlakies/scripts/manyProjects.sh           #right path? do we specify branch or is it implied
