@@ -78,8 +78,8 @@ while IFS="," read -r URL SHA MODULE; do
     else
 
         #5. Run the default test for each
-
-        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false ${PL} -B
+	#add CHECKFLAKYTESTS
+        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${PL} -B
         if [[ $? != 0 ]]; then
             echo "${URL} idflakies detect not successful."
             flag=1
