@@ -3,9 +3,11 @@
 # indicate on the ReadMe that to use this script, the user must provide GitHub URL, SHA to run iDFlakies on with a space inbetween.
 
 if [[ ${1} == "" ]] || [[ ${2} == "" ]] || [[ ${3} == "" ]] || [[ ${4} == "" ]]; then
-    echo "Please provide the GitHub Project Repository, the SHA, the directory to your pom-modify file on your version of iDFlakies, and the file name of the module you would like to test here."
+    echo "Please provide the directory to your pom-modify file on your version of iDFlakies and the name of your name of your csv file with the format "URL,SHA,MODULE,tests1-9" on each line."
     exit
 fi
+
+						# for each project that u run testrunner on, make sure pom modify file has 1.2.0-SNAPSHOT
 
 											 #RUN TESTRUNNER FOR EACH MVN IDFLAKIES:DETECT
 
@@ -13,6 +15,10 @@ fi
 
 #0. Ask for configs, splice name of project           					 #REMOVE THIS: SAME CONFIGS FOR EACH PROJ : ALL AUTOMATION
 
+
+flag=0
+while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4 testCount5 testCount6 testCount7 testCount8 testCount9; do 
+               																		#let a -1 for any of these imply an expected test failure of some sort
 echo "If you would like to provide certain configurations, please press 1. Otherwise, if you would like to run numerous defaults, press enter."
 read option1
 if [[ ${option1} == "1" ]]; then 
@@ -35,32 +41,21 @@ fi
 
 #}
 
-#EXPERIMENT ${4}
+#EXPERIMENT ${MODULE}
 #exit
 
 
 
 
 
-flag=0
-while IFS="," read -r projName testCount1 testCount2 testCount3 testCount4 testCount5 testCount6 testCount7 testCount8 testCount9         #let a -1 for any of these imply an expected test failure of some sort
-do
 
 
 
 
-renamedRepo=${1}"/"
+renamedRepo=${URL}"/"
 readarray -d / -t starr <<< "${renamedRepo}"
 
 #working_dir=$(cd $(dirname $0)/../..; pwd)             #effort to get rid of input detailing pom-modify directory: how do these parameters work
-
-
-if [[ ${projName} != ${starr[4]} ]]; then
-	echo "Error in file structure of testExpectations.csv."
-	flag=1
-	exit
-fi
-
 
 
 
@@ -69,7 +64,7 @@ fi
 
 #1. Clone the project.
 if [[ ! -d ${starr[4]} ]]; then
-	git clone ${1}.git ${starr[4]}
+	git clone ${URL}.git ${starr[4]}
 fi     
 
 
@@ -82,7 +77,7 @@ fi
      
 cd ${starr[4]}
 projectDirectory=$(pwd)
-git checkout ${2}
+git checkout ${SHA}
 
 
 
@@ -90,13 +85,13 @@ git checkout ${2}
 #3. Modify pom file
 
 git checkout -f .
-cd ${3}
+cd ${1}
 
 #cd ${working_dir}/$TOOL_REPO/scripts/docker/pom-modify
 #echo $(pwd)                                                           #effort to get rid of input detailing pom-modify directory
 
 
-bash ./modify-project.sh ${projectDirectory}
+bash ./modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
 
 
 
@@ -104,28 +99,9 @@ bash ./modify-project.sh ${projectDirectory}
 
 
 
-#4. Maven install the proj
-
-PL="-pl ${4}"
-cd ${projectDirectory}
 
 
-mvn install -DskipTests ${PL} -am
-if [[ $? != 0 ]]; then
-	echo "Project ${starr[4]} was not installed successfully."                      
-	flag=1
-	exit										#should we remove the exit here?
-fi
-
-
-{ time -p timeout 1h mvn test -fn -B |& tee -a ${projectDirectory}/mvn-test.log ;} 2> ${projectDirectory}/mvn-test-time.log
-
-
-
-
-
-
-#4.5 Define Helper functions for running/checking tests
+#3.5 Define Helper functions for running/checking tests
 
 
 
@@ -134,7 +110,7 @@ function cleanUp() {
 #list=$(find ${projectDirectory} -name ".dtfixingtools")
 
 
-cd ${4}
+cd ${2}
 cp -r .dtfixingtools ${1}
 rm -r -v .dtfixingtools
 
@@ -228,7 +204,7 @@ numFlakyTests=0
 cd ${3}
 cd ${1}
 cd detection-results
-numFlakyTests=$((numFlakyTests + $(wc -l list.txt) ))
+numFlakyTests=$(wc -l list.txt)
 
 cd ${projectDirectory}
 
@@ -265,7 +241,32 @@ fi
 
 
 
+#4 Maven install the proj
+
+if [[ ${MODULE} != "" ]]; then
+        PL="-pl ${MODULE}"
+    else
+        PL=""
+fi
+cd ${projectDirectory}
+
+
+mvn install -DskipTests ${PL} -am
+if [[ $? != 0 ]]; then
+	echo "Project ${starr[4]} was not installed successfully."                      
+	flag=1
+else
+
+
+
+
+
 #5. Run tests
+
+echo "Start of logs for ${projectDirectory}"
+
+
+{ time -p timeout 1h mvn test -fn -B |& tee -a ${projectDirectory}/mvn-test.log ;} 2> ${projectDirectory}/mvn-test-time.log
 
 
 if [[ ${option1} == "1" ]]; then
@@ -288,67 +289,67 @@ else
 	semantics="-Ddt.detector.roundsemantics.total="
 	absPath="-Ddt.cache.absolute.path="
 	
+	#CHANGE idflakies detect back to testrunner
 
-		#ERROR RUNNING TESTRUNNER TIMEOUT CONFIG
-	mvn idflakies:detect ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test1.log  
-	cleanUp test1 ${4}
-	checkTimeout test1 120.0
-	checkDetType test1 random-class-method ${4} &> ${projectDirectory}/${projName}GeneralLogs.log        #can you repeat this for every function call so that it adds output to the same log file?
-	flakyTestsFound test1 testCount1 ${4} &> ${projectDirectory}/${projName}GeneralLogs.log
-
-
-	mvn idflakies:detect ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2.log
-	cleanUp test2 ${4}
-	checkDetType test2 random ${4}    					 #this might not work if ogorderpass is true (ex: http request)
-	checkNumberRounds test2 8 random-class-method -ge ${4}     							
-	flakyTestsFound test2 testCount2 ${4}
+	mvn idflakies:detect ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test1Logs.log           # >> means append
+	cleanUp test1 ${MODULE}
+	checkTimeout test1 120.0 |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	checkDetType test1 random-class-method ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	flakyTestsFound test1 testCount1 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn idflakies:detect ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3.log
-	cleanUp test3 ${4}
-	checkNumberRounds test3 12 random-class-method -ge ${4}					 #as an input, this function requires the name of folder with test results, expected # rounds, detector type used, and eq/ge (roundsemantics)
-	flakyTestsFound test3 testCount3 ${4}
+	mvn idflakies:detect ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2Logs.log
+	cleanUp test2 ${MODULE}
+	checkDetType test2 random ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log    					 #this might not work if ogorderpass is true (ex: http request)
+	checkNumberRounds test2 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log  							
+	flakyTestsFound test2 testCount2 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn idflakies:detect ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4.log    #check if output logs shows number of verify rounds itself
-	cleanUp test4 ${4}
-	checkDetType test4 random-class ${4}      #run every check for every test, check number of tests (all should be in csv file)
-	flakyTestsFound test4 testCount4 ${4}
+	mvn idflakies:detect ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3Logs.log
+	cleanUp test3 ${MODULE}
+	checkNumberRounds test3 12 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log					 #as an input, this function requires the name of folder with test results, expected # rounds, detector type used, and eq/ge (roundsemantics)
+	flakyTestsFound test3 testCount3 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn idflakies:detect ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${PL} &> ${projectDirectory}/test5.log
-	cleanUp test5 ${4}
-	checkNumberRounds test5 8 random-class-method -ge ${4}
-	flakyTestsFound test5 testCount5 ${4}
+	mvn idflakies:detect ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4Logs.log    #check if output logs shows number of verify rounds itself
+	cleanUp test4 ${MODULE}
+	checkDetType test4 random-class ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	flakyTestsFound test4 testCount4 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn idflakies:detect ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
-	cleanUp test6 ${4}
-	checkNumberRounds test6 1 reverse -ge ${4}
-	flakyTestsFound test6 testCount6 ${4}
+	mvn idflakies:detect ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${PL} &> ${projectDirectory}/test5Logs.log
+	cleanUp test5 ${MODULE}
+	checkNumberRounds test5 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	flakyTestsFound test5 testCount5 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn idflakies:detect ${time}120 ${ogOrderPass}true ${detType}reverse-class ${PL} &> ${projectDirectory}/test7.log
-	cleanUp test7 ${4}
-	checkNumberRounds test7 1 reverse-class -ge ${4}
-	flakyTestsFound test7 testCount7 ${4}
+	mvn idflakies:detect ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6Logs.log
+	cleanUp test6 ${MODULE}
+	checkNumberRounds test6 1 reverse -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	flakyTestsFound test6 testCount6 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn idflakies:detect ${rounds}12 ${semantics}true ${PL} &> ${projectDirectory}/test8.log
-	cleanUp test8 ${4}
-	checkNumberRounds test8 12 random -eq ${4}
-	flakyTestsFound test8 testCount8 ${4}
+	mvn idflakies:detect ${time}120 ${ogOrderPass}true ${detType}reverse-class ${PL} &> ${projectDirectory}/test7Logs.log
+	cleanUp test7 ${MODULE}
+	checkNumberRounds test7 1 reverse-class -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	flakyTestsFound test7 testCount7 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+
+
+	mvn idflakies:detect ${rounds}12 ${semantics}true ${PL} &> ${projectDirectory}/test8Logs.log
+	cleanUp test8 ${MODULE}
+	checkNumberRounds test8 12 random -eq ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	flakyTestsFound test8 testCount8 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
 
-	mvn idflakies:detect ${rounds}12 ${absPath}/tmp/pathTest ${PL}
-	checkAbsPath /tmp pathTest ${4}
+	mvn idflakies:detect ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9Logs.log
+	checkAbsPath /tmp pathTest ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 	
 
 fi
-
-done < testExpectations.csv
+fi
+done < ${2}
 
 
 
