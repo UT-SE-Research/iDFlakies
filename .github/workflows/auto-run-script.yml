@@ -8,10 +8,10 @@ on: [push]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  manyProjTest1:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    timeout-minutes: 4320
+    # timeout-minutes: 4320
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -26,5 +26,26 @@ jobs:
       - name: Installs packages
         run: mvn install -B
         
-      - name: Auto Run manyProjects.sh upon pushing to repo.
+      - name: Test 1st set of projects
         run: bash scripts/manyProjects.sh scripts/idfProjects.csv
+        
+  manyProjTest2:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # timeout-minutes: 4320
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          
+      - name: Installs packages
+        run: mvn install -B
+        
+      - name: Test 2nd set of projects
+        run: bash scripts/manyProjects.sh scripts/idfProjects2.csv
