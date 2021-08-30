@@ -69,8 +69,10 @@ while IFS="," read -r URL SHA MODULE; do
     else
         PL=""
     fi
-
-    mvn install -DskipTests ${PL} -am -B
+    
+    
+    MVNOPTIONS="-Dfindbugs.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true"
+    mvn install -DskipTests ${MVNOPTIONS} ${PL} -am -B
 
     if [[ $? != 0 ]]; then
         echo "Installation of projects under ${URL} was not successful."
@@ -79,7 +81,7 @@ while IFS="," read -r URL SHA MODULE; do
 
         #5. Run the default test for each
 	#add CHECKFLAKYTESTS
-        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${PL} -B
+        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
         if [[ $? != 0 ]]; then
             echo "${URL} idflakies detect not successful."
             flag=1
