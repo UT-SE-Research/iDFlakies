@@ -28,6 +28,13 @@ jobs:
         
       - name: Test 1st set of projects
         run: bash scripts/manyProjects.sh scripts/idfProjects.csv
+       
+      - name: Save artifact
+        uses: actions/upload-artifact@v2
+        with:
+         name: artifact_1
+         path: scripts/testing-script-results
+
         
   manyProjTest2:
     # The type of runner that the job will run on
@@ -49,3 +56,9 @@ jobs:
         
       - name: Test 2nd set of projects
         run: bash scripts/manyProjects.sh scripts/idfProjects2.csv
+        
+      - name: Save artifact
+        uses: actions/upload-artifact@v2
+        with:
+         name: artifact_2
+         path: scripts/testing-script-results
