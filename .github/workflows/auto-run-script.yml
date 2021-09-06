@@ -28,12 +28,6 @@ jobs:
         
       - name: Test 1st set of projects
         run: bash scripts/manyProjects.sh scripts/idfProjects.csv
-       
-      - name: Save artifact
-        uses: actions/upload-artifact@v2
-        with:
-         name: artifact_1
-         path: scripts/testing-script-results
 
         
   manyProjTest2:
@@ -56,9 +50,18 @@ jobs:
         
       - name: Test 2nd set of projects
         run: bash scripts/manyProjects.sh scripts/idfProjects2.csv
-        
-      - name: Save artifact
+         
+   
+  saveArtifact:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [manyProjTest1,manyProjTest2]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2  
+      - name: Save all relevant data
         uses: actions/upload-artifact@v2
         with:
          name: artifact_2
          path: scripts/testing-script-results
+         
