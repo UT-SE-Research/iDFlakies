@@ -72,6 +72,9 @@ while IFS="," read -r URL SHA MODULE; do
     
     
     MVNOPTIONS="-Dfindbugs.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true"
+    if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then
+        sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url><layout>;https://repository.jboss.org/nexus/content/groups/public/</url><layout>;' pom.xml
+    fi
     mvn install -DskipTests ${MVNOPTIONS} ${PL} -am -B
 
     if [[ $? != 0 ]]; then
