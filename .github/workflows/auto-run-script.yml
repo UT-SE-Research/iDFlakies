@@ -27,8 +27,11 @@ jobs:
         run: mvn install -B
         
       - name: Test 1st set of projects
-        run: bash scripts/test-many-projects.sh scripts/idfProjects1.csv
-        
+        run: bash scripts/test-many-projects.sh scripts/idfProjects1.csv |& tee -a scripts/GeneralLogs.log
+
+      - name: Move Logs file into the Artifact folder
+        run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
+
       - name: Save all relevant files
         uses: actions/upload-artifact@v2
         with:
@@ -55,8 +58,11 @@ jobs:
         run: mvn install -B
         
       - name: Test 2nd set of projects
-        run: bash scripts/test-many-projects.sh scripts/idfProjects2.csv
-        
+        run: bash scripts/test-many-projects.sh scripts/idfProjects2.csv |& tee -a scripts/GeneralLogs.log
+
+      - name: Move Logs file into the Artifact folder
+        run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
+
       - name: Save all relevant files
         uses: actions/upload-artifact@v2
         with:
@@ -82,8 +88,11 @@ jobs:
         run: mvn install -B
         
       - name: Test 3rd set of projects
-        run: bash scripts/test-many-projects.sh scripts/idfProjects3.csv
-        
+        run: bash scripts/test-many-projects.sh scripts/idfProjects3.csv |& tee -a scripts/GeneralLogs.log
+
+      - name: Move Logs file into the Artifact folder
+        run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
+
       - name: Save all relevant files
         uses: actions/upload-artifact@v2
         with:
