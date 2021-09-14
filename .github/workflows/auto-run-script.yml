@@ -27,13 +27,13 @@ jobs:
         run: mvn install -B
         
       - name: Test 1st set of projects
-        run: bash scripts/manyProjects.sh scripts/idfProjects.csv
+        run: bash scripts/test-many-projects.sh scripts/idfProjects1.csv
         
       - name: Save all relevant files
         uses: actions/upload-artifact@v2
         with:
          name: artifact_1
-         path: scripts/testing-script-results
+         path: scripts/testing-script-results/ARTIFACT
 
         
   manyProjTest2:
@@ -55,11 +55,38 @@ jobs:
         run: mvn install -B
         
       - name: Test 2nd set of projects
-        run: bash scripts/manyProjects.sh scripts/idfProjects2.csv
+        run: bash scripts/test-many-projects.sh scripts/idfProjects2.csv
         
       - name: Save all relevant files
         uses: actions/upload-artifact@v2
         with:
          name: artifact_2
-         path: scripts/testing-script-results
+         path: scripts/testing-script-results/ARTIFACT
+
+  manyProjTest3:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # timeout-minutes: 4320
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          
+      - name: Installs packages
+        run: mvn install -B
+        
+      - name: Test 3rd set of projects
+        run: bash scripts/test-many-projects.sh scripts/idfProjects3.csv
+        
+      - name: Save all relevant files
+        uses: actions/upload-artifact@v2
+        with:
+         name: artifact_3
+         path: scripts/testing-script-results/ARTIFACT
          
