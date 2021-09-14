@@ -21,16 +21,10 @@ if [[ ! -d testing-script-results ]]; then
 fi
 cd testing-script-results
 
-	
-	#CHANGE ALL ECHO STATEMENTS TO TEE? to save all in 1 "GeneralLogs.txt?"?
-	#check wildfly sed
-        #function syntax
-
 
 
 #CSV Splicing:
 while IFS="," read -r URL SHA MODULE numTests; do
-
 
     renamedRepo=${URL}"/"
     readarray -d / -t starr <<< "${renamedRepo}"
@@ -70,40 +64,35 @@ while IFS="," read -r URL SHA MODULE numTests; do
 
 
     function checkFlakyTests() {
-
-    numFlakyTests=0     
-    if [[ ${1} == -1 ]]; then
-        echo "EXPECTED PROJECT FAILURE %%%%%"
-    else
-        if [[ ${2} != "" ]]; then
-            cd ${2}
-        fi
-        cd .dtfixingtools
-        cd detection-results
-	pwd
-        numFlakyTests=$(wc -l list.txt)
-        echo $numFlakyTests
-	#exit
-        cd ${projectDirectory}
-	
-	
-        if [[ ${1} == ${numFlakyTests} ]]; then
-	    echo "All expected tests were found in ${3}."
-	    return 0
+        expectedTests=$1
+        if [[ ${expectedTests} == -1 ]]; then
+            echo "EXPECTED PROJECT FAILURE %%%%%"
         else
-	    if (( $1 > $numFlakyTests )); then
-		let "x = $1 - $numFlakyTests"
-                echo "There were $x less tests found than expected in ${3}. %%%%%"
-                flag=1
-                return 1
+            if [[ ${2} != "" ]]; then
+                cd ${2}
+            fi
+            cd .dtfixingtools
+            cd detection-results
+            numFlakyTests=$(awk '1' list.txt | wc -l)
+            cd ${projectDirectory}
+
+            if [[ ${expectedTests} == ${numFlakyTests} ]]; then
+	        echo "All expected tests were found in ${3}."
+	        return 0
             else
-		let "x = $numFlakyTests - $1"
-                echo "There were ${x} more tests found than expected in ${3}. %%%%%"
-                flag=1
-                return 1
+	        if [ $expectedTests -gt $numFlakyTests ]; then
+                    let "x = $expectedTests - $numFlakyTests"
+                    echo "There were $x less tests found than expected in ${3}. %%%%%"
+                    flag=1
+                    return 1
+                else
+                    let "x = $numFlakyTests - $expectedTests"
+                    echo "There were $x more tests found than expected in ${3}. %%%%%"
+                    flag=1
+                    return 1
+                fi
             fi
         fi
-    fi
     }
 
 
@@ -123,11 +112,11 @@ while IFS="," read -r URL SHA MODULE numTests; do
         sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' guava/pom.xml
     fi
     if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then
-        sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url><layout>;https://repository.jboss.org/nexus/content/groups/public/</url><layout>;' pom.xml
+        sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
     fi
     mvn install -DskipTests ${MVNOPTIONS} ${PL} -am -B
     if [[ $? != 0 ]]; then
-        echo "Installation of projects under ${URL} was not successful. %%%%%"      #ADD TEE HERE INTO SOME GLOBAL LOG
+        echo "Installation of projects under ${URL} was not successful. %%%%%"
         flag=1
     else
 
@@ -151,7 +140,7 @@ done < ${csvFile}
 if [[ ! -d ARTIFACTS ]]; then
     mkdir ARTIFACTS
 fi
-for d in $(find -name .dtfixingtools); do 
+for d in $(find -name .dtfixingtools); do
     cp -r --parents ${d} ${scriptDir}/testing-script-results/ARTIFACTS/
 done
 
