@@ -21,10 +21,10 @@ if [[ ! -d testing-script-results ]]; then
 fi
 cd testing-script-results
 
-	#ADD A THIRD INPUT FILE
-
+	
 	#CHANGE ALL ECHO STATEMENTS TO TEE? to save all in 1 "GeneralLogs.txt?"?
 	#check wildfly sed
+        #function syntax
 
 
 
@@ -75,30 +75,37 @@ while IFS="," read -r URL SHA MODULE numTests; do
     if [[ ${1} == -1 ]]; then
         echo "EXPECTED PROJECT FAILURE %%%%%"
     else
-        cd ${2}
+        if [[ ${2} != "" ]]; then
+            cd ${2}
+        fi
         cd .dtfixingtools
         cd detection-results
+	pwd
         numFlakyTests=$(wc -l list.txt)
-
+        echo $numFlakyTests
+	#exit
         cd ${projectDirectory}
-
+	
+	
         if [[ ${1} == ${numFlakyTests} ]]; then
 	    echo "All expected tests were found in ${3}."
 	    return 0
         else
-	    if [ ${expectedTests} -gt ${numFlakyTests} ]; then
-                echo "There were $(( ${expectedTests} - ${numFlakyTests} )) less tests found than expected in ${3}. %%%%%"
+	    if (( $1 > $numFlakyTests )); then
+		let "x = $1 - $numFlakyTests"
+                echo "There were $x less tests found than expected in ${3}. %%%%%"
                 flag=1
                 return 1
             else
-                echo "There were $(( ${numFlakyTests} - ${expectedTests} )) more tests found than expected in ${3}. %%%%%"
+		let "x = $numFlakyTests - $1"
+                echo "There were ${x} more tests found than expected in ${3}. %%%%%"
                 flag=1
                 return 1
             fi
         fi
     fi
-
     }
+
 
 
 
@@ -125,7 +132,6 @@ while IFS="," read -r URL SHA MODULE numTests; do
     else
 
         #5. Run the default test for each
-
         mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
         if [[ $? != 0 ]]; then
             echo "${URL} idflakies detect not successful. %%%%%"
