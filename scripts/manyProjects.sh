@@ -1,10 +1,9 @@
 #!/bin/bash
 
 if [[ ${1} == "" ]]; then
-    echo "Please provide the path to your csv file with the format "URL,SHA,\(optional\)MODULE" on each line. If no MODULE is being provided, make sure to end the line with a comma instead."
+    echo "Please provide the path to your csv file with the format "URL,SHA,MODULE,numTestsFound" on each line. Unless only 1 module exists, a module must be provided."
     exit
 fi
-
 
 
 flag=0
@@ -22,15 +21,23 @@ if [[ ! -d testing-script-results ]]; then
 fi
 cd testing-script-results
 
+	#ADD A THIRD INPUT FILE
+
+	#CHANGE ALL ECHO STATEMENTS TO TEE? to save all in 1 "GeneralLogs.txt?"?
+	#check wildfly sed
 
 
 
 #CSV Splicing:
-while IFS="," read -r URL SHA MODULE; do
+while IFS="," read -r URL SHA MODULE numTests; do
+
 
     renamedRepo=${URL}"/"
     readarray -d / -t starr <<< "${renamedRepo}"
 
+    echo "DATE: "
+    date
+    echo "BEGINNING OF $URL"
 
     #1. Clone the project
 
@@ -57,37 +64,74 @@ while IFS="," read -r URL SHA MODULE; do
     cd ..
     cd pom-modify
     bash ./modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
+    cd ${projectDirectory}
 
+
+
+
+    function checkFlakyTests() {
+
+    numFlakyTests=0     
+    if [[ ${1} == -1 ]]; then
+        echo "EXPECTED PROJECT FAILURE %%%%%"
+    else
+        cd ${2}
+        cd .dtfixingtools
+        cd detection-results
+        numFlakyTests=$(wc -l list.txt)
+
+        cd ${projectDirectory}
+
+        if [[ ${1} == ${numFlakyTests} ]]; then
+	    echo "All expected tests were found in ${3}."
+	    return 0
+        else
+	    if [ ${expectedTests} -gt ${numFlakyTests} ]; then
+                echo "There were $(( ${expectedTests} - ${numFlakyTests} )) less tests found than expected in ${3}. %%%%%"
+                flag=1
+                return 1
+            else
+                echo "There were $(( ${numFlakyTests} - ${expectedTests} )) more tests found than expected in ${3}. %%%%%"
+                flag=1
+                return 1
+            fi
+        fi
+    fi
+
+    }
 
 
 
     #4. Maven install the proj
-
-    cd ${projectDirectory}
+    
     if [[ ${MODULE} != "" ]]; then
-        PL="-pl ${MODULE}"
+        PL="-pl $(echo ${MODULE} | sed 's;|;,;g')"
     else
         PL=""
     fi
-    
-    
-    MVNOPTIONS="-Dfindbugs.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true"
+    MVNOPTIONS="-Dfindbugs.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true -Ddependency-check.skip=true"
+    if [[ $URL == "https://github.com/pholser/junit-quickcheck" ]]; then
+        sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' core/pom.xml
+        sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' generators/pom.xml
+        sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' guava/pom.xml
+    fi
     if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then
         sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url><layout>;https://repository.jboss.org/nexus/content/groups/public/</url><layout>;' pom.xml
     fi
     mvn install -DskipTests ${MVNOPTIONS} ${PL} -am -B
-
     if [[ $? != 0 ]]; then
-        echo "Installation of projects under ${URL} was not successful."
+        echo "Installation of projects under ${URL} was not successful. %%%%%"      #ADD TEE HERE INTO SOME GLOBAL LOG
         flag=1
     else
 
         #5. Run the default test for each
-	#add CHECKFLAKYTESTS
+
         mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
         if [[ $? != 0 ]]; then
-            echo "${URL} idflakies detect not successful."
+            echo "${URL} idflakies detect not successful. %%%%%"
             flag=1
+        else
+           checkFlakyTests ${numTests} $(echo ${MODULE} | cut -d'|' -f1) ${URL}
         fi
     fi
     cd ${scriptDir}/testing-script-results
@@ -95,4 +139,15 @@ while IFS="," read -r URL SHA MODULE; do
 done < ${csvFile}
 
 
-exit ${flag}      #test flag functionality on a CI
+
+#6. Save all relevant data
+
+if [[ ! -d ARTIFACTS ]]; then
+    mkdir ARTIFACTS
+fi
+for d in $(find -name .dtfixingtools); do 
+    cp -r --parents ${d} ${scriptDir}/testing-script-results/ARTIFACTS/
+done
+
+
+exit ${flag}
