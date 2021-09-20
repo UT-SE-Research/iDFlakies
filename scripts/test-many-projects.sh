@@ -68,8 +68,8 @@ while IFS="," read -r URL SHA MODULE numTests; do
         if [[ ${expectedTests} == -1 ]]; then
             echo "EXPECTED PROJECT FAILURE %%%%%"
         else
-            if [[ ${2} != "" ]]; then
-                cd ${2}
+            if [[ ${3} != "" ]]; then
+                cd ${3}
             fi
             cd .dtfixingtools
             cd detection-results
@@ -77,17 +77,17 @@ while IFS="," read -r URL SHA MODULE numTests; do
             cd ${projectDirectory}
 
             if [[ ${expectedTests} == ${numFlakyTests} ]]; then
-	        echo "All expected tests were found in ${3}."
+	        echo "All expected tests were found in ${2}."
 	        return 0
             else
 	        if [ $expectedTests -gt $numFlakyTests ]; then
                     let "x = $expectedTests - $numFlakyTests"
-                    echo "There were $x less tests found than expected in ${3}. %%%%%"
+                    echo "There were $x less tests found than expected in ${2}. %%%%%"
                     flag=1
                     return 1
                 else
                     let "x = $numFlakyTests - $expectedTests"
-                    echo "There were $x more tests found than expected in ${3}. %%%%%"
+                    echo "There were $x more tests found than expected in ${2}. %%%%%"
                     flag=1
                     return 1
                 fi
@@ -126,7 +126,7 @@ while IFS="," read -r URL SHA MODULE numTests; do
             echo "${URL} idflakies detect not successful. %%%%%"
             flag=1
         else
-           checkFlakyTests ${numTests} $(echo ${MODULE} | cut -d'|' -f1) ${URL}
+           checkFlakyTests ${numTests} ${URL} $(echo ${MODULE} | cut -d'|' -f1)
         fi
     fi
     cd ${scriptDir}/testing-script-results
