@@ -36,9 +36,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
          name: artifact_1
-         path: scripts/testing-script-results/ARTIFACT
+         path: scripts/testing-script-results/ARTIFACTS
 
-        
   manyProjTest2:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -67,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
          name: artifact_2
-         path: scripts/testing-script-results/ARTIFACT
+         path: scripts/testing-script-results/ARTIFACTS
 
   manyProjTest3:
     # The type of runner that the job will run on
@@ -97,5 +96,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
          name: artifact_3
-         path: scripts/testing-script-results/ARTIFACT
+         path: scripts/testing-script-results/ARTIFACTS
          
