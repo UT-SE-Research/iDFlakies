@@ -82,7 +82,7 @@ while IFS="," read -r URL SHA MODULE numTests; do
             else
 	        if [ $expectedTests -gt $numFlakyTests ]; then
                     let "x = $expectedTests - $numFlakyTests"
-                    echo "There were $x less tests found than expected in ${2}. %%%%%"
+                    echo "There were $x fewer tests found than expected in ${2}. %%%%%"
                     flag=1
                     return 1
                 else
