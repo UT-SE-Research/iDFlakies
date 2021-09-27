@@ -25,7 +25,21 @@ jobs:
           
       - name: Installs packages
         run: mvn install -B
-        
+
+      - name: Test 1st set of projects
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects1.csv |& tee -a scripts/GeneralLogs.log
+
+      - name: Move Logs file into the Artifact folder
+        if: always()
+        run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
+
+      - name: Save all relevant files
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+         name: artifact_1
+         path: scripts/testing-script-results/ARTIFACTS
+
       - name: Test 1st set of projects
         run: bash scripts/test-many-projects.sh scripts/idfProjects1.csv |& tee -a scripts/GeneralLogs.log
 
@@ -57,12 +71,14 @@ jobs:
         run: mvn install -B
         
       - name: Test 2nd set of projects
-        run: bash scripts/test-many-projects.sh scripts/idfProjects2.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects2.csv |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the Artifact folder
+        if: always()
         run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
 
       - name: Save all relevant files
+        if: always()
         uses: actions/upload-artifact@v2
         with:
          name: artifact_2
@@ -85,16 +101,49 @@ jobs:
           
       - name: Installs packages
         run: mvn install -B
-        
+
       - name: Test 3rd set of projects
-        run: bash scripts/test-many-projects.sh scripts/idfProjects3.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects3.csv |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the Artifact folder
+        if: always()
         run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
 
       - name: Save all relevant files
+        if: always()
         uses: actions/upload-artifact@v2
         with:
          name: artifact_3
          path: scripts/testing-script-results/ARTIFACTS
-         
+
+  manyProjTest4:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # timeout-minutes: 4320
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          
+      - name: Installs packages
+        run: mvn install -B
+
+      - name: Test 3rd set of projects
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects4.csv |& tee -a scripts/GeneralLogs.log
+
+      - name: Move Logs file into the Artifact folder
+        if: always()
+        run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
+
+      - name: Save all relevant files
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+         name: artifact_4
+         path: scripts/testing-script-results/ARTIFACTS

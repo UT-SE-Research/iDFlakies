@@ -1,5 +1,4 @@
 https://github.com/apache/incubator-dubbo,737f7a7ea67832d7f17517326fb2491d0a086dd7,dubbo-cluster|dubbo-dependencies-bom,4
-https://github.com/apache/incubator-dubbo,737f7a7ea67832d7f17517326fb2491d0a086dd7,dubbo-rpc/dubbo-rpc-dubbo|dubbo-dependencies-bom,2
 https://github.com/apache/incubator-dubbo,737f7a7ea67832d7f17517326fb2491d0a086dd7,dubbo-serialization/dubbo-serialization-fst|dubbo-dependencies-bom,1
 https://github.com/Apache/Struts,13d9053050c9e4fb2ef049db6a37d3f6eebf48fa,plugins/portlet,0
 https://github.com/dropwizard/dropwizard,07dfaed697427e208d65049f80a5d1949833b7cd,dropwizard-logging|dropwizard-bom,0
