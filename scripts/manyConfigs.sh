@@ -325,7 +325,9 @@ done < ${csvFile}
 if [[ ! -d ARTIFACTS ]]; then
     mkdir ARTIFACTS
 fi
-for d in test{1,2,3,4,5,6,7,8,9}; do cp -r --parents $(find -name ${d}) ${scriptDir}/MC-script-results/ARTIFACTS/; done
+for d in test{1,2,3,4,5,6,7,8,9}; do
+    #check if directory d doesnt exist then continue;
+    cp -r --parents $(find -name ${d}) ${scriptDir}/MC-script-results/ARTIFACTS/; done
 
 
 
