@@ -1,28 +1,17 @@
 #!/bin/bash
 
 
-if [[ ${1} == "" ]] || [[ ${2} == "" ]]; then
-    echo "Please provide the directory to your pom-modify file on your version of iDFlakies and the name of your csv file with the format "URL,SHA,MODULE,tests1-9" on each line."
+if [[ ${1} == "" ]]; then
+    echo "Please provide the name of your csv file with the format "URL,SHA,MODULE,tests1-9" on each line."
     exit
 fi
 
 						
-						
-				
-						#grep "ogorderdidnotpass"
-						#if theres a negative sign, treat the rest of the input as a string, add a new function that greps for that string that affirms intended project failure
-
-											 
-
-											 
-
 #0. File management/defining variables
 
-
 flag=0
-option1=0
 scriptDir=$(cd $(dirname $0); pwd)
-csvFile=$(cd $(dirname $2); pwd)/$(basename $2)
+csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
 cd ${scriptDir}
 
 if [[ ! -f ${csvFile} ]]; then
@@ -30,273 +19,248 @@ if [[ ! -f ${csvFile} ]]; then
     exit
 fi
 
-if [[ ! -d MP-script-results ]]; then
-    mkdir MP-script-results
+if [[ ! -d MC-script-results ]]; then
+    mkdir MC-script-results
 fi
-cd MP-script-results
-
-
-
-while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4 testCount5 testCount6 testCount7 testCount8 testCount9; do 
-
-x=1
-while [ $x -le 9 ]
-do
-     if[ testCount${i}[0] = "-" ]; then 
-          #${testCount${i}}| cut -d'-' -f 2
-     fi
-     x=$(( $x + 1 ))
-done
-exit
-
-
-
-#function EXPERIMENT() {
-
-#echo ${1}
-
-#if [ 5 ${2} ${1} ]; then
-#	echo "greater or equal"
-#else
-#	echo "less"
-#fi
-
-#}
-
-#EXPERIMENT ${MODULE}
-#exit
+cd MC-script-results
 
 
 
 
+while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4 testCount5 testCount6 testCount7 testCount8 testCount9; do
+
+    echo "-------------------------------- $URL" 
+
+    #only runs one proj?
+
+    #proj design on meta func: if 1 big meta for all tests, then wt indicates which funcs to call per test
+    #MOVE ALL THE FUNCTIONS OUTSIDE OF THE WHILE LOOP 
+
+    #PASS IN testcount$ for each of the initial funcs (cleanUp, timeout, #rounds, etc), if -, return
+
+
+    
+    # https://github.com/wildfly/wildfly,b19048b72669fc0e96665b1b125dc1fda21f5993,naming,0,0,42,0,0,0,0,0,0
+    # https://github.com/kevinsawicki/http-request,2d62a3e9da726942a93cf16b6e91c0187e6c0136,lib,-1,-1,28,-1,-1,-1,-1,-1,-1
+    #https://github.com/wikidata/wikidata-toolkit,20de6f7f12319f54eb962ff6e8357b3f5695d54d,wdtk-dumpfiles,-ERROR STRING,3,3,3,3,3,-1,3,3
+
+
+    renamedRepo=${URL}"/"
+    readarray -d / -t starr <<< "${renamedRepo}"
+
+
+    #1. Clone the project.
+
+    if [[ ! -d ${starr[4]} ]]; then
+        git clone ${URL}.git ${starr[4]}
+    fi
 
 
 
 
-
-renamedRepo=${URL}"/"
-readarray -d / -t starr <<< "${renamedRepo}"
+    #2. Navigate to proj and checkout SHA
 
 
-
-
-
-
-#cd into directory that contains the bash script itself 
-
-#1. Clone the project.
-if [[ ! -d ${starr[4]} ]]; then
-	git clone ${URL}.git ${starr[4]}
-fi
+    cd ${starr[4]}
+    projectDirectory=$(pwd)
+    git checkout ${SHA}
 
 
 
 
+    #3. Modify pom file
 
-
-#2. Navigate to proj and checkout SHA
-
-     
-cd ${starr[4]}
-projectDirectory=$(pwd)
-git checkout ${SHA}
-
-
-
-
-#3. Modify pom file
-
-git checkout -f .
-cd ${scriptDir}
-cd ..
-cd pom-modify
-bash ./modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
-cd ${projectDirectory}
+    git checkout -f .
+    cd ${scriptDir}
+    cd ..
+    cd pom-modify
+    bash ./modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
+    cd ${projectDirectory}
 
 
 
-#3.5 Define Helper functions for running/checking tests
 
+    #3.5 Define Helper functions for running/checking tests
 
-
-function cleanUp() {
-
-#list=$(find ${projectDirectory} -name ".dtfixingtools")
-
-
-cd ${2}
-cp -r .dtfixingtools ${1}
-rm -r .dtfixingtools
-
-
-cd ${projectDirectory}
-
-}
-
-
-
-function checkDetType() {
-#list1=$(find ${projectDirectory} -name "${1}")
-
-
-cd ${3}
-cd ${1}
-cd detection-results
-if [[  -d ${2} ]]; then
-	echo "Success: Flaky tests were found using the ${2} detector type."              #check this function later: the folder may still pop up with 0 tests found
+    function cleanUp() {
+	cd ${2}
+        cp -r .dtfixingtools ${1}
+        rm -r .dtfixingtools
 	cd ${projectDirectory}
-	return 0
-fi
-
-
-echo "No flaky tests were found using the ${2} detector type."
-cd ${projectDirectory}
-return 1
-
-}
+    }
 
 
 
-function checkNumberRounds() {
-
-#list2=$(find ${projectDirectory} -name "${1}")
-
-
-cd ${5}
-cd ${1}
-cd detection-results
-if [[  -d ${3} ]]; then
+    function checkDetType() {
 	cd ${3}
-	numRounds=$(ls -l | wc -l)
-	if [ ${numRounds} ${4} ${2} ]; then
-  		echo "Success: ${1} ran ${numRounds} as expected."
+	cd ${1}
+	cd detection-results
+	if [[  -d ${2} ]]; then
+	    echo "Success: Flaky tests were found using the ${2} detector type."
+	    cd ${projectDirectory}
+	    return 0
+	fi
+
+	echo "No flaky tests were found using the ${2} detector type."
+	cd ${projectDirectory}
+	return 1
+    }
+
+
+
+    function checkNumberRounds() {
+	cd ${5}
+	cd ${1}
+	cd detection-results
+	if [[  -d ${3} ]]; then
+	    cd ${3}
+	    numRounds=$(ls | wc -l)
+	    if [ ${numRounds} ${4} ${2} ]; then
+	        echo "Success: ${1} ran ${numRounds} rounds as expected."
 		cd ${projectDirectory}
 		return 0
-	else
-		echo "Error: ${1} only ran ${numRounds} when it should have ran atleast ${2}. %%%%%"
-		cd ${projectDirectory}   
-		return 1			
+	    else
+		echo "Error: ${1} ran ${numRounds} rounds when it should have ran ${2}. %%%%%"
+		cd ${projectDirectory}
+		return 1
+	    fi
 	fi
-fi
 
-cd ${projectDirectory}  
-echo "No flaky tests were found using ${2} rounds."
-
-}
+	cd ${projectDirectory}
+	echo "No flaky tests were found using ${2} rounds."
+    }
 
 
 
-function checkAbsPath() {
-
-cd ${1}
-
-if [[ -d ${2} ]]; then
-	cd ${2}
-	cd ${3}
-	if [ -d "detection-results" ]; then
+    function checkAbsPath() {
+	cd ${1}
+	if [[ -d ${2} ]]; then
+	    cd ${2}
+	    cd ${3}
+	    if [ -d "detection-results" ]; then
 		echo "Success: dt.cache.absolute.path configuration works as intended."
-		cd {projectDirectory}
 		return 0
-	fi	
-fi
-echo "Error: dt.cache.absolute.path not working as intended. %%%%%"
-flag=1
-cd {projectDirectory}
-return 1
-
-
-}
-
-
-
-
-function flakyTestsFound() {
-numFlakyTests=0
-#list3=$(find ${projectDirectory} -name "${1}")
-
-
-cd ${3}
-cd ${1}
-cd detection-results
-numFlakyTests=$(wc -l list.txt)
-
-cd ${projectDirectory}
-
-if [[ ${2} == ${numFlakyTests} ]]; then
-	echo "All expected tests were found."
-	return 0
-else
-	if [ ${expectedTests} -gt ${numFlakyTests} ]; then
-		echo "ERROR: There were $(( ${expectedTests} - ${numFlakyTests} )) less tests found than expected. %%%%%"
-		flag=1
-		return 1
-	else
-		echo "There were $(( ${numFlakyTests} - ${expectedTests} )) more tests found than expected. %%%%%"
-		flag=1
-		return 1
+	    fi
 	fi
-fi
-
-}
-
-function checkTimeout() {
-
-if grep "Using a timeout of ${2}" ${1}.log; then
-	echo "Success: ${1} used a timeout of ${2} as expected."
-	return 0
-else
-	echo "Error: ${1} did not use a timeout. %%%%%"
+	echo "Error: dt.cache.absolute.path not working as intended. %%%%%"
 	flag=1
+	cd {projectDirectory}
 	return 1
-fi
-
-}
+    }
 
 
 
+    function flakyTestsFound() {
+	expectedTests=$2
+	if [[ $expectedTests == -* ]]; then
+            expectedTests=| cut -d'-' -f 2
+	    if grep "$expectedTests" ${1}.log; then
+		echo "Confirmed Expected Project Failure in ${1}"
+		return 0
+	    else
+                echo "ERROR: Unexpected Project Failure in ${1} %%%%%"
+		flag=1
+		return 1
+	    fi
+	else
+	    if [[ ${3} != "" ]]; then
+		cd ${3}
+	    fi
+	    cd ${1}
+	    cd detection-results
+	    numFlakyTests=$(awk '1' list.txt | wc -l)
+	    cd ${projectDirectory}
 
-#4 Maven install the proj
+	    if [[ ${expectedTests} == ${numFlakyTests} ]]; then
+		echo "All expected tests were found in ${1}."
+		return 0
+	    else
+		if [ $expectedTests -gt $numFlakyTests ]; then
+        	    let "x = $expectedTests - $numFlakyTests"
+                    echo "There were $x fewer tests found than expected in ${1}. %%%%%"
+		    flag=1
+		    return 1
+		else
+		    let "x = $numFlakyTests - $expectedTests"
+                    echo "There were $x more tests found than expected in ${1}. %%%%%"
+                    flag=1
+                    return 1
+		fi
+	    fi
+	fi
+    }
 
-if [[ ${MODULE} != "" ]]; then
+
+
+    function checkTimeout() {
+	if grep "Using a timeout of ${2}" ${1}.log; then
+	    echo "Success: ${1} used a timeout of ${2} as expected."
+	    return 0
+	else
+	    echo "Error: ${1} did not use a timeout. %%%%%"
+	    flag=1
+	    return 1
+	fi
+    }
+
+
+
+
+    #4 Maven install the proj
+
+    if [[ ${MODULE} != "" ]]; then
         PL="-pl ${MODULE}"
     else
         PL=""
-fi
-cd ${projectDirectory}
+    fi
+    cd ${projectDirectory}
 
 
-mvn install -DskipTests ${PL} -am
-if [[ $? != 0 ]]; then
-	echo "Project ${starr[4]} was not installed successfully.  %%%%%"                      
+    mvn install -DskipTests ${PL} -am
+    if [[ $? != 0 ]]; then
+	echo "Project ${starr[4]} was not installed successfully.  %%%%%"
 	flag=1
-else
+    else
+
+        #5. Run tests
+	echo "Start of logs for ${projectDirectory}"
+
+	{ time -p timeout 1h mvn test -fn -B ${PL} |& tee -a ${projectDirectory}/${MODULE}/mvn-test.log ;} 2> ${projectDirectory}/${MODULE}/mvn-test-time.log
+	cp ${projectDirectory}/${MODULE}/mvn-test.log ${projectDirectory}/mvn-test.log
+	cp ${projectDirectory}/${MODULE}/mvn-test-time.log ${projectDirectory}/mvn-test-time.log
 
 
-
-
-
-#5. Run tests
-
-echo "Start of logs for ${projectDirectory}"
-
-
-{ time -p timeout 1h mvn test -fn -B ${PL} |& tee -a ${projectDirectory}/${MODULE}/mvn-test.log ;} 2> ${projectDirectory}/${MODULE}/mvn-test-time.log
-cp ${projectDirectory}/${MODULE}/mvn-test.log ${projectDirectory}/mvn-test.log
-cp ${projectDirectory}/${MODULE}/mvn-test-time.log ${projectDirectory}/mvn-test-time.log
-
-
-	rounds="-Ddt.randomize.rounds="
-	ogOrderPass="-Ddt.detector.original_order.all_must_pass="
+        rounds="-Ddt.randomize.rounds="
+        ogOrderPass="-Ddt.detector.original_order.all_must_pass="
 	detType="-Ddetector.detector_type="
 	countFirstFail="-Ddt.detector.count.only.first.failure="
 	verRounds="-Ddt.verify.rounds="
 	time="-Ddetector.timeout="
 	semantics="-Ddt.detector.roundsemantics.total="
 	absPath="-Ddt.cache.absolute.path="
-	#SED HTTPS FOR WILDFLY
+	if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then
+            sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
+        fi
 
-	mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test1.log       #CHANGE THESE TO TEE? OUTPUT TO CONSOLE ?    # >> means append	
-	cleanUp test1 ${MODULE}
+	#function METAFUNCTION () {
+	   # proj=$1
+	  #  testNum=$2
+	 #   MOD=$3
+	#    timeout=$4
+	   # projDir=$5
+	  #  expectedTestNum=$6
+	 #   if [[ $expectedTests == -* ]]; then
+	#	flakyTestsFound $testNum $expectedTestNum $MOD |& tee -a ${projDir}/${proj}GeneralLogs.log
+	 #   else
+	#	??which funcs to call
+	 #   fi
+	    
+	#}
+	
+        mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} |& tee -a ${projectDirectory}/test1.log
+#	METAFUNCTION ${starr[4]} test1 $MODULE
+	
+        cleanUp test1 ${MODULE}
 	checkTimeout test1 120.0 |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 	checkDetType test1 random-class-method ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 	flakyTestsFound test1 $testCount1 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
@@ -304,32 +268,32 @@ cp ${projectDirectory}/${MODULE}/mvn-test-time.log ${projectDirectory}/mvn-test-
 
 	mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2.log
 	cleanUp test2 ${MODULE}
-	checkDetType test2 random ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log    					 #this might not work if ogorderpass is true (ex: http request)
-	checkNumberRounds test2 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log  							
+	checkDetType test2 random ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	checkNumberRounds test2 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 	flakyTestsFound test2 $testCount2 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3.log
+        mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3.log
 	cleanUp test3 ${MODULE}
-	checkNumberRounds test3 12 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log					 #as an input, this function requires the name of folder with test results, expected # rounds, detector type used, and eq/ge (roundsemantics)
+	checkNumberRounds test3 12 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log			        #as an input, this function requires the name of folder with test results, expected # rounds, detector type used, and eq/ge (roundsemantics)
 	flakyTestsFound test3 $testCount3 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
-	mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4.log    #check if output logs shows number of verify rounds itself
+        mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4.log
 	cleanUp test4 ${MODULE}
 	checkDetType test4 random-class ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 	flakyTestsFound test4 $testCount4 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
 	mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${PL} &> ${projectDirectory}/test5.log
-	cleanUp test5 ${MODULE}
+	cleanUp test5 ${MODULE} #pass in  an extra parameter, the name of the log file, and move it into the new file we create in cleanup func
 	checkNumberRounds test5 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 	flakyTestsFound test5 $testCount5 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
 	mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
 	cleanUp test6 ${MODULE}
-	checkNumberRounds test6 1 reverse -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+	checkNumberRounds test6 1 reverse -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log  
 	flakyTestsFound test6 $testCount6 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
 
@@ -348,13 +312,22 @@ cp ${projectDirectory}/${MODULE}/mvn-test-time.log ${projectDirectory}/mvn-test-
 	mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9.log
 	checkAbsPath /tmp pathTest ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
 
-	
+    fi
+    cd ${scriptDir}/MC-script-results
 
-fi
-cd ${scriptDir}/MP-script-results
 done < ${csvFile}
 
 
 
 
+#6. Save all relevant data
+
+if [[ ! -d ARTIFACTS ]]; then
+    mkdir ARTIFACTS
+fi
+for d in test{1,2,3,4,5,6,7,8,9}; do cp -r --parents $(find -name ${d}) ${scriptDir}/MC-script-results/ARTIFACTS/; done
+
+
+
 exit ${flag}
+
