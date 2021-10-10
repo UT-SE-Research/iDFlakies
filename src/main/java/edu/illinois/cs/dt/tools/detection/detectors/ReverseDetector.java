@@ -3,8 +3,9 @@ package edu.illinois.cs.dt.tools.detection.detectors;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.TestShuffler;
+import edu.illinois.cs.dt.tools.detection.filters.ConfirmationFilter;
 import edu.illinois.cs.dt.tools.detection.filters.UniqueFilter;
-import edu.illinois.cs.dt.tools.detection.filters.VerifyFilter;
+import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
@@ -23,8 +24,13 @@ public class ReverseDetector extends ExecutingDetector {
 
         testShuffler = new TestShuffler(name, rounds, tests);
 
+        // Filters to be applied in order
+        if (runner instanceof InstrumentingSmartRunner) {
+            addFilter(new ConfirmationFilter(name, tests, (InstrumentingSmartRunner) runner));
+        } else {
+            addFilter(new ConfirmationFilter(name, tests, InstrumentingSmartRunner.fromRunner(runner)));
+        }
         addFilter(new UniqueFilter());
-        addFilter(new VerifyFilter(name, runner));
     }
 
     @Override
