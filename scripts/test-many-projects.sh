@@ -21,7 +21,7 @@ if [[ ! -d testing-script-results ]]; then
 fi
 cd testing-script-results
 
-
+###CHECK FOR UNDERTOW TO BE 1 OR 2 TESTS AND NOTE THAT ITS NONDETERMINISTIC
 
 #CSV Splicing:
 while IFS="," read -r URL SHA MODULE numTests; do
@@ -77,8 +77,13 @@ while IFS="," read -r URL SHA MODULE numTests; do
             cd ${projectDirectory}
 
             if [[ ${expectedTests} == ${numFlakyTests} ]]; then
-	        echo "All expected tests were found in ${2}."
+                echo "All expected tests were found in ${2}."
 	        return 0
+            elif [[ $2 == "https://github.com/undertow-io/undertow" ]]; then
+                if [ $numFlakyTests == 1 ] || [ $numFlakyTests == 2 ]; then
+                    echo "All expected tests were found in ${2}. NOTE: Non-deterministic project."
+                    return 0
+                fi
             else
 	        if [ $expectedTests -gt $numFlakyTests ]; then
                     let "x = $expectedTests - $numFlakyTests"
