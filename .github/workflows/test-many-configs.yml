@@ -27,7 +27,7 @@ jobs:
         run: mvn install -B
 
       - name: Test set of projects
-        run: set -o pipefail ; bash scripts/manyConfigs.sh scripts/testExpectations.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-configs.sh scripts/testExpectations.csv |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the Artifact folder
         if: always()
