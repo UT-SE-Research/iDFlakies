@@ -78,14 +78,14 @@ while IFS="," read -r URL SHA MODULE numTests; do
 
             if [[ ${expectedTests} == ${numFlakyTests} ]]; then
                 echo "All expected tests were found in ${2}."
-	        return 0
+                return 0
             elif [[ $2 == "https://github.com/undertow-io/undertow" ]]; then
                 if [ $numFlakyTests == 1 ] || [ $numFlakyTests == 2 ]; then
                     echo "All expected tests were found in ${2}. NOTE: Non-deterministic project."
                     return 0
                 fi
             else
-	        if [ $expectedTests -gt $numFlakyTests ]; then
+                if [ $expectedTests -gt $numFlakyTests ]; then
                     let "x = $expectedTests - $numFlakyTests"
                     echo "There were $x fewer tests found than expected in ${2}. %%%%%"
                     flag=1
