@@ -218,8 +218,10 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
     else
         PL=""
     fi
-    cd ${projectDirectory}
 
+    if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then
+        sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
+    fi
 
     mvn install -DskipTests ${PL} -am
     if [[ $? != 0 ]]; then
@@ -244,9 +246,6 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         time="-Ddetector.timeout="
         semantics="-Ddt.detector.roundsemantics.total="
         absPath="-Ddt.cache.absolute.path="
-        if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then
-            sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
-        fi
 
 
         mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} |& tee -a ${projectDirectory}/test1.log 
