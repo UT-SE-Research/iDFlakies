@@ -1,20 +1,12 @@
-# This is a basic workflow to help you get started with Actions
 
-name: auto-run-script
+name: auto-run-test-many-projects-script
 
-# Controls when the workflow will run
 on: [push]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   manyProjTest1:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # timeout-minutes: 4320
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Set up JDK 8
@@ -41,12 +33,8 @@ jobs:
          path: scripts/testing-script-results/ARTIFACTS
 
   manyProjTest2:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # timeout-minutes: 4320
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Set up JDK 8
@@ -73,10 +61,7 @@ jobs:
          path: scripts/testing-script-results/ARTIFACTS
 
   manyProjTest3:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # timeout-minutes: 4320
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -118,7 +103,7 @@ jobs:
       - name: Installs packages
         run: mvn install -B
 
-      - name: Test 3rd set of projects
+      - name: Test 4th set of projects
         run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects4.csv |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the Artifact folder

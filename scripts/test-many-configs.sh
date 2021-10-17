@@ -99,8 +99,8 @@ function checkAbsPath() {
         cd ${2}
         if [[ ${4} != "" ]]; then
             cd ${4}
-	else
-	    cd ${3}
+        else
+            cd ${3}
         fi
         if [ -d "detection-results" ]; then
             echo "Success: dt.cache.absolute.path configuration works as intended."
