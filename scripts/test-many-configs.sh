@@ -27,14 +27,16 @@ cd MC-script-results
 
 
 function cleanUp() {
-    if [[ ${2} != "" ]]; then
-        cd ${2}
+    testNum=$1
+    currModule=$2
+    if [[ ${currModule} != "" ]]; then
+        cd ${currModule}
     fi
     if [[ ! -d ".dtfixingtools" ]]; then
         cd ${projectDirectory}
         return 0
     fi
-    cp -r .dtfixingtools ${1}
+    cp -r .dtfixingtools ${testNum}
     rm -r .dtfixingtools
     cd ${projectDirectory}
 }
@@ -42,21 +44,24 @@ function cleanUp() {
 
 
 function checkDetType() {
-    if [[ ${3} != "" ]]; then
-        cd ${3}
+    testNum=$1
+    detectType=$2
+    currModule=$3
+    if [[ ${currModule} != "" ]]; then
+        cd ${currModule}
     fi
-    if [[ ! -d ${1} ]]; then
+    if [[ ! -d ${testNum} ]]; then
         cd ${projectDirectory}
         return 0
     fi
-    cd ${1}
+    cd ${testNum}
     cd detection-results
-    if [[  -d ${2} ]]; then
-        echo "Success: Flaky tests were found using the ${2} detector type."
+    if [[  -d ${detectType} ]]; then
+        echo "Success: Flaky tests were found using the ${detectType} detector type."
         cd ${projectDirectory}
         return 0
     fi
-    echo "No flaky tests were found using the ${2} detector type."
+    echo "No flaky tests were found using the ${detectType} detector type."
     cd ${projectDirectory}
     return 1
 }
@@ -64,43 +69,52 @@ function checkDetType() {
 
 
 function checkNumberRounds() {
-    if [[ ${5} != "" ]]; then
-        cd ${5}
+    testNum=$1
+    expectedRounds=$2
+    detectType=$3
+    expectedBehavior=$4
+    currModule=$5
+    if [[ ${currModule} != "" ]]; then
+        cd ${currModule}
     fi
-    if [[ ! -d ${1} ]]; then
+    if [[ ! -d ${testNum} ]]; then
         cd ${projectDirectory}
         return 0
     fi
-    cd ${1}
+    cd ${testNum}
     cd detection-results
-    if [[  -d ${3} ]]; then
-        cd ${3}
+    if [[  -d ${detectType} ]]; then
+        cd ${detectType}
         numRounds=$(ls | wc -l)
-        if [ ${numRounds} ${4} ${2} ]; then
-            echo "Success: ${1} ran ${numRounds} round(s) as expected."
+        if [ ${numRounds} ${expectedBehavior} ${expectedRounds} ]; then
+            echo "Success: ${testNum} ran ${numRounds} round(s) as expected."
             cd ${projectDirectory}
             return 0
         else
-            echo "Error: ${1} ran ${numRounds} rounds when it should have ran ${2}. %%%%%"
+            echo "Error: ${testNum} ran ${numRounds} round(s) when it should have ran ${expectedRounds}. %%%%%"
             flag=1
             cd ${projectDirectory}
             return 1
         fi
     fi
     cd ${projectDirectory}
-    echo "No flaky tests were found using ${2} rounds."
+    echo "No flaky tests were found using ${expectedRounds} rounds."
 }
 
 
 
 function checkAbsPath() {
-    cd ${1}
-    if [[ -d ${2} ]]; then
-        cd ${2}
-        if [[ ${4} != "" ]]; then
-            cd ${4}
+    path=$1
+    resultsFolder=$2
+    projName=$3
+    currModule=$4
+    cd ${path}
+    if [[ -d ${resultsFolder} ]]; then
+        cd ${resultsFolder}
+        if [[ ${currModule} != "" ]]; then
+            cd ${currModule}
         else
-            cd ${3}
+            cd ${projName}
         fi
         if [ -d "detection-results" ]; then
             echo "Success: dt.cache.absolute.path configuration works as intended."
@@ -115,38 +129,40 @@ function checkAbsPath() {
 
 
 function flakyTestsFound() {
+    testNum=$1
     expectedTests=$2
+    currModule=$3
     if [[ $expectedTests == -* ]]; then
         expectedTests=$(echo ${expectedTests} | cut -d'-' -f2)
-        if grep "$expectedTests" ${1}.log; then
-            echo "Confirmed Expected Project Failure in ${1}"
+        if grep "$expectedTests" ${testNum}.log; then
+            echo "Confirmed Expected Project Failure in ${testNum}"
             return 0
         else
-            echo "ERROR: Unexpected Project Failure in ${1} %%%%%"
+            echo "ERROR: Unexpected Project Failure in ${testNum} %%%%%"
             flag=1
             return 1
         fi
     else
-        if [[ ${3} != "" ]]; then
-            cd ${3}
+        if [[ ${currModule} != "" ]]; then
+            cd ${currModule}
         fi
-        cd ${1}
+        cd ${testNum}
         cd detection-results
         numFlakyTests=$(awk '1' list.txt | wc -l)
         cd ${projectDirectory}
 
         if [[ ${expectedTests} == ${numFlakyTests} ]]; then
-            echo "All expected tests were found in ${1}."
+            echo "All expected tests were found in ${testNum}."
             return 0
         else
             if [ $expectedTests -gt $numFlakyTests ]; then
                 let "x = $expectedTests - $numFlakyTests"
-                echo "There were $x fewer tests found than expected in ${1}. %%%%%"
+                echo "There were $x fewer tests found than expected in ${testNum}. %%%%%"
                 flag=1
                 return 1
             else
                 let "x = $numFlakyTests - $expectedTests"
-                echo "There were $x more tests found than expected in ${1}. %%%%%"
+                echo "There were $x more tests found than expected in ${testNum}. %%%%%"
                 flag=1
                 return 1
            fi
@@ -157,15 +173,17 @@ function flakyTestsFound() {
 
 
 function checkTimeout() {
-    if [[ ! -f ${1} ]]; then
+    testNum=$1
+    expectedTime=$2
+    if [[ ! -f ${testNum} ]]; then
         return 0
     fi
 
-    if grep "Using a timeout of ${2}" ${1}.log; then
-        echo "Success: ${1} used a timeout of ${2} as expected."
+    if grep "Using a timeout of ${expectedTime}" ${testNum}.log; then
+        echo "Success: ${testNum} used a timeout of ${expectedTime} as expected."
         return 0
     else
-        echo "Error: ${1} did not use a timeout. %%%%%"
+        echo "Error: ${testNum} did not use a timeout. %%%%%"
         flag=1
         return 1
     fi
