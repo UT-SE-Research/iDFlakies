@@ -14,10 +14,13 @@ public class DependentTest {
     private final TestRun intended;
     private final TestRun revealed;
 
+    private DependentTestType type;
+
     public DependentTest(final String name, final TestRun intended, final TestRun revealed) {
         this.name = name;
         this.intended = intended;
         this.revealed = revealed;
+        this.type = DependentTestType.OD;   // Start as OD unless proven otherwise
     }
 
     public String name() {
@@ -30,6 +33,14 @@ public class DependentTest {
 
     public TestRun revealed() {
         return revealed;
+    }
+
+    public DependentTestType type() {
+        return type;
+    }
+
+    public void setType(DependentTestType type) {
+        this.type = type;
     }
 
     @Override
