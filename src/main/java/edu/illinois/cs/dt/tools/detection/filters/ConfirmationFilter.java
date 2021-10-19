@@ -6,6 +6,7 @@ import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.dt.tools.runner.data.DependentTestType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -58,8 +59,9 @@ public class ConfirmationFilter implements Filter {
                 return confirmation(true, "confirmation-sampling", dependentTest, absoluteRound);
             }
 
-            // This test is known to be flaky, so it should never make it past the filter
-            return false;
+            // This test is known to be flaky, so set its type to NOD but still keep the test
+            dependentTest.setType(DependentTestType.NOD);
+            return true;
         } else if (knownDep.contains(dependentTest.name())) {
             if (new Random().nextDouble() < DEPENDENT_CONFIRMATION_SAMPLING_RATE) {
                 return confirmation(false, "confirmation-sampling", dependentTest, absoluteRound);
@@ -83,12 +85,14 @@ public class ConfirmationFilter implements Filter {
             } else {
                 knownFlaky.add(dependentTest.name());
                 knownDep.remove(dependentTest.name());
+                dependentTest.setType(DependentTestType.NOD);   // Set the type to be NOD
             }
         }
 
         // Should never keep flaky tests (keeping mean it's dependent in this case)
         if (isFlaky) {
-            return false;
+            dependentTest.setType(DependentTestType.NOD);   // Just in case, ensure it is marked NOD
+            return true;
         }
 
         return confirmed;
