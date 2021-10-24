@@ -265,59 +265,94 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         semantics="-Ddt.detector.roundsemantics.total="
         absPath="-Ddt.cache.absolute.path="
 
-
-        mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} |& tee -a ${projectDirectory}/test1.log 
+        set -o pipefail ; mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} |& tee -a ${projectDirectory}/test1.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test1 ${MODULE}
-        checkTimeout test1 120.0 |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        checkDetType test1 random-class-method ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        flakyTestsFound test1 $testCount1 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkTimeout test1 120.0
+        checkDetType test1 random-class-method ${MODULE}
+        flakyTestsFound test1 "$testCount1" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test2 ${MODULE}
-        checkDetType test2 random ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        checkNumberRounds test2 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        flakyTestsFound test2 $testCount2 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkDetType test2 random ${MODULE}
+        checkNumberRounds test2 8 random-class-method -ge ${MODULE}
+        flakyTestsFound test2 "$testCount2" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test3 ${MODULE}
-        checkNumberRounds test3 12 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log                    #as an input, this function requires the name of folder with test results, expected # rounds, detector type used, and eq/ge (roundsemantics)
-        flakyTestsFound test3 $testCount3 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkNumberRounds test3 12 random-class-method -ge ${MODULE}
+        flakyTestsFound test3 "$testCount3" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test4 ${MODULE}
-        checkDetType test4 random-class ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        flakyTestsFound test4 $testCount4 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkDetType test4 random-class ${MODULE}
+        flakyTestsFound test4 "$testCount4" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${PL} &> ${projectDirectory}/test5.log
-        cleanUp test5 ${MODULE} #pass in  an extra parameter, the name of the log file, and move it into the new file we create in cleanup func
-        checkNumberRounds test5 8 random-class-method -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        flakyTestsFound test5 $testCount5 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${PL} &> ${projectDirectory}/test5.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
+        cleanUp test5 ${MODULE}
+        checkNumberRounds test5 8 random-class-method -ge ${MODULE}
+        flakyTestsFound test5 "$testCount5" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test6 ${MODULE}
-        checkNumberRounds test6 1 reverse -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log  
-        flakyTestsFound test6 $testCount6 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkNumberRounds test6 1 reverse -ge ${MODULE}
+        flakyTestsFound test6 "$testCount6" ${MODULE}
 
 
-        mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}reverse-class ${PL} &> ${projectDirectory}/test7.log
+        set -o pipefail ; mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}reverse-class ${PL} &> ${projectDirectory}/test7.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test7 ${MODULE}
-        checkNumberRounds test7 1 reverse-class -ge ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        flakyTestsFound test7 $testCount7 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkNumberRounds test7 1 reverse-class -ge ${MODULE}
+        flakyTestsFound test7 "$testCount7" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}12 ${semantics}true ${PL} &> ${projectDirectory}/test8.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${semantics}true ${PL} &> ${projectDirectory}/test8.log
+        if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+        fi
         cleanUp test8 ${MODULE}
-        checkNumberRounds test8 12 random -eq ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
-        flakyTestsFound test8 $testCount8 ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        checkNumberRounds test8 12 random -eq ${MODULE}
+        flakyTestsFound test8 "$testCount8" ${MODULE}
 
 
-        mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9.log
-        checkAbsPath /tmp pathTest ${starr[4]} ${MODULE} |& tee -a ${projectDirectory}/${starr[4]}GeneralLogs.log
+        set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9.log
+    if [[ $? != 0 ]]; then
+            echo "${URL} testrunner was not successful. %%%%%"
+            flag=1
+    fi
+        checkAbsPath /tmp pathTest ${starr[4]} ${MODULE}
 
     fi
     cd ${scriptDir}/MC-script-results
@@ -332,13 +367,16 @@ done < ${csvFile}
 if [[ ! -d ARTIFACTS ]]; then
     mkdir ARTIFACTS
 fi
-for d in test{1,2,3,4,5,6,7,8,9}; do    
-    if [[ ! -d ${d} ]]; then
-        continue
-    fi
-    cp -r --parents $(find -name ${d}) ${scriptDir}/MC-script-results/ARTIFACTS/
-done
 
+
+for d in test{1,2,3,4,5,6,7,8,9}; do
+    for j in $(find -name ${d}.log); do
+        cp -r --parents ${j} ${scriptDir}/MC-script-results/ARTIFACTS/
+    done
+    for k in $(find -name ${d}); do
+        cp -r --parents ${k} ${scriptDir}/MC-script-results/ARTIFACTS/
+    done
+done
 
 
 exit ${flag}
