@@ -29,7 +29,8 @@ function checkFlakyTests() {
     projectURL=$2
     currModule=$3
     if [[ ${expectedTests} == -1 ]]; then
-        echo "EXPECTED PROJECT FAILURE %%%%%"         #potential return here ?
+        echo "EXPECTED PROJECT FAILURE %%%%%"
+        return 0
     else
         if [[ ${currModule} != "" ]]; then
             cd ${currModule}
@@ -138,7 +139,7 @@ while IFS="," read -r URL SHA MODULE numTests; do
             echo "${URL} idflakies detect not successful. %%%%%"
             flag=1
         else
-           checkFlakyTests ${numTests} ${URL} $(echo ${MODULE} | cut -d'|' -f1)
+            checkFlakyTests ${numTests} ${URL} $(echo ${MODULE} | cut -d'|' -f1)   #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
         fi
     fi
     cd ${scriptDir}/testing-script-results
