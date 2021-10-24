@@ -6,7 +6,6 @@ if [[ ${1} == "" ]]; then
 fi
 
 
-
 flag=0    #Global flag designed to represent the status of the overall status of the whole build when running on a CI
 scriptDir=$(cd $(dirname $0); pwd)
 csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
