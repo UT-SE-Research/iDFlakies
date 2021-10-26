@@ -276,6 +276,7 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test1 "$testCount1" ${MODULE}
 
 
+	#add comments explaining wt this test does
         set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -348,10 +349,10 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
 
 
         set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9.log
-    if [[ $? != 0 ]]; then
+        if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
             flag=1
-    fi
+        fi
         checkAbsPath /tmp pathTest ${starr[4]} ${MODULE}
 
     fi
