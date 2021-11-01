@@ -1,6 +1,6 @@
 # iDFlakies
 
-This repository contains tools for detecting/classifying flaky tests
+This repository contains tools for detecting/classifying flaky tests.
 
 More details about iDFlakies can be found in its [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf) and [website](https://sites.google.com/view/flakytestdataset).
 
