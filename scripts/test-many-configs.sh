@@ -9,7 +9,7 @@ fi
 
 #0. File management/defining all helper functions
 
-flag=0
+flag=0  #Global flag designed to represent the status of the overall status of the whole build when running on a CI
 scriptDir=$(cd $(dirname $0); pwd)
 csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
 cd ${scriptDir}
@@ -23,6 +23,24 @@ if [[ ! -d MC-script-results ]]; then
     mkdir MC-script-results
 fi
 cd MC-script-results
+
+
+function setOriginalOrder() {
+    projName=$1
+    currModule=$2
+    if [[ ${currModule} != "" ]]; then
+        cd ${currModule}
+    fi
+    mkdir .dtfixingtools
+    if [[ ${currModule} != "" ]]; then
+        cp ${scriptDir}/original-order-files/${projName} .dtfixingtools/
+        mv .dtfixingtools/${projName} .dtfixingtools/original-order
+    else
+        cp ${scriptDir}/original-order-files/${currModule} .dtfixingtools/
+        mv .dtfixingtools/${currModule} .dtfixingtools/original-order
+    fi
+    cd ${projectDirectory}
+}
 
 
 
@@ -220,11 +238,7 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
     #3. Modify pom file
 
     git checkout -f .
-    cd ${scriptDir}
-    cd ..
-    cd pom-modify
-    bash ./modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
-    cd ${projectDirectory}
+    bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
 
 
 
@@ -265,6 +279,10 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         semantics="-Ddt.detector.roundsemantics.total="
         absPath="-Ddt.cache.absolute.path="
 
+
+
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 1: Simply test if the timeout configuration is working. Not testing accuracy here since it has proven to be nondeterministic
         set -o pipefail ; mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${PL} |& tee -a ${projectDirectory}/test1.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -273,21 +291,23 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         cleanUp test1 ${MODULE}
         checkTimeout test1 120.0
         checkDetType test1 random-class-method ${MODULE}
-        flakyTestsFound test1 "$testCount1" ${MODULE}
 
 
-	#add comments explaining wt this test does
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 2: Most standard test: random-class-method with 8 rounds
         set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${PL} &> ${projectDirectory}/test2.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
             flag=1
         fi
         cleanUp test2 ${MODULE}
-        checkDetType test2 random ${MODULE}
+        checkDetType test2 random-class-method ${MODULE}
         checkNumberRounds test2 8 random-class-method -ge ${MODULE}
         flakyTestsFound test2 "$testCount2" ${MODULE}
 
 
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 3: Test originalOrderPass being set to false
         set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${PL} &> ${projectDirectory}/test3.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -298,6 +318,8 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test3 "$testCount3" ${MODULE}
 
 
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 4: Try random-class determinant type as well as the verifyRounds function
         set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${PL} &> ${projectDirectory}/test4.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -308,6 +330,8 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test4 "$testCount4" ${MODULE}
 
 
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 5: Try the countFirstFail config
         set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${PL} &> ${projectDirectory}/test5.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -318,6 +342,8 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test5 "$testCount5" ${MODULE}
 
 
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 6: Try the reverse determinant type. Make sure only 1 round of testdeterminty over numRounds
         set -o pipefail ; mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -328,6 +354,8 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test6 "$testCount6" ${MODULE}
 
 
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 7: Try the reverse-class determinant type. Test the priority of configurations by throwing in a timeout as well, which should be ignored
         set -o pipefail ; mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}reverse-class ${PL} &> ${projectDirectory}/test7.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -338,6 +366,8 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test7 "$testCount7" ${MODULE}
 
 
+        setOriginalOrder ${starr[4]} ${MODULE}
+        #Test 8: Try setting semantics to be true, where there should be exactly as many rounds as specified. No more, no less
         set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${semantics}true ${PL} &> ${projectDirectory}/test8.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
@@ -348,6 +378,7 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test8 "$testCount8" ${MODULE}
 
 
+        #Test 9: Make sure we can always output test results to a set directory if necessary
         set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
