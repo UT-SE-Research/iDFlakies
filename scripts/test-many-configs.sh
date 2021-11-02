@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 
 if [[ ${1} == "" ]]; then
     echo "Please provide the name of your csv file with the format "URL,SHA,MODULE,tests1-9" on each line."
