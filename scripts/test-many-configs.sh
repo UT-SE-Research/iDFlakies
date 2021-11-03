@@ -32,12 +32,10 @@ function setOriginalOrder() {
         cd ${currModule}
     fi
     mkdir .dtfixingtools
-    if [[ ${currModule} != "" ]]; then
-        cp ${scriptDir}/original-order-files/${projName} .dtfixingtools/
-        mv .dtfixingtools/${projName} .dtfixingtools/original-order
+    if [[ ${currModule} == "" ]]; then
+        cp ${scriptDir}/original-order-files/${projName} .dtfixingtools/original-order
     else
-        cp ${scriptDir}/original-order-files/${currModule} .dtfixingtools/
-        mv .dtfixingtools/${currModule} .dtfixingtools/original-order
+        cp ${scriptDir}/original-order-files/${currModule} .dtfixingtools/original-order
     fi
     cd ${projectDirectory}
 }
@@ -343,8 +341,8 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
 
 
         setOriginalOrder ${starr[4]} ${MODULE}
-        #Test 6: Try the reverse determinant type. Make sure only 1 round of testdeterminty over numRounds
-        set -o pipefail ; mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
+        #Test 6: Try the reverse determinant type. Make sure only 1 round of tests is ran despite rounds being specified
+        mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${PL} &> ${projectDirectory}/test6.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
             flag=1
@@ -378,7 +376,7 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         flakyTestsFound test8 "$testCount8" ${MODULE}
 
 
-        #Test 9: Make sure we can always output test results to a set directory if necessary
+        #Test 9: Make sure we can always output test results to a set directory if necessary via absPath config
         set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${PL} &> ${projectDirectory}/test9.log
         if [[ $? != 0 ]]; then
             echo "${URL} testrunner was not successful. %%%%%"
