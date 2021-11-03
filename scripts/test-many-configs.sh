@@ -253,7 +253,7 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
     fi
 
-    mvn install -DskipTests ${PL} -am
+    mvn install -DskipTests ${PL} -am -B
     if [[ $? != 0 ]]; then
         echo "Project ${starr[4]} was not installed successfully.  %%%%%"
         flag=1
