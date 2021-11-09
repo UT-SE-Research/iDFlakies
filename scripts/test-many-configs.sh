@@ -373,6 +373,9 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         fi
         cleanUp test8 ${MODULE}
         checkNumberRounds test8 12 random -eq ${MODULE}
+	if [ $URL != "https://github.com/wildfly/wildfly" ] && [ $URL != "https://github.com/elasticjob/elastic-job-lite" ] ; then
+            flakyTestsFound test8 "$testCount8" ${MODULE}
+	fi
         flakyTestsFound test8 "$testCount8" ${MODULE}
 
 
