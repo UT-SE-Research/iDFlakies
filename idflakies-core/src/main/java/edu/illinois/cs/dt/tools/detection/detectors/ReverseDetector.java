@@ -27,9 +27,9 @@ public class ReverseDetector extends ExecutingDetector {
 
         // Filters to be applied in order
         if (runner instanceof InstrumentingSmartRunner) {
-            addFilter(new ConfirmationFilter(name, tests, (InstrumentingSmartRunner) runner));
+            addFilter(new ConfirmationFilter(name, tests, baseDir, (InstrumentingSmartRunner) runner));
         } else {
-            addFilter(new ConfirmationFilter(name, tests, InstrumentingSmartRunner.fromRunner(runner)));
+            addFilter(new ConfirmationFilter(name, tests, baseDir, InstrumentingSmartRunner.fromRunner(runner, baseDir)));
         }
         addFilter(new UniqueFilter());
     }
