@@ -316,7 +316,7 @@ while IFS="," read -r URL SHA MODULE testCount1 testCount2 testCount3 testCount4
         if [ $URL != "https://github.com/elasticjob/elastic-job-lite" ]; then    #Elasticjob is too flaky for this test
             flakyTestsFound test3 "$testCount3" ${MODULE}
         fi
- 
+
 
         setOriginalOrder ${starr[4]} ${MODULE}
         #Test 4: Try random-class determinant type as well as the verifyRounds function
