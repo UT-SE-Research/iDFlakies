@@ -3,7 +3,6 @@ name: auto-run-test-many-configs-script
 
 on: [push]
 
-
 jobs:
   manyConfigsTest:
     runs-on: ubuntu-latest
@@ -22,7 +21,7 @@ jobs:
       - name: Test set of projects
         run: set -o pipefail ; bash scripts/test-many-configs.sh scripts/testExpectations.csv |& tee -a scripts/GeneralLogs.log
 
-      - name: Move Logs file into the Artifact folder
+      - name: Move Logs file into the ARTIFACTS folder
         if: always()
         run: mv scripts/GeneralLogs.log scripts/MC-script-results/ARTIFACTS/
 
@@ -30,6 +29,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-         name: artifact_1
+         name: test-many-configs_ARTIFACT
          path: scripts/MC-script-results/ARTIFACTS
 

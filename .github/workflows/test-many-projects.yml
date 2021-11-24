@@ -21,7 +21,7 @@ jobs:
       - name: Test 1st set of projects
         run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects1.csv |& tee -a scripts/GeneralLogs.log
 
-      - name: Move Logs file into the Artifact folder
+      - name: Move Logs file into the ARTIFACTS folder
         if: always()
         run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
 
@@ -29,7 +29,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-         name: artifact_1
+         name: test-many-projects_ARTIFACT_1
          path: scripts/testing-script-results/ARTIFACTS
 
   manyProjTest2:
@@ -49,7 +49,7 @@ jobs:
       - name: Test 2nd set of projects
         run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects2.csv |& tee -a scripts/GeneralLogs.log
 
-      - name: Move Logs file into the Artifact folder
+      - name: Move Logs file into the ARTIFACTS folder
         if: always()
         run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
 
@@ -57,13 +57,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-         name: artifact_2
+         name: test-many-projects_ARTIFACT_2
          path: scripts/testing-script-results/ARTIFACTS
 
   manyProjTest3:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Set up JDK 8
@@ -78,7 +77,7 @@ jobs:
       - name: Test 3rd set of projects
         run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects3.csv |& tee -a scripts/GeneralLogs.log
 
-      - name: Move Logs file into the Artifact folder
+      - name: Move Logs file into the ARTIFACTS folder
         if: always()
         run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
 
@@ -86,7 +85,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-         name: artifact_3
+         name: test-many-projects_ARTIFACT_3
          path: scripts/testing-script-results/ARTIFACTS
 
   manyProjTest4:
@@ -106,7 +105,7 @@ jobs:
       - name: Test 4th set of projects
         run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects4.csv |& tee -a scripts/GeneralLogs.log
 
-      - name: Move Logs file into the Artifact folder
+      - name: Move Logs file into the ARTIFACTS folder
         if: always()
         run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
 
@@ -114,6 +113,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-         name: artifact_4
+         name: test-many-projects_ARTIFACT_4
          path: scripts/testing-script-results/ARTIFACTS
 
