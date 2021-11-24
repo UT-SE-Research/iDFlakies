@@ -35,9 +35,8 @@ function checkFlakyTests() {
         if [[ ${currModule} != "" ]]; then
             cd ${currModule}
         fi
-        cd .dtfixingtools
-        cd detection-results
-        numFlakyTests=$(awk '1' list.txt | wc -l)
+        cd .dtfixingtools/detection-results/
+        numFlakyTests=$(awk '1' list.txt | wc -l)    #Counts number of lines in list.txt file
         cd ${projectDirectory}
 
         if [[ ${expectedTests} == ${numFlakyTests} ]]; then
@@ -73,78 +72,81 @@ function checkFlakyTests() {
 
 
 #CSV Splicing:
-while IFS="," read -r URL SHA MODULE numTests; do
+{
+    read
+    while IFS="," read -r URL SHA MODULE numTests; do
 
-    renamedRepo=${URL}"/"
-    readarray -d / -t starr <<< "${renamedRepo}"
+        renamedRepo=${URL}"/"
+        readarray -d / -t starr <<< "${renamedRepo}"
 
-    echo "DATE: "
-    date
-    echo "BEGINNING OF $URL"
+        echo "DATE: "
+        date
+        echo "BEGINNING OF $URL"
 
-    #1. Clone the project
+        #1. Clone the project
 
-    if [[ ! -d ${starr[4]} ]]; then
-        git clone ${URL}.git ${starr[4]}
-    fi
-
-
-
-
-    #2. Navigate to proj and checkout SHA
-
-    cd ${starr[4]}
-    projectDirectory=$(pwd)
-    git checkout -f ${SHA}
+        if [[ ! -d ${starr[4]} ]]; then
+            git clone ${URL}.git ${starr[4]}
+        fi
 
 
 
 
-    #3. Modify pom file
+        #2. Navigate to proj and checkout SHA
 
-    git checkout -f .
-    bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
-
-
-
+        cd ${starr[4]}
+        projectDirectory=$(pwd)
+        git checkout -f ${SHA}
 
 
-    #4. Maven install the proj
 
-    if [[ ${MODULE} != "" ]]; then
-        PL="-pl $(echo ${MODULE} | sed 's;|;,;g')"  #some projects rely on multiple dependendencies to be installed, so the | delimited we used in csv must be converted into a comma for mvn install
-    else
-        PL=""
-    fi
-    MVNOPTIONS="-Dfindbugs.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true -Ddependency-check.skip=true"
 
-    if [[ $URL == "https://github.com/pholser/junit-quickcheck" ]]; then    #junit-quickcheck references outdated plugins in current pom files, so they must be updated accordingly to mvn install
-        sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' core/pom.xml
-        sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' generators/pom.xml
-        sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' guava/pom.xml
-    fi
-    if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then             #running wildfly on CI causes errors when jboss repo is referenced via http rather than https in pom file
-        sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
-    fi
+        #3. Modify pom file
 
-    mvn install -DskipTests ${MVNOPTIONS} ${PL} -am -B
-    if [[ $? != 0 ]]; then
-        echo "Installation of projects under ${URL} was not successful. %%%%%"
-        flag=1
-    else
+        git checkout -f .
+        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
 
-        #5. Run the default test for each
-        mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
+
+
+
+
+        #4. Maven install the proj
+
+        if [[ ${MODULE} != "" ]]; then
+            PL="-pl $(echo ${MODULE} | sed 's;|;,;g')"  #some projects rely on multiple dependendencies to be installed, so the | delimiter we used in csv must be converted into a comma for mvn install
+        else
+            PL=""
+        fi
+        MVNOPTIONS="-Dfindbugs.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Drat.skip=true -Dmdep.analyze.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true -Ddependency-check.skip=true"
+
+        if [[ $URL == "https://github.com/pholser/junit-quickcheck" ]]; then    #junit-quickcheck references outdated plugins in current pom files, so they must be updated accordingly to mvn install
+            sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' core/pom.xml
+            sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' generators/pom.xml
+            sed -i 's;<artifactId>findbugs-maven-plugin</artifactId>;<artifactId>findbugs-maven-plugin</artifactId><version>3.0.5</version>;' guava/pom.xml
+        fi
+        if [[ $URL == "https://github.com/wildfly/wildfly" ]]; then             #running wildfly on CI causes errors when jboss repo is referenced via http rather than https in pom file
+            sed -i 's;<url>http://repository.jboss.org/nexus/content/groups/public/</url>;<url>https://repository.jboss.org/nexus/content/groups/public/</url>;' pom.xml
+        fi
+
+        mvn install -DskipTests ${MVNOPTIONS} ${PL} -am -B -q
         if [[ $? != 0 ]]; then
-            echo "${URL} idflakies detect not successful. %%%%%"
+            echo "Installation of projects under ${URL} was not successful. %%%%%"
             flag=1
         else
-            checkFlakyTests ${numTests} ${URL} $(echo ${MODULE} | cut -d'|' -f1)   #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
-        fi
-    fi
-    cd ${scriptDir}/testing-script-results
 
-done < ${csvFile}
+            #5. Run the default test for each
+            mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
+            if [[ $? != 0 ]]; then
+                echo "${URL} iDFlakies was not successful. %%%%%"
+                flag=1
+            else
+                checkFlakyTests ${numTests} ${URL} $(echo ${MODULE} | cut -d'|' -f1)   #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
+            fi
+        fi
+        cd ${scriptDir}/testing-script-results
+
+    done
+} < ${csvFile}
 
 
 
