@@ -12,7 +12,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '8.0.292+1'
           distribution: 'adopt'
 
       - name: Installs packages
@@ -40,7 +40,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '8.0.292+1'
           distribution: 'adopt'
 
       - name: Installs packages
@@ -68,7 +68,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '8.0.292+1'
           distribution: 'adopt'
 
       - name: Installs packages
@@ -96,7 +96,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '8.0.292+1'
           distribution: 'adopt'
 
       - name: Installs packages

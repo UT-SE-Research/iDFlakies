@@ -23,6 +23,24 @@ cd testing-script-results
 
 
 
+function setOriginalOrder() {        #Copies the original order of tests we want to use for each individual project, as recomputing it on every run leads to inconsistencies
+    currDir=$(pwd)
+    projName=$1
+    currModule=$(echo ${2} | cut -d'|' -f1)
+    if [[ ${currModule} != "" ]]; then
+        cd ${currModule}
+    fi
+    mkdir .dtfixingtools
+    fileName=${currModule//[/]/@}
+    if [[ ${currModule} == "" ]]; then
+        cp ${scriptDir}/original-order-files/${projName} .dtfixingtools/original-order
+    else
+        cp ${scriptDir}/original-order-files/${fileName} .dtfixingtools/original-order
+    fi
+    cd ${currDir}
+}
+
+
 
 function checkFlakyTests() {
     expectedTests=$1
@@ -134,7 +152,8 @@ function checkFlakyTests() {
             flag=1
         else
 
-            #5. Run the default test for each
+            #5. Using a preset original order, run the default test for each
+            setOriginalOrder ${starr[4]} ${MODULE}
             mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"

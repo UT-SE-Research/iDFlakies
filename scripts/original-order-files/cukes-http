@@ -1,0 +1,14 @@
+lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesDirectMatch
+lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWithRegexp
+lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWith
+lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesLocationUrl
+lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWithRegexp
+lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWith
+lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButContentTypeOctet
+lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledWithMax
+lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotInflateVarName
+lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax
+lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenDisabled
+lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButLongerThanMaxSize
+lv.ctco.cukes.http.logging.HttpLoggingPluginTest.testOutputStream
+lv.ctco.cukes.http.templating.TemplatingEngineTest.testBody

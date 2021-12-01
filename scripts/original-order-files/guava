@@ -1,0 +1,11 @@
+com.pholser.junit.quickcheck.guava.generator.SupplierPropertyParameterTest.supplyingUpperBounded
+com.pholser.junit.quickcheck.guava.generator.SupplierPropertyParameterTest.supplyingInts
+com.pholser.junit.quickcheck.guava.generator.SupplierPropertyParameterTest.supplyingUnresolvedLists
+com.pholser.junit.quickcheck.guava.generator.PredicatePropertyParameterTest.definiteArgType
+com.pholser.junit.quickcheck.guava.generator.OptionalPropertyParameterTest.maybeAString
+com.pholser.junit.quickcheck.guava.generator.OptionalPropertyParameterTest.shrinking
+com.pholser.junit.quickcheck.guava.generator.FunctionOfStringToIntPropertyParameterTest.producesExpectedRandomValues
+com.pholser.junit.quickcheck.guava.generator.FunctionOfStringToIntPropertyParameterTest.verifyInteractionWithRandomness
+com.pholser.junit.quickcheck.guava.generator.FunctionPropertyParameterTypesTest.superShortToInteger
+com.pholser.junit.quickcheck.guava.generator.FunctionPropertyParameterTypesTest.fooToZilch
+com.pholser.junit.quickcheck.guava.generator.FunctionPropertyParameterTypesTest.arrayOfFunction
