@@ -65,11 +65,11 @@ function checkFlakyTests() {
                 echo "All expected tests were found in ${projectURL}. NOTE: Non-deterministic project."
                 return 0
             fi
-     #   elif [ $projectURL == "https://github.com/apache/incubator-dubbo" ] && [ $currModule == "dubbo-cluster" ]; then
-     #       if [ $numFlakyTests == 3 ] || [ $numFlakyTests == 4 ]; then
-     #           echo "All expected tests were found in ${projectURL}. NOTE: Non-deterministic project."
-     #           return 0
-     #       fi
+        elif [[ $projectURL == "https://github.com/sonatype-nexus-community/nexus-repository-helm" ]]; then
+            if [ $numFlakyTests == 0 ] || [ $numFlakyTests == 1 ]; then
+                echo "All expected tests were found in ${projectURL}. NOTE: Non-deterministic project."
+                return 0
+            fi
         else
             if [ $expectedTests -gt $numFlakyTests ]; then
                 let "x = $expectedTests - $numFlakyTests"
