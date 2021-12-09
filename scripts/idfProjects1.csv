@@ -1,0 +1,10 @@
+#Project,SHA,module,expectedFlakyTests
+https://github.com/wildfly/wildfly,b19048b72669fc0e96665b1b125dc1fda21f5993,naming,0
+https://github.com/ctco/cukes,b483e1a8f261b80a66291a42fc455256b0b5059c,cukes-http,1
+https://github.com/kevinsawicki/http-request,2d62a3e9da726942a93cf16b6e91c0187e6c0136,lib,28
+https://github.com/hexagonframework/spring-data-ebean,dd11b97654982403b50dd1d5369cadad71fce410,,0
+https://github.com/wikidata/wikidata-toolkit,20de6f7f12319f54eb962ff6e8357b3f5695d54d,wdtk-dumpfiles,3
+https://github.com/wikidata/wikidata-toolkit,20de6f7f12319f54eb962ff6e8357b3f5695d54d,wdtk-util,2
+https://github.com/openpojo/openpojo,00ed7a06b6403e7f64b298a94c63d7ac70735ff9,,2
+https://github.com/espertechinc/esper,590fa9c9eb854f1420b9d337b802aca19f963cc0,runtime,0
+https://github.com/fhoeben/hsac-fitnesse-fixtures,a64c18d9c4bac8271275c7b089d40be20f0604b5,,1
