@@ -88,7 +88,7 @@ function checkDetType() {        #Checks whether the given detector type was use
 
 
 
-function checkNumberRounds() {        #Checks whether the test ran atleast (or exactly) as many rounds as expected
+function checkNumberRounds() {        #Checks whether the test ran at least (or exactly) as many rounds as expected
     currDir=$(pwd)
     testNum=$1
     expectedRounds=$2
@@ -104,7 +104,7 @@ function checkNumberRounds() {        #Checks whether the test ran atleast (or e
     fi
     cd ${testNum}
     cd detection-results
-    if [[  -d ${detectType} ]]; then
+    if [[ -d ${detectType} ]]; then
         cd ${detectType}
         numRounds=$(ls | wc -l)    #the number of rounds run is evaluated by counting the number of files in this directory
         if [ ${numRounds} ${expectedBehavior} ${expectedRounds} ]; then    #(expectedBehavior) is an algebraic relationship (>, =) that changes based on iDF configs used
