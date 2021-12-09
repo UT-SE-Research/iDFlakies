@@ -154,7 +154,7 @@ function checkFlakyTests() {
 
             #5. Using a preset original order, run the default test for each
             setOriginalOrder ${starr[4]} ${MODULE}
-            mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
+            mvn idflakies:detect testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
