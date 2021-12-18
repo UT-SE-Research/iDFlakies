@@ -60,15 +60,13 @@
         <dependency>
             <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-maven-plugin</artifactId>
-            <version>1.1</version>
+            <version>1.2.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
             <version>3.0.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
@@ -99,8 +97,6 @@
             <artifactId>dom4j</artifactId>
             <version>2.1.1</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>

@@ -1,6 +1,5 @@
 package edu.illinois.cs.dt.tools.runner.data;
 
-
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.reedoei.eunomia.collections.ListUtil;
@@ -25,7 +24,6 @@ public class DependentTestList {
 
     public static DependentTestList fromFile(final Path path) throws IOException {
         Logger.getGlobal().log(Level.INFO, "Reading dependent test list from " + path);
-        //TestPluginPlugin.info("Reading dependent test list from " + path);
         return new Gson().fromJson(FileUtil.readFile(path), DependentTestList.class);
     }
 

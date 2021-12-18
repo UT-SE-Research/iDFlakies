@@ -1,7 +1,6 @@
 package edu.illinois.cs.dt.tools.runner.data;
 
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;

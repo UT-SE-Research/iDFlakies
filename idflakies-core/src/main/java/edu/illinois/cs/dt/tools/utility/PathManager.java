@@ -3,7 +3,6 @@ package edu.illinois.cs.dt.tools.utility;
 import com.google.common.base.Preconditions;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;

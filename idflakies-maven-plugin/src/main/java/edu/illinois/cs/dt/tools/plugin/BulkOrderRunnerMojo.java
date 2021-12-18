@@ -6,7 +6,6 @@ import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.utility.ErrorLogger;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
@@ -38,16 +37,12 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
 
             if (runnerOption.isDefined()) {
                 final InstrumentingSmartRunner runner = InstrumentingSmartRunner.fromRunner(runnerOption.get(), mavenProject.getBasedir());
-
-               // final Path inputPath = Paths.get(Configuration.config().getProperty("bulk_runner.input_dir"));
                 final Path inputPath = Paths.get(System.getProperty("bulk_runner.input_dir"));
-               // final Path outputPath = Paths.get(Configuration.config().getProperty("bulk_runner.output_dir"));
                 final Path outputPath = Paths.get(System.getProperty("bulk_runner.output_dir"));
                 run(runner, inputPath, outputPath);
             } else {
                 final String errorMsg = "Module is not using a supported test framework (probably not JUnit).";
                 Logger.getGlobal().log(Level.INFO, errorMsg);
-               // TestPluginPlugin.info(errorMsg);
                 errorLogger.writeError(errorMsg);
             }
 
@@ -60,7 +55,6 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
         for (int i = 0; i < collect.size(); i++) {
             final Path p = collect.get(i);
             Logger.getGlobal().log(Level.INFO, String.format("Running (%d of %d): %s", i, collect.size(), p));
-          //  TestPluginPlugin.info(String.format("Running (%d of %d): %s", i, collect.size(), p));
             runOrder(runner, p, outputPath);
         }
     }

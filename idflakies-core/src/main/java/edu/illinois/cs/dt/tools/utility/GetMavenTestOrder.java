@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 
 public class GetMavenTestOrder extends StandardMain {
 

@@ -1,6 +1,5 @@
 package edu.illinois.cs.dt.tools.plugin;
 
-
 import com.google.common.collect.Lists;
 import com.opencsv.CSVReader;
 import com.reedoei.eunomia.collections.ListEx;
@@ -19,7 +18,6 @@ import edu.illinois.cs.testrunner.data.framework.TestFramework;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import edu.illinois.cs.testrunner.testobjects.TestLocator;
-
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -120,8 +118,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                         .map(row -> Double.valueOf(row.get(1)))
                         .orElse(0.0);
         double x = 6 * 3600.0;
-        final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", Double.toString(x)));//Configuration.config().getProperty(); // 6 hours
-
+        final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", 6 * 3600.0)); // 6 hours
         double timeout =
                 Math.max(2.0, moduleTime * mainTimeout / totalTime);
 
@@ -156,13 +153,10 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     public int moduleRounds(String coordinates) throws IOException {
-        final boolean hasRounds = System.getProperty("dt.randomize.rounds") != null; // Configuration.config().properties().getProperty("dt.randomize.rounds") != null;
-        final boolean hasTimeout = System.getProperty("detector.timeout")!=null;    // Configuration.config().properties().getProperty("detector.timeout") != null;
+        final boolean hasRounds = System.getProperty("dt.randomize.rounds") != null;
+        final boolean hasTimeout = System.getProperty("detector.timeout") != null;
 
-      //  final int roundNum = Configuration.config().getProperty("dt.randomize.rounds", 20);
         final int roundNum = Integer.parseInt(System.getProperty("dt.randomize.rounds", "20"));
-
-     //   System.out.println(roundNum);
 
         final int timeoutRounds;
         if (hasTimeout) {
@@ -170,7 +164,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             if (Files.isReadable(timeCsv)) {
                 final double totalTime = readRealTime(timeCsv);
-                final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", Double.toString(6 * 3600.0))); // Configuration.config().getProperty(); // 6 hours
+                final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", Double.toString(6 * 3600.0))); // 6 hours
                 if (mainTimeout != 0) {
 
                     Logger.getGlobal().log(Level.INFO, "TIMEOUT_VALUE: Using a timeout of " +
@@ -178,7 +172,6 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                     timeoutRounds = (int) (mainTimeout / totalTime);
                 } else {
                     timeoutRounds = roundNum;
-
                     Logger.getGlobal().log(Level.INFO, "TIMEOUT_VALUE specified as 0. " +
                                                        "Ignoring timeout and using number of rounds.");
                 }
@@ -294,22 +287,22 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
     private static List<String> locateTests(MavenProject project,
 					    TestFramework testFramework) {
-	int id = Objects.hash(project, testFramework);
-	if (!locateTestList.containsKey(id)) {
-        Logger.getGlobal().log(Level.INFO, "Locating tests...");
-	    try {
-		locateTestList.put(id,
-				   OperationTime.runOperation(() -> {
-					   return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
-				       }, (tests, time) -> {
-                       Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
-					   return tests;
-				       }));
-	    } catch (Exception e) {
-		throw new RuntimeException(e);
-	    }
-	}
-	return locateTestList.get(id);
+        int id = Objects.hash(project, testFramework);
+        if (!locateTestList.containsKey(id)) {
+            Logger.getGlobal().log(Level.INFO, "Locating tests...");
+            try {
+		        locateTestList.put(id,
+				           OperationTime.runOperation(() -> {
+				               return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
+				           }, (tests, time) -> {
+                               Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
+					           return tests;
+				           }));
+	        } catch (Exception e) {
+                throw new RuntimeException(e);
+	        }
+        }
+        return locateTestList.get(id);
     }
 
     public static List<String> getOriginalOrder(

@@ -26,7 +26,6 @@ public class ReplayMojo extends AbstractIDFlakiesMojo {
 
         if (runnerOption.isDefined()) {
             replayPath = Paths.get(System.getProperty("replay.path"));
-          //  final Path outputPath = Paths.get(Configuration.config().properties().getProperty("replay.output_path"));
             final Path outputPath = Paths.get(System.getProperty("replay.output_path"));
 
             try {

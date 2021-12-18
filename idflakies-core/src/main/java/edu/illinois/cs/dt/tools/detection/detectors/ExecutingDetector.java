@@ -13,7 +13,6 @@ import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 
 import java.io.File;
 import java.io.IOException;

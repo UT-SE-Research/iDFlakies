@@ -26,7 +26,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        setDefaults(Configuration.config());
+        //setDefaults(Configuration.config());        TODO: see if this alters tests.
     }
 
     private void setDefaults(Configuration configuration) {
