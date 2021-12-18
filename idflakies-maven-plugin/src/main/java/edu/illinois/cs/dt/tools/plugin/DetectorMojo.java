@@ -118,7 +118,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                         .map(row -> Double.valueOf(row.get(1)))
                         .orElse(0.0);
         double x = 6 * 3600.0;
-        final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", 6 * 3600.0)); // 6 hours
+        final double mainTimeout = Double.parseDouble(System.getProperty("detector.timeout", Double.toString(6 * 3600.0))); // 6 hours
         double timeout =
                 Math.max(2.0, moduleTime * mainTimeout / totalTime);
 
