@@ -7,6 +7,11 @@ import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
 import org.apache.maven.project.MavenProject;
 import org.xml.sax.SAXException;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+
+
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

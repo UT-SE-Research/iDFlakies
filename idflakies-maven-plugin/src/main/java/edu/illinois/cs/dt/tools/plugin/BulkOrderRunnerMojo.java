@@ -15,6 +15,10 @@ import org.apache.maven.project.MavenProject;
 import scala.Option;
 import scala.util.Try;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+
 import java.awt.geom.RectangularShape;
 import java.io.IOException;
 import java.nio.file.Files;

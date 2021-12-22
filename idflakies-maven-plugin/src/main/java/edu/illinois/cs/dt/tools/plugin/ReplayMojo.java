@@ -11,6 +11,10 @@ import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import scala.Option;
 import scala.util.Try;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,10 +42,10 @@ public class ReplayMojo extends AbstractIDFlakiesMojo {
                 if (testRunResultTry.isSuccess()) {
                     Files.write(outputPath, new Gson().toJson(testRunResultTry.get()).getBytes());
                 } else {
-                    Logger.getGlobal().log(Level.SEVERE, testRunResultTry.failed().get());
+                    Logger.getGlobal().log(Level.SEVERE, testRunResultTry.failed().get().toString());
                 }
             } catch (IOException e) {
-                Logger.getGlobal().log(Level.SEVERE, e);
+                Logger.getGlobal().log(Level.SEVERE, e.toString());
             }
         } else {
             Logger.getGlobal().log(Level.INFO, "Module is not using a supported test framework (probably not JUnit).");

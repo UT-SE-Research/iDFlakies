@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +26,16 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     @Parameter(property = "project")
     protected MavenProject mavenProject;
 
+    @Parameter(property = "propertiesPath", defaultValue = "")
+    protected String propertiesPath = "";
+
     private String pluginCp;
+    private List<URL> pluginCpURLs = null;
     final public static String pluginName = "testplugin";
     final public static String pluginClassName = "testplugin.className";
     final public static String defaultPluginClassName = "edu.illinois.cs.testrunner.coreplugin.TestRunner";
-    private static List<URL> pluginCpURLs = null;
-    private static String pluginCp = null;
-    public static ProjectWrapper project;
 
-    private static void generate() {
+    private void generate() {
         // TODO: When upgrading past Java 8, this will probably no longer work
         // (cannot cast any ClassLoader to URLClassLoader)
         URLClassLoader pluginClassloader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
@@ -42,7 +44,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
                                pluginCpURLs.stream().map((PluginCpUrl) -> PluginCpUrl.getPath()).toArray(String[]::new));
     }
 
-    private static List<URL> pluginClasspathUrls() {
+    private List<URL> pluginClasspathUrls() {
         if (pluginCpURLs == null) {
             generate();
         }
@@ -50,7 +52,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
         return pluginCpURLs;
     }
 
-    private static String pluginClasspath() {
+    private String pluginClasspath() {
         if (pluginCp == null) {
             generate();
         }
@@ -58,12 +60,12 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
         return pluginCp;
     }
 
-    private static void configJavaAgentPath() {
+    private void configJavaAgentPath() {
         pluginClasspathUrls().stream().filter((url) -> url.toString().contains("idflakies-maven-plugin") ||
                                               url.toString().contains("testrunner-gradle-plugin")).forEach((url) -> Configuration.config().setDefault("testplugin.javaagent", url.toString()));
     }
 
-    private static void setDefaults(Configuration configuration) {
+    private void setDefaults(Configuration configuration) {
         configuration.setDefault(ConfigProps.CAPTURE_STATE, String.valueOf(false));
         configuration.setDefault(ConfigProps.UNIVERSAL_TIMEOUT, String.valueOf(-1));
         configuration.setDefault(ConfigProps.SMARTRUNNER_DEFAULT_TIMEOUT, String.valueOf(6 * 3600));
@@ -75,7 +77,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
         configJavaAgentPath();
     }
 
-    public static void setConfigs(String propertiesPath) throws IOException {
+    public void setConfigs(String propertiesPath) throws IOException {
         System.getProperties()
             .forEach((key, value) -> Configuration.config().properties().setProperty(key.toString(), value.toString()));
 
@@ -88,8 +90,9 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     
     @Override
     public void execute() {
-        setConfigs(propertiesPath);
-            
+        try {
+            setConfigs(propertiesPath);
+        } catch (IOException ignored) {}
         //setDefaults(Configuration.config());        TODO: see if this alters tests.
     }
 

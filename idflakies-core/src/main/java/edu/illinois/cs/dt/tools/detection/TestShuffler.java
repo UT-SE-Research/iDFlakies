@@ -97,7 +97,7 @@ public class TestShuffler {
             return reverseOrder();
         }
 
-        final Path historicalRun = DetectorPathManager.detectionRoundPath(baseDir, i);
+        final Path historicalRun = DetectorPathManager.detectionRoundPath(baseDir, historicalType(), i);
 
         try {
             // look up whether a previous execution of the plugin generated orders for this round already
@@ -125,7 +125,7 @@ public class TestShuffler {
         final DetectionRound detectionRound = new Gson().fromJson(FileUtil.readFile(historicalRun), DetectionRound.class);
 
         return detectionRound.testRunIds().stream()
-                .flatMap(RunnerPathManager::resultFor)
+                .flatMap(n -> RunnerPathManager.resultFor(baseDir, n))
                 .findFirst()
                 .map(TestRunResult::testOrder)
                 .orElse(new ArrayList<>());
