@@ -12,6 +12,7 @@ import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,12 +36,14 @@ public class TestShuffler {
     private final String type;
     private final List<String> tests;
     private final Set<String> alreadySeenOrders = new HashSet<>();
+    private final File baseDir;
 
     private final Random random;
 
-    public TestShuffler(final String type, final int rounds, final List<String> tests) {
+    public TestShuffler(final String type, final int rounds, final List<String> tests, final File baseDir) {
         this.type = type;
         this.tests = tests;
+        this.baseDir = baseDir;
 
         classToMethods = new HashMap<>();
 
@@ -95,7 +98,7 @@ public class TestShuffler {
             return reverseOrder();
         }
 
-        /*final Path historicalRun = DetectorPathManager.detectionRoundPath(historicalType(), i);
+        final Path historicalRun = DetectorPathManager.detectionRoundPath(baseDir, i);
 
         try {
             // look up whether a previous execution of the plugin generated orders for this round already
@@ -103,7 +106,7 @@ public class TestShuffler {
             if (Files.exists(historicalRun)) {
                 return generateHistorical(readHistorical(historicalRun));
             }
-        } catch (IOException ignored) {}*/
+        } catch (IOException ignored) {}
 
         return generateShuffled();
     }
@@ -119,7 +122,7 @@ public class TestShuffler {
         }
     }
 
-    /*private List<String> readHistorical(final Path historicalRun) throws IOException {
+    private List<String> readHistorical(final Path historicalRun) throws IOException {
         final DetectionRound detectionRound = new Gson().fromJson(FileUtil.readFile(historicalRun), DetectionRound.class);
 
         return detectionRound.testRunIds().stream()
@@ -127,7 +130,7 @@ public class TestShuffler {
                 .findFirst()
                 .map(TestRunResult::testOrder)
                 .orElse(new ArrayList<>());
-    }*/
+    }
 
     private List<String> generateHistorical(final List<String> historicalOrder) {
         if ("random-class".equals(type)) {

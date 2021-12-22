@@ -22,11 +22,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mojo(name = "bulk")
+@Mojo(name = "bulk", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
 
     @Override
     public void execute() {
+        super.execute();
         final ErrorLogger errorLogger = new ErrorLogger(mavenProject);
         final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
 

@@ -23,7 +23,7 @@ public class ReverseDetector extends ExecutingDetector {
         this.tests = tests;
         this.origResult = DetectorUtil.originalResults(baseDir, tests, runner);
 
-        testShuffler = new TestShuffler(name, rounds, tests);
+        testShuffler = new TestShuffler(name, rounds, tests, baseDir);
 
         // Filters to be applied in order
         if (runner instanceof InstrumentingSmartRunner) {

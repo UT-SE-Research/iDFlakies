@@ -25,7 +25,7 @@ public class RandomDetector extends ExecutingDetector {
 
         this.tests = tests;
 
-        this.testShuffler = new TestShuffler(type, rounds, tests);
+        this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);
         this.origResult = DetectorUtil.originalResults(baseDir, tests, runner);
 
         // Filters to be applied in order

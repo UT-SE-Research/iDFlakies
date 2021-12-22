@@ -17,11 +17,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
 
-public class ModuleTestTimeMojo  extends AbstractIDFlakiesMojo {
+@Mojo(name = "testTime", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
+public class ModuleTestTimeMojo extends AbstractIDFlakiesMojo {
     private String coordinates;
 
     @Override
     public void execute() {
+        super.execute();
         this.coordinates = mavenProject.getGroupId() + ":" + mavenProject.getArtifactId() + ":" + mavenProject.getVersion();
 
         final Path surefireReportsPath = Paths.get(mavenProject.getBuild().getDirectory()).resolve("surefire-reports");

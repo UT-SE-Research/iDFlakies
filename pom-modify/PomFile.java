@@ -208,36 +208,6 @@ public class PomFile {
                 version.setTextContent("2.0.0-SNAPSHOT");                        //changed
                 plugin.appendChild(version);
             }
-            /*{                                                          ////no longer needs this dependency/config?
-                Node dependencies = doc.createElement("dependencies");
-                {
-                    Node dependency = doc.createElement("dependency");
-                    {
-                        Node depGroupId = doc.createElement("groupId");
-                        depGroupId.setTextContent("edu.illinois.cs");
-                        dependency.appendChild(depGroupId);
-
-                        Node depArtifactId = doc.createElement("artifactId");
-                        depArtifactId.setTextContent(ARTIFACT_ID);
-                        dependency.appendChild(depArtifactId);
-
-                        Node depVersion = doc.createElement("version");
-                        depVersion.setTextContent(ARTIFACT_VERSION);
-                        dependency.appendChild(depVersion);
-                    }
-                    dependencies.appendChild(dependency);
-                }
-                plugin.appendChild(dependencies);
-            }
-            {
-                Node configuration = doc.createElement("configuration");
-                {
-                    Node className = doc.createElement("className");
-                    className.setTextContent(CONFIGURATION_CLASS);
-                    configuration.appendChild(className);
-                }
-                plugin.appendChild(configuration);
-            }*/
             plugins.appendChild(plugin);
         }
     }

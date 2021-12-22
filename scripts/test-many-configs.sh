@@ -1,4 +1,4 @@
-p#!/bin/bash
+#!/bin/bash
 #NOTE: This script is intended to be run on GitHub Actions CI, so please view yml file to understand usage
 
 

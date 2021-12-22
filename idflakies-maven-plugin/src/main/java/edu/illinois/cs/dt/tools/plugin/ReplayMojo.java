@@ -17,11 +17,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Mojo(name = "replay", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class ReplayMojo extends AbstractIDFlakiesMojo {
     private Path replayPath;
 
     @Override
     public void execute() {
+        super.execute();
         final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
 
         if (runnerOption.isDefined()) {
@@ -36,10 +38,10 @@ public class ReplayMojo extends AbstractIDFlakiesMojo {
                 if (testRunResultTry.isSuccess()) {
                     Files.write(outputPath, new Gson().toJson(testRunResultTry.get()).getBytes());
                 } else {
-                    getLog().error(testRunResultTry.failed().get());
+                    Logger.getGlobal().log(Level.SEVERE, testRunResultTry.failed().get());
                 }
             } catch (IOException e) {
-                getLog().error(e);
+                Logger.getGlobal().log(Level.SEVERE, e);
             }
         } else {
             Logger.getGlobal().log(Level.INFO, "Module is not using a supported test framework (probably not JUnit).");

@@ -9,7 +9,6 @@ import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
