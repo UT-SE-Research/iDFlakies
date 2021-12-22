@@ -11,6 +11,7 @@ import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.filters.Filter;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     protected Runner runner;
     protected File baseDir;
-    private boolean countOnlyFirstFailure = Boolean.parseBoolean(System.getProperty("dt.detector.count.only.first.failure", "false"));
+    private boolean countOnlyFirstFailure = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.count.only.first.failure", "false"));
 
     protected int rounds;
     private List<Filter> filters = new ArrayList<>();
@@ -103,7 +104,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         private final long origStartTimeMs = System.currentTimeMillis();
         private long startTimeMs = System.currentTimeMillis();
         private long previousStopTimeMs = System.currentTimeMillis();
-        private boolean roundsAreTotal = Boolean.parseBoolean(System.getProperty("dt.detector.roundsemantics.total", "false"));
+        private boolean roundsAreTotal = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.roundsemantics.total", "false"));
 
         private int i = 0;
 

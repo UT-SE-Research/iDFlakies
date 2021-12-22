@@ -69,10 +69,9 @@ public class TestShuffler {
 
     private String historicalType() {
         if (type.equals("random")) {
-            return System.getProperty("detector.random.historical_type", "random-class");
+            return Configuration.config().getProperty("detector.random.historical_type", "random-class");
         } else {
-
-            return System.getProperty("detector.random.historical_type", "random");
+            return Configuration.config().getProperty("detector.random.historical_type", "random");
         }
     }
 

@@ -1,12 +1,13 @@
 package edu.illinois.cs.dt.tools.runner.data;
 
 import com.google.gson.Gson;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.runner.Runner;
 
 import java.nio.file.Path;
 
 public class DependentTest {
-    private static final boolean VERIFY_DTS = Boolean.parseBoolean(System.getProperty("dt.verify", "true"));
+    private static final boolean VERIFY_DTS = Configuration.config().getProperty("dt.verify", true);
 
     private final String name;
 

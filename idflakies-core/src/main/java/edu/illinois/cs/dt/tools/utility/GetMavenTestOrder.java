@@ -21,10 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 
 public class GetMavenTestOrder extends StandardMain {
 
-    private boolean mvnTestMustPass = Boolean.parseBoolean(System.getProperty("dt.mvn_test.must_pass","true"));
+    private boolean mvnTestMustPass = Boolean.parseBoolean(Configuration.config().getProperty("dt.mvn_test.must_pass","true"));
     
     @Override
     protected void run() throws Exception {

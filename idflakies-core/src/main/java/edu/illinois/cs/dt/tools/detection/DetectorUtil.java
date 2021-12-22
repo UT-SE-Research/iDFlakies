@@ -2,6 +2,7 @@ package edu.illinois.cs.dt.tools.detection;
 
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.testrunner.data.results.Result;
@@ -21,8 +22,8 @@ import java.util.stream.Stream;
 public class DetectorUtil {
 
     public static TestRunResult originalResults(final File baseDir, final List<String> originalOrder, final Runner runner) {
-        final int originalOrderTries = Integer.parseInt(System.getProperty("dt.detector.original_order.retry_count", "3"));
-        final boolean allMustPass = Boolean.parseBoolean(System.getProperty("dt.detector.original_order.all_must_pass", "true"));
+        final int originalOrderTries = Configuration.config().getProperty("dt.detector.original_order.retry_count", 3);
+        final boolean allMustPass = Configuration.config().getProperty("dt.detector.original_order.all_must_pass", true);
 
         System.out.println("[INFO] Getting original results (" + originalOrder.size() + " tests).");
 
