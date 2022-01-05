@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [[ ${1} == "" ]]; then
     echo "Please provide the path to your csv file with the format "URL,SHA,MODULE,numTestsFound" on each line. Unless only 1 module exists, a module must be provided."
     exit
