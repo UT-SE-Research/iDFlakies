@@ -1,6 +1,7 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import com.google.common.base.Preconditions;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import org.apache.maven.project.MavenProject;
@@ -13,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class PathManager {
-    private static final String outputPath = System.getProperty("dt.cache.absolute.path", "");
+    private static final String outputPath = Configuration.config().getProperty("dt.cache.absolute.path", "");
 
     public static Path modulePath(final File baseDir) {
         return baseDir.toPath();
