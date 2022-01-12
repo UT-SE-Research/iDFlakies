@@ -96,7 +96,7 @@
             </dependency>
             <dependency>
                 <groupId>edu.illinois.cs</groupId>
-                <artifactId>testrunner-maven-plugin</artifactId>
+                <artifactId>testrunner-running</artifactId>
                 <version>1.2.1</version>
             </dependency>
             <dependency>

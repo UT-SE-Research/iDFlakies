@@ -3,7 +3,6 @@ package edu.illinois.cs.dt.tools.plugin;
 import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.utility.GetMavenTestOrder;
 import edu.illinois.cs.dt.tools.utility.TestClassData;
-import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
