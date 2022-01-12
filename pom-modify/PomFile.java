@@ -200,12 +200,12 @@ public class PomFile {
             }
             {
                 Node artifactId = doc.createElement("artifactId");
-                artifactId.setTextContent("idflakies-maven-plugin");       //changed
+                artifactId.setTextContent("idflakies-maven-plugin");
                 plugin.appendChild(artifactId);
             }
             {
                 Node version = doc.createElement("version");
-                version.setTextContent("2.0.0-SNAPSHOT");                        //changed
+                version.setTextContent("2.0.0-SNAPSHOT");
                 plugin.appendChild(version);
             }
             plugins.appendChild(plugin);
