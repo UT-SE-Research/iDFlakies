@@ -4,13 +4,12 @@ import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.utility.GetMavenTestOrder;
 import edu.illinois.cs.dt.tools.utility.TestClassData;
 import edu.illinois.cs.testrunner.mavenplugin.TestPlugin;
-import org.apache.maven.project.MavenProject;
-import org.xml.sax.SAXException;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
+import org.apache.maven.project.MavenProject;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;

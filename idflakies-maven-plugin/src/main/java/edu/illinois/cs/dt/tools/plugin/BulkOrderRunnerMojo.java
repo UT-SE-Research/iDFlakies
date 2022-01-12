@@ -10,14 +10,13 @@ import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.project.MavenProject;
 import scala.Option;
 import scala.util.Try;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
 
 import java.awt.geom.RectangularShape;
 import java.io.IOException;

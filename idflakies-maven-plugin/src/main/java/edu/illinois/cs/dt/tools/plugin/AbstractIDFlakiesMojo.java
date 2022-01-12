@@ -1,8 +1,8 @@
 package edu.illinois.cs.dt.tools.plugin;
 
-import edu.illinois.cs.testrunner.util.ProjectWrapper;
 import edu.illinois.cs.testrunner.configuration.ConfigProps;
 import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Execute;
@@ -30,10 +30,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     protected String propertiesPath = "";
 
     private String pluginCp;
-    private List<URL> pluginCpURLs = null;
-    final public static String pluginName = "testplugin";
-    final public static String pluginClassName = "testplugin.className";
-    final public static String defaultPluginClassName = "edu.illinois.cs.testrunner.coreplugin.TestRunner";
+    private List<URL> pluginCpURLs;
 
     private void generate() {
         // TODO: When upgrading past Java 8, this will probably no longer work

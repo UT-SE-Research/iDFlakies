@@ -50,8 +50,6 @@ public class DetectorUtil {
                 throw new NoPassingOrderException("No passing order for tests (" + originalOrderTries + " runs)");
             } else {
                 Logger.getGlobal().log(Level.INFO, "No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
-                // 2nd approach: also doesnt work - TestPluginPlugin.mojo().getLog().info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
-              // initial: TestPluginPlugin.info("No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
             }
         }
 
