@@ -2,7 +2,6 @@
 
 ARTIFACT_ID="idflakies"
 ARTIFACT_VERSION="1.1.0"
-CONFIGURATION_CLASS="edu.illinois.cs.dt.tools.detection.DetectorPlugin"
 
 if [[ $1 == "" ]]; then
     echo "arg1 - the path to the project, where high-level pom.xml is"
@@ -25,7 +24,7 @@ cd - > /dev/null
 cd ${working_dir}
 
 javac PomFile.java
-find ${project_path} -name pom.xml | grep -v "src/" | java PomFile ${ARTIFACT_ID} ${ARTIFACT_VERSION} ${CONFIGURATION_CLASS}
+find ${project_path} -name pom.xml | grep -v "src/" | java PomFile ${ARTIFACT_ID} ${ARTIFACT_VERSION}
 rm -f PomFile.class
 
 cd ${crnt}

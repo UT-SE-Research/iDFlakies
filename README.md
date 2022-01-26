@@ -29,7 +29,7 @@ By default, modify-project.sh will use the version of iDFlakies from Maven Centr
 the version of iDFlakies built locally, you can run the following instead. 
 
 ```shell
-bash pom-modify/modify-project.sh path_to_maven_project 1.2.0-SNAPSHOT
+bash pom-modify/modify-project.sh path_to_maven_project 2.0.0-SNAPSHOT
 ```
 
 ### Manually setting up the pom.xml for iDFlakies
@@ -45,21 +45,8 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
         ...
         <plugin>
             <groupId>edu.illinois.cs</groupId>
-            <artifactId>testrunner-maven-plugin</artifactId>
-            <version>1.2</version>
-            <dependencies>
-                <dependency>
-                    <groupId>edu.illinois.cs</groupId>
-                    <artifactId>idflakies</artifactId>
-                    <!-- Use iDFlakies from Maven Central -->
-                    <version>1.1.0</version>
-                    <!-- Use the following version instead if you build iDFlakies locally and want to use the locally built version. -->
-                    <!-- <version>1.2.0-SNAPSHOT</version> -->
-                </dependency>
-            </dependencies>
-            <configuration>
-                <className>edu.illinois.cs.dt.tools.detection.DetectorPlugin</className>
-            </configuration>
+            <artifactId>idflakies-maven-plugin</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
         </plugin>
     </plugins>
 </build>
@@ -70,7 +57,7 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
 Once iDFlakies is added to a Maven project, one can then run iDFlakies on the project with the following command.
 
 ```shell
-mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
+mvn idflakies:detect -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
 
 iDFlakies configuration options:

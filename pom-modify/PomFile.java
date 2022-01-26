@@ -35,8 +35,7 @@ public class PomFile {
     private String testDir;
     private String outputDir;
     private static String ARTIFACT_ID = "ifixflakies";
-    private static String CONFIGURATION_CLASS = "edu.illinois.cs.dt.tools.fixer.CleanerFixerPlugin";
-    private static String ARTIFACT_VERSION = "1.0.0-SNAPSHOT";
+    private static String ARTIFACT_VERSION = "2.0.0-SNAPSHOT";
 
     public PomFile(String pom) {
         this.pom = pom;
@@ -205,7 +204,7 @@ public class PomFile {
             }
             {
                 Node version = doc.createElement("version");
-                version.setTextContent("2.0.0-SNAPSHOT");
+                version.setTextContent(ARTIFACT_VERSION);
                 plugin.appendChild(version);
             }
             plugins.appendChild(plugin);
@@ -217,13 +216,12 @@ public class PomFile {
     }
 
     public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Usage: java PomFile <artifact_id> <artifact_version> <configuration_class_name>");
+        if (args.length != 2) {
+            System.out.println("Usage: java PomFile <artifact_id> <artifact_version>");
         }
 
         ARTIFACT_ID = args[0];
         ARTIFACT_VERSION = args[1];
-        CONFIGURATION_CLASS  = args[2];
 
         InputStreamReader isReader = new InputStreamReader(System.in);
         BufferedReader bufReader = new BufferedReader(isReader);
