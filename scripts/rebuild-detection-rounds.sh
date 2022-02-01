@@ -13,7 +13,7 @@ if [[ ! "$detection_results" =~ "$/" ]]; then
 fi
 
 # Go to where the pom is
-cd "$scripts_folder/.."
+cd "$scripts_folder/../idflakies-core"
 
 mvn install -DskipTests exec:java -Dexec.mainClass="edu.illinois.cs.dt.tools.detection.RebuildDetectionRounds" \
     -Dexec.args="--results '$detection_results'"
