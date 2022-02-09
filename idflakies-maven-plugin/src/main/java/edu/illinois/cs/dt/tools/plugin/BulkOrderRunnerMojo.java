@@ -34,11 +34,13 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
         super.execute();
         final ErrorLogger errorLogger = new ErrorLogger(mavenProject);
         final Option<Runner> runnerOption = RunnerFactory.from(mavenProject);
+        // put these lines inside abstractidmojo       MavenDetectorPathManager pathManager = new MavenDetectorPathManager(mavenProject);
+        //        DetectorPathManager.setInstance(pathManager);
 
         errorLogger.runAndLogError(() -> {
             Files.deleteIfExists(DetectorPathManager.errorPath(mavenProject.getBasedir()));
             Files.createDirectories(DetectorPathManager.cachePath(mavenProject.getBasedir()));
-            Files.createDirectories(DetectorPathManager.detectionResults(mavenProject.getBasedir()));
+            Files.createDirectories(DetectorPathManager.detectionResults());
 
             if (runnerOption.isDefined()) {
                 final InstrumentingSmartRunner runner = InstrumentingSmartRunner.fromRunner(runnerOption.get(), mavenProject.getBasedir());

@@ -44,7 +44,7 @@ public class ConfirmationFilter implements Filter {
 
         // Load results from the directory if we can
         try {
-            Files.list(DetectorPathManager.detectionResults(baseDir).resolve("flaky")).forEach(p -> {
+            Files.list(DetectorPathManager.detectionResults().resolve("flaky")).forEach(p -> {
                 try {
                     final DetectionRound round = new Gson().fromJson(FileUtil.readFile(p), DetectionRound.class);
 

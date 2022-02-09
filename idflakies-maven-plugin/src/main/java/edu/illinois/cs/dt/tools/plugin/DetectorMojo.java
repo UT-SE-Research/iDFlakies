@@ -101,7 +101,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         final MavenProject parent = getMavenProjectParent(project);
 
         final Path timeCsv = parent.getBasedir().toPath().resolve("module-test-time.csv");
-        Files.copy(timeCsv, DetectorPathManager.detectionResults(mavenProject.getBasedir()).resolve("module-test-time.csv"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(timeCsv, DetectorPathManager.detectionResults().resolve("module-test-time.csv"), StandardCopyOption.REPLACE_EXISTING);
         final ListEx<ListEx<String>> csv = csv(timeCsv);
 
         // Skip the header row, sum the second column to get the total time
@@ -203,7 +203,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     @Override
     public void execute() {
         super.execute();
-        this.outputPath = DetectorPathManager.detectionResults(mavenProject.getBasedir());
+        this.outputPath = DetectorPathManager.detectionResults();
 
         final ErrorLogger logger = new ErrorLogger(mavenProject);
         this.coordinates = logger.coordinates();
@@ -214,7 +214,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     private Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
         Files.deleteIfExists(DetectorPathManager.errorPath(mavenProject.getBasedir()));
         Files.createDirectories(DetectorPathManager.cachePath(mavenProject.getBasedir()));
-        Files.createDirectories(DetectorPathManager.detectionResults(mavenProject.getBasedir()));
+        Files.createDirectories(DetectorPathManager.detectionResults());
 
         // Currently there could two runners, one for JUnit 4 and one for JUnit 5
         // If the maven project has both JUnit 4 and JUnit 5 tests, two runners will

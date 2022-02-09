@@ -44,6 +44,7 @@
     <modules>
         <module>idflakies-core</module>
         <module>idflakies-maven-plugin</module>
+       <!-- <module>idflakies-legacy</module> -->
     </modules>
 
     <build>

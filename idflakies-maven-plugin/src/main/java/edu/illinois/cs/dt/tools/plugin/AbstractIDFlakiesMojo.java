@@ -1,5 +1,8 @@
 package edu.illinois.cs.dt.tools.plugin;
 
+
+import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
+import edu.illinois.cs.dt.tools.detection.MavenDetectorPathManager;
 import edu.illinois.cs.testrunner.configuration.ConfigProps;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.util.ProjectWrapper;
@@ -35,6 +38,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     private void generate() {
         // TODO: When upgrading past Java 8, this will probably no longer work
         // (cannot cast any ClassLoader to URLClassLoader)
+        DetectorPathManager.setInstance(new MavenDetectorPathManager(mavenProject));
         URLClassLoader pluginClassloader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         pluginCpURLs = Arrays.asList(pluginClassloader.getURLs());
         pluginCp = String.join(File.pathSeparator,
