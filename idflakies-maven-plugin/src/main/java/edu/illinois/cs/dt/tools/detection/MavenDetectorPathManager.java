@@ -12,7 +12,7 @@ public class MavenDetectorPathManager extends DetectorPathManager {
 
     private MavenProject mavenProject;
     
-    public MavenDetectorPathManager(MavenProject mavenproject){
+    public MavenDetectorPathManager(MavenProject mavenProject){
         this.mavenProject = mavenProject;
     }
     

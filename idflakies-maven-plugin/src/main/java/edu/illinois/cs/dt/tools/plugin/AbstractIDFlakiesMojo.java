@@ -38,7 +38,6 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     private void generate() {
         // TODO: When upgrading past Java 8, this will probably no longer work
         // (cannot cast any ClassLoader to URLClassLoader)
-        DetectorPathManager.setInstance(new MavenDetectorPathManager(mavenProject));
         URLClassLoader pluginClassloader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         pluginCpURLs = Arrays.asList(pluginClassloader.getURLs());
         pluginCp = String.join(File.pathSeparator,
@@ -79,6 +78,8 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     }
 
     public void setConfigs(String propertiesPath) throws IOException {
+        DetectorPathManager.setInstance(new MavenDetectorPathManager(mavenProject));
+
         System.getProperties()
             .forEach((key, value) -> Configuration.config().properties().setProperty(key.toString(), value.toString()));
 
