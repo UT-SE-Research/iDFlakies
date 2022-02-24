@@ -64,12 +64,12 @@ public class MavenDetectorPathManager extends DetectorPathManager {
     }
 
     @Override
-    public Path testLogInstance(final MavenProject mavenProject) {
+    public Path testLogInstance() {
         return parentPath(mavenProject, MVN_TEST_LOG);
     }
 
     @Override
-    public Path testTimeLogInstance(final MavenProject mavenProject) {
+    public Path testTimeLogInstance() {
         return parentPath(mavenProject, MVN_TEST_TIME_LOG);
     }
 }

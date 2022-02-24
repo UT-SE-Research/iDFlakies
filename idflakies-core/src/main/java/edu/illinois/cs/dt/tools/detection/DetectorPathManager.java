@@ -55,12 +55,12 @@ public abstract class DetectorPathManager extends PathManager {
         return getInstance().originalResultsLogInstance();
     }
 
-    public static Path testLog(final MavenProject mavenProject) {
-        return getInstance().testLogInstance(mavenProject);
+    public static Path testLog() {
+        return getInstance().testLogInstance();
     }
 
-    public static Path testTimeLog(final MavenProject mavenProject) {
-        return getInstance().testTimeLogInstance(mavenProject);
+    public static Path testTimeLog() {
+        return getInstance().testTimeLogInstance();
     }
     
     public abstract Path detectionResultsInstance();
@@ -79,7 +79,7 @@ public abstract class DetectorPathManager extends PathManager {
 
     public abstract Path originalResultsLogInstance();
 
-    public abstract Path testLogInstance(final MavenProject mavenProject);
+    public abstract Path testLogInstance();
 
-    public abstract Path testTimeLogInstance(final MavenProject mavenProject);
+    public abstract Path testTimeLogInstance();
 }

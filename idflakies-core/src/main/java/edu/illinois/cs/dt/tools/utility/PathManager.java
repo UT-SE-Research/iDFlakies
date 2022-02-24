@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class PathManager {
-    private static final String outputPath = Configuration.config().getProperty("dt.cache.absolute.path", "");
 
     public static Path modulePath(final File baseDir) {
         return baseDir.toPath();
@@ -40,6 +39,7 @@ public class PathManager {
     }
 
     public static Path cachePath(final File baseDir) {
+        String outputPath = Configuration.config().properties().getProperty("dt.cache.absolute.path", "");
         Logger.getGlobal().log(Level.INFO, "Accessing cachePath: " + outputPath);
         if (outputPath == "") {
             return modulePath(baseDir).resolve(".dtfixingtools");

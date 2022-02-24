@@ -159,7 +159,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
         final int timeoutRounds;
         if (hasTimeout) {
-            final Path timeCsv = DetectorPathManager.testTimeLog(mavenProject);
+            final Path timeCsv = DetectorPathManager.testTimeLog();
 
             if (Files.isReadable(timeCsv)) {
                 final double totalTime = readRealTime(timeCsv);
@@ -319,7 +319,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             try {
                 final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("surefire-reports");
-                final Path mvnTestLog = DetectorPathManager.testLog(project);
+                final Path mvnTestLog = DetectorPathManager.testLog();
                 if (Files.exists(mvnTestLog) && Files.exists(surefireReportsPath)) {
                     final List<TestClassData> testClassData = new GetMavenTestOrder(surefireReportsPath, mvnTestLog).testClassDataList();
 
