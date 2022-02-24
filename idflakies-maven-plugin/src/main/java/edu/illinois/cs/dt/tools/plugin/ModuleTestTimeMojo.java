@@ -30,7 +30,7 @@ public class ModuleTestTimeMojo extends AbstractIDFlakiesMojo {
         this.coordinates = mavenProject.getGroupId() + ":" + mavenProject.getArtifactId() + ":" + mavenProject.getVersion();
 
         final Path surefireReportsPath = Paths.get(mavenProject.getBuild().getDirectory()).resolve("surefire-reports");
-        final Path mvnTestLog = DetectorPathManager.mvnTestLog(mavenProject);
+        final Path mvnTestLog = DetectorPathManager.testLog(mavenProject);
         try {
             final Path outputFile = Paths.get(getMavenProjectParent(mavenProject).getBasedir().getAbsolutePath(),
                     "module-test-time.csv");

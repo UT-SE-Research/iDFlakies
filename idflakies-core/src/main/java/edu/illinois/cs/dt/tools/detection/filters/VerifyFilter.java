@@ -22,7 +22,7 @@ public class VerifyFilter implements Filter {
     @Override
     public boolean keep(final DependentTest dependentTest, final int absoluteRound) {
         if (VERIFY_DTS) {
-            return dependentTest.verify(runner, DetectorPathManager.filterPath(baseDir, detectorType, "verify", absoluteRound));
+            return dependentTest.verify(runner, DetectorPathManager.filterPath(detectorType, "verify", absoluteRound));
         } else {
             return true;
         }

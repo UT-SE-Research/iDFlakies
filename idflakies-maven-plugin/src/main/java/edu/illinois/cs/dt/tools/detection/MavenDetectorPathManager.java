@@ -22,8 +22,11 @@ public class MavenDetectorPathManager extends DetectorPathManager {
     }
 
     @Override
-    public Path detectionFileInstance(final File baseDir) {
-        return detectionResults().resolve(FLAKY_LIST_PATH);
+    public Path detectionFileInstance() {
+        //delete baseDir here, remove baseDir from the overwritten method
+        //look for all method references for both the static and instance versions of these,
+        //ISOLATE FOR ALL DETECTORPATHMANAGER AND SUBCLASSES OF <-
+        return detectionResultsInstance().resolve(FLAKY_LIST_PATH);
     }
 
     @Override
@@ -36,37 +39,37 @@ public class MavenDetectorPathManager extends DetectorPathManager {
     }
 
     @Override
-    public Path detectionRoundPathInstance(final File baseDir, final String name, final int round) {
-        return pathWithRound(detectionResults().resolve(name), "", round);
+    public Path detectionRoundPathInstance(final String name, final int round) {
+        return pathWithRoundInstance(detectionResultsInstance().resolve(name), "", round);
     }
 
     @Override
-    public Path filterPathInstance(final File baseDir, final String detectorType, final String filterType, final int absoluteRound) {
-        return detectionRoundPath(baseDir, detectorType + "-" + filterType, absoluteRound);
+    public Path filterPathInstance(final String detectorType, final String filterType, final int absoluteRound) {
+        return detectionRoundPathInstance(detectorType + "-" + filterType, absoluteRound);
     }
 
     @Override
-    public Path originalOrderPathInstance(final File baseDir) {
-        return path(baseDir, ORIGINAL_ORDER);
+    public Path originalOrderPathInstance() {
+        return path(mavenProject.getBasedir(), ORIGINAL_ORDER);
     }
 
     @Override
-    public Path errorPathInstance(final File baseDir) {
-        return path(baseDir, ERROR);
+    public Path errorPathInstance() {
+        return path(mavenProject.getBasedir(), ERROR);
     }
 
     @Override
-    public Path originalResultsLogInstance(final File baseDir) {
-        return detectionResults().resolve(ORIGINAL_RESULTS_LOG);
+    public Path originalResultsLogInstance() {
+        return detectionResultsInstance().resolve(ORIGINAL_RESULTS_LOG);
     }
 
     @Override
-    public Path mvnTestLogInstance(final MavenProject mavenProject) {
+    public Path testLogInstance(final MavenProject mavenProject) {
         return parentPath(mavenProject, MVN_TEST_LOG);
     }
 
     @Override
-    public Path mvnTestTimeLogInstance(final MavenProject mavenProject) {
+    public Path testTimeLogInstance(final MavenProject mavenProject) {
         return parentPath(mavenProject, MVN_TEST_TIME_LOG);
     }
 }

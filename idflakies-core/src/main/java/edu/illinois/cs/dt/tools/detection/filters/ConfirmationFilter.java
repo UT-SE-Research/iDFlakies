@@ -103,6 +103,6 @@ public class ConfirmationFilter implements Filter {
     }
 
     private boolean verify(final String verifyType, final DependentTest dependentTest, final int absoluteRound) {
-        return dependentTest.verify(runner, DetectorPathManager.filterPath(baseDir, detectorType, verifyType, absoluteRound));
+        return dependentTest.verify(runner, DetectorPathManager.filterPath(detectorType, verifyType, absoluteRound));
     }
 }

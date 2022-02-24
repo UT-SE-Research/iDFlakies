@@ -72,8 +72,8 @@ public class ErrorLogger {
             System.out.println("ERROR (WRITE_ERROR_STDOUT_THROWABLE): " + coordinates);
             t.printStackTrace();
 
-            t.printStackTrace(new PrintStream(new FileOutputStream(String.valueOf(DetectorPathManager.errorPath(project.getBasedir())))));
-            Files.write(DetectorPathManager.errorPath(project.getBasedir()), ("\n" + coordinates).getBytes(), StandardOpenOption.APPEND);
+            t.printStackTrace(new PrintStream(new FileOutputStream(String.valueOf(DetectorPathManager.errorPath()))));
+            Files.write(DetectorPathManager.errorPath(), ("\n" + coordinates).getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("ERROR (FAIL_OUTPUT_ERR_THROWABLE): Failed to output error!");
             e.printStackTrace();
@@ -89,8 +89,8 @@ public class ErrorLogger {
             System.out.println("Message was:");
             System.out.println(msg);
 
-            Files.write(DetectorPathManager.errorPath(project.getBasedir()), (msg + "\n").getBytes());
-            Files.write(DetectorPathManager.errorPath(project.getBasedir()), ("\n" + coordinates).getBytes(), StandardOpenOption.APPEND);
+            Files.write(DetectorPathManager.errorPath(), (msg + "\n").getBytes());
+            Files.write(DetectorPathManager.errorPath(), ("\n" + coordinates).getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("ERROR (FAIL_OUTPUT_ERR_STRING): Failed to output error!");
             e.printStackTrace();

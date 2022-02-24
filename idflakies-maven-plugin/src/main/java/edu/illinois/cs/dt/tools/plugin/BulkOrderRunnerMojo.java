@@ -38,7 +38,7 @@ public class BulkOrderRunnerMojo extends AbstractIDFlakiesMojo {
         //        DetectorPathManager.setInstance(pathManager);
 
         errorLogger.runAndLogError(() -> {
-            Files.deleteIfExists(DetectorPathManager.errorPath(mavenProject.getBasedir()));
+            Files.deleteIfExists(DetectorPathManager.errorPath());
             Files.createDirectories(DetectorPathManager.cachePath(mavenProject.getBasedir()));
             Files.createDirectories(DetectorPathManager.detectionResults());
 

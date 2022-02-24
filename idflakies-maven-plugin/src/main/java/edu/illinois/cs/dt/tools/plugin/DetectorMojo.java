@@ -159,7 +159,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
         final int timeoutRounds;
         if (hasTimeout) {
-            final Path timeCsv = DetectorPathManager.mvnTestTimeLog(mavenProject);
+            final Path timeCsv = DetectorPathManager.testTimeLog(mavenProject);
 
             if (Files.isReadable(timeCsv)) {
                 final double totalTime = readRealTime(timeCsv);
@@ -212,7 +212,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     private Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
-        Files.deleteIfExists(DetectorPathManager.errorPath(mavenProject.getBasedir()));
+        Files.deleteIfExists(DetectorPathManager.errorPath());
         Files.createDirectories(DetectorPathManager.cachePath(mavenProject.getBasedir()));
         Files.createDirectories(DetectorPathManager.detectionResults());
 
@@ -271,7 +271,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
         if (!tests.isEmpty()) {
             Files.createDirectories(outputPath);
-            Files.write(DetectorPathManager.originalOrderPath(mavenProject.getBasedir()), String.join(System.lineSeparator(), tests).getBytes());
+            Files.write(DetectorPathManager.originalOrderPath(), String.join(System.lineSeparator(), tests).getBytes());
             final Detector detector = DetectorFactory.makeDetector(this.runner, mavenProject.getBasedir(), tests, rounds);
             Logger.getGlobal().log(Level.INFO, "Created dependent test detector (" + detector.getClass() + ").");
             detector.writeTo(outputPath);
@@ -314,12 +314,12 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
             final MavenProject project,
             TestFramework testFramework,
             boolean ignoreExisting) throws IOException {
-        if (!Files.exists(DetectorPathManager.originalOrderPath(project.getBasedir())) || ignoreExisting) {
+        if (!Files.exists(DetectorPathManager.originalOrderPath()) || ignoreExisting) {
             Logger.getGlobal().log(Level.INFO, "Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
 
             try {
                 final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("surefire-reports");
-                final Path mvnTestLog = DetectorPathManager.mvnTestLog(project);
+                final Path mvnTestLog = DetectorPathManager.testLog(project);
                 if (Files.exists(mvnTestLog) && Files.exists(surefireReportsPath)) {
                     final List<TestClassData> testClassData = new GetMavenTestOrder(surefireReportsPath, mvnTestLog).testClassDataList();
 
@@ -341,7 +341,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             return locateTests(project, testFramework);
         } else {
-            return Files.readAllLines(DetectorPathManager.originalOrderPath(project.getBasedir()));
+            return Files.readAllLines(DetectorPathManager.originalOrderPath());
         }
     }
 

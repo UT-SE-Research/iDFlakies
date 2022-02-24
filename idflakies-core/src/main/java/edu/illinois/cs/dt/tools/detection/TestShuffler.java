@@ -97,7 +97,7 @@ public class TestShuffler {
             return reverseOrder();
         }
 
-        final Path historicalRun = DetectorPathManager.detectionRoundPath(baseDir, historicalType(), i);
+        final Path historicalRun = DetectorPathManager.detectionRoundPath(historicalType(), i);
 
         try {
             // look up whether a previous execution of the plugin generated orders for this round already

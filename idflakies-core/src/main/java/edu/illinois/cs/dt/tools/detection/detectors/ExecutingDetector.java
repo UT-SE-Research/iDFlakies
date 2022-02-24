@@ -120,7 +120,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         }
 
         private DetectionRound generateDetectionRound() {
-            final Path path = DetectorPathManager.detectionRoundPath(baseDir, name, absoluteRound.get());
+            final Path path = DetectorPathManager.detectionRoundPath(name, absoluteRound.get());
 
             // Load it if possible
 //            try {
