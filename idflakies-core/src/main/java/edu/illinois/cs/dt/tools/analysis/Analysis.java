@@ -6,12 +6,12 @@ import com.reedoei.eunomia.collections.ListEx;
 import com.reedoei.eunomia.io.files.FileUtil;
 import com.reedoei.eunomia.util.StandardMain;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.dt.tools.utility.TestRunParser;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
@@ -190,15 +190,15 @@ public class Analysis extends StandardMain {
         final String name = path.getFileName().toString();
         final String slug = parent.substring(0, parent.indexOf('_')).replace('.', '/');
 
-        insertModuleTestTime(slug, path.resolve(DetectorPathManager.DETECTION_RESULTS).resolve("module-test-time.csv"));
+        insertModuleTestTime(slug, path.resolve(PathManager.DETECTION_RESULTS).resolve("module-test-time.csv"));
 
         if (!sqlite.checkExists("subject", name)) {
             insertSubject(name, slug, path);
         }
 
-        final Path originalOrderPath = path.resolve(DetectorPathManager.ORIGINAL_ORDER);
+        final Path originalOrderPath = path.resolve(PathManager.ORIGINAL_ORDER);
         if (!Files.exists(originalOrderPath)) {
-            System.out.println("[WARNING] No original order found at " + path.resolve(DetectorPathManager.ORIGINAL_ORDER));
+            System.out.println("[WARNING] No original order found at " + path.resolve(PathManager.ORIGINAL_ORDER));
             return;
         }
 
@@ -250,8 +250,8 @@ public class Analysis extends StandardMain {
         if (!foundPassing) {
             System.out.println("[WARNING] SKIPPING: No passing order found for: " + name);
             for (final String detectorType : new String[] { "original", "random", "random-class", "reverse", "reverse-class"}) {
-                if (Files.isDirectory(path.resolve(DetectorPathManager.DETECTION_RESULTS).resolve(detectorType))) {
-                    System.out.println("[ERROR]: " + detectorType + " results for " + name + " at " + path.resolve(DetectorPathManager.DETECTION_RESULTS).resolve(detectorType));
+                if (Files.isDirectory(path.resolve(PathManager.DETECTION_RESULTS).resolve(detectorType))) {
+                    System.out.println("[ERROR]: " + detectorType + " results for " + name + " at " + path.resolve(PathManager.DETECTION_RESULTS).resolve(detectorType));
                 }
             }
             return;
@@ -261,20 +261,20 @@ public class Analysis extends StandardMain {
 
         insertTestRuns(name, path.resolve(RunnerPathManager.TEST_RUNS).resolve("results"));
 
-        insertDetectionResults(name, "original", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertDetectionResults(name, "random", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertDetectionResults(name, "random-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertDetectionResults(name, "reverse", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertDetectionResults(name, "reverse-class", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "original", path.resolve(PathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "random", path.resolve(PathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "random-class", path.resolve(PathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "reverse", path.resolve(PathManager.DETECTION_RESULTS));
+        insertDetectionResults(name, "reverse-class", path.resolve(PathManager.DETECTION_RESULTS));
 
-        insertVerificationResults(name, "random-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "random-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "reverse-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "reverse-class-verify", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "random-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "random-class-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "reverse-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
-        insertVerificationResults(name, "reverse-class-confirmation-sampling", path.resolve(DetectorPathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-verify", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-class-verify", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-verify", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-class-verify", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-confirmation-sampling", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "random-class-confirmation-sampling", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-confirmation-sampling", path.resolve(PathManager.DETECTION_RESULTS));
+        insertVerificationResults(name, "reverse-class-confirmation-sampling", path.resolve(PathManager.DETECTION_RESULTS));
 
 //        sqlite.save();
 
@@ -443,7 +443,7 @@ public class Analysis extends StandardMain {
                                        final Set<String> addedRounds,
                                        final Set<String> knownFlakyTests, final Path path) throws IOException {
         final Path results = path.resolve(RunnerPathManager.TEST_RUNS);
-        final Path originalOrderPath = path.resolve(DetectorPathManager.ORIGINAL_ORDER);
+        final Path originalOrderPath = path.resolve(PathManager.ORIGINAL_ORDER);
 
         if (!Files.exists(originalOrderPath)) {
             System.out.println("[WARNING] No original order for " + subjectName + " at " + originalOrderPath);

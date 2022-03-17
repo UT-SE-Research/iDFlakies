@@ -5,9 +5,10 @@ import com.google.common.base.Preconditions;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.PathManager;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 
-import org.apache.maven.project.MavenProject;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
+import edu.illinois.cs.testrunner.util.ProjectWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,24 +16,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MavenDetectorPathManager extends PathManager {
-
-    private MavenProject mavenProject;
-    
-    public MavenDetectorPathManager(MavenProject mavenProject){
-        this.mavenProject = mavenProject;
-    }
+public class LegacyDetectorPathManager extends PathManager {
     
     @Override
     public Path detectionResultsInstance() {
-        return pathInstance(DETECTION_RESULTS);
+        return path(DETECTION_RESULTS);
     }
 
     @Override
     public Path detectionFileInstance() {
-        //delete baseDir here, remove baseDir from the overwritten method
-        //look for all method references for both the static and instance versions of these,
-        //ISOLATE FOR ALL DETECTORPATHMANAGER AND SUBCLASSES OF <-
         return detectionResultsInstance().resolve(FLAKY_LIST_PATH);
     }
 
@@ -57,12 +49,12 @@ public class MavenDetectorPathManager extends PathManager {
 
     @Override
     public Path originalOrderPathInstance() {
-        return pathInstance(ORIGINAL_ORDER);
+        return path(ORIGINAL_ORDER);
     }
 
     @Override
     public Path errorPathInstance() {
-        return pathInstance(ERROR);
+        return path(ERROR);
     }
 
     @Override
@@ -97,22 +89,15 @@ public class MavenDetectorPathManager extends PathManager {
         }
     }
 
-    @Override
-    public Path pathInstance(final Path relative) {
-        Preconditions.checkState(!relative.isAbsolute(),
-                "PathManager.path(): Cache paths must be relative, not absolute (%s)", relative);
-
-        return cachePath().resolve(relative);
-    }
 
     @Override
     public Path modulePathInstance() {
-        return mavenProject.getBasedir().toPath();
+        return TestPluginUtil.project.getBasedir().toPath();
     }
 
     @Override
     protected Path parentPath() {   //get rid of mvnproj argument here use it according to plugin
-        return getMavenProjectParent(mavenProject).getBasedir().toPath();
+        return getProjectParent(TestPluginUtil.project).getBasedir().toPath();
     }
 
     @Override
@@ -123,15 +108,21 @@ public class MavenDetectorPathManager extends PathManager {
         return parentPath().resolve(relative);
     }
 
-    public static MavenProject getMavenProjectParent(MavenProject project) {
-        MavenProject parentProj = project;
+    @Override
+    public Path pathInstance(final Path relative) {
+        Preconditions.checkState(!relative.isAbsolute(),
+                "PathManager.path(): Cache paths must be relative, not absolute (%s)", relative);
+
+        return cachePath().resolve(relative);
+    }
+
+    public static ProjectWrapper getProjectParent(ProjectWrapper project) {
+        ProjectWrapper parentProj = project;
         while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
             parentProj = parentProj.getParent();
         }
         return parentProj;
-    }
+    }    
 
     
-
-
 }

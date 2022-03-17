@@ -13,51 +13,103 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class PathManager {
+public abstract class PathManager {
 
-    public static Path modulePath(final File baseDir) {
-        return baseDir.toPath();
+    private static PathManager instance;
+    
+    public static final Path DETECTION_RESULTS = Paths.get("detection-results");
+    public static final Path FLAKY_LIST_PATH = Paths.get("flaky-lists.json");
+    public static final Path ORIGINAL_ORDER = Paths.get("original-order");
+    public static final Path ERROR = Paths.get("error");
+    public static final Path ORIGINAL_RESULTS_LOG = Paths.get("original-results-ids");
+    public static final Path MVN_TEST_LOG = Paths.get("mvn-test.log");
+    public static final Path MVN_TEST_TIME_LOG = Paths.get("mvn-test-time.log");
+
+    public static PathManager getInstance() { return instance; }
+    
+    public static void setInstance(PathManager dm) { instance = dm; }
+    
+    public static Path detectionResults() {
+        return getInstance().detectionResultsInstance();
     }
 
-    private static MavenProject getMavenProjectParent(final MavenProject mavenProject) {
-        MavenProject parentProj = mavenProject;
-        while (parentProj.getParent() != null && parentProj.getParent().getBasedir() != null) {
-            parentProj = parentProj.getParent();
-        }
-        return parentProj;
+    public static Path detectionFile() {
+        return getInstance().detectionFileInstance();
     }
 
-    public static Path parentPath(final MavenProject mavenProject) {
-        return getMavenProjectParent(mavenProject).getBasedir().toPath();
+    public static Path pathWithRound(final Path path, final String testName, final int round) {
+        return getInstance().pathWithRoundInstance(path, testName, round);
     }
 
-    public static Path parentPath(final MavenProject mavenProject, final Path relative) {
-        Preconditions.checkState(!relative.isAbsolute(),
-                "PathManager.parentPath(): Cache paths must be relative, not absolute (%s)", relative);
-
-        return parentPath(mavenProject).resolve(relative);
+    public static Path detectionRoundPath(final String name, final int round) {
+        return getInstance().detectionRoundPathInstance(name, round);
     }
 
-    public static Path cachePath(final File baseDir) {
-        String outputPath = Configuration.config().properties().getProperty("dt.cache.absolute.path", "");
-        Logger.getGlobal().log(Level.INFO, "Accessing cachePath: " + outputPath);
-        if (outputPath == "") {
-            return modulePath(baseDir).resolve(".dtfixingtools");
-        } else {
-            Path outputPathObj = Paths.get(outputPath);
-            try {
-                Files.createDirectories(outputPathObj);
-            } catch (IOException e) {
-                Logger.getGlobal().log(Level.FINE, e.getMessage());
-            }
-            return outputPathObj.resolve(modulePath(baseDir).getFileName());
-        }
+    public static Path filterPath(final String detectorType, final String filterType, final int absoluteRound) {
+        return getInstance().filterPathInstance(detectorType, filterType, absoluteRound);
     }
 
-    public static Path path(final File baseDir, final Path relative) {
-        Preconditions.checkState(!relative.isAbsolute(),
-                "PathManager.path(): Cache paths must be relative, not absolute (%s)", relative);
-
-        return cachePath(baseDir).resolve(relative);
+    public static Path originalOrderPath() {
+        return getInstance().originalOrderPathInstance();
     }
+
+    public static Path errorPath() {
+        return getInstance().errorPathInstance();
+    }
+
+    public static Path originalResultsLog() {
+        return getInstance().originalResultsLogInstance();
+    }
+
+    public static Path testLog() {
+        return getInstance().testLogInstance();
+    }
+
+    public static Path testTimeLog() {
+        return getInstance().testTimeLogInstance();
+    }
+    
+    protected abstract Path detectionResultsInstance();
+
+    protected abstract Path detectionFileInstance();
+
+    protected abstract Path pathWithRoundInstance(final Path path, final String testName, final int round);
+
+    protected abstract Path detectionRoundPathInstance(final String name, final int round);
+
+    protected abstract Path filterPathInstance(final String detectorType, final String filterType, final int absoluteRound);
+
+    protected abstract Path originalOrderPathInstance();
+
+    protected abstract Path errorPathInstance();   //MAKE ALL THESE INSTANCE METHODS TO PROTECTED
+
+    protected abstract Path originalResultsLogInstance();
+
+    protected abstract Path testLogInstance();
+
+    protected abstract Path testTimeLogInstance();
+
+
+    public static Path modulePath() {
+	    return getInstance().modulePathInstance();
+    }
+
+    public static Path cachePath() {
+        return getInstance().cachePathInstance();
+    }
+
+    public static Path path(final Path relative) {
+        return getInstance().pathInstance(relative);
+    }
+
+    protected abstract Path parentPath();
+    
+    protected abstract Path parentPath(final Path relative);
+    
+    protected abstract Path cachePathInstance();
+    
+    protected abstract Path pathInstance(final Path relative);
+    
+    protected abstract Path modulePathInstance();
+    
 }

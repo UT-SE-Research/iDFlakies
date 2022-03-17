@@ -7,6 +7,7 @@ import com.reedoei.eunomia.util.StandardMain;
 import edu.illinois.cs.dt.tools.analysis.ResultDirVisitor;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
@@ -55,8 +56,8 @@ public class RebuildDetectionRounds extends StandardMain {
             System.out.println("[INFO] Rebuilding rounds in " + resultsFolder + " (" + i + " of " + allResultsFolders.size() + ")");
 
             final Path testRuns = resultsFolder.resolve(RunnerPathManager.TEST_RUNS);
-            final Path originalOrderPath = resultsFolder.resolve(DetectorPathManager.ORIGINAL_ORDER);
-            final Path detectionResults = resultsFolder.resolve(DetectorPathManager.DETECTION_RESULTS);
+            final Path originalOrderPath = resultsFolder.resolve(PathManager.ORIGINAL_ORDER);
+            final Path detectionResults = resultsFolder.resolve(PathManager.DETECTION_RESULTS);
 
             if (!Files.exists(originalOrderPath)) {
                 System.out.println("No original order found at: " + originalOrderPath);
@@ -111,7 +112,7 @@ public class RebuildDetectionRounds extends StandardMain {
             return newKnownFlaky;
         }
 
-        try (final Stream<Path> list = Files.list(resultsPath.resolve(DetectorPathManager.DETECTION_RESULTS).resolve(roundType))) {
+        try (final Stream<Path> list = Files.list(resultsPath.resolve(PathManager.DETECTION_RESULTS).resolve(roundType))) {
             final List<Path> roundPaths = list.collect(Collectors.toList());
 
             for (final Path roundPath : roundPaths) {

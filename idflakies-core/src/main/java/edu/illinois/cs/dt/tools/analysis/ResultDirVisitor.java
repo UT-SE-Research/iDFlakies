@@ -1,6 +1,6 @@
 package edu.illinois.cs.dt.tools.analysis;
 
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -31,7 +31,7 @@ public class ResultDirVisitor extends SimpleFileVisitor<Path> {
     }
 
     private boolean containsResultsFolders(final Path p) {
-        final Path detectionResults = p.resolve(DetectorPathManager.DETECTION_RESULTS);
+        final Path detectionResults = p.resolve(PathManager.DETECTION_RESULTS);
 
         final boolean containsResults = Files.exists(detectionResults) || Files.exists(p.resolve("error"));
 

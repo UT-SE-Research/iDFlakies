@@ -3,10 +3,10 @@ package edu.illinois.cs.dt.tools.detection.filters;
 import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestType;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class ConfirmationFilter implements Filter {
 
         // Load results from the directory if we can
         try {
-            Files.list(DetectorPathManager.detectionResults().resolve("flaky")).forEach(p -> {
+            Files.list(PathManager.detectionResults().resolve("flaky")).forEach(p -> {
                 try {
                     final DetectionRound round = new Gson().fromJson(FileUtil.readFile(p), DetectionRound.class);
 
@@ -103,6 +103,6 @@ public class ConfirmationFilter implements Filter {
     }
 
     private boolean verify(final String verifyType, final DependentTest dependentTest, final int absoluteRound) {
-        return dependentTest.verify(runner, DetectorPathManager.filterPath(detectorType, verifyType, absoluteRound));
+        return dependentTest.verify(runner, PathManager.filterPath(detectorType, verifyType, absoluteRound));
     }
 }

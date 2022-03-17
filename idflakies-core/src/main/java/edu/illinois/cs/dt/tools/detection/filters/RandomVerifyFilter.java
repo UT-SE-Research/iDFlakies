@@ -1,8 +1,8 @@
 package edu.illinois.cs.dt.tools.detection.filters;
 
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.detection.filters.Filter;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.runner.Runner;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class RandomVerifyFilter implements Filter {
     public boolean keep(final DependentTest dependentTest, final int absoluteRound) {
         // Only confirm in percentage% of the runs
         if (new Random().nextDouble() < percentage) {
-            return dependentTest.verify(runner, DetectorPathManager.filterPath(detectorType, "confirmation-sampling", absoluteRound));
+            return dependentTest.verify(runner, PathManager.filterPath(detectorType, "confirmation-sampling", absoluteRound));
         }
 
         return true;

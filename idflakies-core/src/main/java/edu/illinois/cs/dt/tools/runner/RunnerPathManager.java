@@ -13,11 +13,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class RunnerPathManager extends PathManager {
+public class RunnerPathManager {
     public static final Path TEST_RUNS = Paths.get("test-runs");
 
     public static Path testRuns(final File baseDir) {
-        return path(baseDir, TEST_RUNS);
+        return PathManager.path(TEST_RUNS);
     }
 
     public static Path outputPath(final File baseDir) {

@@ -11,6 +11,7 @@ import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
 import edu.illinois.cs.dt.tools.utility.MD5;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.dt.tools.utility.TestRunParser;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
@@ -81,7 +82,7 @@ public class DependentTestExtractor extends StandardMain {
     }
 
     private Path outputFilePath(final String subjectName) {
-        return outputPath.resolve(subjectName + "-" + DetectorPathManager.FLAKY_LIST_PATH.getFileName());
+        return outputPath.resolve(subjectName + "-" + PathManager.FLAKY_LIST_PATH.getFileName());
     }
 
     private Optional<String> readProjectName(final Path resultsFolder) {

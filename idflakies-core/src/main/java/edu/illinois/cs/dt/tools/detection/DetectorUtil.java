@@ -5,6 +5,7 @@ import edu.illinois.cs.dt.tools.runner.data.TestRun;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
@@ -35,8 +36,8 @@ public class DetectorUtil {
             origResult = runner.runList(originalOrder).get();
 
             try {
-                Files.write(DetectorPathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(),
-                        Files.exists(DetectorPathManager.originalResultsLog()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+                Files.write(PathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(),
+                        Files.exists(PathManager.originalResultsLog()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             } catch (IOException ignored) {}
 
             if (allPass(origResult)) {

@@ -9,6 +9,7 @@ import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.MD5;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
@@ -97,7 +98,7 @@ public class TestShuffler {
             return reverseOrder();
         }
 
-        final Path historicalRun = DetectorPathManager.detectionRoundPath(historicalType(), i);
+        final Path historicalRun = PathManager.detectionRoundPath(historicalType(), i);
 
         try {
             // look up whether a previous execution of the plugin generated orders for this round already

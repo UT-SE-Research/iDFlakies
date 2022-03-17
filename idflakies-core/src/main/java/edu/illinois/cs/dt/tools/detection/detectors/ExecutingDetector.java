@@ -6,11 +6,11 @@ import com.reedoei.eunomia.io.VerbosePrinter;
 import com.reedoei.eunomia.io.files.FileUtil;
 import com.reedoei.eunomia.string.StringUtil;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.filters.Filter;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
@@ -88,7 +88,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         FileUtil.makeDirectoryDestructive(dir);
 
         final Path listPath = dir.resolve("list.txt");
-        final Path dtListPath = dir.resolve(DetectorPathManager.FLAKY_LIST_PATH);
+        final Path dtListPath = dir.resolve(PathManager.FLAKY_LIST_PATH);
 
         final DependentTestList dtList = new DependentTestList(detect());
         System.out.println(); // End the progress line.
@@ -120,7 +120,7 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         }
 
         private DetectionRound generateDetectionRound() {
-            final Path path = DetectorPathManager.detectionRoundPath(name, absoluteRound.get());
+            final Path path = PathManager.detectionRoundPath(name, absoluteRound.get());
 
             // Load it if possible
 //            try {

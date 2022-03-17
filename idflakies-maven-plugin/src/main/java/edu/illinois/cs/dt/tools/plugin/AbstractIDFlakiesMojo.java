@@ -1,7 +1,7 @@
 package edu.illinois.cs.dt.tools.plugin;
 
 
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.dt.tools.detection.MavenDetectorPathManager;
 import edu.illinois.cs.testrunner.configuration.ConfigProps;
 import edu.illinois.cs.testrunner.configuration.Configuration;
@@ -78,7 +78,7 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
     }
 
     public void setConfigs(String propertiesPath) throws IOException {
-        DetectorPathManager.setInstance(new MavenDetectorPathManager(mavenProject));
+        PathManager.setInstance(new MavenDetectorPathManager(mavenProject));
 
         System.getProperties()
             .forEach((key, value) -> Configuration.config().properties().setProperty(key.toString(), value.toString()));

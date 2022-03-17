@@ -1,6 +1,6 @@
 package edu.illinois.cs.dt.tools.runner.data;
 
-import edu.illinois.cs.dt.tools.detection.DetectorPathManager;
+import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
@@ -54,7 +54,7 @@ public class TestRun {
             newResult = results.results().get(dt).result();
 
             if (path != null) {
-                final Path outputPath = DetectorPathManager.pathWithRound(path, dt + "-" + this.result, i);
+                final Path outputPath = PathManager.pathWithRound(path, dt + "-" + this.result, i);
                 Files.createDirectories(outputPath.getParent());
                 Files.write(outputPath, results.toString().getBytes());
             }
