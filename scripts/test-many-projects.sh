@@ -122,7 +122,7 @@ function checkFlakyTests() {
         #3. Modify pom file
 
         git checkout -f .
-        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
+        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 2.0.0-SNAPSHOT
 
 
 
