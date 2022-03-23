@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ARTIFACT_ID="idflakies"
+ARTIFACT_ID="idflakies-legacy"
 ARTIFACT_VERSION="1.1.0"
 
 if [[ $1 == "" ]]; then
