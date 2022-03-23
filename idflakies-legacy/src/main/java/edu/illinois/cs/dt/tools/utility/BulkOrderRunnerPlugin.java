@@ -1,6 +1,7 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import com.google.gson.Gson;
+import edu.illinois.cs.dt.tools.detection.LegacyDetectorPathManager;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
