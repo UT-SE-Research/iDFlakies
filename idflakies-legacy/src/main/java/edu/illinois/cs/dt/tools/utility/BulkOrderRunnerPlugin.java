@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class BulkOrderRunnerPlugin extends TestPlugin {
     @Override
     public void execute(final ProjectWrapper project) {
+        PathManager.setInstance(new LegacyDetectorPathManager());
         final ErrorLogger errorLogger = new ErrorLogger();
 
         final Option<Runner> runnerOption = RunnerFactory.from(project);
