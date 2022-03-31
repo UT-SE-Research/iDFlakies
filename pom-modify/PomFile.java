@@ -34,6 +34,7 @@ public class PomFile {
     private String srcDir;
     private String testDir;
     private String outputDir;
+    private static String CONFIGURATION_CLASS = "edu.illinois.cs.dt.tools.detection.DetectorPlugin";
     private static String ARTIFACT_GROUPID = "";
     private static String ARTIFACT_ID = "ifixflakies";
     private static String ARTIFACT_VERSION = "2.0.0-SNAPSHOT";
@@ -229,8 +230,27 @@ public class PomFile {
                         depVersion.setTextContent(ARTIFACT_VERSION);
                         dependency.appendChild(depVersion);
                     }
+                    
                     dependencies.appendChild(dependency);
                 }
+                {
+                    Node dependency = doc.createElement("dependency");
+                    {
+                        Node depGroupId = doc.createElement("groupId");
+                        depGroupId.setTextContent("edu.illinois.cs");
+                        dependency.appendChild(depGroupId);
+
+                        Node depArtifactId = doc.createElement("artifactId");
+                        depArtifactId.setTextContent("idflakies-core");
+                        dependency.appendChild(depArtifactId);
+
+                        Node depVersion = doc.createElement("version");
+                        depVersion.setTextContent(ARTIFACT_VERSION);
+                        dependency.appendChild(depVersion);
+                    }
+                    
+                    dependencies.appendChild(dependency);
+                }                
                 plugin.appendChild(dependencies);
             }
             {

@@ -5,7 +5,7 @@ if [[ ${1} == "" ]]; then
     exit
 fi
 
-if [[ ${2} == "" ]]; then
+if [[ ${2} != "idflakies-legacy" && ${2} != "idflakies-maven-plugin" ]]; then
     echo "Please provide the plugin we're testing. Options are idflakies-legacy (to run testrunner) and idflakies-maven-plugin."
     exit
 fi
