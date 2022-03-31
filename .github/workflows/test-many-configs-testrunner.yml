@@ -1,10 +1,10 @@
 
-name: auto-run-test-many-configs-script
+name: auto-run-test-many-configs-script-on-testrunner
 
 on: [push]
 
 jobs:
-  manyConfigsTest:
+  manyConfigsLegacyTest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
         run: mvn install -B
 
       - name: Test set of projects
-        run: set -o pipefail ; bash scripts/test-many-configs.sh scripts/testExpectations.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-configs.sh scripts/testExpectations.csv idflakies-legacy |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the ARTIFACTS folder
         if: always()

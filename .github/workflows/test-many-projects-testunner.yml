@@ -1,10 +1,10 @@
 
-name: auto-run-test-many-projects-script
+name: auto-run-test-many-projects-script-on-testrunner
 
 on: [push]
 
 jobs:
-  manyProjTest1:
+  manyProjLegacyTest1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
         run: mvn install -B
 
       - name: Test 1st set of projects
-        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects1.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects1.csv idflakies-legacy |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the ARTIFACTS folder
         if: always()
@@ -32,7 +32,7 @@ jobs:
          name: test-many-projects_ARTIFACT_1
          path: scripts/testing-script-results/ARTIFACTS
 
-  manyProjTest2:
+  manyProjLegacyTest2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
         run: mvn install -B
 
       - name: Test 2nd set of projects
-        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects2.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects2.csv idflakies-legacy |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the ARTIFACTS folder
         if: always()
@@ -60,7 +60,7 @@ jobs:
          name: test-many-projects_ARTIFACT_2
          path: scripts/testing-script-results/ARTIFACTS
 
-  manyProjTest3:
+  manyProjLegacyTest3:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -75,7 +75,7 @@ jobs:
         run: mvn install -B
 
       - name: Test 3rd set of projects
-        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects3.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects3.csv idflakies-legacy |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the ARTIFACTS folder
         if: always()
@@ -88,7 +88,7 @@ jobs:
          name: test-many-projects_ARTIFACT_3
          path: scripts/testing-script-results/ARTIFACTS
 
-  manyProjTest4:
+  manyProjLegacyTest4:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -103,7 +103,7 @@ jobs:
         run: mvn install -B
 
       - name: Test 4th set of projects
-        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects4.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-many-projects.sh scripts/idfProjects4.csv idflakies-legacy |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the ARTIFACTS folder
         if: always()

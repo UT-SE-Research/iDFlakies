@@ -7,12 +7,35 @@ if [[ ${1} == "" ]]; then
     exit
 fi
 
+if [[ ${2} == "" ]]; then
+    echo "Please provide the plugin we're testing. Options are idflakies-legacy (to run testrunner) and idflakies-maven-plugin."
+    exit
+fi
+
+
+#HARDCODE A GROUPID TO BE EDU.ILLI... and then use it in modify-proj call
+#pass in which to test via parameter TO THE SCRIPT as to whether were testing legacy or testing mvnplugin - this changes the testrunner:test / idfl:det
+
+
+
+
+
 
 #0. File management/defining all helper functions
 
 flag=0  #Global flag designed to represent the overall status of the whole build when running on CI
 scriptDir=$(cd $(dirname $0); pwd)
 csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
+ARTIFACT_GROUPID="edu.illinois.cs"
+ARTIFACT_ID=$2
+ARTIFACT_VERSION="2.0.0-SNAPSHOT"
+mvnCommand=""
+if [[ ${ARTIFACT_ID} == "idflakies-legacy" ]]; then
+    mvnCommand="testrunner:testplugin"
+elif [[ ${ARTIFACT_ID} == "idflakies-maven-plugin" ]]; then
+    mvnCommand="idflakies:detect"
+fi
+
 cd ${scriptDir}
 
 if [[ ! -f ${csvFile} ]]; then
@@ -249,7 +272,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
         #3. Modify pom file
 
         git checkout -f .
-        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 2.0.0-SNAPSHOT
+        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} ${ARTIFACT_GROUPID} ${ARTIFACT_ID} ${ARTIFACT_VERSION}
 
 
 
@@ -295,7 +318,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 1: Simply test if the timeout configuration is working. Not testing accuracy here since it has proven to be nondeterministic
-            set -o pipefail ; mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}random-class-method ${MVNOPTIONS} ${PL} |& tee -a ${projectDirectory}/test1.log
+            set -o pipefail ; mvn ${mvnCommand} ${time}120 ${ogOrderPass}true ${detType}random-class-method ${MVNOPTIONS} ${PL} |& tee -a ${projectDirectory}/test1.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -307,7 +330,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 2: Most standard test: random-class-method with 8 rounds
-            set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test2.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test2.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -322,7 +345,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 3: Test originalOrderPass being set to false
-            set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test3.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test3.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -336,7 +359,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 4: Try random-class determinant type as well as the verifyRounds function
-            set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test4.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}12 ${ogOrderPass}true ${detType}random-class ${verRounds}2 ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test4.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -348,7 +371,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 5: Try the countFirstFail config
-            set -o pipefail ; mvn testrunner:testplugin ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test5.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}8 ${ogOrderPass}true ${detType}random-class-method ${countFirstFail}true ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test5.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -360,7 +383,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 6: Try the reverse determinant type. Make sure only 1 round of tests is run despite rounds being specified
-            mvn testrunner:testplugin ${rounds}3 ${ogOrderPass}true ${detType}reverse ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test6.log
+            mvn ${mvnCommand} ${rounds}3 ${ogOrderPass}true ${detType}reverse ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test6.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -372,7 +395,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 7: Try the reverse-class determinant type. Test the priority of configurations by throwing in a timeout as well, which should be ignored
-            set -o pipefail ; mvn testrunner:testplugin ${time}120 ${ogOrderPass}true ${detType}reverse-class ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test7.log
+            set -o pipefail ; mvn ${mvnCommand} ${time}120 ${ogOrderPass}true ${detType}reverse-class ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test7.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -384,7 +407,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 8: Try setting round semantics to be true, where there should be exactly as many rounds as specified. No more, no less
-            set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${semantics}true ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test8.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}12 ${semantics}true ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test8.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
@@ -397,7 +420,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
 
             #Test 9: Make sure we can always output test results to a set directory if necessary via absPath config
-            set -o pipefail ; mvn testrunner:testplugin ${rounds}12 ${absPath}/tmp/pathTest ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test9.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}12 ${absPath}/tmp/pathTest ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test9.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1

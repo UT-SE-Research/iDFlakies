@@ -34,8 +34,10 @@ public class PomFile {
     private String srcDir;
     private String testDir;
     private String outputDir;
+    private static String ARTIFACT_GROUPID = "";
     private static String ARTIFACT_ID = "ifixflakies";
     private static String ARTIFACT_VERSION = "2.0.0-SNAPSHOT";
+    private static int flag;  // For now, let 0 indicate testrunnerPlugin and 1 indicate mavenPlugin
 
     public PomFile(String pom) {
         this.pom = pom;
@@ -163,7 +165,10 @@ public class PomFile {
                 build.appendChild(plugins);
             }
 
-            addPlugin(plugins, doc);
+            if(flag==0)
+                addTestrunnerPlugin(plugins,doc);
+            else if(flag==1)
+                addMavenPlugin(plugins,doc);
 
             // Construct string representation of the file
             TransformerFactory tf = TransformerFactory.newInstance();
@@ -189,7 +194,60 @@ public class PomFile {
         }
     }
 
-    private void addPlugin(Node plugins, Document doc) {
+    private void addTestrunnerPlugin(Node plugins, Document doc) {
+        {
+            Node plugin = doc.createElement("plugin");
+            {
+                Node groupId = doc.createElement("groupId");
+                groupId.setTextContent("edu.illinois.cs");
+                plugin.appendChild(groupId);
+            }
+            {
+                Node artifactId = doc.createElement("artifactId");
+                artifactId.setTextContent("testrunner-maven-plugin");
+                plugin.appendChild(artifactId);
+            }
+            {
+                Node version = doc.createElement("version");
+                version.setTextContent("1.2.1");
+                plugin.appendChild(version);
+            }
+            {
+                Node dependencies = doc.createElement("dependencies");
+                {
+                    Node dependency = doc.createElement("dependency");
+                    {
+                        Node depGroupId = doc.createElement("groupId");
+                        depGroupId.setTextContent("edu.illinois.cs");
+                        dependency.appendChild(depGroupId);
+
+                        Node depArtifactId = doc.createElement("artifactId");
+                        depArtifactId.setTextContent(ARTIFACT_ID);
+                        dependency.appendChild(depArtifactId);
+
+                        Node depVersion = doc.createElement("version");
+                        depVersion.setTextContent(ARTIFACT_VERSION);
+                        dependency.appendChild(depVersion);
+                    }
+                    dependencies.appendChild(dependency);
+                }
+                plugin.appendChild(dependencies);
+            }
+            {
+                Node configuration = doc.createElement("configuration");
+                {
+                    Node className = doc.createElement("className");
+                    className.setTextContent(CONFIGURATION_CLASS);
+                    configuration.appendChild(className);
+                }
+                plugin.appendChild(configuration);
+            }
+            plugins.appendChild(plugin);
+        }
+    }
+            
+
+    private void addMavenPlugin(Node plugins, Document doc) {
         {
             Node plugin = doc.createElement("plugin");
             {
@@ -220,8 +278,14 @@ public class PomFile {
             System.out.println("Usage: java PomFile <artifact_id> <artifact_version>");
         }
 
-        ARTIFACT_ID = args[0];
-        ARTIFACT_VERSION = args[1];
+        ARTIFACT_GROUPID = args[0];
+        ARTIFACT_ID = args[1];
+        ARTIFACT_VERSION = args[2];
+
+        if(ARTIFACT_ID.equals("idflakies-legacy"))
+            flag = 0;
+        else if(ARTIFACT_ID.equals("idflakies-maven-plugin"))
+            flag = 1;
 
         InputStreamReader isReader = new InputStreamReader(System.in);
         BufferedReader bufReader = new BufferedReader(isReader);
