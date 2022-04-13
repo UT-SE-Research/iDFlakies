@@ -1,27 +1,22 @@
 #!/bin/bash
 
-ARTIFACT_GROUPID="edu.illinois.cs"
-ARTIFACT_ID="idflakies-legacy"
-ARTIFACT_VERSION="1.1.0"
+ARTIFACT_ID="idflakies-maven-plugin"
+ARTIFACT_VERSION="2.0.0-SNAPSHOT"
 
 if [[ $1 == "" ]]; then
     echo "arg1 - the path to the project, where high-level pom.xml is"
-    echo "arg2 - (Optional) Custom groupID for the artifact (e.g., edu.illinois.cs). Default is $ARTIFACT_GROUPID"
-    echo "arg3 - (Optional) Preferred ID for the artifact. Current options are idflakies-legacy and idflakies-maven-plugin. Default is $ARTIFACT_ID"
-    echo "arg4 - (Optional) Custom version for the artifact (e.g., 1.1.0, 1.2.0-SNAPSHOT). Default is $ARTIFACT_VERSION"
+    echo "arg2 - (Optional) Preferred ID for the artifact. Current options are idflakies-legacy and idflakies-maven-plugin. Default is $ARTIFACT_ID"
+    echo "arg3 - (Optional) Custom version for the artifact (e.g., 1.1.0, 1.2.0-SNAPSHOT). Default is $ARTIFACT_VERSION"
     exit
 fi
 
+
 if [[ ! $2 == "" ]]; then
-    ARTIFACT_GROUPID=$2
+    ARTIFACT_ID=$2
 fi
 
 if [[ ! $3 == "" ]]; then
-    ARTIFACT_ID=$3
-fi
-
-if [[ ! $4 == "" ]]; then
-    ARTIFACT_VERSION=$4
+    ARTIFACT_VERSION=$3
 fi
 
 crnt=`pwd`
@@ -35,7 +30,7 @@ cd - > /dev/null
 cd ${working_dir}
 
 javac PomFile.java
-find ${project_path} -name pom.xml | grep -v "src/" | java PomFile ${ARTIFACT_GROUPID} ${ARTIFACT_ID} ${ARTIFACT_VERSION}
+find ${project_path} -name pom.xml | grep -v "src/" | java PomFile ${ARTIFACT_ID} ${ARTIFACT_VERSION}
 rm -f PomFile.class
 
 cd ${crnt}

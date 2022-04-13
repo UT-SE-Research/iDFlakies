@@ -21,6 +21,7 @@ slug=$1
 rounds=$2
 timeout=$3
 
+iDFlakiesArtifactID="idflakies-maven-plugin"
 iDFlakiesVersion=2.0.0-SNAPSHOT
 
 # Setup prolog stuff
@@ -29,7 +30,7 @@ cd "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/"
 
 # Incorporate tooling into the project, using Java XML parsing
 cd "/home/$SCRIPT_USERNAME/${slug}"
-/home/$SCRIPT_USERNAME/$TOOL_REPO/pom-modify/modify-project.sh . $iDFlakiesVersion
+/home/$SCRIPT_USERNAME/$TOOL_REPO/pom-modify/modify-project.sh . $iDFlakiesArtifactID $iDFlakiesVersion
 
 # Run the plugin, get module test times
 echo "*******************iDFLAKIES************************"

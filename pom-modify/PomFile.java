@@ -296,13 +296,12 @@ public class PomFile {
     }
 
     public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Usage: java PomFile <artifact_groupID> <artifact_ID> <artifact_version>");
+        if (args.length != 2) {
+            System.out.println("Usage: java PomFile <artifact_ID> <artifact_version>");
         }
 
-        ARTIFACT_GROUPID = args[0];
-        ARTIFACT_ID = args[1];
-        ARTIFACT_VERSION = args[2];
+        ARTIFACT_ID = args[0];
+        ARTIFACT_VERSION = args[1];
 
         if (ARTIFACT_ID.equals("idflakies-legacy")) {
             flag = 0;

@@ -22,7 +22,6 @@ fi
 flag=0  #Global flag designed to represent the overall status of the whole build when running on CI
 scriptDir=$(cd $(dirname $0); pwd)
 csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
-ARTIFACT_GROUPID="edu.illinois.cs"
 ARTIFACT_ID=$2
 ARTIFACT_VERSION="2.0.0-SNAPSHOT"
 mvnCommand=""
@@ -268,7 +267,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
         #3. Modify pom file
 
         git checkout -f .
-        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} ${ARTIFACT_GROUPID} ${ARTIFACT_ID} ${ARTIFACT_VERSION}
+        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} ${ARTIFACT_ID} ${ARTIFACT_VERSION}
 
 
 
