@@ -95,7 +95,6 @@ public abstract class AbstractIDFlakiesMojo extends AbstractMojo {
         try {
             setConfigs(propertiesPath);
         } catch (IOException ignored) {}
-        //setDefaults(Configuration.config());        TODO: see if this alters tests.
     }
 
 }

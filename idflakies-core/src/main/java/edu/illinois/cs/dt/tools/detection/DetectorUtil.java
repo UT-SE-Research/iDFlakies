@@ -11,7 +11,6 @@ import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -22,7 +21,7 @@ import java.util.stream.Stream;
 
 public class DetectorUtil {
 
-    public static TestRunResult originalResults(final File baseDir, final List<String> originalOrder, final Runner runner) {
+    public static TestRunResult originalResults(final List<String> originalOrder, final Runner runner) {
         final int originalOrderTries = Configuration.config().getProperty("dt.detector.original_order.retry_count", 3);
         final boolean allMustPass = Configuration.config().getProperty("dt.detector.original_order.all_must_pass", true);
 

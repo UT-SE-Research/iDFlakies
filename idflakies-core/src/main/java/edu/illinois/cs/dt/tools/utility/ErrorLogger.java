@@ -25,7 +25,7 @@ public class ErrorLogger {
                         try {
                             System.out.println("COPY_FAILING_TEST_OUTPUT: " + path.toAbsolutePath());
 
-                            final Path dest = PathManager.cachePath().resolve(path.getFileName()); //we will get rid of project.getbasedir here
+                            final Path dest = PathManager.cachePath().resolve(path.getFileName());
 
                             if (Files.exists(dest)) {
                                 Files.copy(path, PathManager.cachePath().resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);

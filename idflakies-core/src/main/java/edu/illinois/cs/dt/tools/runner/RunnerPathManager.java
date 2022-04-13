@@ -6,7 +6,6 @@ import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,37 +15,37 @@ import java.util.stream.Stream;
 public class RunnerPathManager {
     public static final Path TEST_RUNS = Paths.get("test-runs");
 
-    public static Path testRuns(final File baseDir) {
+    public static Path testRuns() {
         return PathManager.path(TEST_RUNS);
     }
 
-    public static Path outputPath(final File baseDir) {
-        return testRuns(baseDir).resolve("output");
+    public static Path outputPath() {
+        return testRuns().resolve("output");
     }
 
-    public static Path outputPath(final File baseDir, final String id) {
-        return outputPath(baseDir).resolve(id);
+    public static Path outputPath(final String id) {
+        return outputPath().resolve(id);
     }
 
-    public static Path outputPath(final File baseDir, final TestRunResult run) {
-        return outputPath(baseDir, run.id());
+    public static Path outputPath(final TestRunResult run) {
+        return outputPath(run.id());
     }
 
-    public static Path resultsPath(final File baseDir) {
-        return testRuns(baseDir).resolve("results");
+    public static Path resultsPath() {
+        return testRuns().resolve("results");
     }
 
-    public static Path resultsPath(final File baseDir, final String id) {
-        return resultsPath(baseDir).resolve(id);
+    public static Path resultsPath(final String id) {
+        return resultsPath().resolve(id);
     }
 
-    public static Path resultsPath(final File baseDir, final TestRunResult run) {
-        return resultsPath(baseDir, run.id());
+    public static Path resultsPath(final TestRunResult run) {
+        return resultsPath(run.id());
     }
 
-    public static void outputResult(final Path tempOutput, final File baseDir, final TestRunResult testRunResult) throws Exception {
-        final Path outputPath = outputPath(baseDir, testRunResult);
-        final Path resultPath = resultsPath(baseDir, testRunResult);
+    public static void outputResult(final Path tempOutput, final TestRunResult testRunResult) throws Exception {
+        final Path outputPath = outputPath(testRunResult);
+        final Path resultPath = resultsPath(testRunResult);
 
         Files.createDirectories(outputPath.getParent());
         Files.move(tempOutput, outputPath);
@@ -55,13 +54,13 @@ public class RunnerPathManager {
         Files.write(resultPath, testRunResult.toString().getBytes());
     }
 
-    public static void clearTestRuns(final File baseDir) throws IOException {
-        FileUtils.deleteDirectory(testRuns(baseDir).toFile());
+    public static void clearTestRuns() throws IOException {
+        FileUtils.deleteDirectory(testRuns().toFile());
     }
 
-    public static Stream<TestRunResult> resultFor(final File baseDir, final String trKey) {
+    public static Stream<TestRunResult> resultFor(final String trKey) {
         try {
-            return Stream.of(new Gson().fromJson(FileUtil.readFile(resultsPath(baseDir, trKey)), TestRunResult.class));
+            return Stream.of(new Gson().fromJson(FileUtil.readFile(resultsPath(trKey)), TestRunResult.class));
         } catch (IOException ignored) {}
 
         return Stream.empty();

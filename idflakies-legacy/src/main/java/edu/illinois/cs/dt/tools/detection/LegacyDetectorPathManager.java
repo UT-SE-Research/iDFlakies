@@ -20,12 +20,12 @@ public class LegacyDetectorPathManager extends PathManager {
     
     @Override
     public Path detectionResultsInstance() {
-        return path(DETECTION_RESULTS);
+        return pathInstance(PathManager.DETECTION_RESULTS);
     }
 
     @Override
     public Path detectionFileInstance() {
-        return detectionResultsInstance().resolve(FLAKY_LIST_PATH);
+        return detectionResultsInstance().resolve(PathManager.FLAKY_LIST_PATH);
     }
 
     @Override
@@ -49,27 +49,27 @@ public class LegacyDetectorPathManager extends PathManager {
 
     @Override
     public Path originalOrderPathInstance() {
-        return path(ORIGINAL_ORDER);
+        return pathInstance(PathManager.ORIGINAL_ORDER);
     }
 
     @Override
     public Path errorPathInstance() {
-        return path(ERROR);
+        return pathInstance(PathManager.ERROR);
     }
 
     @Override
     public Path originalResultsLogInstance() {
-        return detectionResultsInstance().resolve(ORIGINAL_RESULTS_LOG);
+        return detectionResultsInstance().resolve(PathManager.ORIGINAL_RESULTS_LOG);
     }
 
     @Override
     public Path testLogInstance() {
-        return parentPath(MVN_TEST_LOG);
+        return parentPath(PathManager.MVN_TEST_LOG);
     }
 
     @Override
     public Path testTimeLogInstance() {
-        return parentPath(MVN_TEST_TIME_LOG);
+        return parentPath(PathManager.MVN_TEST_TIME_LOG);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class LegacyDetectorPathManager extends PathManager {
     }
 
     @Override
-    protected Path parentPath() {   //get rid of mvnproj argument here use it according to plugin
+    protected Path parentPath() {
         return getProjectParent(TestPluginUtil.project).getBasedir().toPath();
     }
 
@@ -113,7 +113,7 @@ public class LegacyDetectorPathManager extends PathManager {
         Preconditions.checkState(!relative.isAbsolute(),
                 "PathManager.path(): Cache paths must be relative, not absolute (%s)", relative);
 
-        return cachePath().resolve(relative);
+        return cachePathInstance().resolve(relative);
     }
 
     public static ProjectWrapper getProjectParent(ProjectWrapper project) {

@@ -2,6 +2,7 @@ package edu.illinois.cs.dt.tools.utility;
 
 import com.google.gson.Gson;
 import com.reedoei.eunomia.io.files.FileUtil;
+import edu.illinois.cs.dt.tools.detection.LegacyDetectorPathManager;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.coreplugin.TestPlugin;
@@ -23,6 +24,7 @@ public class ReplayPlugin extends TestPlugin {
 
     @Override
     public void execute(final ProjectWrapper project) {
+        PathManager.setInstance(new LegacyDetectorPathManager());
         final Option<Runner> runnerOption = RunnerFactory.from(project);
 
         if (runnerOption.isDefined()) {

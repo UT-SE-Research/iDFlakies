@@ -24,9 +24,9 @@ public class SmartShuffleDetector extends ExecutingDetector {
 
         this.originalOrder = tests;
         this.shuffler = new SmartShuffler(tests);
-        this.originalResults = DetectorUtil.originalResults(baseDir, originalOrder, runner);
+        this.originalResults = DetectorUtil.originalResults(originalOrder, runner);
 
-        addFilter(new ConfirmationFilter(type, tests, baseDir, runner));
+        addFilter(new ConfirmationFilter(type, tests, runner));
         addFilter(new UniqueFilter());
     }
 

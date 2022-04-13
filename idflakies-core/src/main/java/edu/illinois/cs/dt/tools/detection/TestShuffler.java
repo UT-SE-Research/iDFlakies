@@ -126,7 +126,7 @@ public class TestShuffler {
         final DetectionRound detectionRound = new Gson().fromJson(FileUtil.readFile(historicalRun), DetectionRound.class);
 
         return detectionRound.testRunIds().stream()
-                .flatMap(n -> RunnerPathManager.resultFor(baseDir, n))
+                .flatMap(n -> RunnerPathManager.resultFor(n))
                 .findFirst()
                 .map(TestRunResult::testOrder)
                 .orElse(new ArrayList<>());

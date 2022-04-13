@@ -8,7 +8,6 @@ import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestType;
 import edu.illinois.cs.dt.tools.utility.PathManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -23,15 +22,12 @@ public class ConfirmationFilter implements Filter {
     private final Set<String> knownFlaky;
     private final Set<String> knownDep;
     private final String detectorType;
-    private final File baseDir;
     private final InstrumentingSmartRunner runner;
 
     public ConfirmationFilter(final String detectorType,
                               final List<String> tests,
-                              final File baseDir,
                               final InstrumentingSmartRunner runner) {
         this.detectorType = detectorType;
-        this.baseDir = baseDir;
         this.runner = runner;
         this.knownFlaky = new HashSet<>();
         knownDep = new HashSet<>();

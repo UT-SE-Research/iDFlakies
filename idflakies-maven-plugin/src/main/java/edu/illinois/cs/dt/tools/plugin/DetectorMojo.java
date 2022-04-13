@@ -277,19 +277,17 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         return null;
     }
 
-    private static List<String> locateTests(MavenProject project,
-					    TestFramework testFramework) {
+    private static List<String> locateTests(MavenProject project, TestFramework testFramework) {
         int id = Objects.hash(project, testFramework);
         if (!locateTestList.containsKey(id)) {
             Logger.getGlobal().log(Level.INFO, "Locating tests...");
             try {
-		        locateTestList.put(id,
-				           OperationTime.runOperation(() -> {
-				               return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
-				           }, (tests, time) -> {
-                               Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
-					           return tests;
-				           }));
+		        locateTestList.put(id, OperationTime.runOperation(() -> {
+                    return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
+                }, (tests, time) -> {
+                    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
+                    return tests;
+                }));
 	        } catch (Exception e) {
                 throw new RuntimeException(e);
 	        }

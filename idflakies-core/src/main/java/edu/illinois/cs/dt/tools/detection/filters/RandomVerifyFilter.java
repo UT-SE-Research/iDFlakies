@@ -5,19 +5,16 @@ import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.runner.Runner;
 
-import java.io.File;
 import java.util.Random;
 
 public class RandomVerifyFilter implements Filter {
     private final double percentage;
     private final String detectorType;
-    private final File baseDir;
     private final Runner runner;
 
-    public RandomVerifyFilter(final double percentage, final String detectorType, final File baseDir, final Runner runner) {
+    public RandomVerifyFilter(final double percentage, final String detectorType, final Runner runner) {
         this.percentage = percentage;
         this.detectorType = detectorType;
-        this.baseDir = baseDir;
         this.runner = runner;
     }
 

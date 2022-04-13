@@ -35,8 +35,8 @@ public class PomFile {
     private String testDir;
     private String outputDir;
     private static String CONFIGURATION_CLASS = "edu.illinois.cs.dt.tools.detection.DetectorPlugin";
-    private static String ARTIFACT_GROUPID = "";
-    private static String ARTIFACT_ID = "ifixflakies";
+    private static String ARTIFACT_GROUPID = "edu.illinois.cs";
+    private static String ARTIFACT_ID = "idflakies-legacy";
     private static String ARTIFACT_VERSION = "2.0.0-SNAPSHOT";
     private static int flag;  // For now, let 0 indicate testrunnerPlugin and 1 indicate mavenPlugin
 
@@ -166,10 +166,12 @@ public class PomFile {
                 build.appendChild(plugins);
             }
 
-            if(flag==0)
-                addTestrunnerPlugin(plugins,doc);
-            else if(flag==1)
-                addMavenPlugin(plugins,doc);
+            if (flag==0) {
+                addTestrunnerPlugin(plugins, doc);
+            }
+            else if (flag==1) {
+                addMavenPlugin(plugins, doc);
+            }
 
             // Construct string representation of the file
             TransformerFactory tf = TransformerFactory.newInstance();
@@ -294,18 +296,20 @@ public class PomFile {
     }
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: java PomFile <artifact_id> <artifact_version>");
+        if (args.length != 3) {
+            System.out.println("Usage: java PomFile <artifact_groupID> <artifact_ID> <artifact_version>");
         }
 
         ARTIFACT_GROUPID = args[0];
         ARTIFACT_ID = args[1];
         ARTIFACT_VERSION = args[2];
 
-        if(ARTIFACT_ID.equals("idflakies-legacy"))
+        if (ARTIFACT_ID.equals("idflakies-legacy")) {
             flag = 0;
-        else if(ARTIFACT_ID.equals("idflakies-maven-plugin"))
+        }
+        else if (ARTIFACT_ID.equals("idflakies-maven-plugin")) {
             flag = 1;
+        }
 
         InputStreamReader isReader = new InputStreamReader(System.in);
         BufferedReader bufReader = new BufferedReader(isReader);

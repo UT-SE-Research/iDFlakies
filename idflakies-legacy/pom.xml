@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>iDFlakies Legacy</name>
-    <description>Legacy idflakies</description>
+    <description>Legacy iDFlakies</description>
 
     <developers>
         <developer>
@@ -62,7 +62,6 @@
         <dependency>
             <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-core-plugin</artifactId>
-            <version>1.2.1</version>
         </dependency>
     </dependencies>
 </project>

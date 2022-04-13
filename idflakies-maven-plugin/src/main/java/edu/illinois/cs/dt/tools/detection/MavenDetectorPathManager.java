@@ -25,15 +25,12 @@ public class MavenDetectorPathManager extends PathManager {
     
     @Override
     public Path detectionResultsInstance() {
-        return pathInstance(DETECTION_RESULTS);
+        return pathInstance(PathManager.DETECTION_RESULTS);
     }
 
     @Override
     public Path detectionFileInstance() {
-        //delete baseDir here, remove baseDir from the overwritten method
-        //look for all method references for both the static and instance versions of these,
-        //ISOLATE FOR ALL DETECTORPATHMANAGER AND SUBCLASSES OF <-
-        return detectionResultsInstance().resolve(FLAKY_LIST_PATH);
+        return detectionResultsInstance().resolve(PathManager.FLAKY_LIST_PATH);
     }
 
     @Override
@@ -57,27 +54,27 @@ public class MavenDetectorPathManager extends PathManager {
 
     @Override
     public Path originalOrderPathInstance() {
-        return pathInstance(ORIGINAL_ORDER);
+        return pathInstance(PathManager.ORIGINAL_ORDER);
     }
 
     @Override
     public Path errorPathInstance() {
-        return pathInstance(ERROR);
+        return pathInstance(PathManager.ERROR);
     }
 
     @Override
     public Path originalResultsLogInstance() {
-        return detectionResultsInstance().resolve(ORIGINAL_RESULTS_LOG);
+        return detectionResultsInstance().resolve(PathManager.ORIGINAL_RESULTS_LOG);
     }
 
     @Override
     public Path testLogInstance() {
-        return parentPath(MVN_TEST_LOG);
+        return parentPath(PathManager.MVN_TEST_LOG);
     }
 
     @Override
     public Path testTimeLogInstance() {
-        return parentPath(MVN_TEST_TIME_LOG);
+        return parentPath(PathManager.MVN_TEST_TIME_LOG);
     }
 
     @Override
@@ -102,7 +99,7 @@ public class MavenDetectorPathManager extends PathManager {
         Preconditions.checkState(!relative.isAbsolute(),
                 "PathManager.path(): Cache paths must be relative, not absolute (%s)", relative);
 
-        return cachePath().resolve(relative);
+        return cachePathInstance().resolve(relative);
     }
 
     @Override
@@ -111,7 +108,7 @@ public class MavenDetectorPathManager extends PathManager {
     }
 
     @Override
-    protected Path parentPath() {   //get rid of mvnproj argument here use it according to plugin
+    protected Path parentPath() {
         return getMavenProjectParent(mavenProject).getBasedir().toPath();
     }
 
@@ -130,8 +127,5 @@ public class MavenDetectorPathManager extends PathManager {
         }
         return parentProj;
     }
-
-    
-
 
 }

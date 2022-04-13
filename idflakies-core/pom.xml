@@ -61,10 +61,6 @@
             <groupId>edu.illinois.cs</groupId>
             <artifactId>testrunner-running</artifactId>
         </dependency>
-<!--        <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-invoker</artifactId>
-        </dependency> -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>

@@ -12,9 +12,6 @@ if [[ ${2} != "idflakies-legacy" && ${2} != "idflakies-maven-plugin" ]]; then
     exit
 fi
 
-#HARDCODE A GROUPID TO BE EDU.ILLI... and then use it in modify-proj call
-#pass in which to test via parameter TO THE SCRIPT as to whether were testing legacy or testing mvnplugin - this changes the testrunner:test / idfl:det
-
 
 
 
@@ -382,7 +379,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 6: Try the reverse determinant type. Make sure only 1 round of tests is run despite rounds being specified
-            mvn ${mvnCommand} ${rounds}3 ${ogOrderPass}true ${detType}reverse ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test6.log
+            set -o pipefail ; mvn ${mvnCommand} ${rounds}3 ${ogOrderPass}true ${detType}reverse ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test6.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1

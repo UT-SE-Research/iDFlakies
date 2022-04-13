@@ -26,7 +26,7 @@ public class OriginalDetector extends ExecutingDetector {
         super(runner, baseDir, rounds, "original");
 
         this.tests = tests;
-        this.origResult = DetectorUtil.originalResults(baseDir, tests, runner);
+        this.origResult = DetectorUtil.originalResults(tests, runner);
 
         addFilter(new UniqueFilter());
     }

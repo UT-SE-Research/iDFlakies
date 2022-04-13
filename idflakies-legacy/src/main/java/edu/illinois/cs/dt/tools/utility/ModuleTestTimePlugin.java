@@ -25,7 +25,7 @@ public class ModuleTestTimePlugin extends TestPlugin {
 
     @Override
     public void execute(final ProjectWrapper project) {
-        PathManager.setInstance(new LegacyDetectorPathManager()); //repeat for the other plugins 
+        PathManager.setInstance(new LegacyDetectorPathManager());
         this.coordinates = project.getGroupId() + ":" + project.getArtifactId() + ":" + project.getVersion();
 
         final Path surefireReportsPath = Paths.get(project.getBuildDirectory()).resolve("surefire-reports");

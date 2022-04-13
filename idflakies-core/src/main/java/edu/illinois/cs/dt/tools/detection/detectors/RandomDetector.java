@@ -26,13 +26,13 @@ public class RandomDetector extends ExecutingDetector {
         this.tests = tests;
 
         this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);
-        this.origResult = DetectorUtil.originalResults(baseDir, tests, runner);
+        this.origResult = DetectorUtil.originalResults(tests, runner);
 
         // Filters to be applied in order
         if (runner instanceof InstrumentingSmartRunner) {
-            addFilter(new ConfirmationFilter(name, tests, baseDir, (InstrumentingSmartRunner) runner));
+            addFilter(new ConfirmationFilter(name, tests, (InstrumentingSmartRunner) runner));
         } else {
-            addFilter(new ConfirmationFilter(name, tests, baseDir, InstrumentingSmartRunner.fromRunner(runner, baseDir)));
+            addFilter(new ConfirmationFilter(name, tests, InstrumentingSmartRunner.fromRunner(runner, baseDir)));
         }
 
         addFilter(new UniqueFilter());

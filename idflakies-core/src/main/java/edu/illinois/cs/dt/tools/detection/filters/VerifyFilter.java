@@ -5,18 +5,15 @@ import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.runner.Runner;
 
-import java.io.File;
 
 public class VerifyFilter implements Filter {
     private static final boolean VERIFY_DTS = Configuration.config().getProperty("dt.verify", true);
     private final String detectorType;
     private final Runner runner;
-    private final File baseDir;
 
-    public VerifyFilter(final String detectorType, final Runner runner, final File baseDir) {
+    public VerifyFilter(final String detectorType, final Runner runner) {
         this.detectorType = detectorType;
         this.runner = runner;
-        this.baseDir = baseDir;
     }
 
     @Override

@@ -3,9 +3,8 @@
 ARTIFACT_GROUPID="edu.illinois.cs"
 ARTIFACT_ID="idflakies-legacy"
 ARTIFACT_VERSION="1.1.0"
-#flag=0    isnt this unnecessary since the plugin u want to add is contained within the artifact_id ?
 
-if [[ $1 == "" ]]; then   #add arg3 and arg4 accordingly
+if [[ $1 == "" ]]; then
     echo "arg1 - the path to the project, where high-level pom.xml is"
     echo "arg2 - (Optional) Custom groupID for the artifact (e.g., edu.illinois.cs). Default is $ARTIFACT_GROUPID"
     echo "arg3 - (Optional) Preferred ID for the artifact. Current options are idflakies-legacy and idflakies-maven-plugin. Default is $ARTIFACT_ID"

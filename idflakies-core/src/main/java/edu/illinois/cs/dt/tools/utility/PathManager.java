@@ -69,6 +69,18 @@ public abstract class PathManager {
         return getInstance().testTimeLogInstance();
     }
     
+    public static Path modulePath() {
+	    return getInstance().modulePathInstance();
+    }
+
+    public static Path cachePath() {
+        return getInstance().cachePathInstance();
+    }
+
+    public static Path path(final Path relative) {
+        return getInstance().pathInstance(relative);
+    }
+
     protected abstract Path detectionResultsInstance();
 
     protected abstract Path detectionFileInstance();
@@ -81,26 +93,13 @@ public abstract class PathManager {
 
     protected abstract Path originalOrderPathInstance();
 
-    protected abstract Path errorPathInstance();   //MAKE ALL THESE INSTANCE METHODS TO PROTECTED
+    protected abstract Path errorPathInstance();
 
     protected abstract Path originalResultsLogInstance();
 
     protected abstract Path testLogInstance();
 
     protected abstract Path testTimeLogInstance();
-
-
-    public static Path modulePath() {
-	    return getInstance().modulePathInstance();
-    }
-
-    public static Path cachePath() {
-        return getInstance().cachePathInstance();
-    }
-
-    public static Path path(final Path relative) {
-        return getInstance().pathInstance(relative);
-    }
 
     protected abstract Path parentPath();
     

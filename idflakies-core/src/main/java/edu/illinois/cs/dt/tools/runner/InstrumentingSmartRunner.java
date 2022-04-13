@@ -58,7 +58,7 @@ public class InstrumentingSmartRunner extends SmartRunner {
                 final Try<TestRunResult> testRunResultTry = super.runWithCp(cp, testOrder);
 
                 if (testRunResultTry.isSuccess()) {
-                    RunnerPathManager.outputResult(outputPath, baseDir, testRunResultTry.get());
+                    RunnerPathManager.outputResult(outputPath, testRunResultTry.get());
                 }
 
                 return testRunResultTry;

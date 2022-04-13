@@ -57,7 +57,7 @@ public class DetectorPlugin extends TestPlugin {
     }
 
     public DetectorPlugin(final Path outputPath, final InstrumentingSmartRunner runner) {
-        // same as above
+        PathManager.setInstance(new LegacyDetectorPathManager());
         this.outputPath = outputPath;
         this.runner = runner;
     }
