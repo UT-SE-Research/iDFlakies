@@ -48,9 +48,11 @@ public class InstrumentingSmartRunner extends SmartRunner {
 
     @Override
     public Try<TestRunResult> runWithCp(final String cp, final Stream<String> testOrder) {
-        // Save stdout,stderr, and run result to a file
-        final Try<Try<TestRunResult>> result = TempFiles.withTempFile(outputPath -> {
             try {
+                Path outputPath = null;
+                    File tmp = File.createTempFile("temp", ".tmp");
+                    String pathstr = tmp.getAbsolutePath();
+                    outputPath = Paths.get(pathstr);
                 writeTo(outputPath);
 
                 final Try<TestRunResult> testRunResultTry = super.runWithCp(cp, testOrder);
@@ -58,14 +60,11 @@ public class InstrumentingSmartRunner extends SmartRunner {
                 if (testRunResultTry.isSuccess()) {
                     RunnerPathManager.outputResult(outputPath, testRunResultTry.get());
                 }
-
+                tmp.deleteOnExit();
                 return testRunResultTry;
             } catch (Exception e){
                 return new Failure<>(e);
             }
-        });
-
-        return result.get();
     }
 
     private void writeTo(final Path outputPath) {
