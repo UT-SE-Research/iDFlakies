@@ -198,7 +198,7 @@ public class Analysis extends StandardMain {
 
         final Path originalOrderPath = path.resolve(PathManager.ORIGINAL_ORDER);
         if (!Files.exists(originalOrderPath)) {
-            System.out.println("[WARNING] No original order found at " + path.resolve(PathManager.ORIGINAL_ORDER));
+            System.out.println("[WARNING] No original order found at " + originalOrderPath);
             return;
         }
 

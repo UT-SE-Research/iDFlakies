@@ -54,7 +54,15 @@ public class MavenDetectorPathManager extends PathManager {
 
     @Override
     public Path originalOrderPathInstance() {
-        return pathInstance(PathManager.ORIGINAL_ORDER);
+	String originalOrderPath = Configuration.config().properties().getProperty("dt.original.order", "");
+	Path originalOrderPathObj;
+        if (originalOrderPath == "") {
+	    originalOrderPathObj = pathInstance(PathManager.ORIGINAL_ORDER);
+        } else {
+            originalOrderPathObj = Paths.get(originalOrderPath);
+        }
+	Logger.getGlobal().log(Level.INFO, "Using original order in path: " + originalOrderPathObj);
+	return originalOrderPathObj;
     }
 
     @Override
@@ -80,7 +88,7 @@ public class MavenDetectorPathManager extends PathManager {
     @Override
     public Path cachePathInstance() {
         String outputPath = Configuration.config().properties().getProperty("dt.cache.absolute.path", "");
-        Logger.getGlobal().log(Level.INFO, "Accessing cachePath: " + outputPath);
+        Logger.getGlobal().log(Level.FINE, "Accessing cachePath: " + outputPath);
         if (outputPath == "") {
             return modulePath().resolve(".dtfixingtools");
         } else {
