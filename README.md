@@ -64,7 +64,7 @@ iDFlakies configuration options:
 * ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf). Default is ```random``` (random-class-method).
 * ```dt.randomize.rounds``` - Number of times to run the test suite. Default is ```20```.
 * ```dt.detector.original_order.all_must_pass``` - Controls whether iDFlakies must use an original order of tests where all of them pass or not. Default is ```true``` (i.e., iDFlakies will exit if within three runs of the test suite, it does observe all tests to pass in one of the runs).
-
+* ```dt.original.order``` - Enables one to specify to iDFlakies the exact list of tests that should be run. Test names should be fully-qualified and use only ```.``` as separators (e.g., ```com.github.kevinsawicki.http.EncodeTest.encode```). This option is unlikely to be useful when running multiple modules at once and is best suited for running the tests of a specific module. Absolute paths should be used or the file path should be relative to the module that contains the tests.
 
 ## Running iDFlakies framework
 
