@@ -66,6 +66,7 @@ done
 
 # rm -rf temp-subject
 
+cd idflakies-core
 mvn install -DskipTests exec:java \
     -Dexec.mainClass="edu.illinois.cs.dt.tools.analysis.Analysis" \
     -Dexec.args="--results '$results_folder' --db '$database' --subjectList '$subject_list' --subjectListLoc '$subject_list_loc'"

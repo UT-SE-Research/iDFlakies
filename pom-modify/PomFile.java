@@ -34,9 +34,11 @@ public class PomFile {
     private String srcDir;
     private String testDir;
     private String outputDir;
-    private static String ARTIFACT_ID = "ifixflakies";
-    private static String CONFIGURATION_CLASS = "edu.illinois.cs.dt.tools.fixer.CleanerFixerPlugin";
-    private static String ARTIFACT_VERSION = "1.0.0-SNAPSHOT";
+    private static String CONFIGURATION_CLASS = "edu.illinois.cs.dt.tools.detection.DetectorPlugin";
+    private static String ARTIFACT_GROUPID = "edu.illinois.cs";
+    private static String ARTIFACT_ID = "idflakies-legacy";
+    private static String ARTIFACT_VERSION = "2.0.0-SNAPSHOT";
+    private static int flag;  // For now, let 0 indicate testrunnerPlugin and 1 indicate mavenPlugin
 
     public PomFile(String pom) {
         this.pom = pom;
@@ -164,7 +166,12 @@ public class PomFile {
                 build.appendChild(plugins);
             }
 
-            addPlugin(plugins, doc);
+            if (flag==0) {
+                addTestrunnerPlugin(plugins, doc);
+            }
+            else if (flag==1) {
+                addMavenPlugin(plugins, doc);
+            }
 
             // Construct string representation of the file
             TransformerFactory tf = TransformerFactory.newInstance();
@@ -190,7 +197,7 @@ public class PomFile {
         }
     }
 
-    private void addPlugin(Node plugins, Document doc) {
+    private void addTestrunnerPlugin(Node plugins, Document doc) {
         {
             Node plugin = doc.createElement("plugin");
             {
@@ -225,8 +232,27 @@ public class PomFile {
                         depVersion.setTextContent(ARTIFACT_VERSION);
                         dependency.appendChild(depVersion);
                     }
+                    
                     dependencies.appendChild(dependency);
                 }
+                {
+                    Node dependency = doc.createElement("dependency");
+                    {
+                        Node depGroupId = doc.createElement("groupId");
+                        depGroupId.setTextContent("edu.illinois.cs");
+                        dependency.appendChild(depGroupId);
+
+                        Node depArtifactId = doc.createElement("artifactId");
+                        depArtifactId.setTextContent("idflakies-core");
+                        dependency.appendChild(depArtifactId);
+
+                        Node depVersion = doc.createElement("version");
+                        depVersion.setTextContent(ARTIFACT_VERSION);
+                        dependency.appendChild(depVersion);
+                    }
+                    
+                    dependencies.appendChild(dependency);
+                }                
                 plugin.appendChild(dependencies);
             }
             {
@@ -241,19 +267,48 @@ public class PomFile {
             plugins.appendChild(plugin);
         }
     }
+            
+
+    private void addMavenPlugin(Node plugins, Document doc) {
+        {
+            Node plugin = doc.createElement("plugin");
+            {
+                Node groupId = doc.createElement("groupId");
+                groupId.setTextContent("edu.illinois.cs");
+                plugin.appendChild(groupId);
+            }
+            {
+                Node artifactId = doc.createElement("artifactId");
+                artifactId.setTextContent("idflakies-maven-plugin");
+                plugin.appendChild(artifactId);
+            }
+            {
+                Node version = doc.createElement("version");
+                version.setTextContent(ARTIFACT_VERSION);
+                plugin.appendChild(version);
+            }
+            plugins.appendChild(plugin);
+        }
+    }
 
     private String getArtifactId() {
         return this.artifactId;
     }
 
     public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Usage: java PomFile <artifact_id> <artifact_version> <configuration_class_name>");
+        if (args.length != 2) {
+            System.out.println("Usage: java PomFile <artifact_ID> <artifact_version>");
         }
 
         ARTIFACT_ID = args[0];
         ARTIFACT_VERSION = args[1];
-        CONFIGURATION_CLASS  = args[2];
+
+        if (ARTIFACT_ID.equals("idflakies-legacy")) {
+            flag = 0;
+        }
+        else if (ARTIFACT_ID.equals("idflakies-maven-plugin")) {
+            flag = 1;
+        }
 
         InputStreamReader isReader = new InputStreamReader(System.in);
         BufferedReader bufReader = new BufferedReader(isReader);

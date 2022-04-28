@@ -5,10 +5,25 @@ if [[ ${1} == "" ]]; then
     exit
 fi
 
+if [[ ${2} != "idflakies-legacy" && ${2} != "idflakies-maven-plugin" ]]; then
+    echo "Please provide the plugin we're testing. Options are idflakies-legacy (to run testrunner) and idflakies-maven-plugin."
+    exit
+fi
+
+
 
 flag=0    #Global flag designed to represent the status of the overall status of the whole build when running on a CI
 scriptDir=$(cd $(dirname $0); pwd)
 csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
+ARTIFACT_ID=$2
+ARTIFACT_VERSION="2.0.0-SNAPSHOT"
+mvnCommand=""
+if [[ ${ARTIFACT_ID} == "idflakies-legacy" ]]; then
+    mvnCommand="testrunner:testplugin"
+elif [[ ${ARTIFACT_ID} == "idflakies-maven-plugin" ]]; then
+    mvnCommand="idflakies:detect"
+fi
+
 cd ${scriptDir}
 
 if [[ ! -f ${csvFile} ]]; then
@@ -122,8 +137,7 @@ function checkFlakyTests() {
         #3. Modify pom file
 
         git checkout -f .
-        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} 1.2.0-SNAPSHOT
-
+        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} ${ARTIFACT_ID} ${ARTIFACT_VERSION}
 
 
 
@@ -154,7 +168,7 @@ function checkFlakyTests() {
 
             #5. Using a preset original order, run the default test for each
             setOriginalOrder ${starr[4]} ${MODULE}
-            mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
+            mvn ${mvnCommand} -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1

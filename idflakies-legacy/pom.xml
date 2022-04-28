@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>edu.illinois.cs</groupId>
+        <artifactId>idflakies</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>idflakies-legacy</artifactId>
+    <packaging>jar</packaging>
+
+    <name>iDFlakies Legacy</name>
+    <description>Legacy iDFlakies</description>
+
+    <developers>
+        <developer>
+            <name>Wing Lam</name>
+            <email>winglam2@illinois.edu</email>
+        </developer>
+        <developer>
+            <name>Reed Oei</name>
+            <email>reedoei2@illinois.edu</email>
+        </developer>
+        <developer>
+            <name>August Shi</name>
+            <email>awshi2@illinois.edu</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>University of Illinois/NCSA Open Source License</name>
+            <url>https://opensource.org/licenses/NCSA</url>
+        </license>
+    </licenses>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.illinois.cs</groupId>
+            <artifactId>idflakies-core</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs</groupId>
+            <artifactId>testrunner-core-plugin</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+

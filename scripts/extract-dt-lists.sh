@@ -20,7 +20,7 @@ if [[ ! "$output_folder" =~ "$/" ]]; then
 fi
 
 # Go to where the pom is
-cd "$scripts_folder/.."
+cd "$scripts_folder/../idflakies-core"
 
 mvn install -DskipTests exec:java -Dexec.mainClass="edu.illinois.cs.dt.tools.detection.DependentTestExtractor" \
     -Dexec.args="--results '$detection_results' --output '$output_folder'"

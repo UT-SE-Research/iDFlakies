@@ -29,7 +29,7 @@ By default, modify-project.sh will use the version of iDFlakies from Maven Centr
 the version of iDFlakies built locally, you can run the following instead. 
 
 ```shell
-bash pom-modify/modify-project.sh path_to_maven_project 1.2.0-SNAPSHOT
+bash pom-modify/modify-project.sh path_to_maven_project 2.0.0-SNAPSHOT
 ```
 
 ### Manually setting up the pom.xml for iDFlakies
@@ -45,21 +45,8 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
         ...
         <plugin>
             <groupId>edu.illinois.cs</groupId>
-            <artifactId>testrunner-maven-plugin</artifactId>
-            <version>1.2</version>
-            <dependencies>
-                <dependency>
-                    <groupId>edu.illinois.cs</groupId>
-                    <artifactId>idflakies</artifactId>
-                    <!-- Use iDFlakies from Maven Central -->
-                    <version>1.1.0</version>
-                    <!-- Use the following version instead if you build iDFlakies locally and want to use the locally built version. -->
-                    <!-- <version>1.2.0-SNAPSHOT</version> -->
-                </dependency>
-            </dependencies>
-            <configuration>
-                <className>edu.illinois.cs.dt.tools.detection.DetectorPlugin</className>
-            </configuration>
+            <artifactId>idflakies-maven-plugin</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
         </plugin>
     </plugins>
 </build>
@@ -70,14 +57,14 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
 Once iDFlakies is added to a Maven project, one can then run iDFlakies on the project with the following command.
 
 ```shell
-mvn testrunner:testplugin -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
+mvn idflakies:detect -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
 ```
 
 iDFlakies configuration options:
 * ```detector.detector_type``` - Configurations of iDFlakies as described on pages 3 and 4 of our [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf). Default is ```random``` (random-class-method).
 * ```dt.randomize.rounds``` - Number of times to run the test suite. Default is ```20```.
 * ```dt.detector.original_order.all_must_pass``` - Controls whether iDFlakies must use an original order of tests where all of them pass or not. Default is ```true``` (i.e., iDFlakies will exit if within three runs of the test suite, it does observe all tests to pass in one of the runs).
-
+* ```dt.original.order``` - Enables one to specify to iDFlakies the exact list of tests that should be run. Test names should be fully-qualified, use only ```.``` to separate different parts of the test name (e.g., ```com.github.kevinsawicki.http.EncodeTest.encode```), and test names are separated from each other by line breaks. This option is unlikely to be useful when running multiple modules at once and is best suited for running the tests of a specific module. Absolute paths should be used or the file path should be relative to the module that contains the tests.
 
 ## Running iDFlakies framework
 

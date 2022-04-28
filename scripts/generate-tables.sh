@@ -10,7 +10,7 @@ if [[ ! "$database" =~ "$/" ]]; then
 fi
 
 # Go to where the pom is
-cd "$scripts_folder/.."
+cd "$scripts_folder/../idflakies-core"
 
 mvn install -DskipTests exec:java -Dexec.mainClass="edu.illinois.cs.dt.tools.detection.analysis.TableGenerator" -Dexec.args="--db '$database'"
 
