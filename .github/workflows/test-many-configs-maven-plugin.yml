@@ -1,7 +1,7 @@
 
 name: auto-run-test-many-configs-script-on-maven-plugin
 
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
   manyConfigsMavenPluginTest:
