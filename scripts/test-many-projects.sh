@@ -16,7 +16,7 @@ flag=0    #Global flag designed to represent the status of the overall status of
 scriptDir=$(cd $(dirname $0); pwd)
 csvFile=$(cd $(dirname $1); pwd)/$(basename $1)
 ARTIFACT_ID=$2
-ARTIFACT_VERSION="2.0.0-SNAPSHOT"
+ARTIFACT_VERSION="2.0.1-SNAPSHOT"
 mvnCommand=""
 if [[ ${ARTIFACT_ID} == "idflakies-legacy" ]]; then
     mvnCommand="testrunner:testplugin"

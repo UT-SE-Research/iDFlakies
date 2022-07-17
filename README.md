@@ -29,7 +29,7 @@ By default, modify-project.sh will use the version of iDFlakies from Maven Centr
 the version of iDFlakies built locally, you can run the following instead. 
 
 ```shell
-bash pom-modify/modify-project.sh path_to_maven_project 2.0.0-SNAPSHOT
+bash pom-modify/modify-project.sh path_to_maven_project 2.0.1-SNAPSHOT
 ```
 
 ### Manually setting up the pom.xml for iDFlakies
@@ -46,7 +46,7 @@ in [Automatically setting up the pom.xml for iDFlakies](#automatically-setting-u
         <plugin>
             <groupId>edu.illinois.cs</groupId>
             <artifactId>idflakies-maven-plugin</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.0.1-SNAPSHOT</version>
         </plugin>
     </plugins>
 </build>

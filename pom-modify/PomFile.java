@@ -37,7 +37,7 @@ public class PomFile {
     private static String CONFIGURATION_CLASS = "edu.illinois.cs.dt.tools.detection.DetectorPlugin";
     private static String ARTIFACT_GROUPID = "edu.illinois.cs";
     private static String ARTIFACT_ID = "idflakies-legacy";
-    private static String ARTIFACT_VERSION = "2.0.0-SNAPSHOT";
+    private static String ARTIFACT_VERSION = "2.0.1-SNAPSHOT";
     private static int flag;  // For now, let 0 indicate testrunnerPlugin and 1 indicate mavenPlugin
 
     public PomFile(String pom) {
