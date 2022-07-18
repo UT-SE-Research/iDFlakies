@@ -66,6 +66,12 @@ public class MavenDetectorPathManager extends PathManager {
     }
 
     @Override
+    public Path selectedTestPathInstance() { return pathInstance(PathManager.SELECTED_TESTS); }
+
+    @Override
+    public Path timePathInstance() { return pathInstance(PathManager.TIME); }
+
+    @Override
     public Path errorPathInstance() {
         return pathInstance(PathManager.ERROR);
     }
@@ -99,6 +105,30 @@ public class MavenDetectorPathManager extends PathManager {
                 Logger.getGlobal().log(Level.FINE, e.getMessage());
             }
             return outputPathObj.resolve(modulePath().getFileName());
+        }
+    }
+
+    @Override
+    public Path startsPathInstance() {
+        String outputPath = Configuration.config().properties().getProperty("dt.incdetector.startspath", "");
+        Logger.getGlobal().log(Level.FINE, "Accessing relative startspath: " + outputPath);
+        if (outputPath == "") {
+            return modulePath().resolve(".starts");
+        } else {
+            // access relative paths; in case of multi-module projects
+            return modulePath().resolve(outputPath);
+        }
+    }
+
+    @Override
+    public Path ekstaziPathInstance() {
+        String outputPath = Configuration.config().properties().getProperty("dt.incdetector.ekstazipath", "");
+        Logger.getGlobal().log(Level.FINE, "Accessing relative ekstazipath: " + outputPath);
+        if (outputPath == "") {
+            return modulePath().resolve(".ekstazi");
+        } else {
+            // access relative paths; in case of multi-module projects
+            return modulePath().resolve(outputPath);
         }
     }
 

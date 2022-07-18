@@ -20,10 +20,8 @@ import edu.illinois.cs.testrunner.runner.Runner;
 import edu.illinois.cs.testrunner.runner.RunnerFactory;
 import edu.illinois.cs.testrunner.testobjects.TestLocator;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
@@ -37,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,9 +48,9 @@ import java.util.function.Predicate;
 @Mojo(name = "detect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class DetectorMojo extends AbstractIDFlakiesMojo {
 
-    private Path outputPath;
-    private String coordinates;
-    private InstrumentingSmartRunner runner;
+    protected Path outputPath;
+    protected String coordinates;
+    protected InstrumentingSmartRunner runner;
     private static Map<Integer, List<String>> locateTestList = new HashMap<>();
     // useful for modules with JUnit 4 tests but depend on something in JUnit 5
     private final boolean forceJUnit4 = Configuration.config().getProperty("dt.detector.forceJUnit4", false);
@@ -195,20 +194,35 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
     @Override
     public void execute() {
-        super.execute();
+        superExecute();
         this.outputPath = PathManager.detectionResults();
 
         final ErrorLogger logger = new ErrorLogger();
         this.coordinates = mavenProject.getGroupId() + ":" + mavenProject.getArtifactId() + ":" + mavenProject.getVersion();
 
+        long startTime = System.currentTimeMillis();
+        try {
+            defineSettings(logger, mavenProject);
+            loadTestRunners(logger, mavenProject);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         logger.runAndLogError(() -> detectorExecute(logger, mavenProject, moduleRounds(coordinates)));
+        timing(startTime);
     }
 
-    private Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
+    protected void superExecute() {
+        super.execute();
+    }
+
+    protected void defineSettings(final ErrorLogger logger, final MavenProject mavenProject) throws IOException {
         Files.deleteIfExists(PathManager.errorPath());
+        Files.deleteIfExists(PathManager.timePath());
         Files.createDirectories(PathManager.cachePath());
         Files.createDirectories(PathManager.detectionResults());
+    }
 
+    protected void loadTestRunners(final ErrorLogger logger, final MavenProject mavenProject) throws IOException {
         // Currently there could two runners, one for JUnit 4 and one for JUnit 5
         // If the maven project has both JUnit 4 and JUnit 5 tests, two runners will
         // be returned
@@ -237,7 +251,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                     }
                     Logger.getGlobal().log(Level.INFO, errorMsg);
                     logger.writeError(errorMsg);
-                    return null;
+                    return;
                 }
             } else {
                 String errorMsg;
@@ -253,18 +267,28 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                 }
                 Logger.getGlobal().log(Level.INFO, errorMsg);
                 logger.writeError(errorMsg);
-                return null;
+                return;
             }
         }
 
         if (this.runner == null) {
             this.runner = InstrumentingSmartRunner.fromRunner(runners.get(0), mavenProject.getBasedir());
         }
-        final List<String> tests = getOriginalOrder(mavenProject, this.runner.framework());
+    }
+
+    protected List<String> getTests(
+            final MavenProject project,
+            TestFramework testFramework) throws IOException {
+        return getOriginalOrder(project, testFramework);
+    }
+
+    protected Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
+        final List<String> tests = getTests(mavenProject, this.runner.framework());
 
         if (!tests.isEmpty()) {
             Files.createDirectories(outputPath);
-            Files.write(PathManager.originalOrderPath(), String.join(System.lineSeparator(), tests).getBytes());
+            Files.write(PathManager.originalOrderPath(), String.join(System.lineSeparator(), getOriginalOrder(mavenProject, this.runner.framework(), true)).getBytes());
+            Files.write(PathManager.selectedTestPath(), String.join(System.lineSeparator(), tests).getBytes());
             final Detector detector = DetectorFactory.makeDetector(this.runner, mavenProject.getBasedir(), tests, rounds);
             Logger.getGlobal().log(Level.INFO, "Created dependent test detector (" + detector.getClass() + ").");
             detector.writeTo(outputPath);
@@ -349,5 +373,25 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
             }
         }
         return aliveRunners;
+    }
+
+    public static void timing(long startTime) {
+        if (!Files.exists(PathManager.timePath())) {
+            try {
+                Files.createFile(PathManager.timePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        double duration = (endTime - startTime) / 1000.0;
+
+        String time = duration + ",";
+        try {
+            Files.write(PathManager.timePath(), time.getBytes(),
+                    StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
