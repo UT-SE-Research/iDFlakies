@@ -340,7 +340,7 @@ function checkTimeout() {        #Checks whether the timeout detector type works
 
             setOriginalOrder ${starr[4]} ${MODULE}
             #Test 3: Test originalOrderPass being set to false
-            set -o pipefail ; mvn ${mvnCommand} ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test3.log
+            set -o pipefail ; mvn ${mvnCommand} ${semantics}false ${rounds}12 ${ogOrderPass}false ${detType}random-class-method ${MVNOPTIONS} ${PL} &> ${projectDirectory}/test3.log
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
                 flag=1
