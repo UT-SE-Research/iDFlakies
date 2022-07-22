@@ -10,6 +10,7 @@ import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
@@ -193,5 +194,36 @@ public class TestShuffler {
                 return accum;
             }
         }
+    }
+
+    public List<String> tuscanOrder(int count) {
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        Collections.sort(classes);
+        System.out.println(count);
+        Tuscan t = new Tuscan();
+        t.main(classes.size());
+        int[][] res = t.getMatrix();
+        int nn = res.length;
+        List<String> fullTestOrder = new ArrayList<String>();
+        List<String> permClasses = new ArrayList<String>();
+        for (int i = 0; i < nn; i++) {
+            permClasses.add(classes.get(res[count][i]));
+        }
+
+        for (String className : permClasses) {
+            fullTestOrder.addAll(classToMethods.get(className));
+        }
+        count++;
+        return fullTestOrder;
+    }
+
+    public List<String> alphabeticalOrder() {
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        Collections.sort(classes);
+        final List<String> fullTestOrder = new ArrayList<>();
+        for (String className : classes) {
+            fullTestOrder.addAll(classToMethods.get(className));
+        }
+        return fullTestOrder;
     }
 }
