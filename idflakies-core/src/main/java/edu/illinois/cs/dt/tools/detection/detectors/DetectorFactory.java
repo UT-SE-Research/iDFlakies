@@ -38,6 +38,9 @@ public class DetectorFactory {
             return new SmartShuffleDetector(runner, baseDir, rounds, tests, detectorType());
         }  else if (detectorType().equals("tuscan")){
             int n = getClassesSize(tests);
+            if(n == 3 || n == 5) {
+                return new TuscanDetector(runner, baseDir, rounds > (n+1) ? (n+1) : rounds, detectorType(), tests);
+            }
             return new TuscanDetector(runner, baseDir, rounds > n ? n : rounds, detectorType(), tests);
         } else if (detectorType().equals("alphabetical")) {
             return new AlphabeticalDetector(runner, baseDir, rounds, detectorType(), tests);

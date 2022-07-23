@@ -4,11 +4,13 @@ import scala.annotation.meta.getter;
 
 public class Tuscan {
     public void main(int arg) {
-        int n = arg;
-        if (n == 3 || n == 5) {
-            throw new RuntimeException("Impossible to solve for n=3 or n=5.");
+        if (arg == 3) {
+            generateThree();
+        } else if (arg == 5) {
+            generateFive();
+        } else {
+            generateTuscanSquare(arg);
         }
-        generateTuscanSquare(n);
     }
     static int[][] r;
     static void helper(int[] a, int i) {
@@ -115,13 +117,33 @@ public class Tuscan {
 		System.arraycopy(t, 0, r[i], 0, n);
             }
         }
+    }
+    static void generateThree() {
+        int[][] t = {
+                { 0, 1, 2 },
+                { 1, 0, 2 },
+                { 2, 0 },
+                { 2, 1 }
+        };
+        r = new int[4][];
+        for (int k = 0; k < 4; k++) {
+            r[k] = t[k].clone();
+        }
+    }
 
-    //     for (int i = 0; i < nn; i++){
-	//     System.out.print("[");
-	//     for (int j = 0; j < nn; j++)
-    //    		System.out.print((r[i][j]+ (j==nn-1?"":", ")));
-	//     System.out.println("]");
-	// }
+    static void generateFive() {
+        int[][] t = {
+                { 0, 1, 2, 3, 4 },
+                { 1, 0, 3, 2, 4 },
+                { 4, 3, 0, 2, 1 },
+                { 1, 4, 2, 0 },
+                { 0, 4, 1, 3 },
+                { 4, 0, 3, 1 }
+        };
+        r = new int[6][];
+        for (int k = 0; k < 6; k++) {
+            r[k] = t[k].clone();
+        }
     }
 
     public int[][] getMatrix(){
