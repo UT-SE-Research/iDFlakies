@@ -45,6 +45,7 @@ public class DetectorFactory {
         } else if (detectorType().equals("alphabetical")) {
             return new AlphabeticalDetector(runner, baseDir, rounds, detectorType(), tests);
         }
+        
         return new RandomDetector("random", baseDir, runner, rounds, tests);
     }
 }
