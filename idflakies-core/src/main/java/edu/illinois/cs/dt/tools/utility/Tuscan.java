@@ -1,7 +1,5 @@
 package edu.illinois.cs.dt.tools.utility;
 
-import scala.annotation.meta.getter;
-
 public class Tuscan {
     public static int[][] generateTuscanPermutations(int arg) {
         if (arg == 3) {
@@ -159,7 +157,4 @@ public class Tuscan {
         };
         r = t;
     }
-    // public int[][] getMatrix(){
-    //     return r;
-    // }
 }

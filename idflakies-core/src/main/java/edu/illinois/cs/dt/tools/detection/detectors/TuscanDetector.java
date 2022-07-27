@@ -35,11 +35,11 @@ public class TuscanDetector extends ExecutingDetector {
     public TuscanDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
         super(runner, baseDir, rounds, type);
         int n = getClassesSize(tests);
-            if (n == 3 || n == 5) {
-                if(this.rounds > n) this.rounds = n + 1;
-            } else {
-               if(this.rounds > n) this.rounds = n;
-            }
+        if (n == 3 || n == 5) {
+            if(this.rounds > n) this.rounds = n + 1;
+        } else {
+            if(this.rounds > n) this.rounds = n;
+        }
         this.tests = tests;
         this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);
         this.origResult = DetectorUtil.originalResults(tests, runner);
