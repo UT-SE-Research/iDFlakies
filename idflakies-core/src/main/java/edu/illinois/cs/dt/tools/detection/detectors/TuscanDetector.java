@@ -1,6 +1,7 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
@@ -19,8 +20,26 @@ public class TuscanDetector extends ExecutingDetector {
     private DetectionRound lastTuscanDetectionRound;
 
     private final TestShuffler testShuffler;
+
+    public static int getClassesSize(List<String> tests) {
+        List<String> classes = new ArrayList<String>();        
+        for (final String test : tests) {
+            final String className = TestShuffler.className(test);
+            if (!classes.contains(className)) {
+                classes.add(className);
+            }
+        }
+        return classes.size();
+    }
+    
     public TuscanDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
         super(runner, baseDir, rounds, type);
+        int n = getClassesSize(tests);
+            if (n == 3 || n == 5) {
+                if(this.rounds > n) this.rounds = n + 1;
+            } else {
+               if(this.rounds > n) this.rounds = n;
+            }
         this.tests = tests;
         this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);
         this.origResult = DetectorUtil.originalResults(tests, runner);

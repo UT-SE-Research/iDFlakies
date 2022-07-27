@@ -17,6 +17,7 @@ public class AlphabeticalDetector extends ExecutingDetector {
     private TestRunResult origResult;
 
     private final TestShuffler testShuffler;
+    
     public AlphabeticalDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
         super(runner, baseDir, rounds, type);
         this.tests = tests;
