@@ -5,11 +5,17 @@ import scala.annotation.meta.getter;
 public class Tuscan {
     public void main(int arg) {
         if (arg == 3) {
+
             generateThree();
+
         } else if (arg == 5) {
+
             generateFive();
+
         } else {
+
             generateTuscanSquare(arg);
+        
         }
     }
     static int[][] r;
@@ -18,11 +24,11 @@ public class Tuscan {
     }
     static void generateTuscanSquare(int n) {
     	int nn = n;
-    	while((n-1) % 4 == 0 && n != 1 && n != 9) n = (n-1)/2+1;
+    	while((n - 1) % 4 == 0 && n != 1 && n != 9) n = (n - 1) / 2 + 1;
 
 	r = new int[nn][];
 	for (int i = 0; i < nn; i++) {
-	    r[i] = new int[nn+1];
+	    r[i] = new int[nn + 1];
 	}
 
         if (n % 2 == 0) {
@@ -49,17 +55,17 @@ public class Tuscan {
                         ((i == 3*k + 2) ? 4*k : 2*k)));
                 int[] a = new int[n];
                 for (int j = 0; j < n; j++) {
-                    a[(j < p) ? n+j-p : j-p] = (j == 0) ? (n - 1) : (i + ((j % 2 == 0) ? (j / 2) : (n - 1 - (j - 1) / 2))) % (n - 1);
+                    a[(j < p) ? n + j - p : j - p] = (j == 0) ? (n - 1) : (i + ((j % 2 == 0) ? (j / 2) : (n - 1 - (j - 1) / 2))) % (n - 1);
                 }
-                b[a[n-1]] = a[0];
+                b[a[n - 1]] = a[0];
                 helper(a, i);
             }
             int[] t = new int[n];
             t[0] = n - 1;
             for (int i = 1; i < n; i++) {
-                t[i] = b[t[i-1]];
+                t[i] = b[t[i - 1]];
             }
-            helper(t, n-1);
+            helper(t, n - 1);
         } else if (n == 9) {
             int[][] t = {{0,1,7,2,6,3,5,4,8},
                          {3,7,4,6,5,8,1,2,0},
@@ -130,7 +136,7 @@ public class Tuscan {
                 { 0, 1, 2 },
                 { 1, 0, 2 },
                 { 2, 0, 1 },
-                { 2, 1, 0}
+                { 2, 1, 0 }
         };
 
         r = new int[4][];
@@ -152,9 +158,9 @@ public class Tuscan {
                 { 0, 1, 2, 3, 4 },
                 { 1, 0, 3, 2, 4 },
                 { 4, 3, 0, 2, 1 },
-                { 1, 4, 2, 0, 3},
-                { 0, 4, 1, 3, 2},
-                { 4, 0, 3, 1, 2}
+                { 1, 4, 2, 0, 3 },
+                { 0, 4, 1, 3, 2 },
+                { 4, 0, 3, 1, 2 }
         };
         r = new int[6][];
         for (int k = 0; k < 6; k++) {

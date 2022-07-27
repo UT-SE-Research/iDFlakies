@@ -205,12 +205,12 @@ public class TestShuffler {
         int[][] res = t.getMatrix();
         List<String> fullTestOrder = new ArrayList<String>();
         List<String> permClasses = new ArrayList<String>();
-        if(n == 3 || n == 5) {
+        if (n == 3 || n == 5) {
             for (int i = 0; i < res[count].length; i++) {
                 permClasses.add(classes.get(res[count][i]));
             }
         } else {
-            int nn = res.length-1;
+            int nn = res.length - 1;
             for (int i = 0; i < nn; i++) {
                 permClasses.add(classes.get(res[count][i]));
             }
