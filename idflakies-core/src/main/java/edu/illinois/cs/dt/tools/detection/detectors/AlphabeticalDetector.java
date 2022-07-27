@@ -15,8 +15,6 @@ import edu.illinois.cs.testrunner.runner.Runner;
 public class AlphabeticalDetector extends ExecutingDetector {
     final List<String> tests;
     private TestRunResult origResult;
-    private TestRunResult lastAlphabeticalResult;
-    private DetectionRound lastAlphabeticalDetectionRound;
 
     private final TestShuffler testShuffler;
     public AlphabeticalDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
@@ -35,9 +33,7 @@ public class AlphabeticalDetector extends ExecutingDetector {
 
     @Override
     public DetectionRound results() throws Exception {
-        lastAlphabeticalResult = runList(testShuffler.alphabeticalOrder());
-        lastAlphabeticalDetectionRound = makeDts(origResult, lastAlphabeticalResult);
-        return lastAlphabeticalDetectionRound;
+        return makeDts(origResult, runList(testShuffler.alphabeticalOrder()));
     }
     
 }
