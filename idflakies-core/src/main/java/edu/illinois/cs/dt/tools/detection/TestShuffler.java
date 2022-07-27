@@ -199,10 +199,8 @@ public class TestShuffler {
     public List<String> tuscanOrder(int count) {
         List<String> classes = new ArrayList<>(classToMethods.keySet());
         Collections.sort(classes);
-        Tuscan t = new Tuscan();
         int n = classes.size();
-        t.main(n);
-        int[][] res = t.getMatrix();
+        int[][] res = Tuscan.generateTuscanPermutations(n);
         List<String> fullTestOrder = new ArrayList<String>();
         List<String> permClasses = new ArrayList<String>();
         if (n == 3 || n == 5) {
@@ -210,7 +208,7 @@ public class TestShuffler {
                 permClasses.add(classes.get(res[count][i]));
             }
         } else {
-            int nn = res.length - 1;
+            int nn = res.length;
             for (int i = 0; i < nn; i++) {
                 permClasses.add(classes.get(res[count][i]));
             }
