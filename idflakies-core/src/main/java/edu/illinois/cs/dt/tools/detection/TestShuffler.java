@@ -196,35 +196,30 @@ public class TestShuffler {
         }
     }
 
-    public List<String> tuscanOrder(int count) {
-        List<String> classes = new ArrayList<>(classToMethods.keySet());
-        Collections.sort(classes);
-        int n = classes.size();
-        int[][] res = Tuscan.generateTuscanPermutations(n);
-        List<String> fullTestOrder = new ArrayList<String>();
-        List<String> permClasses = new ArrayList<String>();
-        if (n == 3 || n == 5) {
-            for (int i = 0; i < res[count].length; i++) {
-                permClasses.add(classes.get(res[count][i]));
-            }
-        } else {
-            int nn = res.length;
-            for (int i = 0; i < nn; i++) {
-                permClasses.add(classes.get(res[count][i]));
-            }
-        }
-        for (String className : permClasses) {
-            fullTestOrder.addAll(classToMethods.get(className));
-        }
-        return fullTestOrder;
-    }
-
-    public List<String> alphabeticalOrder() {
+    public List<String> alphabeticalAndTuscanOrder(int count, boolean isTuscan) {
         List<String> classes = new ArrayList<>(classToMethods.keySet());
         Collections.sort(classes);
         final List<String> fullTestOrder = new ArrayList<>();
-        for (String className : classes) {
-            fullTestOrder.addAll(classToMethods.get(className));
+        if (isTuscan) {
+            int n = classes.size();
+            int[][] res = Tuscan.generateTuscanPermutations(n);
+            List<String> permClasses = new ArrayList<String>();
+            if (n == 3 || n == 5) {
+                for (int i = 0; i < res[count].length; i++) {
+                    permClasses.add(classes.get(res[count][i]));
+                }
+            } else {
+                for (int i = 0; i < res[count].length - 1; i++) {
+                    permClasses.add(classes.get(res[count][i]));
+                }
+            }
+            for (String className : permClasses) {
+                fullTestOrder.addAll(classToMethods.get(className));
+            }
+        } else {
+            for (String className : classes) {
+                fullTestOrder.addAll(classToMethods.get(className));
+            }
         }
         return fullTestOrder;
     }

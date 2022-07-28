@@ -13,7 +13,7 @@ import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
 public class AlphabeticalDetector extends ExecutingDetector {
-    final List<String> tests;
+    private final List<String> tests;
     private TestRunResult origResult;
 
     private final TestShuffler testShuffler;
@@ -28,13 +28,12 @@ public class AlphabeticalDetector extends ExecutingDetector {
         } else {
             addFilter(new ConfirmationFilter(name, tests, InstrumentingSmartRunner.fromRunner(runner, baseDir)));
         }
-
         addFilter(new UniqueFilter());
     }
 
     @Override
     public DetectionRound results() throws Exception {
-        return makeDts(origResult, runList(testShuffler.alphabeticalOrder()));
+        return makeDts(origResult, runList(testShuffler.alphabeticalAndTuscanOrder(absoluteRound.get(), false)));
     }
     
 }

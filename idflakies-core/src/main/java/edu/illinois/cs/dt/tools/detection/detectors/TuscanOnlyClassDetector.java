@@ -13,11 +13,9 @@ import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
-public class TuscanDetector extends ExecutingDetector {
-    final List<String> tests;
+public class TuscanOnlyClassDetector extends ExecutingDetector {
+    private final List<String> tests;
     private TestRunResult origResult;
-    private TestRunResult lastTuscanResult;
-    private DetectionRound lastTuscanDetectionRound;
 
     private final TestShuffler testShuffler;
 
@@ -32,13 +30,17 @@ public class TuscanDetector extends ExecutingDetector {
         return classes.size();
     }
     
-    public TuscanDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
+    public TuscanOnlyClassDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
         super(runner, baseDir, rounds, type);
         int n = getClassesSize(tests);
         if (n == 3 || n == 5) {
-            if(this.rounds > n) this.rounds = n + 1;
+            if (this.rounds > n) {
+                    this.rounds = n + 1;
+            }
         } else {
-            if(this.rounds > n) this.rounds = n;
+            if (this.rounds > n) {
+                this.rounds = n;
+            }
         }
         this.tests = tests;
         this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);
@@ -48,15 +50,12 @@ public class TuscanDetector extends ExecutingDetector {
         } else {
             addFilter(new ConfirmationFilter(name, tests, InstrumentingSmartRunner.fromRunner(runner, baseDir)));
         }
-
         addFilter(new UniqueFilter());
     }
 
     @Override
     public DetectionRound results() throws Exception {
-        lastTuscanResult = runList(testShuffler.tuscanOrder(absoluteRound.get()));
-        lastTuscanDetectionRound = makeDts(origResult, lastTuscanResult);
-        return lastTuscanDetectionRound;
+        return makeDts(origResult, runList(testShuffler.alphabeticalAndTuscanOrder(absoluteRound.get(), true)));
     }
     
 }

@@ -25,7 +25,7 @@ public class DetectorFactory {
         } else if (detectorType().equals("smart-shuffle")) {
             return new SmartShuffleDetector(runner, baseDir, rounds, tests, detectorType());
         }  else if (detectorType().equals("tuscan")){
-            return new TuscanDetector(runner, baseDir, rounds, detectorType(), tests);
+            return new TuscanOnlyClassDetector(runner, baseDir, rounds, detectorType(), tests);
         } else if (detectorType().equals("alphabetical")) {
             return new AlphabeticalDetector(runner, baseDir, rounds, detectorType(), tests);
         }
