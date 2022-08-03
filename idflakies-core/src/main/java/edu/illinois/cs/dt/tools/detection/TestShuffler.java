@@ -34,7 +34,8 @@ public class TestShuffler {
     }
 
     private final HashMap<String, List<String>> classToMethods;
-
+    private static int row = 0;
+    private static int selectClass = 0;
     private final String type;
     private final List<String> tests;
     private final Set<String> alreadySeenOrders = new HashSet<>();
@@ -220,6 +221,70 @@ public class TestShuffler {
             for (String className : classes) {
                 fullTestOrder.addAll(classToMethods.get(className));
             }
+        }
+        return fullTestOrder;
+    }
+
+    public List<String> tuscanIntraClassOrder(int round) {
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        HashMap<String, int[][]> classToPermutations = new HashMap<String, int[][]>();
+        Collections.sort(classes);
+        final List<String> fullTestOrder = new ArrayList<>();
+        int n = classes.size(); // n is number of classes
+        int[][] classOrdering = Tuscan.generateTuscanPermutations(n);
+        for (String className : classes) {
+            int[][] methodPermuation = Tuscan.generateTuscanPermutations(classToMethods.get(className).size());
+            classToPermutations.put(className, methodPermuation);
+        }
+        HashMap<String, List<String>> newClassToMethods = new HashMap<String, List<String>>();
+        List<String> permClasses = new ArrayList<String>();
+        int classRound = round;
+        if (classOrdering.length <= classRound) {
+            classRound = round - classOrdering.length;
+        }
+        if (n == 3 || n == 5) {
+            for (int i = 0; i < classOrdering[classRound].length; i++) {
+                permClasses.add(classes.get(classOrdering[classRound][i]));
+            }
+        } else {
+            for (int i = 0; i < classOrdering[classRound].length - 1; i++) {
+                permClasses.add(classes.get(classOrdering[classRound][i]));
+            }
+        }
+        for (String className : permClasses) {
+            List<String> methods = classToMethods.get(className);
+            List<String> permMethods = new ArrayList<String>();
+            int[][] currMethodOrdering = classToPermutations.get(className);
+            // System.out.println(className);
+            n = methods.size();
+            // System.out.println(n);
+            int methodRound = round;
+            // System.out.println("methodRound: " + methodRound);
+            // for (int j = 0; j < currMethodOrdering.length; j++) {
+            //     for (int k = 0; k < currMethodOrdering[j].length; k++) {
+            //         System.out.print(currMethodOrdering[j][k]);
+            //     }
+            //     System.out.println();
+            // }
+            if ((currMethodOrdering.length - 1) < methodRound) {
+                methodRound = round - currMethodOrdering.length;
+            }
+            // System.out.println("After methodRound: " + methodRound);
+            // System.out.println("After currMethod.length: " + currMethodOrdering.length);
+            if (n == 3 || n == 5) {
+                for (int i = 0; i < currMethodOrdering[methodRound].length; i++) {
+                    permMethods.add(methods.get(currMethodOrdering[methodRound][i]));
+                }
+            } else {
+                for (int i = 0; i < currMethodOrdering[methodRound].length - 1; i++) {
+                    permMethods.add(methods.get(currMethodOrdering[methodRound][i]));
+                }
+            }
+            newClassToMethods.put(className, permMethods);
+        }
+        
+        for (String className : permClasses) {
+            fullTestOrder.addAll(newClassToMethods.get(className));
         }
         return fullTestOrder;
     }
