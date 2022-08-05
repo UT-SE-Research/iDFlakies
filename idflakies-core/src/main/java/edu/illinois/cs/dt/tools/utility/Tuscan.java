@@ -14,18 +14,18 @@ public class Tuscan {
     private static int[][] r;
 
     private static void helper(int[] a, int i) {
-	    System.arraycopy(a, 0, r[i], 0, a.length);
+        System.arraycopy(a, 0, r[i], 0, a.length);
     }
 
     private static void generateTuscanSquare(int n) {
-    	int nn = n;
-    	while((n - 1) % 4 == 0 && n != 1 && n != 9){
-             n = (n - 1) / 2 + 1;
+        int nn = n;
+        while ((n - 1) % 4 == 0 && n != 1 && n != 9) {
+            n = (n - 1) / 2 + 1;
         }
-	    r = new int[nn][];
-	    for (int i = 0; i < nn; i++) {
-	        r[i] = new int[nn + 1];
-	    }
+        r = new int[nn][];
+        for (int i = 0; i < nn; i++) {
+            r[i] = new int[nn + 1];
+        }
 
         if (n % 2 == 0) {
             // https://mathoverflow.net/questions/60856/hamilton-paths-in-k-2n/60859#60859
@@ -91,11 +91,11 @@ public class Tuscan {
             }
             for (int i = h; i < n; i++) {
                 for (int j = 0; j < h - 1; j++) {
-                    r[i][j] = ((j % 2 == 0) ? 0 : h) + (i-h + ((j % 2 == 0) ? (j / 2) : (h - 2 - (j - 1) / 2))) % (h - 1);
+                    r[i][j] = ((j % 2 == 0) ? 0 : h) + (i - h + ((j % 2 == 0) ? (j / 2) : (h - 2 - (j - 1) / 2))) % (h - 1);
                 }
-                r[i][h-1] = h-1;
+                r[i][h - 1] = h - 1;
                 for (int j = h; j < n + 1; j++) {
-                    r[i][j] = ((j % 2 == 0) ? 0 : h) + r[i][j-h] % h;
+                    r[i][j] = ((j % 2 == 0) ? 0 : h) + r[i][j - h] % h;
                 }
             }
             for (int i = 0; i < n; i++) {
@@ -104,19 +104,19 @@ public class Tuscan {
                     if (r[i][l] == n) break;
                 }
                 int[] t = new int[n];
-                System.arraycopy(r[i], l+1, t, 0, n - l);
+                System.arraycopy(r[i], l + 1, t, 0, n - l);
                 System.arraycopy(r[i], 0, t, n - l, l);
-		        System.arraycopy(t, 0, r[i], 0, n);
+                System.arraycopy(t, 0, r[i], 0, n);
             }
         }
     }
 
     private static void generateThree() {
         int[][] t = {
-                { 0, 1, 2 },
-                { 1, 0, 2 },
-                { 2, 0 },
-                { 2, 1 }
+                { 0, 1, 2, 0 },
+                { 1, 0, 2, 0 },
+                { 2, 0, 0 },
+                { 2, 1, 0 }
         };
         // int[][] t = {
         //         { 0, 1, 2 },
@@ -129,12 +129,12 @@ public class Tuscan {
 
     private static void generateFive() {
         int[][] t = {
-                { 0, 1, 2, 3, 4 },
-                { 1, 0, 3, 2, 4 },
-                { 4, 3, 0, 2, 1 },
-                { 1, 4, 2, 0 },
-                { 0, 4, 1, 3 },
-                { 4, 0, 3, 1 }
+                { 0, 1, 2, 3, 4, 0 },
+                { 1, 0, 3, 2, 4, 0 },
+                { 4, 3, 0, 2, 1, 0 },
+                { 1, 4, 2, 0, 0 },
+                { 0, 4, 1, 3, 0 },
+                { 4, 0, 3, 1, 0 }
         };
         // int[][] t = {
         //         { 0, 1, 2, 3, 4 },
