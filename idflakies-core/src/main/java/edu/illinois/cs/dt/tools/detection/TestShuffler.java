@@ -203,14 +203,8 @@ public class TestShuffler {
             int n = classes.size();
             int[][] res = Tuscan.generateTuscanPermutations(n);
             List<String> permClasses = new ArrayList<String>();
-            if (n == 3 || n == 5) {
-                for (int i = 0; i < res[count].length; i++) {
-                    permClasses.add(classes.get(res[count][i]));
-                }
-            } else {
-                for (int i = 0; i < res[count].length - 1; i++) {
-                    permClasses.add(classes.get(res[count][i]));
-                }
+            for (int i = 0; i < res[count].length - 1; i++) {
+                permClasses.add(classes.get(res[count][i]));
             }
             for (String className : permClasses) {
                 fullTestOrder.addAll(classToMethods.get(className));
