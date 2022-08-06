@@ -34,8 +34,6 @@ public class TestShuffler {
     }
 
     private final HashMap<String, List<String>> classToMethods;
-    private static int row = 0;
-    private static int selectClass = 0;
     private final String type;
     private final List<String> tests;
     private final Set<String> alreadySeenOrders = new HashSet<>();
