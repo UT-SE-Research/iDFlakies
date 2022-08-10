@@ -26,7 +26,6 @@ public class Tuscan {
         for (int i = 0; i < nn; i++) {
             r[i] = new int[nn + 1];
         }
-
         if (n % 2 == 0) {
             // https://mathoverflow.net/questions/60856/hamilton-paths-in-k-2n/60859#60859
             int[] a = new int[n];
@@ -42,6 +41,7 @@ public class Tuscan {
                 helper(a, j);
             }
         } else if (n % 4 == 3) {
+            System.out.println("Here we are" + n);
             int k = (n - 3) / 4;
             int[] b = new int[n];
             for (int i = 0; i < n - 1; i++) {
@@ -78,7 +78,9 @@ public class Tuscan {
                 helper(t[i], i);
             }
         }
-        else assert(false);
+        else {
+            assert(false);
+        }
 
         while (nn != n){
             // https://www.sciencedirect.com/science/article/pii/0095895680900441
@@ -112,18 +114,18 @@ public class Tuscan {
     }
 
     private static void generateThree() {
+        // int[][] t = {
+        //         { 0, 1, 2, 0 },
+        //         { 1, 0, 2, 0 },
+        //         { 2, 0, 0 },
+        //         { 2, 1, 0 }
+        // };
         int[][] t = {
                 { 0, 1, 2, 0 },
                 { 1, 0, 2, 0 },
-                { 2, 0, 0 },
-                { 2, 1, 0 }
+                { 2, 0, 1, 0 },
+                { 2, 1, 0, 0 }
         };
-        // int[][] t = {
-        //         { 0, 1, 2 },
-        //         { 1, 0, 2 },
-        //         { 2, 0, 1 },
-        //         { 2, 1, 0 }
-        // };
         r = t;
     }
 

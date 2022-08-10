@@ -14,7 +14,7 @@ import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
-public class TuscanIntraClassDetector extends ExecutingDetector {
+public class TuscanInterClassDetector extends ExecutingDetector {
     private final List<String> tests;
     private TestRunResult origResult;
 
@@ -31,19 +31,26 @@ public class TuscanIntraClassDetector extends ExecutingDetector {
         }
         return classes.size();
     }
-    
-    public static int findMaxMethodSize(HashMap<String, List<String>> classToMethods) {
-        int maxMethodSize = 0;
+
+    public static int findNumberOfRounds (HashMap<String, List<String>> classToMethods) {
+        int classSize = classToMethods.keySet().size();
+        if (classSize == 3 || classSize == 5) {
+            classSize++;
+        }
+        int totalMethodSize = 1;
         for (String className : classToMethods.keySet()) {
-            int nn = classToMethods.get(className).size();
-            if(maxMethodSize < nn) {
-                maxMethodSize = nn;
+            int methodSize = classToMethods.get(className).size();
+            if (methodSize == 3 || methodSize == 5) {
+                totalMethodSize *= (methodSize + 1);
+            } else {
+                totalMethodSize *= methodSize; 
             }
         }
-        return maxMethodSize;
+        int tempRounds = classSize * totalMethodSize;
+        return tempRounds;
     }
     
-    public TuscanIntraClassDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
+    public TuscanInterClassDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
         super(runner, baseDir, rounds, type);
         classToMethods = new HashMap<>();
         for (final String test : tests) {
@@ -53,23 +60,25 @@ public class TuscanIntraClassDetector extends ExecutingDetector {
             }
             classToMethods.get(className).add(test);
         }
-        int classSize = classToMethods.keySet().size();
-        if (classSize == 3 || classSize == 5) {
-            classSize++;
-        }
-        int maxMethodSize = findMaxMethodSize(classToMethods);
-        if (maxMethodSize == 3 || maxMethodSize == 5) {
-            maxMethodSize++;
-        }
-        this.rounds = rounds;
-        if (classSize > maxMethodSize) {
-            if (this.rounds > classSize) {
-                this.rounds = classSize;
-            }
+        // int classSize = classToMethods.keySet().size();
+        // if (classSize == 3 || classSize == 5) {
+        //     classSize++;
+        // }
+        // int totalMethodSize = 1;
+        // for (String className : classToMethods.keySet()) {
+        //     int methodSize = classToMethods.get(className).size();
+        //     if (methodSize == 3 || methodSize == 5) {
+        //         totalMethodSize *= (methodSize + 1);
+        //     } else {
+        //         totalMethodSize *= methodSize; 
+        //     }
+        // }
+        // int tempRounds = classSize * totalMethodSize;
+        int tempRounds = findNumberOfRounds(classToMethods);
+        if (rounds > tempRounds) {
+            this.rounds = tempRounds;
         } else {
-            if (this.rounds > maxMethodSize) {
-                this.rounds = maxMethodSize;
-            }
+            this.rounds = rounds;
         }
         this.tests = tests;
         this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);
@@ -84,6 +93,6 @@ public class TuscanIntraClassDetector extends ExecutingDetector {
 
     @Override
     public DetectionRound results() throws Exception {
-        return makeDts(origResult, runList(testShuffler.tuscanIntraClassOrder(absoluteRound.get())));
+        return makeDts(origResult, runList(testShuffler.tuscanInterClass(absoluteRound.get())));
     }
 }

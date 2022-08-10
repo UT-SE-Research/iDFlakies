@@ -23,10 +23,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.enterprise.inject.spi.InterceptionType;
 
 public class TestShuffler {
     public static String className(final String testName) {
@@ -225,8 +228,15 @@ public class TestShuffler {
         int n = classes.size(); // n is number of classes
         int[][] classOrdering = Tuscan.generateTuscanPermutations(n);
         for (String className : classes) {
-            int[][] methodPermuation = Tuscan.generateTuscanPermutations(classToMethods.get(className).size());
-            classToPermutations.put(className, methodPermuation);
+            if (classToMethods.get(className).size() == 1) {
+                int[][] methodPermuation = { 
+                    { 0, 0 }
+                };
+                classToPermutations.put(className, methodPermuation);
+            } else {
+                int[][] methodPermuation = Tuscan.generateTuscanPermutations(classToMethods.get(className).size());
+                classToPermutations.put(className, methodPermuation);
+            }
         }
         HashMap<String, List<String>> newClassToMethods = new HashMap<String, List<String>>();
         List<String> permClasses = new ArrayList<String>();
@@ -234,49 +244,107 @@ public class TestShuffler {
         while ((classOrdering.length - 1) < classRound) {
             classRound -= classOrdering.length;
         }
-        if (n == 3 || n == 5) {
-            for (int i = 0; i < classOrdering[classRound].length; i++) {
-                permClasses.add(classes.get(classOrdering[classRound][i]));
-            }
-        } else {
-            for (int i = 0; i < classOrdering[classRound].length - 1; i++) { // {0, 1, 0} {1, 0, 0}
-                permClasses.add(classes.get(classOrdering[classRound][i]));
-            }
+        for (int i = 0; i < classOrdering[classRound].length - 1; i++) { // {0, 1, 0} {1, 0, 0}
+            permClasses.add(classes.get(classOrdering[classRound][i]));
         }
         for (String className : permClasses) {
             List<String> methods = classToMethods.get(className);
             List<String> permMethods = new ArrayList<String>();
             int[][] currMethodOrdering = classToPermutations.get(className);
-            // System.out.println(className);
             n = methods.size();
-            // System.out.println(n);
             int methodRound = round;
-            // System.out.println("methodRound: " + methodRound);
-            // for (int j = 0; j < currMethodOrdering.length; j++) {
-            //     for (int k = 0; k < currMethodOrdering[j].length; k++) {
-            //         System.out.print(currMethodOrdering[j][k]);
-            //     }
-            //     System.out.println();
-            // }
             while((currMethodOrdering.length - 1) < methodRound) {
                 methodRound -= currMethodOrdering.length;
             }
-            // System.out.println("After methodRound: " + methodRound);
-            // System.out.println("After currMethod.length: " + currMethodOrdering.length);
-            if (n == 3 || n == 5) {
-                for (int i = 0; i < currMethodOrdering[methodRound].length; i++) {
-                    permMethods.add(methods.get(currMethodOrdering[methodRound][i]));
+            for (int i = 0; i < currMethodOrdering[methodRound].length - 1; i++) {
+                permMethods.add(methods.get(currMethodOrdering[methodRound][i]));
+            }
+            newClassToMethods.put(className, permMethods);
+        }
+        for (String className : permClasses) {
+            fullTestOrder.addAll(newClassToMethods.get(className));
+        }
+        return fullTestOrder;
+    }
+    
+    private static int interClassRound = 0; // which class permutation to choose
+    private static int interCurrentMethodRound = 0; // first class of pair
+    private static int interNextMethodRound = 0; // second class of pair
+    private static int i1 = 0; // current class
+    private static int i2 = 1; // next class
+    private static boolean isNewOrdering = false; // To change the permutation of classes
+
+    public List<String> tuscanInterClass(int round) {
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        HashMap<String, int[][]> classToPermutations = new HashMap<String, int[][]>();
+        Collections.sort(classes);
+        final List<String> fullTestOrder = new ArrayList<>();
+        int n = classes.size(); // n is number of classes
+        int[][] classOrdering = Tuscan.generateTuscanPermutations(n); // Tuscan square for classes
+
+        for (String className : classes) {
+            int methodSize = classToMethods.get(className).size();
+            int[][] methodPermuation = Tuscan.generateTuscanPermutations(methodSize);
+            classToPermutations.put(className, methodPermuation);
+        }
+        HashMap<String, List<String>> newClassToMethods = new HashMap<String, List<String>>(); // class to permutated methods
+        List<String> permClasses = new ArrayList<String>();
+        if (isNewOrdering) {
+            // When we reach end of a permutation for classes only
+            i1 = 0;
+            i2 = 1;
+            interNextMethodRound = 0;
+            interCurrentMethodRound = 0;
+            interClassRound++;
+            isNewOrdering = false;
+        }
+        for (int i = 0; i < classOrdering[interClassRound].length - 1; i++) {
+            permClasses.add(classes.get(classOrdering[interClassRound][i]));
+        }
+        String currentClass = permClasses.get(i1), nextClass = permClasses.get(i2);
+        int currentClassMethodSize = classToMethods.get(currentClass).size();
+        int nextClassMethodSize = classToMethods.get(nextClass).size();
+        if (currentClassMethodSize == interCurrentMethodRound && nextClassMethodSize == (interNextMethodRound + 1)) {
+            // To change the pair so we change i1 & i2
+            i1++;
+            i2++;
+            interNextMethodRound = 0;
+            interCurrentMethodRound = 0;
+        }
+        else if (currentClassMethodSize == (interCurrentMethodRound)) {
+            // To change the *next* class methods
+            interNextMethodRound++;
+            interCurrentMethodRound = 0;
+        }
+        int[] currentClassTuscan = classToPermutations.get(currentClass)[interCurrentMethodRound];
+        int[] nextClassTuscan = classToPermutations.get(nextClass)[interNextMethodRound];
+        for (String className : permClasses) {
+            List<String> methods = classToMethods.get(className);
+            List<String> permMethods = new ArrayList<String>();
+            if (className == currentClass) {
+                for (int i = 0; i < currentClassTuscan.length - 1; i++) {
+                    permMethods.add(methods.get(currentClassTuscan[i]));
+                }
+            }
+            else if (className == nextClass) {
+                for (int i = 0; i < nextClassTuscan.length - 1; i++) {
+                    permMethods.add(methods.get(nextClassTuscan[i]));
                 }
             } else {
-                for (int i = 0; i < currMethodOrdering[methodRound].length - 1; i++) {
-                    permMethods.add(methods.get(currMethodOrdering[methodRound][i]));
+                // We don't care about this classes permutations yet
+                for (int i = 0; i < nextClassTuscan.length; i++) {
+                    permMethods = methods;
                 }
             }
             newClassToMethods.put(className, permMethods);
         }
-        
         for (String className : permClasses) {
             fullTestOrder.addAll(newClassToMethods.get(className));
+        }
+        interCurrentMethodRound++;
+        if (nextClass == permClasses.get(permClasses.size() - 1) && currentClassMethodSize == interCurrentMethodRound && nextClassMethodSize == (interNextMethodRound + 1)) {
+            // if the *next class* is our last class then there is no pair so change to the next order
+            isNewOrdering = true;
         }
         return fullTestOrder;
     }

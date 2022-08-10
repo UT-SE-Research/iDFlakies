@@ -1,6 +1,7 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 
 import java.io.File;
@@ -30,6 +31,8 @@ public class DetectorFactory {
             return new AlphabeticalDetector(runner, baseDir, rounds, detectorType(), tests);
         } else if (detectorType().equals("tuscan-intra-class")) {
             return new TuscanIntraClassDetector(runner, baseDir, rounds, detectorType(), tests);
+        } else if (detectorType().equals("tuscan-inter-class")) {
+            return new TuscanInterClassDetector(runner, baseDir, rounds, detectorType(), tests);
         }
         return new RandomDetector("random", baseDir, runner, rounds, tests);
     }
