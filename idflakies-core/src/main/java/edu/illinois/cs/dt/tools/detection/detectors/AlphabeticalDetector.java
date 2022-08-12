@@ -33,7 +33,7 @@ public class AlphabeticalDetector extends ExecutingDetector {
 
     @Override
     public DetectionRound results() throws Exception {
-        return makeDts(origResult, runList(testShuffler.alphabeticalAndTuscanOrder(absoluteRound.get(), false)));
+        return makeDts(origResult, runList(testShuffler.alphabeticalOrderSelector(absoluteRound.get())));
     }
     
 }

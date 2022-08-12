@@ -196,6 +196,23 @@ public class TestShuffler {
         }
     }
 
+    public List<String> alphabeticalOrderSelector(int round) {
+        if (this.type.equals("alphabetical-class-method")) {
+            return alphabeticalClassMethodOrder();
+        } else {
+            return alphabeticalAndTuscanOrder(round, false);
+        }
+    }
+    
+    private List<String> alphabeticalClassMethodOrder() {
+        final List<String> fullTestOrder = new ArrayList<>();
+        for (String className : classToMethods.keySet()) {
+            fullTestOrder.addAll(classToMethods.get(className));
+        }
+        Collections.sort(fullTestOrder);
+        return fullTestOrder;
+    }
+
     public List<String> alphabeticalAndTuscanOrder(int count, boolean isTuscan) {
         List<String> classes = new ArrayList<>(classToMethods.keySet());
         Collections.sort(classes);
