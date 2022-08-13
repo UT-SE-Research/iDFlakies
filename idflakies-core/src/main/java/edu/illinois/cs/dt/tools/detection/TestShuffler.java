@@ -14,8 +14,6 @@ import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
-import static org.junit.Assert.assertNotSame;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,8 +27,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.enterprise.inject.spi.InterceptionType;
 
 public class TestShuffler {
     public static String className(final String testName) {
