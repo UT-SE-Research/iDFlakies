@@ -19,11 +19,6 @@ public class Pair {
     public boolean equals(Object rhs) {
         if (rhs instanceof Pair) {
             Pair o = (Pair) rhs;
-            // if (this.x == o.x && this.y == o.y) {
-            //     System.out.println(o.x + "    " + this.x);
-            //     System.out.println(o.y + "    " + this.y);
-            //     System.out.println();
-            // }
             return this.x == o.x && this.y == o.y;
         }
         return false;
@@ -33,9 +28,4 @@ public class Pair {
     public int hashCode() {
         return Objects.hash(x, y);
     }
-
-    // public Pair reverse() {
-    //     Pair reversedPair = new Pair(this.y, this.x);
-    //     return reversedPair;
-    // }
 }

@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.TestShuffler;
 import edu.illinois.cs.dt.tools.detection.filters.ConfirmationFilter;
 import edu.illinois.cs.dt.tools.detection.filters.UniqueFilter;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
@@ -34,19 +36,25 @@ public class TuscanInterClassDetector extends ExecutingDetector {
 
     public static int findNumberOfRounds (HashMap<String, List<String>> classToMethods) {
         int classSize = classToMethods.keySet().size();
-        if (classSize == 3 || classSize == 5) {
-            classSize++;
-        }
-        int totalMethodSize = 1;
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        Collections.sort(classes);
+        int[][] classPermutations = Tuscan.generateTuscanPermutations(classSize);
+        HashMap<String, Integer> classToSize = new HashMap<>();
         for (String className : classToMethods.keySet()) {
-            int methodSize = classToMethods.get(className).size();
-            if (methodSize == 3 || methodSize == 5) {
-                totalMethodSize *= (methodSize + 1);
-            } else {
-                totalMethodSize *= methodSize; 
-            }
+            classToSize.put(className, classToMethods.get(className).size());
         }
-        int tempRounds = classSize * totalMethodSize;
+        int tempRounds = 0;
+        for (int i = 0; i < classPermutations.length; i++) {
+            int methodSize = 0;
+            for (int j = 0; j < classPermutations.length - 2; j++) {
+                String current = classes.get(classPermutations[i][j]);
+                String next = classes.get(classPermutations[i][j + 1]);
+                int size1 = classToMethods.get(current).size();
+                int size2 = classToMethods.get(next).size();
+                methodSize += (size1 * size2);
+            }
+            tempRounds += methodSize;
+        }
         return tempRounds;
     }
     
@@ -60,20 +68,6 @@ public class TuscanInterClassDetector extends ExecutingDetector {
             }
             classToMethods.get(className).add(test);
         }
-        // int classSize = classToMethods.keySet().size();
-        // if (classSize == 3 || classSize == 5) {
-        //     classSize++;
-        // }
-        // int totalMethodSize = 1;
-        // for (String className : classToMethods.keySet()) {
-        //     int methodSize = classToMethods.get(className).size();
-        //     if (methodSize == 3 || methodSize == 5) {
-        //         totalMethodSize *= (methodSize + 1);
-        //     } else {
-        //         totalMethodSize *= methodSize; 
-        //     }
-        // }
-        // int tempRounds = classSize * totalMethodSize;
         int tempRounds = findNumberOfRounds(classToMethods);
         if (rounds > tempRounds) {
             this.rounds = tempRounds;

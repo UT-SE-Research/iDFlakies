@@ -14,6 +14,8 @@ import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
+import static org.junit.Assert.assertNotSame;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -41,6 +42,13 @@ public class TestShuffler {
     private final List<String> tests;
     private final Set<String> alreadySeenOrders = new HashSet<>();
     private final File baseDir;
+    // For tuscanInterClass
+    private static int interClassRound = 0; // which class permutation to choose
+    private static int interCurrentMethodRound = 0; // first class of pair
+    private static int interNextMethodRound = 0; // second class of pair
+    private static int i1 = 0; // current class
+    private static int i2 = 1; // next class
+    private static boolean isNewOrdering = false; // To change the permutation of classes
 
     private final Random random;
 
@@ -267,25 +275,38 @@ public class TestShuffler {
         return fullTestOrder;
     }
     
-    private static int interClassRound = 0; // which class permutation to choose
-    private static int interCurrentMethodRound = 0; // first class of pair
-    private static int interNextMethodRound = 0; // second class of pair
-    private static int i1 = 0; // current class
-    private static int i2 = 1; // next class
-    private static boolean isNewOrdering = false; // To change the permutation of classes
-
     public List<String> tuscanInterClass(int round) {
         List<String> classes = new ArrayList<>(classToMethods.keySet());
         HashMap<String, int[][]> classToPermutations = new HashMap<String, int[][]>();
         Collections.sort(classes);
         final List<String> fullTestOrder = new ArrayList<>();
         int n = classes.size(); // n is number of classes
-        int[][] classOrdering = Tuscan.generateTuscanPermutations(n); // Tuscan square for classes
+        int[][] classOrdering = Tuscan.generateTuscanPermutations(n);
 
         for (String className : classes) {
             int methodSize = classToMethods.get(className).size();
-            int[][] methodPermuation = Tuscan.generateTuscanPermutations(methodSize);
-            classToPermutations.put(className, methodPermuation);
+            int[][] result;
+            if (methodSize == 3) {
+                int[][] methodPermuation = {
+                    { 0, 1, 2, 0 },
+                    { 1, 2, 0, 0 },
+                    { 2, 0, 1, 0 },
+                };
+                result = methodPermuation;
+            } else if (methodSize == 5) {
+                int[][] methodPermuation = {
+                    { 0, 1, 2, 3, 4, 0 },
+                    { 1, 0, 2, 4, 3, 0 },
+                    { 2, 4, 0, 3, 1, 0 },
+                    { 3, 1, 0, 4, 2, 0 },
+                    { 4, 1, 2, 3, 0, 0 },
+                };
+                result = methodPermuation;
+            } else {
+                int[][] methodPermuation = Tuscan.generateTuscanPermutations(methodSize);
+                result = methodPermuation;
+            }
+            classToPermutations.put(className, result);
         }
         HashMap<String, List<String>> newClassToMethods = new HashMap<String, List<String>>(); // class to permutated methods
         List<String> permClasses = new ArrayList<String>();

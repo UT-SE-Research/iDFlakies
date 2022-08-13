@@ -67,16 +67,12 @@ public class TuscanIntraClassTest {
                 classToMethods.get(className).add(test);
             }
             List<Pair> currentClassPairs = generateAllPairs(classes);
-            // allClassPairs.addAll(currentClassPairs);
             for (int j = 0; j < classes.size() - 1; j++) {
                 // Check if class pairs are covered
                 Pair newPair = new Pair(classes.get(j), classes.get(j + 1));
                 if (!currentClassPairs.contains(newPair)) {
                     throw new Exception("Not included Classes");
                 }
-                // if (!visitedClassPairs.contains(newPair)) {
-                //     visitedClassPairs.add(newPair);
-                // }
             }
             for (String className : classes) {
                 List<String> currentMethodOrdering = classToMethods.get(className);

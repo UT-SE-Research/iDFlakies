@@ -54,13 +54,13 @@ public class TuscanIntraClassDetector extends ExecutingDetector {
             classToMethods.get(className).add(test);
         }
         int classSize = classToMethods.keySet().size();
-        if (classSize == 3 || classSize == 5) {
-            classSize++;
-        }
+        // if (classSize == 3 || classSize == 5) {
+        //     classSize++;
+        // }
         int maxMethodSize = findMaxMethodSize(classToMethods);
-        if (maxMethodSize == 3 || maxMethodSize == 5) {
-            maxMethodSize++;
-        }
+        // if (maxMethodSize == 3 || maxMethodSize == 5) {
+        //     maxMethodSize++;
+        // }
         this.rounds = rounds;
         if (classSize > maxMethodSize) {
             if (this.rounds > classSize) {
