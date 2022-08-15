@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.*;
 
 import org.junit.Test;
@@ -12,10 +11,6 @@ import org.junit.Assert;
 
 import edu.illinois.cs.dt.tools.detection.TestShuffler;
 import edu.illinois.cs.dt.tools.detection.detectors.TuscanIntraClassDetector;
-import edu.illinois.cs.dt.tools.detection.detectors.TuscanOnlyClassDetector;
-import javassist.bytecode.stackmap.TypeData.ClassName;
-
-import edu.illinois.Pair;
 
 public class TuscanIntraClassTest {
     @Test
@@ -50,10 +45,8 @@ public class TuscanIntraClassTest {
         // System.out.println(rounds);
         List<String> classes = new ArrayList<String>();
         LinkedHashMap<String, List<String>> classToMethods = new LinkedHashMap<String, List<String>>();
-        List<Pair> visitedMethodPairs = new ArrayList<Pair>();
-        // List<Pair> visitedClassPairs = new ArrayList<Pair>();
-        Set<Pair> allMethodPairs = new HashSet<Pair>();
-        // Set<Pair> allClassPairs = new HashSet<Pair>();
+        List<Pair<String>> visitedMethodPairs = new ArrayList<Pair<String>>();
+        Set<Pair<String>> allMethodPairs = new HashSet<Pair<String>>();
         for (int i = 0; i < rounds; i++) {
             List<String> currentOrder = testShuffler.tuscanIntraClassOrder(i);
             for (String test : currentOrder) {
@@ -66,21 +59,21 @@ public class TuscanIntraClassTest {
                 }
                 classToMethods.get(className).add(test);
             }
-            List<Pair> currentClassPairs = generateAllPairs(classes);
+            List<Pair<String>> currentClassPairs = generateAllPairs(classes);
             for (int j = 0; j < classes.size() - 1; j++) {
                 // Check if class pairs are covered
-                Pair newPair = new Pair(classes.get(j), classes.get(j + 1));
+                Pair<String> newPair = new Pair<String>(classes.get(j), classes.get(j + 1));
                 if (!currentClassPairs.contains(newPair)) {
                     throw new Exception("Not included Classes");
                 }
             }
             for (String className : classes) {
                 List<String> currentMethodOrdering = classToMethods.get(className);
-                List<Pair> currentMethodPairs = generateAllPairs(currentMethodOrdering);
+                List<Pair<String>> currentMethodPairs = generateAllPairs(currentMethodOrdering);
                 allMethodPairs.addAll(currentMethodPairs);
                 // System.out.println(currentMethodPairs.size());
                 for (int j = 0; j < currentMethodOrdering.size() - 1; j++) {
-                    Pair newPair = new Pair(currentMethodOrdering.get(j), currentMethodOrdering.get(j + 1));
+                    Pair<String> newPair = new Pair<String>(currentMethodOrdering.get(j), currentMethodOrdering.get(j + 1));
                     if(!currentMethodPairs.contains(newPair)) {
                         System.out.println(newPair);
                         throw new Exception("Not included Method Pairs");
@@ -95,12 +88,12 @@ public class TuscanIntraClassTest {
         Assert.assertEquals(visitedMethodPairs.size(), allMethodPairs.size());
     }    
 
-    public static List<Pair> generateAllPairs(List<String> tests) {
-        List<Pair> allPairs = new ArrayList<Pair>();
+    public static List<Pair<String>> generateAllPairs(List<String> tests) {
+        List<Pair<String>> allPairs = new ArrayList<Pair<String>>();
         for (int i = 0; i < tests.size(); i++) {
             for (int j = 0; j < tests.size(); j++) {
                 if (tests.get(i) != tests.get(j)) {
-                    Pair newPair = new Pair(tests.get(i), tests.get(j));
+                    Pair<String> newPair = new Pair<String>(tests.get(i), tests.get(j));
                     allPairs.add(newPair);
                 }
             }

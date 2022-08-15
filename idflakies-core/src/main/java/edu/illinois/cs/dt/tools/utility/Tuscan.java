@@ -2,7 +2,9 @@ package edu.illinois.cs.dt.tools.utility;
 
 public class Tuscan {
     public static int[][] generateTuscanPermutations(int arg) {
-        if (arg == 3) {
+        if (arg == 1) {
+            generateOne();
+        } else if (arg == 3) {
             generateThree();
         } else if (arg == 5) {
             generateFive();
@@ -41,7 +43,6 @@ public class Tuscan {
                 helper(a, j);
             }
         } else if (n % 4 == 3) {
-            System.out.println("Here we are" + n);
             int k = (n - 3) / 4;
             int[] b = new int[n];
             for (int i = 0; i < n - 1; i++) {
@@ -111,6 +112,13 @@ public class Tuscan {
                 System.arraycopy(t, 0, r[i], 0, n);
             }
         }
+    }
+
+    private static void generateOne() {
+        int[][] t = {
+            { 0, 0 }
+        };
+        r = t;
     }
 
     private static void generateThree() {

@@ -46,7 +46,7 @@ public class TuscanInterClassDetector extends ExecutingDetector {
         int tempRounds = 0;
         for (int i = 0; i < classPermutations.length; i++) {
             int methodSize = 0;
-            for (int j = 0; j < classPermutations.length - 2; j++) {
+            for (int j = 0; j < classPermutations[i].length - 2; j++) {
                 String current = classes.get(classPermutations[i][j]);
                 String next = classes.get(classPermutations[i][j + 1]);
                 int size1 = classToMethods.get(current).size();

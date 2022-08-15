@@ -2,11 +2,11 @@ package edu.illinois;
 
 import java.util.Objects;
 
-public class Pair {
-    private String x;
-    private String y;
+public class Pair<T> {
+    private T x;
+    private T y;
 
-    Pair(String x, String y) {
+    Pair(T x, T y) {
         this.x = x;
         this.y = y;
     }
@@ -17,8 +17,8 @@ public class Pair {
 
     @Override
     public boolean equals(Object rhs) {
-        if (rhs instanceof Pair) {
-            Pair o = (Pair) rhs;
+        if (rhs instanceof Pair<?>) {
+            Pair<?> o = (Pair<?>)rhs;
             return this.x == o.x && this.y == o.y;
         }
         return false;
