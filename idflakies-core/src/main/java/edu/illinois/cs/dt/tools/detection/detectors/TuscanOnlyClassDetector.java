@@ -36,7 +36,7 @@ public class TuscanOnlyClassDetector extends ExecutingDetector {
         if (n == 3 || n == 5) {
             // We need one more round than the number of classes if n is 3 or 5.
             if (this.rounds > n) {
-                    this.rounds = n + 1;
+                this.rounds = n + 1;
             }
         } else {
             if (this.rounds > n) {
