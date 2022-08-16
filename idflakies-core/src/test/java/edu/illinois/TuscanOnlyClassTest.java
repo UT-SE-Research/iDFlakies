@@ -35,18 +35,18 @@ public class TuscanOnlyClassTest {
         if (n == 3 || n == 5) {
             rounds++;
         }
-        List<Pair> listOfPairs = new ArrayList<Pair>();
+        List<List<String>> listOfPairs = new ArrayList<List<String>>();
         for (int i = 0; i < rounds; i++) {
             List<String> currentOrder = testShuffler.alphabeticalAndTuscanOrder(i, true);
             Set<String> classes = new LinkedHashSet<String>();
-            // System.out.println("currentORder.size()" + currentOrder.size());
             for (int j = 0; j < currentOrder.size(); j++) {
                 classes.add(TestShuffler.className(currentOrder.get(j)));
             }
-            // System.out.println("classes.size()" + classes.size());
             String[] classesArray = classes.toArray(new String[classes.size()]);
             for (int j = 0; j < classesArray.length - 1; j++) {
-                Pair newPair = new Pair(classesArray[j], classesArray[j + 1]);
+                List<String> newPair = new ArrayList<String>();
+                newPair.add(classesArray[j]);
+                newPair.add(classesArray[j + 1]);
                 if (listOfPairs.contains(newPair)) {
                     throw new Exception("new");
                 }
@@ -54,10 +54,6 @@ public class TuscanOnlyClassTest {
             }
         }
         int count = listOfPairs.size();
-        if (n == 5) {
-            Assert.assertEquals(count, 21);
-        } else {
-            Assert.assertEquals(count, n * (n - 1));
-        }
+        Assert.assertEquals(count, n * (n - 1));
     }    
 }

@@ -89,8 +89,8 @@ public class TuscanInterClassTest {
                 finalPairsMethods.addAll(allMethodPairs);
             }
         }
-        Assert.assertEquals(finalPairs, visitedClassPairs);
-        Assert.assertEquals(finalPairsMethods, visitedMethodPairs);
+        Assert.assertEquals(finalPairs.size(), visitedClassPairs.size());
+        Assert.assertEquals(finalPairsMethods.size(), visitedMethodPairs.size());
     }
 
     public static List<List<String>> generateAllPairs(List<String> tests) {

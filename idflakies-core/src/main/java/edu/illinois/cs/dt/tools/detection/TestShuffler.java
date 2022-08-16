@@ -248,7 +248,7 @@ public class TestShuffler {
         while ((classOrdering.length - 1) < classRound) {
             classRound -= classOrdering.length;
         }
-        for (int i = 0; i < classOrdering[classRound].length - 1; i++) { // {0, 1, 0} {1, 0, 0}
+        for (int i = 0; i < classOrdering[classRound].length - 1; i++) {
             permClasses.add(classes.get(classOrdering[classRound][i]));
         }
         for (String className : permClasses) {
@@ -283,13 +283,16 @@ public class TestShuffler {
             int methodSize = classToMethods.get(className).size();
             int[][] result;
             if (methodSize == 3) {
+
                 int[][] methodPermuation = {
                     { 0, 1, 2, 0 },
                     { 1, 2, 0, 0 },
                     { 2, 0, 1, 0 },
                 };
                 result = methodPermuation;
+
             } else if (methodSize == 5) {
+
                 int[][] methodPermuation = {
                     { 0, 1, 2, 3, 4, 0 },
                     { 1, 0, 2, 4, 3, 0 },
@@ -298,9 +301,12 @@ public class TestShuffler {
                     { 4, 1, 2, 3, 0, 0 },
                 };
                 result = methodPermuation;
+
             } else {
+
                 int[][] methodPermuation = Tuscan.generateTuscanPermutations(methodSize);
                 result = methodPermuation;
+
             }
             classToPermutations.put(className, result);
         }
