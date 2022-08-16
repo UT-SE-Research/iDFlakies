@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import edu.illinois.cs.dt.tools.utility.Tuscan;
 
 @RunWith(Theories.class)
-public class Test {
+public class TuscanTest {
     private static int[][] matrix;
 
     @DataPoints
