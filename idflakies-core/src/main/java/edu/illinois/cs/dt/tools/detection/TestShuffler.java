@@ -10,6 +10,7 @@ import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 
@@ -193,5 +194,44 @@ public class TestShuffler {
                 return accum;
             }
         }
+    }
+
+    public List<String> alphabeticalOrderSelector(int round) {
+        if (this.type.equals("alphabetical-class-method")) {
+            return alphabeticalClassMethodOrder();
+        } else {
+            return alphabeticalAndTuscanOrder(round, false);
+        }
+    }
+    
+    private List<String> alphabeticalClassMethodOrder() {
+        final List<String> fullTestOrder = new ArrayList<>();
+        for (String className : classToMethods.keySet()) {
+            fullTestOrder.addAll(classToMethods.get(className));
+        }
+        Collections.sort(fullTestOrder);
+        return fullTestOrder;
+    }
+
+    public List<String> alphabeticalAndTuscanOrder(int count, boolean isTuscan) {
+        List<String> classes = new ArrayList<>(classToMethods.keySet());
+        Collections.sort(classes);
+        final List<String> fullTestOrder = new ArrayList<>();
+        if (isTuscan) {
+            int n = classes.size();
+            int[][] res = Tuscan.generateTuscanPermutations(n);
+            List<String> permClasses = new ArrayList<String>();
+            for (int i = 0; i < res[count].length - 1; i++) {
+                permClasses.add(classes.get(res[count][i]));
+            }
+            for (String className : permClasses) {
+                fullTestOrder.addAll(classToMethods.get(className));
+            }
+        } else {
+            for (String className : classes) {
+                fullTestOrder.addAll(classToMethods.get(className));
+            }
+        }
+        return fullTestOrder;
     }
 }
