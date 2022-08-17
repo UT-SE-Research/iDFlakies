@@ -16,7 +16,7 @@ public class TuscanTest {
 
     @DataPoints
     public static int[] integers() {
-        int[] range = IntStream.rangeClosed(2, 20).toArray();
+        int[] range = IntStream.rangeClosed(1, 20).toArray();
         return range;
     }
 

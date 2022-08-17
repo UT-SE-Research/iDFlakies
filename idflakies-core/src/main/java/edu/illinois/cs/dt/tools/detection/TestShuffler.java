@@ -249,15 +249,16 @@ public class TestShuffler {
         int n = classes.size(); // n is number of classes
         int[][] classOrdering = Tuscan.generateTuscanPermutations(n);
         for (String className : classes) {
-            if (classToMethods.get(className).size() == 1) {
-                int[][] methodPermuation = { 
-                    { 0, 0 }
-                };
-                classToPermutations.put(className, methodPermuation);
-            } else {
-                int[][] methodPermuation = Tuscan.generateTuscanPermutations(classToMethods.get(className).size());
-                classToPermutations.put(className, methodPermuation);
-            }
+            // This condition may be needed for the tests
+            // if (classToMethods.get(className).size() == 1) {
+            //     int[][] methodPermuation = { 
+            //         { 0, 0 }
+            //     };
+            //     classToPermutations.put(className, methodPermuation);
+            // } else {
+            int[][] methodPermuation = Tuscan.generateTuscanPermutations(classToMethods.get(className).size());
+            classToPermutations.put(className, methodPermuation);
+            // }
         }
         HashMap<String, List<String>> newClassToMethods = new HashMap<String, List<String>>();
         List<String> permClasses = new ArrayList<String>();
