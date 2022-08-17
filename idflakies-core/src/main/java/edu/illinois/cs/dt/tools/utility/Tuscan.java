@@ -3,20 +3,15 @@ package edu.illinois.cs.dt.tools.utility;
 public class Tuscan {
     public static int[][] generateTuscanPermutations(int arg) {
         if (arg == 3) {
-
             generateThree();
-
         } else if (arg == 5) {
-
             generateFive();
-
         } else {
-
             generateTuscanSquare(arg);
-            
         }
         return r;
     }
+    
     private static int[][] r;
 
     private static void helper(int[] a, int i) {
