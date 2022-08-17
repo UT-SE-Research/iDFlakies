@@ -78,13 +78,14 @@ public class Tuscan {
             for (int i = 0; i < 9; i++) {
                 helper(t[i], i);
             }
+        } else {
+            assert (false);
         }
-        else assert(false);
 
-        while (nn != n){
-            // https://www.sciencedirect.com/science/article/pii/0095895680900441
-	        n = n * 2 - 1;
-            int h = (n + 1) / 2;
+        while (nn != n) {
+            // https://ww.sciencedirect.com/science/article/pii/0095895680900441
+            n = n * 2 - 1;
+	        int h = (n + 1) / 2;
             for (int i = 0; i < h; i++) {
                 for (int j = 0; j < h; j++) {
                     r[i][n - j] = r[i][j] + h;
