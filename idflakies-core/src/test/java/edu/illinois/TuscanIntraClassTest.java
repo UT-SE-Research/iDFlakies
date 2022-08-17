@@ -15,7 +15,8 @@ import edu.illinois.cs.dt.tools.detection.detectors.TuscanIntraClassDetector;
 public class TuscanIntraClassTest {
     @Test
     public void test() throws Exception {
-        String[] testArray = {"cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
+        String[] testArray = {
+        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
         "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
         "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
         "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
@@ -23,7 +24,8 @@ public class TuscanIntraClassTest {
         "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAdd",
         "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAddAndReturn",
         "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMetaSetterAndGetter",
-        "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode"};
+        "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode"
+        };
         List<String> tests = Arrays.asList(testArray);
         TestShuffler testShuffler = new TestShuffler("", 0, tests, null);
         // int n = TuscanOnlyClassDetector.getClassesSize(tests);
@@ -42,7 +44,6 @@ public class TuscanIntraClassTest {
         } else {
             rounds = maxMethodSize;
         }
-        // System.out.println(rounds);
         List<String> classes = new ArrayList<String>();
         LinkedHashMap<String, List<String>> classToMethods = new LinkedHashMap<String, List<String>>();
         List<List<String>> visitedMethodPairs = new ArrayList<List<String>>();
@@ -73,7 +74,6 @@ public class TuscanIntraClassTest {
                 List<String> currentMethodOrdering = classToMethods.get(className);
                 List<List<String>> currentMethodPairs = TuscanInterClassTest.generateAllPairs(currentMethodOrdering);
                 allMethodPairs.addAll(currentMethodPairs);
-                // System.out.println(currentMethodPairs.size());
                 for (int j = 0; j < currentMethodOrdering.size() - 1; j++) {
                     List<String> newPair = new ArrayList<String>();
                     newPair.add(currentMethodOrdering.get(j));

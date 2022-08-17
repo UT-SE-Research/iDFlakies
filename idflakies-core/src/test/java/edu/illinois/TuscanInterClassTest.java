@@ -2,8 +2,6 @@ package edu.illinois;
 
 import java.util.*;
 
-import javax.annotation.security.PermitAll;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,17 +12,19 @@ import edu.illinois.cs.dt.tools.detection.detectors.TuscanInterClassDetector;
 public class TuscanInterClassTest {
     @Test
     public void test() throws Exception {
-        String[] testArray = { "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
-                "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
-                "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
-                "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey1",
-                "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
-                "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testRocksDBInjector",
+        String[] testArray = { 
+        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
+        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
+        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
+        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey1",
+        "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
+        "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testRocksDBInjector",
         "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAdd",
         "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAddAndReturn",
         "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMetaSetterAndGetter",
         "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMock1",
-        "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode"};
+        "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode"
+        };
         List<String> tests = Arrays.asList(testArray);
         HashMap<String, List<String>> tempClassToMethods = TuscanIntraClassTest.generateClassToMethods(tests);
         int rounds = TuscanInterClassDetector.findNumberOfRounds(tempClassToMethods);
@@ -60,9 +60,7 @@ public class TuscanInterClassTest {
                 if (!(allClassPairs.contains(newPair))) {
                     throw new Exception("Not included pair");
                 }
-                if (!visitedClassPairs.contains(newPair)) {
-                    visitedClassPairs.add(newPair);
-                }
+                visitedClassPairs.add(newPair);
             }
             finalPairs.addAll(allClassPairs);
             // Now we will explore the inter-class method pairs
@@ -81,7 +79,7 @@ public class TuscanInterClassTest {
                 newPair.add(firstMethod);
                 if (!allMethodPairs.contains(newPair)) {
                     System.out.println(newPair);
-                    throw new Exception("Doents contain all method paris");
+                    throw new Exception("Doesn't contain all method pairs");
                 }
                 if (!visitedMethodPairs.contains(newPair)) {
                     visitedMethodPairs.add(newPair);

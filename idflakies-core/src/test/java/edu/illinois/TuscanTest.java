@@ -3,7 +3,6 @@ package edu.illinois;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Assert;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -14,7 +13,6 @@ import edu.illinois.cs.dt.tools.utility.Tuscan;
 
 @RunWith(Theories.class)
 public class TuscanTest {
-    // private static int[][] matrix;
 
     @DataPoints
     public static int[] integers() {
@@ -24,7 +22,6 @@ public class TuscanTest {
 
     @Theory
     public void test(int n) throws Exception {
-        int count;
         int[][] matrix = Tuscan.generateTuscanPermutations(n);
         Set<List<Integer>> finalPairs = new LinkedHashSet<List<Integer>>();
         Set<List<Integer>> visitedPairs = new LinkedHashSet<List<Integer>>();
