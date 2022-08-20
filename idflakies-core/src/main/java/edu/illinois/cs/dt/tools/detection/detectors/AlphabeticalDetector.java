@@ -35,5 +35,4 @@ public class AlphabeticalDetector extends ExecutingDetector {
     public DetectionRound results() throws Exception {
         return makeDts(origResult, runList(testShuffler.alphabeticalOrderSelector(absoluteRound.get())));
     }
-    
 }
