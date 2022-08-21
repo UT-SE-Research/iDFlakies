@@ -2,9 +2,7 @@ package edu.illinois.cs.dt.tools.utility;
 
 public class Tuscan {
     public static int[][] generateTuscanPermutations(int arg) {
-        if (arg == 1) {
-            generateOne();
-        } else if (arg == 3) {
+        if (arg == 3) {
             generateThree();
         } else if (arg == 5) {
             generateFive();
@@ -29,6 +27,7 @@ public class Tuscan {
         for (int i = 0; i < nn; i++) {
             r[i] = new int[nn + 1];
         }
+
         if (n % 2 == 0) {
             // https://mathoverflow.net/questions/60856/hamilton-paths-in-k-2n/60859#60859
             int[] a = new int[n];
@@ -79,14 +78,13 @@ public class Tuscan {
             for (int i = 0; i < 9; i++) {
                 helper(t[i], i);
             }
-        }
-        else {
-            assert(false);
+        } else {
+            assert (false);
         }
 
-        while (nn != n){
-            // https://www.sciencedirect.com/science/article/pii/0095895680900441
-	        n = n * 2 - 1;
+        while (nn != n) {
+            // https://ww.sciencedirect.com/science/article/pii/0095895680900441
+            n = n * 2 - 1;
             int h = (n + 1) / 2;
             for (int i = 0; i < h; i++) {
                 for (int j = 0; j < h; j++) {
@@ -115,13 +113,6 @@ public class Tuscan {
         }
     }
 
-    private static void generateOne() {
-        int[][] t = {
-            { 0, 0 }
-        };
-        r = t;
-    }
-
     private static void generateThree() {
         int[][] t = {
                 { 0, 1, 2, 0 },
@@ -148,12 +139,12 @@ public class Tuscan {
                 { 4, 0, 3, 1, 0 }
         };
         // int[][] t = {
-        //         { 0, 1, 2, 3, 4 },
-        //         { 1, 0, 3, 2, 4 },
-        //         { 4, 3, 0, 2, 1 },
-        //         { 1, 4, 2, 0, 3 },
-        //         { 0, 4, 1, 3, 2 },
-        //         { 4, 0, 3, 1, 2 }
+        //         { 0, 1, 2, 3, 4, 0 },
+        //         { 1, 0, 3, 2, 4, 0 },
+        //         { 4, 3, 0, 2, 1, 0 },
+        //         { 1, 4, 2, 0, 3, 0 },
+        //         { 0, 4, 1, 3, 2, 0 },
+        //         { 4, 0, 3, 1, 2, 0 }
         // };
         r = t;
     }
