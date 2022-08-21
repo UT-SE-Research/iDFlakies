@@ -1,7 +1,6 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
-import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 
 import java.io.File;
