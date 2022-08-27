@@ -60,7 +60,7 @@ public class TuscanIntraClassTest {
                 }
                 classToMethods.get(className).add(test);
             }
-            List<List<String>> currentClassPairs = TuscanInterClassTest.generateAllPairs(classes);
+            List<List<String>> currentClassPairs = generateAllPairs(classes);
             for (int j = 0; j < classes.size() - 1; j++) {
                 // Check if class pairs are covered
                 List<String> newPair = new ArrayList<String>();
@@ -72,7 +72,7 @@ public class TuscanIntraClassTest {
             }
             for (String className : classes) {
                 List<String> currentMethodOrdering = classToMethods.get(className);
-                List<List<String>> currentMethodPairs = TuscanInterClassTest.generateAllPairs(currentMethodOrdering);
+                List<List<String>> currentMethodPairs = generateAllPairs(currentMethodOrdering);
                 allMethodPairs.addAll(currentMethodPairs);
                 for (int j = 0; j < currentMethodOrdering.size() - 1; j++) {
                     List<String> newPair = new ArrayList<String>();
@@ -102,5 +102,20 @@ public class TuscanIntraClassTest {
             classToMethods.get(className).add(test);
         }
         return classToMethods;
+    }
+
+    public static List<List<String>> generateAllPairs(List<String> tests) {
+        List<List<String>> allPairs = new ArrayList<>();
+        for (int i = 0; i < tests.size(); i++) {
+            for (int j = 0; j < tests.size(); j++) {
+                if (tests.get(i) != tests.get(j)) {
+                    List<String> newPair = new ArrayList<String>();
+                    newPair.add(tests.get(i));
+                    newPair.add(tests.get(j));
+                    allPairs.add(newPair);
+                }
+            }
+        }
+        return allPairs;
     }
 }

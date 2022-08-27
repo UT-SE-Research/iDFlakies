@@ -47,7 +47,7 @@ public class TuscanOnlyClassTest {
                     permutatedClasses.add(className);
                 }
             }
-            List<List<String>> allPairs = TuscanInterClassTest.generateAllPairs(permutatedClasses);
+            List<List<String>> allPairs = generateAllPairs(permutatedClasses);
             for (int j = 0; j < permutatedClasses.size() - 1; j++) {
                 List<String> newPair = new ArrayList<String>();
                 newPair.add(permutatedClasses.get(j));
@@ -62,4 +62,19 @@ public class TuscanOnlyClassTest {
         int count = finalPairs.size();
         Assert.assertEquals(count, n * (n - 1));
     }    
+
+    public static List<List<String>> generateAllPairs(List<String> tests) {
+        List<List<String>> allPairs = new ArrayList<>();
+        for (int i = 0; i < tests.size(); i++) {
+            for (int j = 0; j < tests.size(); j++) {
+                if (tests.get(i) != tests.get(j)) {
+                    List<String> newPair = new ArrayList<String>();
+                    newPair.add(tests.get(i));
+                    newPair.add(tests.get(j));
+                    allPairs.add(newPair);
+                }
+            }
+        }
+        return allPairs;
+    }
 }
