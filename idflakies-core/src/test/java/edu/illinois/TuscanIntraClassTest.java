@@ -16,19 +16,18 @@ public class TuscanIntraClassTest {
     @Test
     public void test() throws Exception {
         String[] testArray = {
-        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
-        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
-        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
-        "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
-        "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testRocksDBInjector",
-        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAdd",
-        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAddAndReturn",
-        "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMetaSetterAndGetter",
-        "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode"
+            "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
+            "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
+            "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
+            "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
+            "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testRocksDBInjector",
+            "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAdd",
+            "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAddAndReturn",
+            "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMetaSetterAndGetter",
+            "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode"
         };
         List<String> tests = Arrays.asList(testArray);
         TestShuffler testShuffler = new TestShuffler("", 0, tests, null);
-        // int n = TuscanOnlyClassDetector.getClassesSize(tests);
         HashMap<String, List<String>> tempClassToMethods = generateClassToMethods(tests);
         int maxMethodSize = TuscanIntraClassDetector.findMaxMethodSize(tempClassToMethods);
         if (maxMethodSize == 3 || maxMethodSize == 5) {
@@ -92,7 +91,7 @@ public class TuscanIntraClassTest {
         Assert.assertEquals(allMethodPairs.size(), visitedMethodPairs.size());
     }    
 
-    public static HashMap<String, List<String>> generateClassToMethods (List<String> tests) {
+    public static HashMap<String, List<String>> generateClassToMethods(List<String> tests) {
         HashMap<String, List<String>> classToMethods = new HashMap<>();
         for (final String test : tests) {
             final String className = TestShuffler.className(test);
