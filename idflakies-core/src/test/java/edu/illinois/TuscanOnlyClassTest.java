@@ -16,18 +16,17 @@ public class TuscanOnlyClassTest {
     @Test
     public void test() throws Exception {
         String[] testArray = {
-        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
-        "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
-        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
-        "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
-        "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testRocksDBInjector",
-        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAdd",
-        "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAddAndReturn",
-        "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMetaSetterAndGetter",
-        "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode" 
+            "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncodingByMozilla",
+            "cn.edu.hfut.dmic.webcollector.util.CharsetDetectorTest.testGuessEncoding",
+            "cn.edu.hfut.dmic.webcollector.util.CrawlDatumTest.testKey",
+            "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testBerkeleyDBInjector",
+            "cn.edu.hfut.dmic.webcollector.util.DBManagerTest.testRocksDBInjector",
+            "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAdd",
+            "cn.edu.hfut.dmic.webcollector.util.CrawlDatumsTest.testAddAndReturn",
+            "cn.edu.hfut.dmic.webcollector.util.MetaTest.testMetaSetterAndGetter",
+            "cn.edu.hfut.dmic.webcollector.util.OkHttpRequesterTest.testHttpCode" 
         };
         List<String> tests = Arrays.asList(testArray);
-        // System.out.println(tests);
         TestShuffler testShuffler = new TestShuffler("", 0, tests, null);
         int n = TuscanOnlyClassDetector.getClassesSize(tests);
         int rounds = n;
