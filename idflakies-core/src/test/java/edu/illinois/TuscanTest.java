@@ -42,7 +42,7 @@ public class TuscanTest {
         Assert.assertEquals(finalPairs.size(), visitedPairs.size());
     }
     
-    private static List<List<Integer>> generateAllPairs (int[] row) {
+    private static List<List<Integer>> generateAllPairs(int[] row) {
         List<List<Integer>> allPairs = new ArrayList<>();
         for (int i = 0; i < row.length - 1; i++) {
             for (int j = 0; j < row.length - 1; j++) {
