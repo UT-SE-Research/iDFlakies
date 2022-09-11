@@ -33,47 +33,48 @@ public class TuscanOnlyClassTest {
         if (n == 3 || n == 5) {
             rounds++;
         }
-        Set<List<String>> finalPairs = new LinkedHashSet<List<String>>();
-        Set<List<String>> visitedPairs = new LinkedHashSet<List<String>>();
 
-        for (int i = 0; i < rounds; i++) {
-            List<String> currentRoundPermutation = testShuffler.alphabeticalAndTuscanOrder(i, true);
-            List<String> permutatedClasses = new ArrayList<String>();
-            for (String test : currentRoundPermutation) {
-                String className = TestShuffler.className(test);
-                // classes.add(TestShuffler.className(currentOrder.get(j)));
-                if (!permutatedClasses.contains(className)) {
-                    permutatedClasses.add(className);
-                }
-            }
-            List<List<String>> allPairs = generateAllPairs(permutatedClasses);
-            for (int j = 0; j < permutatedClasses.size() - 1; j++) {
-                List<String> newPair = new ArrayList<String>();
-                newPair.add(permutatedClasses.get(j));
-                newPair.add(permutatedClasses.get(j + 1));
-                if (!allPairs.contains(newPair)) {
-                    throw new Exception("Class pair is not covered");
-                }
-                visitedPairs.add(newPair);
-            }
-            finalPairs.addAll(allPairs);
-        }
-        int count = finalPairs.size();
-        Assert.assertEquals(count, n * (n - 1));
+        // Each List inside a set is basically a pair 
+        Set<List<String>> allClassPairs = generateAllPairs(tests);
+        Set<List<String>> tuscanCoveredClassPairs = tuscanOnlyClassPairs(rounds, tests, testShuffler);
+
+        Assert.assertEquals(allClassPairs, tuscanCoveredClassPairs);
     }    
 
-    public static List<List<String>> generateAllPairs(List<String> tests) {
-        List<List<String>> allPairs = new ArrayList<>();
+    public static Set<List<String>> generateAllPairs(List<String> tests) {
+        // Generates all pairs using a naive algorithm for comparison with tuscan-only-class method
+        Set<List<String>> allPairs = new LinkedHashSet<List<String>>();
         for (int i = 0; i < tests.size(); i++) {
             for (int j = 0; j < tests.size(); j++) {
-                if (tests.get(i) != tests.get(j)) {
+                String className1 = TestShuffler.className(tests.get(i));
+                String className2 = TestShuffler.className(tests.get(j));
+                if (!className1.equals(className2)) {
                     List<String> newPair = new ArrayList<String>();
-                    newPair.add(tests.get(i));
-                    newPair.add(tests.get(j));
+                    newPair.add(className1);
+                    newPair.add(className2);
                     allPairs.add(newPair);
                 }
             }
         }
         return allPairs;
+    }
+
+    private static Set<List<String>> tuscanOnlyClassPairs(int rounds, List<String> tests, TestShuffler testShuffler) {
+        // Generates all class pairs using tuscan-only-class method
+        Set<List<String>> visitedClassPairs = new LinkedHashSet<List<String>>();
+        for (int i = 0; i < rounds; i++) {
+            List<String> currentOrder = testShuffler.alphabeticalAndTuscanOrder(i, true);
+            for (int j = 0; j < currentOrder.size() - 1; j++) {
+                String className1 = TestShuffler.className(currentOrder.get(j));
+                String className2 = TestShuffler.className(currentOrder.get(j + 1));
+                List<String> newPair = new ArrayList<String>();
+                if (!className1.equals(className2)) {
+                    newPair.add(className1);
+                    newPair.add(className2);
+                    visitedClassPairs.add(newPair);
+                }
+            }
+        }
+        return visitedClassPairs;
     }
 }

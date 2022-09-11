@@ -1,9 +1,5 @@
 package edu.illinois;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.*;
 
 import org.junit.Test;
@@ -28,13 +24,14 @@ public class TuscanIntraClassTest {
         };
         List<String> tests = Arrays.asList(testArray);
         TestShuffler testShuffler = new TestShuffler("", 0, tests, null);
-        HashMap<String, List<String>> tempClassToMethods = generateClassToMethods(tests);
-        int maxMethodSize = TuscanIntraClassDetector.findMaxMethodSize(tempClassToMethods);
+        HashMap<String, List<String>> classToMethods = generateClassToMethods(tests);
+
+        int maxMethodSize = TuscanIntraClassDetector.findMaxMethodSize(classToMethods);
         if (maxMethodSize == 3 || maxMethodSize == 5) {
             maxMethodSize++;
         }
         int rounds;
-        int classSize = tempClassToMethods.keySet().size();
+        int classSize = classToMethods.keySet().size();
         if (classSize == 3 || classSize == 5) {
             classSize++;
         }
@@ -43,52 +40,17 @@ public class TuscanIntraClassTest {
         } else {
             rounds = maxMethodSize;
         }
-        List<String> classes = new ArrayList<String>();
-        LinkedHashMap<String, List<String>> classToMethods = new LinkedHashMap<String, List<String>>();
-        List<List<String>> visitedMethodPairs = new ArrayList<List<String>>();
-        Set<List<String>> allMethodPairs = new HashSet<List<String>>();
-        for (int i = 0; i < rounds; i++) {
-            List<String> currentOrder = testShuffler.tuscanIntraClassOrder(i);
-            for (String test : currentOrder) {
-                String className = TestShuffler.className(test);
-                if (!classes.contains(className)) {
-                    classes.add(className);
-                }
-                if (!classToMethods.containsKey(className)) {
-                    classToMethods.put(className, new ArrayList<String>());
-                }
-                classToMethods.get(className).add(test);
-            }
-            List<List<String>> currentClassPairs = generateAllPairs(classes);
-            for (int j = 0; j < classes.size() - 1; j++) {
-                // Check if class pairs are covered
-                List<String> newPair = new ArrayList<String>();
-                newPair.add(classes.get(j));
-                newPair.add(classes.get(j + 1));
-                if (!currentClassPairs.contains(newPair)) {
-                    throw new Exception("Not included Classes");
-                }
-            }
-            for (String className : classes) {
-                List<String> currentMethodOrdering = classToMethods.get(className);
-                List<List<String>> currentMethodPairs = generateAllPairs(currentMethodOrdering);
-                allMethodPairs.addAll(currentMethodPairs);
-                for (int j = 0; j < currentMethodOrdering.size() - 1; j++) {
-                    List<String> newPair = new ArrayList<String>();
-                    newPair.add(currentMethodOrdering.get(j));
-                    newPair.add(currentMethodOrdering.get(j + 1));
-                    if(!currentMethodPairs.contains(newPair)) {
-                        System.out.println(newPair);
-                        throw new Exception("Not included Method Pairs");
-                    }
-                    if (!visitedMethodPairs.contains(newPair)) {
-                        visitedMethodPairs.add(newPair);
-                    }
-                }
-                currentMethodOrdering.clear();
-            }
-        }
-        Assert.assertEquals(allMethodPairs.size(), visitedMethodPairs.size());
+
+        // Each List inside a set is basically a pair 
+        Set<List<String>> allClassPairs = generateAllPairs(tests, false);
+        Set<List<String>> tuscanCoveredClassPairs = tuscanClassPairs(rounds, tests, testShuffler);
+
+        Assert.assertEquals(allClassPairs, tuscanCoveredClassPairs);
+
+        Set<List<String>> allMethodPairs = generateAllPairs(tests, true);
+        Set<List<String>> tuscanCoveredMethodPairs = tuscanMethodPairs(rounds, tests, testShuffler);
+
+        Assert.assertEquals(allMethodPairs, tuscanCoveredMethodPairs);
     }    
 
     public static HashMap<String, List<String>> generateClassToMethods(List<String> tests) {
@@ -103,11 +65,11 @@ public class TuscanIntraClassTest {
         return classToMethods;
     }
 
-    public static List<List<String>> generateAllPairs(List<String> tests) {
-        List<List<String>> allPairs = new ArrayList<>();
+    public static Set<List<String>> generateAllPairs(List<String> tests) {
+        Set<List<String>> allPairs = new LinkedHashSet<List<String>>();
         for (int i = 0; i < tests.size(); i++) {
             for (int j = 0; j < tests.size(); j++) {
-                if (tests.get(i) != tests.get(j)) {
+                if (!tests.get(i).equals(tests.get(j))) {
                     List<String> newPair = new ArrayList<String>();
                     newPair.add(tests.get(i));
                     newPair.add(tests.get(j));
@@ -116,5 +78,65 @@ public class TuscanIntraClassTest {
             }
         }
         return allPairs;
+    }
+
+    private static Set<List<String>> generateAllPairs(List<String> tests, boolean isMethods) {
+        // Generates all pairs with a naive algorithm for comparison with tuscan-intra-class method
+        Set<List<String>> allPairs = new LinkedHashSet<List<String>>();
+        for (int i = 0; i < tests.size(); i++) {
+            for (int j = 0; j < tests.size(); j++) {
+                String className1 = TestShuffler.className(tests.get(i));
+                String className2 = TestShuffler.className(tests.get(j));
+                List<String> newPair = new ArrayList<String>();
+                if (!isMethods && !className1.equals(className2)) {
+                    newPair.add(className1);
+                    newPair.add(className2);
+                    allPairs.add(newPair);
+                } else if (isMethods && className1.equals(className2) && !tests.get(i).equals(tests.get(j))) {
+                    newPair.add(tests.get(i));
+                    newPair.add(tests.get(j));
+                    allPairs.add(newPair);
+                }
+            }
+        }
+        return allPairs;
+    }
+
+    private static Set<List<String>> tuscanClassPairs(int rounds, List<String> tests, TestShuffler testShuffler) {
+        // Generates the class pairs using tuscan-intra-class algorithm
+        Set<List<String>> visitedClassPairs = new LinkedHashSet<List<String>>();
+        for (int i = 0; i < rounds; i++) {
+            List<String> currentOrder = testShuffler.tuscanIntraClassOrder(i);
+            for (int j = 0; j < currentOrder.size() - 1; j++) {
+                String className1 = TestShuffler.className(currentOrder.get(j));
+                String className2 = TestShuffler.className(currentOrder.get(j + 1));
+                List<String> newPair = new ArrayList<String>();
+                if (!className1.equals(className2)) {
+                    newPair.add(className1);
+                    newPair.add(className2);
+                    visitedClassPairs.add(newPair);
+                }
+            }
+        }
+        return visitedClassPairs;
+    }
+
+    private static Set<List<String>> tuscanMethodPairs(int rounds, List<String> tests, TestShuffler testShuffler) {
+        // Generates the intra-class method pairs using tuscan-intra-class algorithm
+        Set<List<String>> visitedMethodPairs = new LinkedHashSet<List<String>>();
+        for (int i = 0; i < rounds; i++) {
+            List<String> currentOrder = testShuffler.tuscanIntraClassOrder(i);
+            for (int j = 0; j < currentOrder.size() - 1; j++) {
+                String class1 = TestShuffler.className(currentOrder.get(j));
+                String class2 = TestShuffler.className(currentOrder.get(j + 1));
+                if (class1.equals(class2)) {
+                    List<String> newPair = new ArrayList<String>();
+                    newPair.add(currentOrder.get(j));
+                    newPair.add(currentOrder.get(j + 1));
+                    visitedMethodPairs.add(newPair);
+                }
+            }
+        }
+        return visitedMethodPairs;
     }
 }
