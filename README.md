@@ -114,7 +114,7 @@ If you use iDFlakies, please cite our corresponding [ICST paper](http://mir.cs.i
 @inproceedings{LamETAL2019ICST,
     author    = {Lam, Wing and Oei, Reed and Shi, August and Marinov, Darko and Xie, Tao},
     title     = {{iDFlakies}: {A} Framework for Detecting and Partially Classifying Flaky Tests},
-    booktitle = {12th {IEEE} Conference on Software Testing, Validation and Verification, {ICST} 2019, Xi'an, China, April 22-27, 2019},
+    booktitle = {12th {IEEE} International Conference on Software Testing, Verification and Validation},
     pages     = {312--322},
     year      = {2019},
 }
