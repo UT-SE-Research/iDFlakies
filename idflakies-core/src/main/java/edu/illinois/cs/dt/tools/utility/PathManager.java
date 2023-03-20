@@ -2,6 +2,7 @@ package edu.illinois.cs.dt.tools.utility;
 
 import com.google.common.base.Preconditions;
 import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import org.apache.maven.project.MavenProject;
@@ -21,6 +22,7 @@ public abstract class PathManager {
     public static final Path FLAKY_LIST_PATH = Paths.get("flaky-lists.json");
     public static final Path ORIGINAL_ORDER = Paths.get("original-order");
     public static final Path SELECTED_TESTS = Paths.get("selected-tests");
+    public static final Path MINIMIZED = Paths.get("minimized");
     public static final Path TIME = Paths.get("time");
     public static final Path ERROR = Paths.get("error");
     public static final Path ORIGINAL_RESULTS_LOG = Paths.get("original-results-ids");
@@ -95,6 +97,18 @@ public abstract class PathManager {
         return getInstance().pathInstance(relative);
     }
 
+    public static Path minimizedPath() {
+        return getInstance().minimizedPathInstance();
+    }
+
+    public static Path minimizedPath(final Path relative) {
+        return getInstance().minimizedPathInstance(relative);
+    }
+
+    public static Path minimizedPath(final String dependentTest, final String hash, final Result expected) {
+        return getInstance().minimizedPathInstance(dependentTest, hash, expected);
+    }
+
     protected abstract Path detectionResultsInstance();
 
     protected abstract Path detectionFileInstance();
@@ -132,5 +146,10 @@ public abstract class PathManager {
     protected abstract Path pathInstance(final Path relative);
     
     protected abstract Path modulePathInstance();
-    
+
+    protected abstract Path minimizedPathInstance();
+
+    protected abstract Path minimizedPathInstance(final Path relative);
+
+    protected abstract Path minimizedPathInstance(final String dependentTest, final String hash, final Result expected);
 }
