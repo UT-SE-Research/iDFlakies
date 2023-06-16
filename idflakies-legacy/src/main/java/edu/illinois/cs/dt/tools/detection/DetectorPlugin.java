@@ -259,7 +259,6 @@ public class DetectorPlugin extends TestPlugin {
 
         if (!tests.isEmpty()) {
             Files.createDirectories(outputPath);
-            Files.write(PathManager.originalOrderPath(), String.join(System.lineSeparator(), tests).getBytes());
             final Detector detector = DetectorFactory.makeDetector(this.runner, project.getBasedir(), tests, rounds);
             TestPluginUtil.project.info("Created dependent test detector (" + detector.getClass() + ").");
             detector.writeTo(outputPath);
@@ -305,6 +304,7 @@ public class DetectorPlugin extends TestPlugin {
         if (!Files.exists(PathManager.originalOrderPath()) || ignoreExisting) {
             TestPluginUtil.project.info("Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
 
+            List<String> originalOrder = null;
             try {
                 final Path surefireReportsPath = Paths.get(project.getBuildDirectory()).resolve("surefire-reports");
                 final Path mvnTestLog = PathManager.testLog();
@@ -319,13 +319,20 @@ public class DetectorPlugin extends TestPlugin {
                             tests.add(classData.className + delimiter + testName);
                         }
                     }
-                    return tests;
+                    originalOrder = tests;
                 } else {
-                    return locateTests(project, testFramework);
+                    originalOrder = locateTests(project, testFramework);
                 }
             } catch (Exception ignored) {}
 
-            return locateTests(project, testFramework);
+            // If something went wrong, then configure originalOrder accordingly
+            if (originalOrder == null) {
+                originalOrder = locateTests(project, testFramework);
+            }
+
+            // Write the computed original order to file if did not exist or specified to ignore existing one
+            Files.write(PathManager.originalOrderPath(), String.join(System.lineSeparator(), originalOrder).getBytes());
+            return originalOrder;
         } else {
             return Files.readAllLines(PathManager.originalOrderPath());
         }

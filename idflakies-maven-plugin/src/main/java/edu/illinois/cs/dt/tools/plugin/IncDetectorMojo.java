@@ -412,6 +412,7 @@ public class IncDetectorMojo extends DetectorMojo {
     protected List<String> getTests(
             final MavenProject project,
             TestFramework testFramework) throws IOException {
+        // NOTE: Do we need to re-compute original order, or expect developer to provide already?
         List<String> tests = getOriginalOrder(project, testFramework, true);
         List<String> affectedTests = new ArrayList<>();
 
@@ -428,6 +429,7 @@ public class IncDetectorMojo extends DetectorMojo {
     private List<String> getTestClasses(
             final MavenProject project,
             TestFramework testFramework) throws IOException {
+        // NOTE: Do we need to re-compute original order, or expect developer to provide already?
         List<String> tests = getOriginalOrder(project, testFramework, true);
 
         String delimiter = testFramework.getDelimiter();
