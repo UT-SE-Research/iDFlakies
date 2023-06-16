@@ -46,7 +46,7 @@ function setOriginalOrder() {        #Copies the original order of tests we want
         cd ${currModule}
     fi
     mkdir .dtfixingtools
-    fileName=${currModule//[/]/@}
+    fileName=${currModule//[\/]/@}
     if [[ ${currModule} == "" ]]; then
         cp ${scriptDir}/original-order-files/${projName} .dtfixingtools/original-order
     else
@@ -168,6 +168,7 @@ function checkFlakyTests() {
 
             #5. Using a preset original order, run the default test for each
             setOriginalOrder ${starr[4]} ${MODULE}
+            exit
             mvn ${mvnCommand} -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=5 -Ddt.detector.original_order.all_must_pass=false -Ddt.detector.roundsemantics.total=true ${MVNOPTIONS} ${PL} -B
             if [[ $? != 0 ]]; then
                 echo "${URL} iDFlakies was not successful. %%%%%"
