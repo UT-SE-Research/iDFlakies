@@ -287,7 +287,6 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
         if (!tests.isEmpty()) {
             Files.createDirectories(outputPath);
-            Files.write(PathManager.originalOrderPath(), String.join(System.lineSeparator(), getOriginalOrder(mavenProject, this.runner.framework(), true)).getBytes());
             Files.write(PathManager.selectedTestPath(), String.join(System.lineSeparator(), tests).getBytes());
             final Detector detector = DetectorFactory.makeDetector(this.runner, mavenProject.getBasedir(), tests, rounds);
             Logger.getGlobal().log(Level.INFO, "Created dependent test detector (" + detector.getClass() + ").");
@@ -332,6 +331,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         if (!Files.exists(PathManager.originalOrderPath()) || ignoreExisting) {
             Logger.getGlobal().log(Level.INFO, "Getting original order by parsing logs. ignoreExisting set to: " + ignoreExisting);
 
+            List<String> originalOrder = null;
             try {
                 final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("surefire-reports");
                 final Path mvnTestLog = PathManager.testLog();
@@ -348,13 +348,20 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
                         }
                     }
 
-                    return tests;
+                    originalOrder = tests;
                 } else {
-                    return locateTests(project, testFramework);
+                    originalOrder = locateTests(project, testFramework);
                 }
             } catch (Exception ignored) {}
 
-            return locateTests(project, testFramework);
+            // If something went wrong, then configure originalOrder accordingly
+            if (originalOrder == null) {
+                originalOrder = locateTests(project, testFramework);
+            }
+
+            // Write the computed original order to file if did not exist or specified to ignore existing one
+            Files.write(PathManager.originalOrderPath(), String.join(System.lineSeparator(), originalOrder).getBytes());
+            return originalOrder;
         } else {
             return Files.readAllLines(PathManager.originalOrderPath());
         }

@@ -46,7 +46,7 @@ function setOriginalOrder() {        #Copies the original order of tests we want
         cd ${currModule}
     fi
     mkdir .dtfixingtools
-    fileName=${currModule//[/]/@}
+    fileName=${currModule//[\/]/@}
     if [[ ${currModule} == "" ]]; then
         cp ${scriptDir}/original-order-files/${projName} .dtfixingtools/original-order
     else

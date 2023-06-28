@@ -17,14 +17,6 @@ org.apache.dubbo.rpc.protocol.dubbo.ImplicitCallBackTest.test_Ex_OnReturn
 org.apache.dubbo.rpc.protocol.dubbo.ImplicitCallBackTest.test_CloseCallback
 org.apache.dubbo.rpc.protocol.dubbo.ImplicitCallBackTest.test_Async_Future_Multi
 org.apache.dubbo.rpc.protocol.dubbo.ImplicitCallBackTest.test_Sync_NoFuture
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testGenricCustomArg
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testNormalEnum
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testGenricEnumCompat
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testGenericEnum
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testExportService
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testNormal
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testGenericExport
-org.apache.dubbo.rpc.protocol.dubbo.support.EnumBak.testEnumCompat
 org.apache.dubbo.rpc.protocol.dubbo.DubboLazyConnectTest.testSticky1
 org.apache.dubbo.rpc.protocol.dubbo.DubboLazyConnectTest.testSticky2
 org.apache.dubbo.rpc.protocol.dubbo.DubboLazyConnectTest.testSticky3
