@@ -77,7 +77,7 @@ function checkMinimizeResults() {
         echo "Did not find the correct polluters in ${projectURL}. %%%%%"
         flag=1
         return 1
-    elif [[ ${exitcode} == 2]]; then
+    elif [[ ${exitcode} == 2 ]]; then
         echo "Did not find the correct cleaners in ${projectURL}. %%%%%"
         flag=1
         return 1
