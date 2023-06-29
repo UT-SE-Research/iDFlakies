@@ -121,7 +121,7 @@ function checkMinimizeResults() {
         #3. Modify pom file
 
         git checkout -f .
-        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} ${ARTIFACT_ID} idflakies-maven-plugin #only support iFixFlakies logic in Maven form
+        bash ${scriptDir}/../pom-modify/modify-project.sh ${projectDirectory} idflakies-maven-plugin ${ARTIFACT_VERSION} #only support iFixFlakies logic in Maven form
 
 
 
