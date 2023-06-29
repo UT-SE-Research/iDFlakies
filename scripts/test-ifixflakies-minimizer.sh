@@ -69,7 +69,7 @@ function checkMinimizeResults() {
     if [[ ${currModule} != "" ]]; then
         cd ${currModule}
     fi
-    cd .dtfixingtools/detection-results/
+    cd .dtfixingtools/minimized/
     minimizedfile=$(ls) #assume there is only one flaky test we are analyzing
     python ${scriptDir}/parse-minimized.py ${minimizedfile} ${expectedPolluters} ${expectedCleaners}
     exitcode=$?
