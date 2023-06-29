@@ -29,5 +29,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-         name: test-many-projects_ARTIFACT_1
+         name: test-ifixflakies-minimizer_ARTIFACT_1
          path: scripts/testing-script-results/ARTIFACTS
