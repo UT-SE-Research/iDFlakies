@@ -167,7 +167,7 @@ function checkMinimizeResults() {
                 echo "${URL} iFixFlakies minimizer was not successful. %%%%%"
                 flag=1
             else
-                checkMinimizeResults ${odtest} ${expectedPolluters} ${expectedCleaners} ${URL} $(echo ${MODULE} | cut -d'|' -f1)  #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
+                checkMinimizeResults ${odtest} "${expectedPolluters}" "${expectedCleaners}" ${URL} $(echo ${MODULE} | cut -d'|' -f1)  #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
             fi
         fi
         cd ${scriptDir}/testing-script-results
