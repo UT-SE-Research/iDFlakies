@@ -1,2 +1,2 @@
-#Project,SHA,module,expectedPolluters,expectedCleaners
-https://github.com/kevinsawicki/http-request,2d62a3e9da726942a93cf16b6e91c0187e6c0136,lib,com.github.kevinsawicki.http.HttpRequestTest.customConnectionFactory,com.github.kevinsawicki.http.HttpRequestTest.nullConnectionFactory
+#Project,SHA,module,odtest,expectedPolluters,expectedCleaners
+https://github.com/kevinsawicki/http-request,2d62a3e9da726942a93cf16b6e91c0187e6c0136,lib,com.github.kevinsawicki.http.HttpRequestTest.postWithVaragsQueryParams,com.github.kevinsawicki.http.HttpRequestTest.customConnectionFactory,com.github.kevinsawicki.http.HttpRequestTest.nullConnectionFactory
