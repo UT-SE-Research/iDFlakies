@@ -6,10 +6,10 @@ def main(args):
     minimized_file = args[1]    # File to parse for info
 
     expected_polluters = set(args[2].split('|'))    # Polluters that should be detected (separated by |)
-    if len(args) > 3:                               # Cleaners that should be detected (separated by |), if there are any
-        expected_cleaners = set(args[3].split('|'))
-    else:
+    if args[3] == '':                               # Cleaners that should be detected (separated by |), if there are any
         expected_cleaners = set()
+    else:
+        expected_cleaners = set(args[3].split('|'))
 
     # Parse json output
     with open(minimized_file) as f:
