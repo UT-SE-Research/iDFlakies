@@ -71,10 +71,18 @@ function checkMinimizeResults() {
         cd ${currModule}
     fi
     cd .dtfixingtools/minimized/
-    minimizedfile=$(ls ${odtest}-*.json) #assume there is the minimized file corresponding to the OD test
+    minimizedfile=$(find -name "${odtest}-*.json")  #assume there is the minimized file corresponding to the OD test
+    if [[ ${minimizedfile} == "" ]]; then
+        echo "Minimized file for ${odtest} in ${projectURL} does not exist. %%%%%"
+        flag=1
+        return 1
+    fi
     python ${scriptDir}/parse-minimized.py ${minimizedfile} "${expectedPolluters}" "${expectedCleaners}"
     exitcode=$?
-    if [[ ${exitcode} == 1 ]]; then
+    if [[ ${exitcode} == 0 ]]; then
+        echo "All expected polluters/cleaners found in ${projectURL}."
+        return 0
+    elif [[ ${exitcode} == 1 ]]; then
         echo "Did not find the correct polluters in ${projectURL}. %%%%%"
         flag=1
         return 1
@@ -83,8 +91,8 @@ function checkMinimizeResults() {
         flag=1
         return 1
     else
-        echo "All expected polluters/cleaners found in ${projectURL}."
-        return 0
+        echo "Something went wrong in ${projectURL}. %%%%%"
+        return 1
     fi
 }
 
