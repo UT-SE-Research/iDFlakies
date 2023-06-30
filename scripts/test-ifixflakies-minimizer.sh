@@ -61,16 +61,17 @@ function setFlakyLists() {
 
 
 function checkMinimizeResults() {
-    expectedPolluters=$1
-    expectedCleaners=$2
-    projectURL=$3
-    currModule=$4
+    odtest=$1
+    expectedPolluters=$2
+    expectedCleaners=$3
+    projectURL=$4
+    currModule=$5
 
     if [[ ${currModule} != "" ]]; then
         cd ${currModule}
     fi
     cd .dtfixingtools/minimized/
-    minimizedfile=$(ls) #assume there is only one flaky test we are analyzing
+    minimizedfile=$(ls ${odtest}-*.json) #assume there is the minimized file corresponding to the OD test
     python ${scriptDir}/parse-minimized.py ${minimizedfile} ${expectedPolluters} ${expectedCleaners}
     exitcode=$?
     if [[ ${exitcode} == 1 ]]; then
@@ -91,7 +92,7 @@ function checkMinimizeResults() {
 #CSV Splicing:
 {
     read
-    while IFS="," read -r URL SHA MODULE expectedPolluters expectedCleaners; do
+    while IFS="," read -r URL SHA MODULE odtest expectedPolluters expectedCleaners; do
 
         renamedRepo=${URL}"/"
         readarray -d / -t starr <<< "${renamedRepo}"
@@ -158,7 +159,7 @@ function checkMinimizeResults() {
                 echo "${URL} iFixFlakies minimizer was not successful. %%%%%"
                 flag=1
             else
-                checkMinimizeResults ${expectedPolluters} ${expectedCleaners} ${URL} $(echo ${MODULE} | cut -d'|' -f1)  #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
+                checkMinimizeResults ${odtest} ${expectedPolluters} ${expectedCleaners} ${URL} $(echo ${MODULE} | cut -d'|' -f1)  #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
             fi
         fi
         cd ${scriptDir}/testing-script-results
