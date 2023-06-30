@@ -7,7 +7,7 @@ def main(args):
 
     expected_polluters = set(args[2].split('|'))    # Polluters that should be detected (separated by |)
     if len(args) > 3:                               # Cleaners that should be detected (separated by |), if there are any
-        expected_cleaners = set(args[2].split('|'))
+        expected_cleaners = set(args[3].split('|'))
     else:
         expected_cleaners = set()
 
@@ -20,7 +20,8 @@ def main(args):
     for p in data['polluters']:
         actual_polluters |= set(p['deps'])
     if not actual_polluters == expected_polluters:  # If does not match, exit with non-zero code
-        print 'ACTUAL POLLUTERS: ' + str(actual_polluters)
+        print('EXPECTED POLLUTERS:', sorted(expected_polluters))
+        print('ACTUAL POLLUTERS:', sorted(actual_polluters))
         exit(1)
 
     # Match expected cleaners with the found cleaners
@@ -30,7 +31,8 @@ def main(args):
             for c in p['cleanerData']['cleaners']:
                 actual_cleaners |= set(c['cleanerTests'])
     if not actual_cleaners == expected_cleaners:    # If does not match, exit with non-zero code
-        print 'ACTUAL CLEANERS: ' + str(actual_cleaners)
+        print('EXPECTED CLEANERS:', sorted(expected_cleaners))
+        print('ACTUAL CLEANERS:', sorted(actual_cleaners))
         exit(2)
 
 if __name__ == '__main__':
