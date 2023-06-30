@@ -72,7 +72,7 @@ function checkMinimizeResults() {
     fi
     cd .dtfixingtools/minimized/
     minimizedfile=$(ls ${odtest}-*.json) #assume there is the minimized file corresponding to the OD test
-    python ${scriptDir}/parse-minimized.py ${minimizedfile} ${expectedPolluters} ${expectedCleaners}
+    python ${scriptDir}/parse-minimized.py ${minimizedfile} "${expectedPolluters}" "${expectedCleaners}"
     exitcode=$?
     if [[ ${exitcode} == 1 ]]; then
         echo "Did not find the correct polluters in ${projectURL}. %%%%%"
