@@ -4,8 +4,12 @@ import sys
 
 def main(args):
     minimized_file = args[1]    # File to parse for info
-    polluters = args[2]         # Polluters that should be detected (separated by |)
-    cleaners = args[3]          # Cleaners that should be detected (separated by |)
+
+    expected_polluters = set(args[2].split('|'))    # Polluters that should be detected (separated by |)
+    if len(args) > 3:                               # Cleaners that should be detected (separated by |), if there are any
+        expected_cleaners = set(args[2].split('|'))
+    else:
+        expected_cleaners = set()
 
     # Parse json output
     with open(minimized_file) as f:
@@ -15,8 +19,8 @@ def main(args):
     actual_polluters = set()
     for p in data['polluters']:
         actual_polluters |= set(p['deps'])
-    expected_polluters = set(polluters.split('|'))
     if not actual_polluters == expected_polluters:  # If does not match, exit with non-zero code
+        print 'ACTUAL POLLUTERS: ' + str(actual_polluters)
         exit(1)
 
     # Match expected cleaners with the found cleaners
@@ -25,9 +29,9 @@ def main(args):
         if 'cleanerData' in p:
             for c in p['cleanerData']['cleaners']:
                 actual_cleaners |= set(c['cleanerTests'])
-    expected_cleaners = set(cleaners.split('|'))
     if not actual_cleaners == expected_cleaners:    # If does not match, exit with non-zero code
-        exit(1)
+        print 'ACTUAL CLEANERS: ' + str(actual_cleaners)
+        exit(2)
 
 if __name__ == '__main__':
     main(sys.argv)
