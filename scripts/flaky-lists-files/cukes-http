@@ -1,0 +1,37 @@
+{
+  "dts": [
+    {
+      "name": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+      "intended": {
+        "order": [
+          "lv.ctco.cukes.http.logging.HttpLoggingPluginTest.testOutputStream",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesDirectMatch",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWithRegexp",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWith",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesLocationUrl",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWithRegexp",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWith",
+          "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButContentTypeOctet",
+          "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledWithMax",
+          "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotInflateVarName"
+        ],
+        "result": "PASS",
+        "testRunId": "1688181858373-e4078cc3-eb74-4eb7-91b8-8878d2d03bf1"
+      },
+      "revealed": {
+        "order": [
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesLocationUrl",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWith",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWithRegexp",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWith",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWithRegexp",
+          "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesDirectMatch",
+          "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButLongerThanMaxSize"
+        ],
+        "result": "FAILURE",
+        "testRunId": "1688181866086-ab5d63d7-3f9a-44d9-9040-a97124a98646"
+      },
+      "type": "OD"
+    }
+  ]
+}
