@@ -19,7 +19,7 @@ jobs:
         run: mvn install -B
 
       - name: Test 1st set of projects
-        run: set -o pipefail ; bash scripts/test-ifixflakies-minimizer.sh scripts/idfProjectsMinimizer1.csv |& tee -a scripts/GeneralLogs.log
+        run: set -o pipefail ; bash scripts/test-ifixflakies-minimizer.sh scripts/idfProjectsMinimizer.csv |& tee -a scripts/GeneralLogs.log
 
       - name: Move Logs file into the ARTIFACTS folder
         if: always()
