@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -273,22 +274,23 @@ public class DetectorPlugin extends TestPlugin {
 
     private static List<String> locateTests(ProjectWrapper project,
 					    TestFramework testFramework) {
-	int id = Objects.hash(project, testFramework);
-	if (!locateTestList.containsKey(id)) {
-	    TestPluginUtil.project.info("Locating tests...");
-	    try {
-		locateTestList.put(id,
-				   OperationTime.runOperation(() -> {
-					   return new ArrayList<String>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
-				       }, (tests, time) -> {
-					   TestPluginUtil.project.info("Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
-					   return tests;
-				       }));
-	    } catch (Exception e) {
-		throw new RuntimeException(e);
-	    }
-	}
-	return locateTestList.get(id);
+        int id = Objects.hash(project, testFramework);
+        if (!locateTestList.containsKey(id)) {
+            TestPluginUtil.project.info("Locating tests...");
+            try {
+                locateTestList.put(id, OperationTime.runOperation(() -> {
+                    List<String> tests = new ArrayList<>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
+                    Collections.sort(tests);
+                    return tests;
+                }, (tests, time) -> {
+                    TestPluginUtil.project.info("Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
+                    return tests;
+                }));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return locateTestList.get(id);
     }
 
     public static List<String> getOriginalOrder(
