@@ -29,6 +29,12 @@ public class OperationTime {
         this.elapsedSeconds = endTime / 1000.0 - startTime / 1000.0;
     }
 
+    private OperationTime(final long startTime, final double elapsedSeconds) {
+        this.startTime = startTime;
+        this.elapsedSeconds = elapsedSeconds;
+        this.endTime = (long) ((elapsedSeconds + (startTime / 1000.0)) * 1000.0);
+    }
+
     public long startTime() {
         return startTime;
     }
@@ -39,5 +45,23 @@ public class OperationTime {
 
     public double elapsedSeconds() {
         return elapsedSeconds;
+    }
+
+    public OperationTime addTime(OperationTime otherTime) {
+        if (otherTime == null) {
+            return this;
+        }
+        long earliestStart = (startTime < otherTime.startTime) ? startTime : otherTime.startTime;
+        double elapsedSeconds = elapsedSeconds() + otherTime.elapsedSeconds;
+        return new OperationTime(earliestStart, elapsedSeconds);
+    }
+
+    public OperationTime mergeTime(OperationTime otherTime) {
+        if (otherTime == null) {
+            return this;
+        }
+        long earliestStart = (startTime < otherTime.startTime) ? startTime : otherTime.startTime;
+        long latestEnd = (endTime < otherTime.endTime) ? otherTime.endTime: endTime;
+        return new OperationTime(earliestStart, latestEnd);
     }
 }

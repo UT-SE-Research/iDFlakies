@@ -144,7 +144,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         return 0.0;
     }
 
-    public int moduleRounds(String coordinates) throws IOException {
+    public static int moduleRounds(String coordinates) throws IOException {
         final boolean hasRounds = Configuration.config().properties().getProperty("dt.randomize.rounds") != null;
         final boolean hasTimeout = Configuration.config().properties().getProperty("detector.timeout") != null;
 

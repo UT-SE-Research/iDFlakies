@@ -8,6 +8,7 @@ import edu.illinois.cs.dt.tools.utility.PathManager;
 
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.coreplugin.TestPluginUtil;
+import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.util.ProjectWrapper;
 
 import java.io.File;
@@ -130,6 +131,21 @@ public class LegacyDetectorPathManager extends PathManager {
     @Override
     public Path modulePathInstance() {
         return TestPluginUtil.project.getBasedir().toPath();
+    }
+
+    @Override
+    public Path minimizedPathInstance() {
+        return pathInstance(PathManager.MINIMIZED);
+    }
+
+    @Override
+    protected Path minimizedPathInstance(final Path relative) {
+        return pathInstance(PathManager.MINIMIZED.resolve(relative));
+    }
+
+    @Override
+    protected Path minimizedPathInstance(final String dependentTest, final String hash, final Result expected) {
+        return minimizedPathInstance(Paths.get(String.format("%s-%s-%s-dependencies.json", dependentTest, hash, expected)));
     }
 
     @Override

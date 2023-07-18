@@ -1,0 +1,33 @@
+
+name: auto-run-test-ifixflakies-minimizer
+
+on: [push, pull_request]
+
+jobs:
+  minimizerTest1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8.0.292+10'
+          distribution: 'adopt'
+
+      - name: Installs packages
+        run: mvn install -B
+
+      - name: Test 1st set of projects
+        run: set -o pipefail ; bash scripts/test-ifixflakies-minimizer.sh scripts/idfProjectsMinimizer.csv |& tee -a scripts/GeneralLogs.log
+
+      - name: Move Logs file into the ARTIFACTS folder
+        if: always()
+        run: mv scripts/GeneralLogs.log scripts/testing-script-results/ARTIFACTS/
+
+      - name: Save all relevant files
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+         name: test-ifixflakies-minimizer_ARTIFACT_1
+         path: scripts/testing-script-results/ARTIFACTS
