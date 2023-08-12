@@ -151,7 +151,18 @@ public class CleanerFixer {
             for (File f : PathManager.minimizedPath().toFile().listFiles()) {
                 if (f.isFile()) {
                     MinimizeTestsResult res = MinimizeTestsResult.fromPath(f.toPath());
-                    results.add(res);
+
+                    // Consider whether user configured to fix only a single test
+                    String dependentTest = Configuration.config().getProperty("dt.minimizer.dependent.test", null);
+                    if (dependentTest != null) {
+                        Logger.getGlobal().log(Level.INFO, "Filtering dependent test list to run only for: " + dependentTest);
+                        if (res.dependentTest().equals(dependentTest)) {
+                            results.add(res);
+                            return results; // Only consider this one dependent test and return
+                        }
+                    } else {
+                        results.add(res);
+                    }
                 }
             }
         }
