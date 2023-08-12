@@ -1,44 +1,29 @@
-package edu.illinois.cs.dt.tools.plugin;
+package edu.illinois.cs.dt.tools.fixer;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.Statement;
-import edu.illinois.cs.dt.tools.fixer.FailingTestDetector;
-import edu.illinois.cs.dt.tools.fixer.JavaMethod;
+import edu.illinois.cs.dt.tools.utility.BuildCommands;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
-import edu.illinois.cs.dt.tools.utility.MvnCommands;
 import edu.illinois.cs.dt.tools.utility.deltadebug.DeltaDebugger;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.DefaultInvoker;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
-import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.apache.maven.shared.invoker.PrintStreamHandler;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 
 public class CleanerFixerDeltaDebugger extends DeltaDebugger<Statement> {
 
-    private final MavenProject project;
+    private final BuildCommands buildCommands;
     private final InstrumentingSmartRunner runner;
     private final JavaMethod methodToModify;
     private final List<String> failingOrder;
     private final boolean prepend;
 
-    public CleanerFixerDeltaDebugger(MavenProject project, InstrumentingSmartRunner runner,
+    public CleanerFixerDeltaDebugger(BuildCommands buildCommands, InstrumentingSmartRunner runner,
                                      JavaMethod methodToModify, List<String> failingOrder,
                                      boolean prepend) {
-        this.project = project;
+        this.buildCommands = buildCommands;
         this.runner = runner;
         this.methodToModify = methodToModify;
         this.failingOrder = failingOrder;
@@ -68,7 +53,7 @@ public class CleanerFixerDeltaDebugger extends DeltaDebugger<Statement> {
 
             // Rebuild and see if tests run properly
             try {
-                MvnCommands.runMvnInstall(this.project, suppressError);
+                this.buildCommands.install();
             } catch (Exception ex) {
                 Logger.getGlobal().log(Level.FINE, "Error building the code, passed in cleaner code does not compile");
                 // Reset the change

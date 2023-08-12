@@ -1,13 +1,11 @@
-package edu.illinois.cs.dt.tools.plugin;
+package edu.illinois.cs.dt.tools.fixer;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import edu.illinois.cs.dt.tools.fixer.JavaMethod;
+import edu.illinois.cs.dt.tools.utility.BuildCommands;
 import edu.illinois.cs.dt.tools.utility.deltadebug.DeltaDebugger;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
-
-import org.apache.maven.project.MavenProject;
 
 import java.util.List;
 
@@ -16,10 +14,10 @@ public class CleanerFixerBlockDeltaDebugger extends CleanerFixerDeltaDebugger {
     private final BlockStmt blockStmt;
     private final NodeList<Statement> stmtsToRun;
 
-    public CleanerFixerBlockDeltaDebugger(MavenProject project, InstrumentingSmartRunner runner,
+    public CleanerFixerBlockDeltaDebugger(BuildCommands buildCommands, InstrumentingSmartRunner runner,
                                           JavaMethod methodToModify, List<String> failingOrder,
                                           boolean prepend, BlockStmt blockStmt, NodeList<Statement> stmtsToRun) {
-        super(project, runner, methodToModify, failingOrder, prepend);
+        super(buildCommands, runner, methodToModify, failingOrder, prepend);
         this.blockStmt = blockStmt;
         this.stmtsToRun = stmtsToRun;
     }
