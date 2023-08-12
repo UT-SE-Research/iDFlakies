@@ -1,6 +1,5 @@
 package edu.illinois.cs.dt.tools.utility;
 
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
@@ -18,10 +17,19 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class MvnCommands {
+public class MvnCommands extends BuildCommands {
+
+    private MavenProject project;
+    private boolean suppressOutput;
+
+    public MvnCommands(MavenProject project, boolean suppressOutput) {
+        this.project = project;
+        this.suppressOutput = suppressOutput;
+    }
 
     // Running mvn install, just to build and compile code (no running tests)
-    public static boolean runMvnInstall(MavenProject project, boolean suppressOutput) throws MavenInvocationException {
+    @Override
+    public void install() {
         // TODO: Maybe support custom command lines/options?
         final InvocationRequest request = new DefaultInvocationRequest();
         request.setGoals(Arrays.asList("install"));
@@ -44,23 +52,25 @@ public class MvnCommands {
         PrintStream errorStream = new PrintStream(baosError);
         request.setErrorHandler(new PrintStreamHandler(errorStream, true));
 
-        final Invoker invoker = new DefaultInvoker();
-        final InvocationResult result = invoker.execute(request);
+        try {
+            final Invoker invoker = new DefaultInvoker();
+            final InvocationResult result = invoker.execute(request);
 
-        if (result.getExitCode() != 0) {
-            // Print out the contents of the output/error streamed out during evocation, if not suppressed
-            if (!suppressOutput) {
-                Logger.getGlobal().log(Level.SEVERE, baosOutput.toString());
-                Logger.getGlobal().log(Level.SEVERE, baosError.toString());
-            }
+            if (result.getExitCode() != 0) {
+                // Print out the contents of the output/error streamed out during evocation, if not suppressed
+                if (!suppressOutput) {
+                    Logger.getGlobal().log(Level.SEVERE, baosOutput.toString());
+                    Logger.getGlobal().log(Level.SEVERE, baosError.toString());
+                }
 
-            if (result.getExecutionException() == null) {
-                throw new RuntimeException("Compilation failed with exit code " + result.getExitCode() + " for an unknown reason");
-            } else {
-                throw new RuntimeException(result.getExecutionException());
+                if (result.getExecutionException() == null) {
+                    throw new RuntimeException("Compilation failed with exit code " + result.getExitCode() + " for an unknown reason");
+                } else {
+                    throw new RuntimeException(result.getExecutionException());
+                }
             }
+        } catch (MavenInvocationException mie) {
+            throw new RuntimeException(mie);
         }
-
-        return true;
     }
 }
