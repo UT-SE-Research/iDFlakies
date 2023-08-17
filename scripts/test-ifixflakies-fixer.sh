@@ -53,9 +53,9 @@ function setMinimized() {
     rm -rf .dtfixingtools/minimized # Ensure it is clean, need to copy minimized files in
     fileName=${currModule//[/]/@}
     if [[ ${currModule} == "" ]]; then
-        cp ${scriptDir}/minimized-files/${projName} .dtfixingtools/minimized/
+        cp -r ${scriptDir}/minimized-files/${projName} .dtfixingtools/minimized/
     else
-        cp ${scriptDir}/minimized-files/${fileName} .dtfixingtools/minimized/
+        cp -r ${scriptDir}/minimized-files/${fileName} .dtfixingtools/minimized/
     fi
     cd ${currDir}
 }
