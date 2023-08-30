@@ -17,6 +17,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+import com.google.gson.JsonSyntaxException;
+
 import edu.illinois.cs.dt.tools.minimizer.FlakyClass;
 import edu.illinois.cs.dt.tools.minimizer.MinimizeTestsResult;
 import edu.illinois.cs.dt.tools.minimizer.PolluterData;
@@ -150,18 +152,24 @@ public class CleanerFixer {
         if (Files.exists(PathManager.minimizedPath())) {
             for (File f : PathManager.minimizedPath().toFile().listFiles()) {
                 if (f.isFile()) {
-                    MinimizeTestsResult res = MinimizeTestsResult.fromPath(f.toPath());
+                    try {
+                        MinimizeTestsResult res = MinimizeTestsResult.fromPath(f.toPath());
 
-                    // Consider whether user configured to fix only a single test
-                    String dependentTest = Configuration.config().getProperty("dt.minimizer.dependent.test", null);
-                    if (dependentTest != null) {
-                        Logger.getGlobal().log(Level.INFO, "Filtering dependent test list to run only for: " + dependentTest);
-                        if (res.dependentTest().equals(dependentTest)) {
+                        // Consider whether user configured to fix only a single test
+                        String dependentTest = Configuration.config().getProperty("dt.minimizer.dependent.test", null);
+                        if (dependentTest != null) {
+                            Logger.getGlobal().log(Level.INFO, "Filtering dependent test list to run only for: " + dependentTest);
+                            if (res.dependentTest().equals(dependentTest)) {
+                                results.add(res);
+                                return results; // Only consider this one dependent test and return
+                            }
+                        } else {
                             results.add(res);
-                            return results; // Only consider this one dependent test and return
                         }
-                    } else {
-                        results.add(res);
+                    } catch (IOException ioe) {
+                        Logger.getGlobal().log(Level.WARNING, "Exception in opening file");
+                    } catch (JsonSyntaxException jse) {
+                        Logger.getGlobal().log(Level.WARNING, "Encountered non-JSON file under " + PathManager.minimizedPath());
                     }
                 }
             }
