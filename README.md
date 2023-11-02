@@ -66,6 +66,19 @@ iDFlakies configuration options:
 * ```dt.detector.original_order.all_must_pass``` - Controls whether iDFlakies must use an original order of tests where all of them pass or not. Default is ```true``` (i.e., iDFlakies will exit if within three runs of the test suite, it does observe all tests to pass in one of the runs).
 * ```dt.original.order``` - Enables one to specify to iDFlakies the exact list of tests that should be run. Test names should be fully-qualified, use only ```.``` to separate different parts of the test name (e.g., ```com.github.kevinsawicki.http.EncodeTest.encode```), and test names are separated from each other by line breaks. This option is unlikely to be useful when running multiple modules at once and is best suited for running the tests of a specific module. Absolute paths should be used or the file path should be relative to the module that contains the tests.
 
+### Running iDFlakies without modifying pom.xml
+
+You can also run iDFlakies on a Maven project without modifying the project's pom.xml file.
+You would specify the full group ID and artifact ID as part of the command.
+For example, if you want to do the same command as above, you would instead run.
+
+```shell
+mvn edu.illinois.cs:idflakies-maven-plugin:2.0.0:detect -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=10 -Ddt.detector.original_order.all_must_pass=false
+```
+
+Note how the command is still running the `detect` goal, but it needs to specify the group ID to be `edu.illinois.cs` and the artifact ID to be `idflakies-maven-plugin`.
+The version the command uses is `2.0.0`, meaning it can download this version from Maven Central, but you can change it to a locally-built version, e.g., `2.0.1-SNAPSHOT`.
+
 ## Running iDFlakies framework
 
 The main script is located in `scripts/docker/create_and_run_dockers.sh`.
