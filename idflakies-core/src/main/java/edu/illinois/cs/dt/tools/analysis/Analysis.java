@@ -1,10 +1,5 @@
 package edu.illinois.cs.dt.tools.analysis;
 
-import com.google.gson.Gson;
-import com.opencsv.CSVReader;
-import com.reedoei.eunomia.collections.ListEx;
-import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.eunomia.util.StandardMain;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
@@ -16,6 +11,12 @@ import edu.illinois.cs.dt.tools.utility.TestRunParser;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
+
+import com.google.gson.Gson;
+import com.opencsv.CSVReader;
+import com.reedoei.eunomia.collections.ListEx;
+import com.reedoei.eunomia.io.files.FileUtil;
+import com.reedoei.eunomia.util.StandardMain;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.FileInputStream;
@@ -42,23 +43,6 @@ import java.util.stream.Stream;
 // TODO: would probably be better to have these insert methods in their respective classes with some
 //       interface or something...
 public class Analysis extends StandardMain {
-    public static int roundNumber(final String filename) {
-        // Files are named roundN.json, so strip extension and "round" and we'll have the number
-        final String fileName = FilenameUtils.removeExtension(filename);
-        return Integer.parseInt(fileName.substring("round".length()));
-    }
-
-    // List files and close the directory streams
-    private static ListEx<Path> listFiles(final Path path) throws IOException {
-        final ListEx<Path> result = new ListEx<>();
-
-        try (final Stream<Path> stream = Files.list(path)) {
-            result.addAll(stream.collect(Collectors.toList()));
-        }
-
-        return result;
-    }
-
     private final Path results;
     private final SQLite sqlite;
     private int dtListIndex = 0;
@@ -76,13 +60,30 @@ public class Analysis extends StandardMain {
         this.maxTestRuns = getArg("max-test-runs").map(Integer::parseInt).orElse(0);
     }
 
+    public static int roundNumber(final String filename) {
+        // Files are named roundN.json, so strip extension and "round" and we'll have the number
+        final String fileName = FilenameUtils.removeExtension(filename);
+        return Integer.parseInt(fileName.substring("round".length()));
+    }
+
+    // List files and close the directory streams
+    private static ListEx<Path> listFiles(final Path path) throws IOException {
+        final ListEx<Path> result = new ListEx<>();
+
+        try (final Stream<Path> stream = Files.list(path)) {
+            result.addAll(stream.collect(Collectors.toList()));
+        }
+
+        return result;
+    }
+
     public static void main(final String[] args) {
         try {
             new Analysis(args).run();
 
             System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         System.exit(1);
@@ -110,11 +111,12 @@ public class Analysis extends StandardMain {
 
         for (int i = 0; i < allResultsFolders.size(); i++) {
             final Path p = allResultsFolders.get(i);
-            System.out.println("[INFO] Inserting results for module " + (i + 1) + " of " + allResultsFolders.size() + ": " + p);
+            System.out.println("[INFO] Inserting results for module " + (i + 1) + " of "
+                + allResultsFolders.size() + ": " + p);
             try {
                 insertResults(p);
-            } catch (IOException | SQLException e) {
-                throw new RuntimeException(e);
+            } catch (IOException | SQLException ex) {
+                throw new RuntimeException(ex);
             }
         }
 
@@ -249,9 +251,11 @@ public class Analysis extends StandardMain {
         // If we got a no passing order exception, don't insert any of the other results
         if (!foundPassing) {
             System.out.println("[WARNING] SKIPPING: No passing order found for: " + name);
-            for (final String detectorType : new String[] { "original", "random", "random-class", "reverse", "reverse-class"}) {
+            for (final String detectorType :
+                new String[] { "original", "random", "random-class", "reverse", "reverse-class"}) {
                 if (Files.isDirectory(path.resolve(PathManager.DETECTION_RESULTS).resolve(detectorType))) {
-                    System.out.println("[ERROR]: " + detectorType + " results for " + name + " at " + path.resolve(PathManager.DETECTION_RESULTS).resolve(detectorType));
+                    System.out.println("[ERROR]: " + detectorType + " results for " + name + " at "
+                        + path.resolve(PathManager.DETECTION_RESULTS).resolve(detectorType));
                 }
             }
             return;
@@ -386,8 +390,8 @@ public class Analysis extends StandardMain {
                         .param(String.valueOf(testResult.result()))
                         .addBatch();
                 count.incrementAndGet();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (SQLException sqle) {
+                throw new RuntimeException(sqle);
             }
         });
 
@@ -405,7 +409,7 @@ public class Analysis extends StandardMain {
     private void insertDetectionResults(final String name, final String roundType, final Path path) throws IOException {
         final Path detectionResults = path.resolve(roundType);
 
-        int i = 0;
+        int index = 0;
 
         final Set<String> knownFlakyTests = new HashSet<>();
         final Set<String> addedRounds = new HashSet<>();
@@ -415,8 +419,8 @@ public class Analysis extends StandardMain {
             System.out.println("[INFO] Inserting " + roundType + " detection results for " + name
                     + " (" + paths.size() + " results)");
 
-            for (i = 0; Files.exists(detectionResults.resolve("round" + i + ".json")); i++) {
-                final Path p = detectionResults.resolve("round" + i  + ".json");
+            for (index = 0; Files.exists(detectionResults.resolve("round" + index + ".json")); index++) {
+                final Path p = detectionResults.resolve("round" + index + ".json");
                 final int roundNumber = roundNumber(p.getFileName().toString());
 
                 try {
@@ -428,14 +432,14 @@ public class Analysis extends StandardMain {
                     }
 
                     insertDetectionRound(name, roundType, roundNumber, round);
-                } catch (IOException | SQLException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException | SQLException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         }
 
         if (roundType.equals("original")) {
-            insertOriginalResults(name, i, addedRounds, knownFlakyTests, path.getParent());
+            insertOriginalResults(name, index, addedRounds, knownFlakyTests, path.getParent());
         }
     }
 
@@ -470,12 +474,13 @@ public class Analysis extends StandardMain {
                         System.out.println("Found an original order to try to insert: " + trr.id());
                         final List<DependentTest> result = DetectorUtil.flakyTests(passing, trr, true);
                         final DetectionRound dr = new DetectionRound(Collections.singletonList(trr.id()), result,
-                                result.stream().filter(t -> !knownFlakyTests.contains(t.name())).collect(Collectors.toList()),
+                                result.stream().filter(
+                                    t -> !knownFlakyTests.contains(t.name())).collect(Collectors.toList()),
                                 -1);
                         try {
                             insertDetectionRound(subjectName, "original", counter.incrementAndGet(), dr);
-                        } catch (IOException | SQLException e) {
-                            throw new RuntimeException(e);
+                        } catch (IOException | SQLException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
                 }
@@ -551,7 +556,8 @@ public class Analysis extends StandardMain {
                 .insertSingleRow();
     }
 
-    private void insertVerificationResults(final String name, final String roundType, final Path basePath) throws IOException {
+    private void insertVerificationResults(final String name, final String roundType, final Path basePath)
+            throws IOException {
         final Path verificationResults = basePath.resolve(roundType);
 
         if (!Files.isDirectory(verificationResults)) {
@@ -560,19 +566,21 @@ public class Analysis extends StandardMain {
 
         final ListEx<Path> paths = listFiles(verificationResults);
 
-        System.out.println("[INFO] Inserting " + roundType + " verification results for " + name + " (" + paths.size() + " rounds)");
+        System.out.println("[INFO] Inserting " + roundType + " verification results for " + name
+            + " (" + paths.size() + " rounds)");
 
         paths.forEach(p -> {
             try {
                 insertVerificationRound(name, roundType, roundNumber(p.getFileName().toString()), p);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
             }
         });
     }
 
-    private void insertVerificationRound(final String name, final String roundType, final int roundNumber, final Path p) throws IOException {
-        listFiles(p).forEach(verificationStep -> {
+    private void insertVerificationRound(final String name, final String roundType, final int roundNumber, final Path path)
+            throws IOException {
+        listFiles(path).forEach(verificationStep -> {
             final String filename = verificationStep.getFileName().toString();
             final String[] split = filename.split("-");
 
@@ -581,7 +589,8 @@ public class Analysis extends StandardMain {
             final int verificationRoundNumber = roundNumber(split[2]);
 
             try {
-                final TestRunResult testRunResult = new Gson().fromJson(FileUtil.readFile(verificationStep), TestRunResult.class);
+                final TestRunResult testRunResult = new Gson().fromJson(FileUtil.readFile(verificationStep),
+                    TestRunResult.class);
 
                 sqlite.statement(SQLStatements.INSERT_VERIFICATION_ROUND)
                         .param(name)
@@ -595,8 +604,8 @@ public class Analysis extends StandardMain {
                         .executeUpdate();
 
                 insertTestRunResult(name, testRunResult);
-            } catch (IOException | SQLException e) {
-                throw new RuntimeException(e);
+            } catch (IOException | SQLException ex) {
+                throw new RuntimeException(ex);
             }
         });
     }

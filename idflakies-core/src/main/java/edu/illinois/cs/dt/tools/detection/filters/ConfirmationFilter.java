@@ -1,12 +1,13 @@
 package edu.illinois.cs.dt.tools.detection.filters;
 
-import com.google.gson.Gson;
-import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestType;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+
+import com.google.gson.Gson;
+import com.reedoei.eunomia.io.files.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,9 +48,13 @@ public class ConfirmationFilter implements Filter {
                     for (final DependentTest dependentTest : round.filteredTests().dts()) {
                         knownFlaky.add(dependentTest.name());
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             });
-        } catch (IOException ignored) {}
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
     @Override

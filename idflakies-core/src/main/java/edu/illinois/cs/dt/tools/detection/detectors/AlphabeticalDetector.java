@@ -1,8 +1,5 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
-import java.io.File;
-import java.util.List;
-
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.TestShuffler;
@@ -12,13 +9,17 @@ import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
+import java.io.File;
+import java.util.List;
+
 public class AlphabeticalDetector extends ExecutingDetector {
     private final List<String> tests;
     private TestRunResult origResult;
 
     private final TestShuffler testShuffler;
-    
-    public AlphabeticalDetector(final Runner runner, final File baseDir, final int rounds, final String type, final List<String> tests) {
+
+    public AlphabeticalDetector(final Runner runner, final File baseDir, final int rounds,
+            final String type, final List<String> tests) {
         super(runner, baseDir, rounds, type);
         this.tests = tests;
         this.testShuffler = new TestShuffler(type, rounds, tests, baseDir);

@@ -1,8 +1,8 @@
 package edu.illinois.cs.dt.tools.detection;
 
-import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
