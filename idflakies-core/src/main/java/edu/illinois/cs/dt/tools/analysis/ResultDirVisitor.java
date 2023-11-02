@@ -30,20 +30,20 @@ public class ResultDirVisitor extends SimpleFileVisitor<Path> {
         return super.preVisitDirectory(dir, attrs);
     }
 
-    private boolean containsResultsFolders(final Path p) {
-        final Path detectionResults = p.resolve(PathManager.DETECTION_RESULTS);
+    private boolean containsResultsFolders(final Path path) {
+        final Path detectionResults = path.resolve(PathManager.DETECTION_RESULTS);
 
-        final boolean containsResults = Files.exists(detectionResults) || Files.exists(p.resolve("error"));
+        final boolean containsResults = Files.exists(detectionResults) || Files.exists(path.resolve("error"));
 
         if (!containsResults) {
             return false;
         }
 
-        final Path parent = p.getParent();
+        final Path parent = path.getParent();
 
         // TODO: This is probably no longer needed
         // We only want to run randomizeclasses, not both, because otherwise we'll try to insert some runs twice
-        return !parent.getFileName().toString().equals("randomizemethods") ||
-                !Files.exists(parent.resolveSibling("randomizeclasses"));
+        return !parent.getFileName().toString().equals("randomizemethods")
+            || !Files.exists(parent.resolveSibling("randomizeclasses"));
     }
 }

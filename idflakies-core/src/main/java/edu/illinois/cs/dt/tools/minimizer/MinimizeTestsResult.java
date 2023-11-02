@@ -1,15 +1,16 @@
 package edu.illinois.cs.dt.tools.minimizer;
 
-import com.google.gson.Gson;
-import com.reedoei.eunomia.collections.ListUtil;
-import com.reedoei.eunomia.io.IOUtil;
-import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.utility.MD5;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
 import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
+
+import com.google.gson.Gson;
+import com.reedoei.eunomia.collections.ListUtil;
+import com.reedoei.eunomia.io.IOUtil;
+import com.reedoei.eunomia.io.files.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,15 +28,9 @@ public class MinimizeTestsResult {
     private final String dependentTest;
     private final List<PolluterData> polluters;
     private final String hash;
-    private final FlakyClass flakyClass;    // The classification of this one's dependent test can be "OD" or "NOD" (if reruns found it to be not order-dependent)
 
-    public static MinimizeTestsResult fromPath(final Path path) throws IOException {
-        return fromString(FileUtil.readFile(path));
-    }
-
-    public static MinimizeTestsResult fromString(final String jsonString) {
-        return new Gson().fromJson(jsonString, MinimizeTestsResult.class);
-    }
+    // The classification of this one's dependent test can be "OD" or "NOD" (if reruns found it to be not order-dependent)
+    private final FlakyClass flakyClass;
 
     public MinimizeTestsResult(final OperationTime time, final TestRunResult expectedRun, final Result expected,
                                final String dependentTest, final List<PolluterData> polluters, final FlakyClass flakyClass) {
@@ -46,6 +41,14 @@ public class MinimizeTestsResult {
         this.polluters = polluters;
         this.hash = MD5.hashOrder(expectedRun.testOrder());
         this.flakyClass = flakyClass;
+    }
+
+    public static MinimizeTestsResult fromPath(final Path path) throws IOException {
+        return fromString(FileUtil.readFile(path));
+    }
+
+    public static MinimizeTestsResult fromString(final String jsonString) {
+        return new Gson().fromJson(jsonString, MinimizeTestsResult.class);
     }
 
     public OperationTime time() {
@@ -85,7 +88,8 @@ public class MinimizeTestsResult {
                     int check = 1;
                     int totalChecks = 2 + depLists.size() - 1;
 
-                    IOUtil.printClearLine(String.format("Verifying %d of %d. Running check %d of %d.", i + 1, verifyCount, check++, totalChecks));
+                    IOUtil.printClearLine(String.format("Verifying %d of %d. Running check %d of %d.", i + 1,
+                        verifyCount, check++, totalChecks));
                     // Check that it's correct with the dependencies
                     if (!isExpected(runner, deps)) {
                         throw new MinimizeTestListException("Got unexpected result when running with all dependencies!");
@@ -107,7 +111,8 @@ public class MinimizeTestsResult {
             }
         }
         polluters.removeAll(pollutersToRemove);
-        if (pollutersToRemove.size() > 0) { // Extreme measures, if there are polluters that were found to not work, then say whole test is NOD
+        // Extreme measures, if there are polluters that were found to not work, then say whole test is NOD
+        if (pollutersToRemove.size() > 0) {
             return false;
         }
 
@@ -116,12 +121,13 @@ public class MinimizeTestsResult {
 
     private void verifyDependencies(final Runner runner,
                                     final int verifyCount,
-                                    final int i,
+                                    final int index,
                                     final List<String> deps,
                                     final List<List<String>> depLists,
                                     int check,
                                     final int totalChecks) throws Exception {
-        IOUtil.printClearLine(String.format("Verifying %d of %d. Running check %d of %d.", i + 1, verifyCount, check++, totalChecks));
+        IOUtil.printClearLine(String.format("Verifying %d of %d. Running check %d of %d.", index + 1,
+            verifyCount, check++, totalChecks));
         // Check that it's wrong without dependencies.
         if (isExpected(runner, new ArrayList<>())) {
             throw new MinimizeTestListException("Got expected result even without any dependencies!");
@@ -133,7 +139,8 @@ public class MinimizeTestsResult {
                 continue;
             }
 
-            IOUtil.printClearLine(String.format("Verifying %d of %d. Running check %d of %d.",  i + 1, verifyCount, check++, totalChecks));
+            IOUtil.printClearLine(String.format("Verifying %d of %d. Running check %d of %d.",  index + 1,
+                verifyCount, check++, totalChecks));
             if (isExpected(runner, depList)) {
                 throw new MinimizeTestListException("Got expected result without some dependencies! " + depList);
             }
@@ -151,8 +158,8 @@ public class MinimizeTestsResult {
         try {
             Files.createDirectories(outputPath.getParent());
             Files.write(outputPath, toString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 

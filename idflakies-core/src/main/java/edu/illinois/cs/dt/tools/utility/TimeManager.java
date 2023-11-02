@@ -6,18 +6,6 @@ package edu.illinois.cs.dt.tools.utility;
  */
 public class TimeManager {
 
-    public TimeManager manageTime(OperationTime time) {
-        this.addTime = addTime().addTime(time);
-        this.totalTime = totalTime().mergeTime(time);
-        return this;
-    }
-
-    public TimeManager mergeTimeManager(TimeManager tm) {
-        this.addTime = addTime().addTime(tm.addTime());
-        this.totalTime = totalTime().mergeTime(tm.totalTime());
-        return this;
-    }
-
     private OperationTime addTime;
     private OperationTime totalTime;
 
@@ -29,6 +17,18 @@ public class TimeManager {
     public TimeManager(final TimeManager other) {
         this.addTime = other.addTime();
         this.totalTime = other.totalTime();
+    }
+
+    public TimeManager manageTime(OperationTime time) {
+        this.addTime = addTime().addTime(time);
+        this.totalTime = totalTime().mergeTime(time);
+        return this;
+    }
+
+    public TimeManager mergeTimeManager(TimeManager tm) {
+        this.addTime = addTime().addTime(tm.addTime());
+        this.totalTime = totalTime().mergeTime(tm.totalTime());
+        return this;
     }
 
     public OperationTime addTime() {

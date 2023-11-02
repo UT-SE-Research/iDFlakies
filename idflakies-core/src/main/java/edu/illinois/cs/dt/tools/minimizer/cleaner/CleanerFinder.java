@@ -1,7 +1,5 @@
 package edu.illinois.cs.dt.tools.minimizer.cleaner;
 
-import com.reedoei.eunomia.collections.ListEx;
-import com.reedoei.eunomia.collections.StreamUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
@@ -13,6 +11,9 @@ import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.SmartRunner;
+
+import com.reedoei.eunomia.collections.ListEx;
+import com.reedoei.eunomia.collections.StreamUtil;
 import org.codehaus.plexus.util.StringUtils;
 import scala.util.Try;
 
@@ -29,6 +30,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CleanerFinder {
+
+    private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
+
     private final SmartRunner runner;
     private final String dependentTest;
     private final List<String> deps;
@@ -42,8 +46,6 @@ public class CleanerFinder {
     // Some fields to help with tracking when it is "desperately" trying all tests
     private int startingTryingEveryTest = -1;
     private int startingTryingEveryTestConfirmed = -1;
-
-    private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
 
     public CleanerFinder(final SmartRunner runner,
                          final String dependentTest, final List<String> deps,
@@ -98,16 +100,20 @@ public class CleanerFinder {
                 continue;
             }
             seenGroups.add(minimizedCleanerGroup.cleanerTests());
-            if (minimizedCleanerGroup.confirm(runner, new ListEx<>(deps), expected, isolationResult, cleanerGroupsMap.get(cleanerGroup))) {
+            if (minimizedCleanerGroup.confirm(runner,
+                    new ListEx<>(deps), expected, isolationResult, cleanerGroupsMap.get(cleanerGroup))) {
                 minimizedCleanerGroups.add(minimizedCleanerGroup);
                 if (i >= this.startingTryingEveryTestConfirmed) {
                     double elapsedSeconds = System.currentTimeMillis() / 1000.0 - startTime / 1000.0;
-                    Logger.getGlobal().log(Level.INFO, "DESPERATELY TRYING CLEANERS INDIVIDUALLY: Found such cleaner " + minimizedCleanerGroup + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
+                    Logger.getGlobal().log(Level.INFO, "DESPERATELY TRYING CLEANERS INDIVIDUALLY: Found such cleaner "
+                        + minimizedCleanerGroup + " for dependent test " + dependentTest + " in "
+                        + elapsedSeconds + " seconds.");
                 }
             }
         }
         final CleanerData cleanerData = new CleanerData(dependentTest, expected, isolationResult, minimizedCleanerGroups);
-        Logger.getGlobal().log(Level.INFO, dependentTest + " has " + cleanerData.cleaners().size() + " cleaners: " + cleanerData.cleaners());
+        Logger.getGlobal().log(Level.INFO, dependentTest + " has " + cleanerData.cleaners().size()
+            + " cleaners: " + cleanerData.cleaners());
         return cleanerData;
     }
 
@@ -115,11 +121,11 @@ public class CleanerFinder {
         final TimeManager[] timeToFindCandidates = new TimeManager[1];
 
         final ListEx<ListEx<String>> candidates =
-                OperationTime.runOperation(() ->
-                   new ListEx<>(cleanerCandidates(originalOrder)).distinct(),
-                       (candidateList, time) -> {
-                        timeToFindCandidates[0] = new TimeManager(time, time);
-                        return candidateList;
+            OperationTime.runOperation(() ->
+                new ListEx<>(cleanerCandidates(originalOrder)).distinct(),
+                (candidateList, time) -> {
+                    timeToFindCandidates[0] = new TimeManager(time, time);
+                    return candidateList;
                 });
         Logger.getGlobal().log(Level.INFO, "Found " + candidates.size() + " cleaner group candidates.");
 
@@ -132,10 +138,12 @@ public class CleanerFinder {
     private CleanerData summarizeCleanerGroups(final CleanerData cleanerData) {
         if (!cleanerData.cleaners().isEmpty()) {
             for (final CleanerGroup cleanerGroup : cleanerData.cleaners()) {
-                Logger.getGlobal().log(Level.INFO, dependentTest + " cleaner group size: " + cleanerGroup.cleanerTests().size());
+                Logger.getGlobal().log(Level.INFO, dependentTest + " cleaner group size: "
+                    + cleanerGroup.cleanerTests().size());
 
                 if (cleanerGroup.cleanerTests().any(testOrder::contains)) {
-                    Logger.getGlobal().log(Level.INFO, "Cleaner group contains a test that is in the failing order: " + cleanerGroup.cleanerTests());
+                    Logger.getGlobal().log(Level.INFO, "Cleaner group contains a test that is in the failing order: "
+                        + cleanerGroup.cleanerTests());
                 }
             }
         }
@@ -168,9 +176,11 @@ public class CleanerFinder {
                 double elapsedSeconds = System.currentTimeMillis() / 1000.0 - startTime / 1000.0;
                 // If this is the first one, log out the result
                 if (result.size() == 1) {
-                    Logger.getGlobal().log(Level.INFO, "FIRST CLEANER: Found first cleaner " + candidate + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
+                    Logger.getGlobal().log(Level.INFO, "FIRST CLEANER: Found first cleaner " + candidate
+                        + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
                 } else {
-                    Logger.getGlobal().log(Level.INFO, "CLEANER: Found cleaner " + candidate + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
+                    Logger.getGlobal().log(Level.INFO, "CLEANER: Found cleaner "
+                        + candidate + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
                 }
 
                 // If not configured to find all, since one is found now, can stop looking
@@ -186,6 +196,7 @@ public class CleanerFinder {
     }
 
     /**
+     * Checks whether a group of tests are a cleaner.
      * @param cleanerCandidate The tests that make up the cleaner group
      * @return if the candidate satisfies the criteria above (changes the results)
      */
@@ -196,23 +207,28 @@ public class CleanerFinder {
 
         final Try<TestRunResult> testRunResultTry = runner.runList(tests);
 
-        return testRunResultTry.isSuccess() &&
-               testRunResultTry.get().results().get(dependentTest).result().equals(isolationResult);
+        return testRunResultTry.isSuccess()
+            && testRunResultTry.get().results().get(dependentTest).result().equals(isolationResult);
     }
 
     /**
+     * Minimizes the cleaner group.
      * @param cleanerGroup The list of tests that is a known, but not minimal, cleaner group
      * @return A minimal cleaner group
      */
-    private CleanerGroup minimalCleanerGroup(final int i, final ListEx<String> cleanerGroup) {
-        Logger.getGlobal().log(Level.INFO, "Minimizing cleaner group " + i + ": " +
-                StringUtils.abbreviate(String.valueOf(cleanerGroup), 500));
-        CleanerGroupDeltaDebugger debugger = new CleanerGroupDeltaDebugger(this.runner, this.dependentTest, this.deps, this.isolationResult);
-        return new CleanerGroup(dependentTest, cleanerGroup.size(), new ListEx<>(debugger.deltaDebug(cleanerGroup, 2)), i);
+    private CleanerGroup minimalCleanerGroup(final int index, final ListEx<String> cleanerGroup) {
+        Logger.getGlobal().log(Level.INFO, "Minimizing cleaner group " + index + ": "
+            + StringUtils.abbreviate(String.valueOf(cleanerGroup), 500));
+        CleanerGroupDeltaDebugger debugger = new CleanerGroupDeltaDebugger(this.runner, this.dependentTest,
+            this.deps, this.isolationResult);
+        return new CleanerGroup(dependentTest, cleanerGroup.size(),
+            new ListEx<>(debugger.deltaDebug(cleanerGroup, 2)), index);
     }
 
     /**
-     * @return The lists of tests which could possibly be a cleaner group, with groups that are more likely to be cleaners coming first
+     * Create candidate cleaners.
+     * @return The lists of tests which could possibly be a cleaner group,
+               with groups that are more likely to be cleaners coming first;
      *         A cleaner group is considered "better" if they come between the polluter(s)
      *         and the dependent test does not have the expected result in that order
      */
@@ -222,7 +238,8 @@ public class CleanerFinder {
         }
 
         // Get the number of elements done before considering every test as a possible cleaner
-        Stream<ListEx<String>> intermediate = Stream.concat(highLikelihoodCleanerGroups(), Stream.of(possibleCleaners(originalOrder)));
+        Stream<ListEx<String>> intermediate = Stream.concat(highLikelihoodCleanerGroups(),
+            Stream.of(possibleCleaners(originalOrder)));
         this.startingTryingEveryTest = intermediate.collect(Collectors.toList()).size();
 
         return Stream.concat(
@@ -234,6 +251,7 @@ public class CleanerFinder {
     }
 
     /**
+     * Compute possible cleaners as those that do not come between dependent test and deps.
      * @return All tests that do not come between the deps and the dependent test in the expected run,
      *         in an arbitrary order (currently it's the order from the original order excluding dependencies,
      *         the dependent test itself, and all tests in between the two)
@@ -253,7 +271,7 @@ public class CleanerFinder {
 
     /**
      * If we have historical test run information (that is, we've run the tests before), and we ever see a group
-     * of tests that appears to be a cleaner group
+     * of tests that appears to be a cleaner group.
      * @return likely cleaner groups
      */
     private Stream<ListEx<String>> highLikelihoodCleanerGroups() {
@@ -261,7 +279,9 @@ public class CleanerFinder {
             return new TestRunParser(RunnerPathManager.testRuns()).testResults()
                     .mapToStream((output, result) -> result)
                     .flatMap(this::likelyCleanerCandidate);
-        } catch (IOException ignored) {}
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 
         return Stream.empty();
     }

@@ -1,9 +1,10 @@
 package edu.illinois.cs.dt.tools.minimizer.cleaner;
 
-import com.reedoei.eunomia.collections.ListEx;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
 import edu.illinois.cs.dt.tools.utility.TimeManager;
 import edu.illinois.cs.testrunner.data.results.Result;
+
+import com.reedoei.eunomia.collections.ListEx;
 
 public class CleanerData {
     private final String dependentTest;

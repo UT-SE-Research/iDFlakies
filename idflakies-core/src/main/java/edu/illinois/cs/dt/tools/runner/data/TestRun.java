@@ -42,7 +42,7 @@ public class TestRun {
                 .allMatch(i -> verifyRound(dt, runner, path, i));
     }
 
-    private boolean verifyRound(final String dt, final Runner runner, final Path path, final int i) {
+    private boolean verifyRound(final String dt, final Runner runner, final Path path, final int index) {
         Result newResult = null;
         try {
             final List<String> order = new ArrayList<>(this.order);
@@ -54,11 +54,13 @@ public class TestRun {
             newResult = results.results().get(dt).result();
 
             if (path != null) {
-                final Path outputPath = PathManager.pathWithRound(path, dt + "-" + this.result, i);
+                final Path outputPath = PathManager.pathWithRound(path, dt + "-" + this.result, index);
                 Files.createDirectories(outputPath.getParent());
                 Files.write(outputPath, results.toString().getBytes());
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         System.out.printf("Verified %s, status: expected %s, got %s\n",
                           dt, this.result, newResult);

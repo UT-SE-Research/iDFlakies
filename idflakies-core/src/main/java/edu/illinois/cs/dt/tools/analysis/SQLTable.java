@@ -17,7 +17,8 @@ public abstract class SQLTable {
         this.procedure = procedure;
     }
 
-    public abstract LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table);
+    public abstract LatexTable formatTable(final List<String> columns, final List<String> rows,
+        final QueryResult queryResult, final LatexTable table);
 
     public LatexTable generateTable() throws SQLException {
         final QueryResult queryResult = procedure.tableQuery();

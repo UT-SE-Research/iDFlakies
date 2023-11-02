@@ -1,13 +1,14 @@
 package edu.illinois.cs.dt.tools.detection.analysis;
 
-import com.reedoei.eunomia.collections.ListUtil;
-import com.reedoei.eunomia.latex.CellType;
-import com.reedoei.eunomia.latex.LatexTable;
-import com.reedoei.eunomia.util.StandardMain;
 import edu.illinois.cs.dt.tools.analysis.QueryResult;
 import edu.illinois.cs.dt.tools.analysis.SQLStatements;
 import edu.illinois.cs.dt.tools.analysis.SQLTable;
 import edu.illinois.cs.dt.tools.analysis.SQLite;
+
+import com.reedoei.eunomia.collections.ListUtil;
+import com.reedoei.eunomia.latex.CellType;
+import com.reedoei.eunomia.latex.LatexTable;
+import com.reedoei.eunomia.util.StandardMain;
 
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -29,8 +30,8 @@ public class TableGenerator extends StandardMain {
     public static void main(final String[] args) {
         try {
             new TableGenerator(args).run();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
 
             System.exit(1);
         }
@@ -44,28 +45,31 @@ public class TableGenerator extends StandardMain {
 
         System.out.println(new SQLTable(sqlite.statement(SQLStatements.FLAKY_TEST_BY_TECHNIQUE)) {
             @Override
-            public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
-              return table.addTotalRow("Total", CellType.DEFAULT)
-                      .setupCell("slug", "Total", "\\textbf{Total}")
-                      .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
+            public LatexTable formatTable(final List<String> columns, final List<String> rows,
+                    final QueryResult queryResult, final LatexTable table) {
+                return table.addTotalRow("Total", CellType.DEFAULT)
+                    .setupCell("slug", "Total", "\\textbf{Total}")
+                    .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
             }
         }.generateTable());
 
         // System.out.println(new SQLTable(sqlite.statement(SQLStatements.FAILURE_PROB_PER_TEST_PER_RUN)) {
         //     @Override
-        //     public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
+        //     public LatexTable formatTable(final List<String> columns, final List<String> rows,
+        //             final QueryResult queryResult, final LatexTable table) {
         //         return table.addTotalRow("Average", CellType.DEFAULT, true)
-        //                 .setupCell("slug", "Average", "\\textbf{Average}")
-        //                 .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
+        //             .setupCell("slug", "Average", "\\textbf{Average}")
+        //             .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
         //     }
         // }.generateTable());
 
         // System.out.println(new SQLTable(sqlite.statement(SQLStatements.FAILURE_PROB_BY_ROUND)) {
         //     @Override
-        //     public LatexTable formatTable(final List<String> columns, final List<String> rows, final QueryResult queryResult, final LatexTable table) {
+        //     public LatexTable formatTable(final List<String> columns, final List<String> rows,
+        //             final QueryResult queryResult, final LatexTable table) {
         //         return table.addTotalRow("Average", CellType.DEFAULT, true)
-        //                 .setupCell("slug", "Average", "\\textbf{Average}")
-        //                 .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
+        //             .setupCell("slug", "Average", "\\textbf{Average}")
+        //             .setRowNames(ListUtil.ensureSize(new ArrayList<>(), rows.size() + 1, () -> ""));
         //     }
         // }.generateTable());
     }

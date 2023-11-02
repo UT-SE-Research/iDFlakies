@@ -5,19 +5,6 @@ import com.reedoei.eunomia.functional.ThrowingBiFunction;
 import java.util.concurrent.Callable;
 
 public class OperationTime {
-    public static <T,U> U runOperation(final Callable<T> callable,
-                                       final ThrowingBiFunction<T, OperationTime, U> constructor)
-            throws Exception {
-        final long startTime = System.currentTimeMillis();
-        final T t = callable.call();
-        final long endTime = System.currentTimeMillis();
-
-        return constructor.apply(t, new OperationTime(startTime, endTime));
-    }
-
-    public static OperationTime instantaneous() {
-        return new OperationTime(System.currentTimeMillis(), System.currentTimeMillis());
-    }
 
     private final long startTime;
     private final long endTime;
@@ -33,6 +20,20 @@ public class OperationTime {
         this.startTime = startTime;
         this.elapsedSeconds = elapsedSeconds;
         this.endTime = (long) ((elapsedSeconds + (startTime / 1000.0)) * 1000.0);
+    }
+
+    public static <T,U> U runOperation(final Callable<T> callable,
+                                       final ThrowingBiFunction<T, OperationTime, U> constructor)
+            throws Exception {
+        final long startTime = System.currentTimeMillis();
+        final T t = callable.call();
+        final long endTime = System.currentTimeMillis();
+
+        return constructor.apply(t, new OperationTime(startTime, endTime));
+    }
+
+    public static OperationTime instantaneous() {
+        return new OperationTime(System.currentTimeMillis(), System.currentTimeMillis());
     }
 
     public long startTime() {
@@ -61,7 +62,7 @@ public class OperationTime {
             return this;
         }
         long earliestStart = (startTime < otherTime.startTime) ? startTime : otherTime.startTime;
-        long latestEnd = (endTime < otherTime.endTime) ? otherTime.endTime: endTime;
+        long latestEnd = (endTime < otherTime.endTime) ? otherTime.endTime : endTime;
         return new OperationTime(earliestStart, latestEnd);
     }
 }

@@ -1,11 +1,10 @@
 package edu.illinois.cs.dt.tools.minimizer;
 
+import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerData;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerData;
 
 public class PolluterData {
     private final OperationTime time;

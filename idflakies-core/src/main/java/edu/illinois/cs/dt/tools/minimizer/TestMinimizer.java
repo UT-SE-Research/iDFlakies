@@ -1,13 +1,5 @@
 package edu.illinois.cs.dt.tools.minimizer;
 
-import com.google.gson.Gson;
-import com.reedoei.eunomia.collections.ListEx;
-import com.reedoei.eunomia.collections.ListUtil;
-import com.reedoei.eunomia.data.caching.FileCache;
-import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.eunomia.util.RuntimeThrower;
-import com.reedoei.eunomia.util.Util;
-
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerData;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerFinder;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerGroup;
@@ -21,6 +13,13 @@ import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.SmartRunner;
 
+import com.google.gson.Gson;
+import com.reedoei.eunomia.collections.ListEx;
+import com.reedoei.eunomia.collections.ListUtil;
+import com.reedoei.eunomia.data.caching.FileCache;
+import com.reedoei.eunomia.io.files.FileUtil;
+import com.reedoei.eunomia.util.RuntimeThrower;
+import com.reedoei.eunomia.util.Util;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.file.Files;
@@ -32,30 +31,24 @@ import java.util.List;
 
 public class TestMinimizer extends FileCache<MinimizeTestsResult> {
 
+    // By setting ONE_BY_ONE_POLLUTERS, will find all the polluters
+    private static final boolean ONE_BY_ONE_POLLUTERS =
+        Configuration.config().getProperty("dt.minimizer.polluters.one_by_one", false);
+    // Fully quailified polluter test names seperated by ';' (overwrite the order to look for polluters)
+    private static final String CUSTOM_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.custom", "");
+    // FIND_ALL only for cleaners, not for polluters
+    private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
+
     protected final List<String> testOrder;
     protected final String dependentTest;
     protected final Result expected;
     protected final Result isolationResult;
     protected final SmartRunner runner;
     protected final List<String> fullTestOrder;
-    // By setting ONE_BY_ONE_POLLUTERS, will find all the polluters
-    private final boolean ONE_BY_ONE_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.one_by_one", false);
-    // Fully quailified polluter test names seperated by ';' (overwrite the order to look for polluters)
-    private final String CUSTOM_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.custom", "");
-    // FIND_ALL only for cleaners, not for polluters
-    private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
 
     protected final Path path;
 
     protected TestRunResult expectedRun;
-
-    private void debug(final String str) {
-        Logger.getGlobal().log(Level.FINE, str);
-    }
-
-    private void info(final String str) {
-        Logger.getGlobal().log(Level.INFO, str);
-    }
 
     public TestMinimizer(final List<String> testOrder, final SmartRunner runner, final String dependentTest) {
         // Only take the tests that come before the dependent test
@@ -75,6 +68,14 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         this.path = PathManager.minimizedPath(dependentTest, MD5.hashOrder(expectedRun.testOrder()), expected);
     }
 
+    private void debug(final String str) {
+        Logger.getGlobal().log(Level.FINE, str);
+    }
+
+    private void info(final String str) {
+        Logger.getGlobal().log(Level.INFO, str);
+    }
+
     public Result expected() {
         return expected;
     }
@@ -92,7 +93,7 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     private Result result(final List<String> order) {
         try {
             return runResult(order).results().get(dependentTest).result();
-        } catch (java.lang.IllegalThreadStateException e) {
+        } catch (java.lang.IllegalThreadStateException ltse) {
              // indicates timeout
             return Result.SKIPPED;
         }
@@ -126,21 +127,36 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
 
             return polluters;
         }, (polluters, time) -> {
-            final MinimizeTestsResult minimizedResult =
+                final MinimizeTestsResult minimizedResult =
                     new MinimizeTestsResult(time, expectedRun, expected, dependentTest, polluters, FlakyClass.OD);
 
-            // If the verifying does not work, then mark this test as NOD
-            boolean verifyStatus = minimizedResult.verify(runner);
-            if (verifyStatus) {
-                return minimizedResult;
-            } else {
-                return new MinimizeTestsResult(time, expectedRun, expected, dependentTest, polluters, FlakyClass.NOD);
-            }
-        });
+                // If the verifying does not work, then mark this test as NOD
+                boolean verifyStatus = minimizedResult.verify(runner);
+                if (verifyStatus) {
+                    return minimizedResult;
+                } else {
+                    return new MinimizeTestsResult(time, expectedRun, expected, dependentTest, polluters, FlakyClass.NOD);
+                }
+            });
+    }
+
+    private List<String> run(List<String> order) throws Exception {
+        final List<String> deps = new ArrayList<>();
+
+        if (order.isEmpty()) {
+            debug("Order is empty, so it is already minimized!");
+            return deps;
+        }
+
+        TestMinimizerDeltaDebugger debugger = new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
+        deps.addAll(debugger.deltaDebug(order, 2));
+
+        return deps;
     }
 
     private int getPolluters(List<String> order, long startTime, List<PolluterData> polluters, int index) throws Exception {
-        // order can be the prefix + dependentTest or just the prefix. All current uses of this method are using it as just prefix
+        // Order can be the prefix + dependentTest or just the prefix
+        // All current uses of this method are using it as just prefix
         while (!order.isEmpty()) {
             // First need to check if remaining tests in order still lead to expected value
             if (result(order) != expected) {
@@ -152,9 +168,9 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             final List<String> deps = OperationTime.runOperation(() -> {
                 return run(new ArrayList<>(order));
             }, (foundDeps, time) -> {
-                operationTime[0] = time;
-                return foundDeps;
-            });
+                    operationTime[0] = time;
+                    return foundDeps;
+                });
 
             if (deps.isEmpty()) {
                 info("Did not find any deps");
@@ -164,21 +180,25 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             info("Ran minimizer, dependencies: " + deps);
             double elapsedSeconds = System.currentTimeMillis() / 1000.0 - startTime / 1000.0;
             if (index == 0) {
-                info("FIRST POLLUTER: Found first polluter " + deps + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
+                info("FIRST POLLUTER: Found first polluter " + deps + " for dependent test " + dependentTest + " in "
+                    + elapsedSeconds + " seconds.");
             } else {
-                info("POLLUTER: Found polluter " + deps + " for dependent test " + dependentTest + " in " + elapsedSeconds + " seconds.");
+                info("POLLUTER: Found polluter " + deps + " for dependent test " + dependentTest + " in "
+                    + elapsedSeconds + " seconds.");
             }
 
-            // Only look for cleaners if the order is not passing; in case of minimizing for setter don't need to look for cleaner
+            // Only look for cleaners if the order is not passing
+            // In case of minimizing for setter don't need to look for cleaner
             CleanerData cleanerData;
             if (!expected.equals(Result.PASS)) {
-                cleanerData = new CleanerFinder(runner, dependentTest, deps, expected, isolationResult, expectedRun.testOrder()).find();
+                cleanerData = new CleanerFinder(runner, dependentTest, deps, expected, isolationResult,
+                    expectedRun.testOrder()).find();
             } else {
                 cleanerData = new CleanerData(dependentTest, expected, isolationResult, new ListEx<CleanerGroup>());
             }
 
             polluters.add(new PolluterData(operationTime[0], index, deps, cleanerData));
-  
+
             // If not configured to find all, since one is found now, can stop looking
             if (!FIND_ALL) {
                 break;
@@ -202,20 +222,6 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         }
 
         return singleTests;
-    }
-
-    private List<String> run(List<String> order) throws Exception {
-        final List<String> deps = new ArrayList<>();
-
-        if (order.isEmpty()) {
-            debug("Order is empty, so it is already minimized!");
-            return deps;
-        }
-
-        TestMinimizerDeltaDebugger debugger = new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
-        deps.addAll(debugger.deltaDebug(order, 2));
-
-        return deps;
     }
 
     public String getDependentTest() {

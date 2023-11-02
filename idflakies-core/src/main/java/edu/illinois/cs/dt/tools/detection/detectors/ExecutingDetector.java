@@ -1,10 +1,5 @@
 package edu.illinois.cs.dt.tools.detection.detectors;
 
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Streams;
-import com.reedoei.eunomia.io.VerbosePrinter;
-import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.eunomia.string.StringUtil;
 import edu.illinois.cs.dt.tools.detection.DetectionRound;
 import edu.illinois.cs.dt.tools.detection.DetectorUtil;
 import edu.illinois.cs.dt.tools.detection.filters.Filter;
@@ -14,6 +9,12 @@ import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
+
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Streams;
+import com.reedoei.eunomia.io.VerbosePrinter;
+import com.reedoei.eunomia.io.files.FileUtil;
+import com.reedoei.eunomia.string.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,14 +32,15 @@ import java.util.stream.Stream;
 public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     protected Runner runner;
     protected File baseDir;
-    private boolean countOnlyFirstFailure = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.count.only.first.failure", "false"));
-
     protected int rounds;
-    private List<Filter> filters = new ArrayList<>();
     protected final String name;
     protected final AtomicInteger absoluteRound = new AtomicInteger(0);
 
+    private List<Filter> filters = new ArrayList<>();
     private final Stopwatch stopwatch = Stopwatch.createUnstarted();
+
+    private boolean countOnlyFirstFailure =
+        Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.count.only.first.failure", "false"));
 
     public ExecutingDetector(final Runner runner, final File baseDir, final int rounds, final String name) {
         this.runner = runner;
@@ -93,7 +95,8 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         final DependentTestList dtList = new DependentTestList(detect());
         System.out.println(); // End the progress line.
 
-        print(String.format("[INFO] Found %d tests, writing list to %s and dt lists to %s\n", dtList.size(), listPath, dtListPath));
+        print(String.format("[INFO] Found %d tests, writing list to %s and dt lists to %s\n",
+            dtList.size(), listPath, dtListPath));
 
         Files.write(dtListPath, dtList.toString().getBytes());
         Files.write(listPath, StringUtil.unlines(dtList.names()).getBytes());
@@ -104,15 +107,16 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         private final long origStartTimeMs = System.currentTimeMillis();
         private long startTimeMs = System.currentTimeMillis();
         private long previousStopTimeMs = System.currentTimeMillis();
-        private boolean roundsAreTotal = Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.roundsemantics.total", "true"));
+        private boolean roundsAreTotal =
+            Boolean.parseBoolean(Configuration.config().getProperty("dt.detector.roundsemantics.total", "true"));
 
-        private int i = 0;
+        private int index = 0;
 
         private final List<DependentTest> result = new ArrayList<>();
 
         @Override
         public boolean hasNext() {
-            while (i < rounds && result.isEmpty()) {
+            while (index < rounds && result.isEmpty()) {
                 generate();
             }
 
@@ -143,10 +147,10 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
                 previousStopTimeMs = stopTime;
 
                 return result;
-            } catch (RuntimeException e) {
-                throw e;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (RuntimeException re) {
+                throw re;
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
 
@@ -155,20 +159,20 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
 
             final double elapsed = previousStopTimeMs - startTimeMs;
             final double totalElapsed = (System.currentTimeMillis() - origStartTimeMs) / 1000.0;
-            final double estimate = elapsed / (i + 1) * (rounds - i - 1) / 1000;
+            final double estimate = elapsed / (index + 1) * (rounds - index - 1) / 1000;
 
             if (!round.filteredTests().dts().isEmpty()) {
                 System.out.println(
-                        buildResultString(round.filteredTests().size(), ++i, rounds,
+                        buildResultString(round.filteredTests().size(), ++index, rounds,
                                           elapsed / 1000, totalElapsed, estimate));
                 result.addAll(round.filteredTests().dts());
                 if (!roundsAreTotal) {
-                    i = 0;
+                    index = 0;
                 }
                 startTimeMs = System.currentTimeMillis();
             } else {
                 System.out.println(
-                        buildResultString(round.filteredTests().size(), ++i, rounds,
+                        buildResultString(round.filteredTests().size(), ++index, rounds,
                                           elapsed / 1000, totalElapsed, estimate));
             }
 
@@ -188,8 +192,9 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
     private static String buildResultString(
             int testCnt, int currentRound, int totalRound,
             double elapsedTimeSec, double totalTimeSec, double estimateTimeSec) {
-        return String.format("\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).",
-                             testCnt, currentRound, totalRound,
-                             elapsedTimeSec, totalTimeSec, estimateTimeSec);
+        return String.format(
+            "\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).",
+            testCnt, currentRound, totalRound,
+            elapsedTimeSec, totalTimeSec, estimateTimeSec);
     }
 }

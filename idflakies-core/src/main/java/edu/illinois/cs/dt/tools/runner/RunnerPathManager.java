@@ -1,9 +1,10 @@
 package edu.illinois.cs.dt.tools.runner;
 
-import com.google.gson.Gson;
-import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
+
+import com.google.gson.Gson;
+import com.reedoei.eunomia.io.files.FileUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
@@ -61,7 +62,9 @@ public class RunnerPathManager {
     public static Stream<TestRunResult> resultFor(final String trKey) {
         try {
             return Stream.of(new Gson().fromJson(FileUtil.readFile(resultsPath(trKey)), TestRunResult.class));
-        } catch (IOException ignored) {}
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 
         return Stream.empty();
     }

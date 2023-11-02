@@ -9,16 +9,16 @@ public abstract class DeltaDebugger<T> {
     protected int iterations;   // Keep track of number of iterations the delta debugging went through
 
     // Core logic for delta debugging, generalized to elements
-    public List<T> deltaDebug(final List<T> elements, int n) {
+    public List<T> deltaDebug(final List<T> elements, int granularity) {
         this.iterations++;
 
-        // If n granularity is greater than number of tests, then finished, simply return passed in tests
-        if (elements.size() < n) {
+        // If granularity is greater than number of tests, then finished, simply return passed in tests
+        if (elements.size() < granularity) {
             return elements;
         }
 
         // Cut the elements into n equal chunks and try each chunk
-        int chunkSize = (int)Math.round((double)(elements.size()) / n);
+        int chunkSize = (int)Math.round((double)(elements.size()) / granularity);
         List<List<T>> chunks = new ArrayList<>();
         for (int i = 0; i < elements.size(); i += chunkSize) {
             List<T> chunk = new ArrayList<>();
@@ -41,14 +41,14 @@ public abstract class DeltaDebugger<T> {
             }
         }
         // If size is equal to number of chunks, we are finished, cannot go down more
-        if (elements.size() == n) {
+        if (elements.size() == granularity) {
             return elements;
         }
         // If not chunk/complement work, increase granularity and try again
-        if (elements.size() < n * 2) {
+        if (elements.size() < granularity * 2) {
             return deltaDebug(elements, elements.size());
         } else {
-            return deltaDebug(elements, n * 2);
+            return deltaDebug(elements, granularity * 2);
         }
     }
 
@@ -57,6 +57,7 @@ public abstract class DeltaDebugger<T> {
         return this.iterations;
     }
 
-    // Method to check if chunks during delta debugging is valid, to be overwritten by subclasses for specific delta debugging tasks
+    // Method to check if chunks during delta debugging is valid,
+    // to be overwritten by subclasses for specific delta debugging tasks
     public abstract boolean checkValid(List<T> elements);
 }

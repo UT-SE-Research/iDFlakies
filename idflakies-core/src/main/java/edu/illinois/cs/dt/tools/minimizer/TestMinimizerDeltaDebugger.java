@@ -28,7 +28,7 @@ public class TestMinimizerDeltaDebugger extends DeltaDebugger<String> {
     private Result result(final List<String> tests) {
         try {
             return runResult(tests).results().get(this.dependentTest).result();
-        } catch (java.lang.IllegalThreadStateException e) {
+        } catch (java.lang.IllegalThreadStateException itse) {
              // indicates timeout
             return Result.SKIPPED;
         }
