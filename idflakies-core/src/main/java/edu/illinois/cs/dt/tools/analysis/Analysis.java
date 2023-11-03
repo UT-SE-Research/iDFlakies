@@ -493,7 +493,7 @@ public class Analysis extends StandardMain {
         final Map<String, TestResult> testOutcomes = new HashMap<>();
 
         for (final String testName : originalOrder) {
-            testOutcomes.put(testName, new TestResult(testName, Result.PASS, -1, new String[0]));
+            testOutcomes.put(testName, new TestResult(testName, Result.PASS, -1, new StackTraceElement[0]));
         }
 
         return new TestRunResult("the id is unimportant and should never be referenced",
