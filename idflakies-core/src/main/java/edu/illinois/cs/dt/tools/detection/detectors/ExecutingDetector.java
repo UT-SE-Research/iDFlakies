@@ -15,10 +15,14 @@ import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.Runner;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -191,5 +195,49 @@ public abstract class ExecutingDetector implements Detector, VerbosePrinter {
         return String.format("\r[INFO] Found %d tests in round %d of %d (%.1f seconds elapsed (%.1f total), %.1f seconds remaining).",
                              testCnt, currentRound, totalRound,
                              elapsedTimeSec, totalTimeSec, estimateTimeSec);
+    }
+
+    public static BufferedWriter getWriter(String filePath) {
+        Path path = Paths.get(filePath);
+        BufferedWriter writer = null;
+        try {
+            if (path.getParent() != null && !Files.exists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+            writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return writer;
+    }
+
+    public static void writeTo(final Path outputPath, String output) {
+        if (!Files.exists(outputPath)) {
+            try {
+                Files.createFile(outputPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Files.write(outputPath, output.getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public static void writeOrder(List<String> order, Path orders, int index, List<String> tests) {
+        String outFilename = orders.resolve(Paths.get("order-" + index)).toString();
+        try (BufferedWriter writer = getWriter(outFilename)) {
+            for (String test : order) {
+                int i = tests.indexOf(test);
+                String s = Integer.toString(i);
+                writer.write(s);
+                writer.write(System.lineSeparator());
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 }
