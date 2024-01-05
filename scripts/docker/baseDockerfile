@@ -38,7 +38,7 @@ WORKDIR /home/idflakies/
 
 # Install Maven 3.5.4 locally for user
 RUN \
-  wget http://mirrors.ibiblio.org/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz && \
+  wget https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5.4/apache-maven-3.5.4-bin.tar.gz && \
   tar -xzf apache-maven-3.5.4-bin.tar.gz && mv apache-maven-3.5.4/ apache-maven/ && \
   echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/' >> ~/.bashrc && \
   echo 'export M2_HOME=${HOME}/apache-maven' >> ~/.bashrc && \
