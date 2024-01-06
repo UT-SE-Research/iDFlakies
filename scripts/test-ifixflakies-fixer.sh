@@ -176,6 +176,7 @@ function checkFixResults() {
                 else
                     expectedPatchFile=${scriptDir}/fixer-files/${fileName}/${odtest}.patch
                 fi
+                #NOTE: only checking contents of first patch file, even if there are others
                 checkFixResults ${odtest} "${status}" "${expectedPatchFile}" ${URL} $(echo ${MODULE} | cut -d'|' -f1)  #some projects, such as incubator-dubbo, have modules that must be installed but don't necessarily produce flaky tests. Therefore, only the first listed module (before the |) is to be checked in this function
             fi
         fi
