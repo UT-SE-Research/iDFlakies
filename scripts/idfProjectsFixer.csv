@@ -1,3 +1,3 @@
 #Project,SHA,module,odtest,status
 https://github.com/kevinsawicki/http-request,2d62a3e9da726942a93cf16b6e91c0187e6c0136,lib,com.github.kevinsawicki.http.HttpRequestTest.postWithVaragsQueryParams,INLINE SUCCESSFUL
-https://github.com/ktuukkan/marine-api,af0003847db9ba822f67d4f1dceb8de3fe63250a,,net.sf.marineapi.ais.parser.AISMessageFactoryTest.testCreateWithTwo,INLINE SUCCESSFUL
+https://github.com/ktuukkan/marine-api,af0003847db9ba822f67d4f1dceb8de3fe63250a,,net.sf.marineapi.ais.parser.AISMessageFactoryTest.testCreateWithTwo,INLINE SUCCESSFUL SETUPTEARDOWN
