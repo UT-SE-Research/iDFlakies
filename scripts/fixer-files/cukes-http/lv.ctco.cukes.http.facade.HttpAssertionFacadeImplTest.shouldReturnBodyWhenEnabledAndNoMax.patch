@@ -1,0 +1,4 @@
+@@ -78,0 +78,3 @@
++ {
++     world.put(ASSERTS_STATUS_CODE_MAX_SIZE, "100");
++ }
