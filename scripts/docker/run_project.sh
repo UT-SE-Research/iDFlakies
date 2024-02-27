@@ -22,7 +22,7 @@ rounds=$2
 timeout=$3
 
 iDFlakiesArtifactID="idflakies-maven-plugin"
-iDFlakiesVersion=2.0.0-SNAPSHOT
+iDFlakiesVersion=2.0.1-SNAPSHOT
 
 # Setup prolog stuff
 cd "/home/$SCRIPT_USERNAME/$TOOL_REPO/scripts/"
