@@ -1,0 +1,38 @@
+@@ -246,0 +246,37 @@
++ {
++     container = ServiceContainer.Factory.create();
++     installOwnerService(OWNER_FOO);
++     final CountDownLatch latch2 = new CountDownLatch(1);
++     final NamingStoreService namingStoreService = new NamingStoreService();
++     container.addService(ContextNames.JAVA_CONTEXT_SERVICE_NAME, namingStoreService).setInitialMode(ServiceController.Mode.ACTIVE).addListener(new LifecycleListener() {
++ 
++         public void handleEvent(ServiceController<?> controller, LifecycleEvent event) {
++             switch(event) {
++                 case UP:
++                     {
++                         latch2.countDown();
++                         break;
++                     }
++                 case FAILED:
++                     {
++                         latch2.countDown();
++                         fail("Did not install store service - " + controller.getStartException().getMessage());
++                         break;
++                     }
++                 default:
++                     break;
++             }
++         }
++     }).install();
++     latch2.await(10, TimeUnit.SECONDS);
++     store = (WritableServiceBasedNamingStore) namingStoreService.getValue();
++     final Name name = new CompositeName("test");
++     final Object value = new Object();
++     WritableServiceBasedNamingStore.pushOwner(OWNER_FOO);
++     try {
++         store.bind(name, value);
++     } finally {
++         WritableServiceBasedNamingStore.popOwner();
++     }
++     assertEquals(value, store.lookup(name));
++ }
