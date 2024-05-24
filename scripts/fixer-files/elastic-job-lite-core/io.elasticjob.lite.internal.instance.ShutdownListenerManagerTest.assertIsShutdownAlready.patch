@@ -1,0 +1,4 @@
+@@ -59,0 +59,3 @@
++ {
++     JobRegistry.getInstance().shutdown("test_job");
++ }
