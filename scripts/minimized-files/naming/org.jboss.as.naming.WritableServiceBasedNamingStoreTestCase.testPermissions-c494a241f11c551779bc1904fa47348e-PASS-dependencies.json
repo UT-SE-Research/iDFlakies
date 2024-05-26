@@ -532,35 +532,6 @@
         "isolationResult": "ERROR",
         "cleaners": []
       }
-    },
-    {
-      "time": {
-        "startTime": 1716586771584,
-        "endTime": 1716586780940,
-        "elapsedSeconds": 9.355999946594238
-      },
-      "index": 1,
-      "deps": [
-        "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBind"
-      ],
-      "cleanerData": {
-        "dependentTest": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testPermissions",
-        "time": {
-          "addTime": {
-            "startTime": 1716586780941,
-            "endTime": 1716586780941,
-            "elapsedSeconds": 0
-          },
-          "totalTime": {
-            "startTime": 1716586780941,
-            "endTime": 1716586780941,
-            "elapsedSeconds": 0
-          }
-        },
-        "expected": "PASS",
-        "isolationResult": "ERROR",
-        "cleaners": []
-      }
     }
   ],
   "hash": "c494a241f11c551779bc1904fa47348e",
