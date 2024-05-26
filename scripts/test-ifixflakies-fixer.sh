@@ -95,6 +95,7 @@ function checkFixResults() {
     sed -n '12,$p' ${patchfile} > /tmp/tmpPatch
     if [[ $(diff /tmp/tmpPatch ${fileWithExpectedPatch}) != "" ]]; then
         echo "Computed patch for ${odtest} in ${projectURL} does not match. %%%%%"
+        diff /tmp/tmpPatch ${fileWithExpectedPatch}
         flag=1
         return 1
     fi
