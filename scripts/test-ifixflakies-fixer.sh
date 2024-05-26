@@ -106,6 +106,10 @@ function checkFixResults() {
 {
     read
     while IFS="," read -r URL SHA MODULE odtest status; do
+        #skip if starts with #
+        if [[ ${URL} =~ ^#.* ]]; then
+            continue
+        fi
 
         renamedRepo=${URL}"/"
         readarray -d / -t starr <<< "${renamedRepo}"
