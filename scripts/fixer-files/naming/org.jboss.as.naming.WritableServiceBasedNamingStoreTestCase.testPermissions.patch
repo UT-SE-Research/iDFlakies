@@ -26,7 +26,7 @@
 +     }).install();
 +     latch2.await(10, TimeUnit.SECONDS);
 +     store = (WritableServiceBasedNamingStore) namingStoreService.getValue();
-+     final Name name = new CompositeName("test");
++     final Name name = new CompositeName("nested/test");
 +     final Object value = new Object();
 +     WritableServiceBasedNamingStore.pushOwner(OWNER_FOO);
 +     try {
