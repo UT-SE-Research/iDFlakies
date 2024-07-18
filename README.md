@@ -26,7 +26,7 @@ bash pom-modify/modify-project.sh path_to_maven_project
 ```
 
 By default, modify-project.sh will use the version of iDFlakies from Maven Central. If you wish to use
-the version of iDFlakies built locally, you can run the following instead. 
+the version of iDFlakies built locally, you can run the following instead.
 
 ```shell
 bash pom-modify/modify-project.sh path_to_maven_project idflakies-maven-plugin 2.0.1-SNAPSHOT
@@ -120,15 +120,61 @@ Note that multiple rounds may detect the same test.
 To see more information about a specific test (e.g., a passing and failing ordering of the test), please see the JSON file(s) that detected the test.
 The output of iDFlakies is explained in depth in `scripts/README.md` and the csv files used to evaluate iDFlakies are in `scripts/docker/icst-dataset`.
 
+# iFixFlakies
+
+iDFlakies now includes iFixFlakies.
+iFixFlakies automatically generates patches for order-dependent tests by finding and utilizing helper test methods in the test suite.
+
+More details about iFixFlakies can be found in its [paper](https://utexas.box.com/v/august-shi-FSE2019) and [website](https://sites.google.com/view/ifixflakies).
+
+## Using iFixFlakies
+
+First, include the iDFlakies plugin into your project or by specifying the full group ID and artifact ID as part of the running command (see instructions above).
+iFixFlakies provides two new goals: `minimize` and `fix`.
+
+### Minimize
+
+Assuming the iDFlakies plugin is included in the Maven project, use command:
+
+```shell
+mvn idflakies:minimize
+```
+
+You should only run this command after using `idflakies:detect` to have detected some order-dependent tests.
+This command generates, under `.dtfixingtools/minimized/`, a JSON file per detected order-dependent test.
+The JSON file contains information pertaining to the polluters, state-setters, and cleaners found for the order-dependent test.
+
+### Fix
+
+Use command:
+
+```shell
+mvn idflakies:fix
+```
+
+You should only run this command after using `idflakies:minimize` to have reported polluter/state-setters/cleaners for detected order-dependent tests.
+This command generates, under `.dtfixingtools/fixer/`, a JSON file per order-dependent test representing information pertaining to how it fixed the test.
+The directory also contains for each order-dependent test some `.patch` files that contain the possible patches.
+
 # Cite
 
-If you use iDFlakies, please cite our corresponding [ICST paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf):
+If you use iDFlakies or iFixFlakies, please cite our corresponding [ICST paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf) or [ESEC/FSE paper](https://utexas.box.com/v/august-shi-FSE2019):
 ```
 @inproceedings{LamETAL2019ICST,
     author    = {Lam, Wing and Oei, Reed and Shi, August and Marinov, Darko and Xie, Tao},
     title     = {{iDFlakies}: {A} Framework for Detecting and Partially Classifying Flaky Tests},
     booktitle = {12th {IEEE} International Conference on Software Testing, Verification and Validation},
     pages     = {312--322},
+    year      = {2019},
+}
+```
+
+```
+@inproceedings{ShiETAL2019FSE,
+    author    = {Shi, August and Lam, Wing and Oei, Reed and Xie, Tao and Marinov, Darko},
+    title     = {{iFixFlakies}: {A} Framework for Automatically Fixing Order-Dependent Flaky Tests},
+    booktitle = {ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+    pages     = {545--555},
     year      = {2019},
 }
 ```
