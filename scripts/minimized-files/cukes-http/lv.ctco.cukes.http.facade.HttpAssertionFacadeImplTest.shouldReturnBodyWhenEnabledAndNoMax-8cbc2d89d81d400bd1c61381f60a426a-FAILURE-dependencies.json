@@ -1,0 +1,407 @@
+{
+  "time": {
+    "startTime": 1704746980486,
+    "endTime": 1704747059320,
+    "elapsedSeconds": 78.83399987220764
+  },
+  "expectedRun": {
+    "id": "1704746976430-4f4ebce4-a85b-488a-9234-89a76da3a296",
+    "testOrder": [
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesLocationUrl",
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWith",
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWithRegexp",
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWith",
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWithRegexp",
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesDirectMatch",
+      "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButLongerThanMaxSize",
+      "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax"
+    ],
+    "results": {
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesLocationUrl": {
+        "name": "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesLocationUrl",
+        "result": "PASS",
+        "time": 0.001649558,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesDirectMatch": {
+        "name": "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesDirectMatch",
+        "result": "PASS",
+        "time": 6.5503e-05,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWith": {
+        "name": "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWith",
+        "result": "PASS",
+        "time": 8.4273e-05,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButLongerThanMaxSize": {
+        "name": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButLongerThanMaxSize",
+        "result": "PASS",
+        "time": 0.275153678,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWith": {
+        "name": "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWith",
+        "result": "PASS",
+        "time": 0.001340337,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWithRegexp": {
+        "name": "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesNotEndWithRegexp",
+        "result": "PASS",
+        "time": 7.0646e-05,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWithRegexp": {
+        "name": "lv.ctco.cukes.http.matchers.EndsWithRegexpTest.matchesEndWithRegexp",
+        "result": "PASS",
+        "time": 0.011550793,
+        "stackTrace": []
+      },
+      "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax": {
+        "name": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+        "result": "FAILURE",
+        "time": 0.009717062,
+        "stackTrace": [
+          {
+            "declaringClass": "org.junit.Assert",
+            "methodName": "assertEquals",
+            "fileName": "Assert.java",
+            "lineNumber": 115
+          },
+          {
+            "declaringClass": "org.junit.Assert",
+            "methodName": "assertEquals",
+            "fileName": "Assert.java",
+            "lineNumber": 144
+          },
+          {
+            "declaringClass": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest",
+            "methodName": "validateException",
+            "fileName": "HttpAssertionFacadeImplTest.java",
+            "lineNumber": 195
+          },
+          {
+            "declaringClass": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest",
+            "methodName": "shouldReturnBodyWhenEnabledAndNoMax",
+            "fileName": "HttpAssertionFacadeImplTest.java",
+            "lineNumber": 91
+          },
+          {
+            "declaringClass": "sun.reflect.NativeMethodAccessorImpl",
+            "methodName": "invoke0",
+            "fileName": "NativeMethodAccessorImpl.java",
+            "lineNumber": -2
+          },
+          {
+            "declaringClass": "sun.reflect.NativeMethodAccessorImpl",
+            "methodName": "invoke",
+            "fileName": "NativeMethodAccessorImpl.java",
+            "lineNumber": 62
+          },
+          {
+            "declaringClass": "sun.reflect.DelegatingMethodAccessorImpl",
+            "methodName": "invoke",
+            "fileName": "DelegatingMethodAccessorImpl.java",
+            "lineNumber": 43
+          },
+          {
+            "declaringClass": "java.lang.reflect.Method",
+            "methodName": "invoke",
+            "fileName": "Method.java",
+            "lineNumber": 498
+          },
+          {
+            "declaringClass": "org.junit.runners.model.FrameworkMethod$1",
+            "methodName": "runReflectiveCall",
+            "fileName": "FrameworkMethod.java",
+            "lineNumber": 50
+          },
+          {
+            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
+            "methodName": "run",
+            "fileName": "ReflectiveCallable.java",
+            "lineNumber": 12
+          },
+          {
+            "declaringClass": "org.junit.runners.model.FrameworkMethod",
+            "methodName": "invokeExplosively",
+            "fileName": "FrameworkMethod.java",
+            "lineNumber": 47
+          },
+          {
+            "declaringClass": "org.junit.internal.runners.statements.InvokeMethod",
+            "methodName": "evaluate",
+            "fileName": "InvokeMethod.java",
+            "lineNumber": 17
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "runLeaf",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 325
+          },
+          {
+            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
+            "methodName": "runChild",
+            "fileName": "BlockJUnit4ClassRunner.java",
+            "lineNumber": 78
+          },
+          {
+            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
+            "methodName": "runChild",
+            "fileName": "BlockJUnit4ClassRunner.java",
+            "lineNumber": 57
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner$3",
+            "methodName": "run",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 290
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner$1",
+            "methodName": "schedule",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 71
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "runChildren",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 288
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "access$000",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 58
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner$2",
+            "methodName": "evaluate",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 268
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "run",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 363
+          },
+          {
+            "declaringClass": "org.junit.runners.Suite",
+            "methodName": "runChild",
+            "fileName": "Suite.java",
+            "lineNumber": 128
+          },
+          {
+            "declaringClass": "org.junit.runners.Suite",
+            "methodName": "runChild",
+            "fileName": "Suite.java",
+            "lineNumber": 27
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner$3",
+            "methodName": "run",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 290
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner$1",
+            "methodName": "schedule",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 71
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "runChildren",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 288
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "access$000",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 58
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner$2",
+            "methodName": "evaluate",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 268
+          },
+          {
+            "declaringClass": "org.junit.runners.ParentRunner",
+            "methodName": "run",
+            "fileName": "ParentRunner.java",
+            "lineNumber": 363
+          },
+          {
+            "declaringClass": "org.junit.runner.JUnitCore",
+            "methodName": "run",
+            "fileName": "JUnitCore.java",
+            "lineNumber": 137
+          },
+          {
+            "declaringClass": "org.junit.runner.JUnitCore",
+            "methodName": "run",
+            "fileName": "JUnitCore.java",
+            "lineNumber": 115
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
+            "methodName": "execute",
+            "fileName": "JUnitTestExecutor.java",
+            "lineNumber": 246
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
+            "methodName": "executeWithJUnit4Runner",
+            "fileName": "JUnitTestExecutor.java",
+            "lineNumber": 315
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
+            "methodName": "runOrder",
+            "fileName": "JUnitTestExecutor.java",
+            "lineNumber": 46
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
+            "methodName": "$anonfun$run$1",
+            "fileName": "Executor.scala",
+            "lineNumber": 30
+          },
+          {
+            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
+            "methodName": "apply",
+            "fileName": "JFunction0$mcV$sp.java",
+            "lineNumber": 12
+          },
+          {
+            "declaringClass": "scala.util.Try$",
+            "methodName": "apply",
+            "fileName": "Try.scala",
+            "lineNumber": 209
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
+            "methodName": "run",
+            "fileName": "Executor.scala",
+            "lineNumber": 28
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
+            "methodName": "main",
+            "fileName": "Executor.scala",
+            "lineNumber": 18
+          },
+          {
+            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
+            "methodName": "main",
+            "fileName": "Executor.scala",
+            "lineNumber": -1
+          }
+        ]
+      }
+    }
+  },
+  "expected": "FAILURE",
+  "dependentTest": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+  "polluters": [
+    {
+      "time": {
+        "startTime": 1704746982432,
+        "endTime": 1704746986553,
+        "elapsedSeconds": 4.121000051498413
+      },
+      "index": 0,
+      "deps": [
+        "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButLongerThanMaxSize"
+      ],
+      "cleanerData": {
+        "dependentTest": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+        "time": {
+          "addTime": {
+            "startTime": 1704746986564,
+            "endTime": 1704746996279,
+            "elapsedSeconds": 9.71500015258789
+          },
+          "totalTime": {
+            "startTime": 1704746986564,
+            "endTime": 1704747044497,
+            "elapsedSeconds": 57.93300008773804
+          }
+        },
+        "expected": "FAILURE",
+        "isolationResult": "PASS",
+        "cleaners": [
+          {
+            "dependentTest": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+            "originalSize": 12,
+            "cleanerTests": [
+              "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenDisabled"
+            ],
+            "orderFound": 0,
+            "time": {
+              "addTime": {
+                "startTime": 1704746986564,
+                "endTime": 1704746996279,
+                "elapsedSeconds": 9.71500015258789
+              },
+              "totalTime": {
+                "startTime": 1704746986564,
+                "endTime": 1704747044497,
+                "elapsedSeconds": 57.93300008773804
+              }
+            }
+          },
+          {
+            "dependentTest": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+            "originalSize": 1,
+            "cleanerTests": [
+              "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldNotReturnBodyWhenEnabledButContentTypeOctet"
+            ],
+            "orderFound": 1,
+            "time": {
+              "addTime": {
+                "startTime": 1704746986564,
+                "endTime": 1704747011790,
+                "elapsedSeconds": 25.2260000705719
+              },
+              "totalTime": {
+                "startTime": 1704746986564,
+                "endTime": 1704747050701,
+                "elapsedSeconds": 64.13700008392334
+              }
+            }
+          },
+          {
+            "dependentTest": "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledAndNoMax",
+            "originalSize": 1,
+            "cleanerTests": [
+              "lv.ctco.cukes.http.facade.HttpAssertionFacadeImplTest.shouldReturnBodyWhenEnabledWithMax"
+            ],
+            "orderFound": 2,
+            "time": {
+              "addTime": {
+                "startTime": 1704746986564,
+                "endTime": 1704747014079,
+                "elapsedSeconds": 27.515000104904175
+              },
+              "totalTime": {
+                "startTime": 1704746986564,
+                "endTime": 1704747056987,
+                "elapsedSeconds": 70.42300009727478
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "hash": "8cbc2d89d81d400bd1c61381f60a426a",
+  "flakyClass": "OD"
+}

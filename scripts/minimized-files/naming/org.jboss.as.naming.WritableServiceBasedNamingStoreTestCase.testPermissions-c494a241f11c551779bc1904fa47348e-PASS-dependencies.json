@@ -1,0 +1,539 @@
+{
+  "time": {
+    "startTime": 1716586758119,
+    "endTime": 1716587141597,
+    "elapsedSeconds": 383.4779999256134
+  },
+  "expectedRun": {
+    "id": "1716586755147-2cd39326-d7d3-413d-bc44-62328860c981",
+    "testOrder": [
+      "org.jboss.as.naming.ExternalContextsNavigableSetTestCase.testGetParentContext",
+      "org.jboss.as.naming.InitialContextFactoryTestCase.testInitialFactory",
+      "org.jboss.as.naming.InitialContextFactoryTestCase.testJavaContext",
+      "org.jboss.as.naming.InitialContextTestCase.testRegisterURLSchemeHandler",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListBindingsNameNotFound",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testUnbindNotFound",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListBindings",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testList",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testAutoRemove",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndLookup",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndRebind",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindUnbindLookup",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListNameNotFound",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindEmptyName",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testLookupNameNotFound",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindInvalidContext",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndLookupResolveResult",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindAndLookup",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindEmptyName",
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testLookupEmptyName",
+      "org.jboss.as.naming.NamingContextTestCase.testRebindReferenceable",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupReference",
+      "org.jboss.as.naming.NamingContextTestCase.testCreateSubcontext",
+      "org.jboss.as.naming.NamingContextTestCase.testListBindingsNameNotFound",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupWitResolveResult",
+      "org.jboss.as.naming.NamingContextTestCase.testListBindings",
+      "org.jboss.as.naming.NamingContextTestCase.testBind",
+      "org.jboss.as.naming.NamingContextTestCase.testList",
+      "org.jboss.as.naming.NamingContextTestCase.testListNameNotFound",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupNameNotFound",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupLink",
+      "org.jboss.as.naming.NamingContextTestCase.testListBindingsWithContinuation",
+      "org.jboss.as.naming.NamingContextTestCase.testListWithContinuation",
+      "org.jboss.as.naming.NamingContextTestCase.testBindReferenceable",
+      "org.jboss.as.naming.NamingContextTestCase.testLookup",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupWithContinuation",
+      "org.jboss.as.naming.NamingContextTestCase.testRebind",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupContextLink",
+      "org.jboss.as.naming.NamingContextTestCase.testUnbind",
+      "org.jboss.as.naming.NamingContextTestCase.testLookupEmptyName",
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireSubTreeEvent",
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireObjectEvent",
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireMultiLevelEvent",
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireAllEvent",
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireOneLevelEvent",
+      "org.jboss.as.naming.ObjectFactoryTestCase.testBindAndRetrieveObjectFactoryFromInitialContext",
+      "org.jboss.as.naming.ObjectFactoryTestCase.testBindAndRetrieveObjectFactoryFromNamingContext",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBinding",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupNestedContext",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testListBindings",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testList",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBindingUsingNestedContext",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testStoredContext",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBase",
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupParentContext",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testCompositeBindingOps",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testOnlyExternalContextAllowsCache",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSchemaOfSubsystemTemplates",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testCompositeBindingUpdate",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testRejectionsEAP6",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testRejectionsEAP7",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSubsystem",
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSchema",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testCreateSubcontext",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testMultipleOwnersBindingReferences",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBind",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testCreateSubContextNoOwner",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBindNested",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testRebindNoOwner",
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testPermissions"
+    ],
+    "results": {
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupParentContext": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupParentContext",
+        "result": "PASS",
+        "time": 0.00026057,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookup": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookup",
+        "result": "PASS",
+        "time": 0.000334571,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testCompositeBindingOps": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testCompositeBindingOps",
+        "result": "PASS",
+        "time": 0.266634675,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSubsystem": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSubsystem",
+        "result": "PASS",
+        "time": 0.081240065,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBase": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBase",
+        "result": "PASS",
+        "time": 0.000283499,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testMultipleOwnersBindingReferences": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testMultipleOwnersBindingReferences",
+        "result": "PASS",
+        "time": 0.003187112,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testBindReferenceable": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testBindReferenceable",
+        "result": "PASS",
+        "time": 0.00069177,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindUnbindLookup": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindUnbindLookup",
+        "result": "PASS",
+        "time": 0.000135315,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireOneLevelEvent": {
+        "name": "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireOneLevelEvent",
+        "result": "PASS",
+        "time": 0.000565201,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndLookupResolveResult": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndLookupResolveResult",
+        "result": "PASS",
+        "time": 0.000180894,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testCreateSubcontext": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testCreateSubcontext",
+        "result": "PASS",
+        "time": 0.005513984,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testListWithContinuation": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testListWithContinuation",
+        "result": "PASS",
+        "time": 0.00064591,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireObjectEvent": {
+        "name": "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireObjectEvent",
+        "result": "PASS",
+        "time": 0.000359329,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testPermissions": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testPermissions",
+        "result": "PASS",
+        "time": 0.003994649,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupNameNotFound": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupNameNotFound",
+        "result": "PASS",
+        "time": 0.000756495,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSchema": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSchema",
+        "result": "PASS",
+        "time": 0.006961368,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBindNested": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBindNested",
+        "result": "PASS",
+        "time": 0.001771452,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testRebindReferenceable": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testRebindReferenceable",
+        "result": "PASS",
+        "time": 0.016078399,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testUnbind": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testUnbind",
+        "result": "PASS",
+        "time": 0.000809273,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testListNameNotFound": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testListNameNotFound",
+        "result": "PASS",
+        "time": 0.000865134,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testListBindings": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testListBindings",
+        "result": "PASS",
+        "time": 0.018516317,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupNestedContext": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupNestedContext",
+        "result": "PASS",
+        "time": 0.000788871,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBind": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBind",
+        "result": "PASS",
+        "time": 0.001221751,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testListBindingsWithContinuation": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testListBindingsWithContinuation",
+        "result": "PASS",
+        "time": 0.000804446,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindEmptyName": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindEmptyName",
+        "result": "PASS",
+        "time": 0.000129713,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSchemaOfSubsystemTemplates": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testSchemaOfSubsystemTemplates",
+        "result": "PASS",
+        "time": 0.184953483,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndRebind": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndRebind",
+        "result": "PASS",
+        "time": 0.000281957,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindEmptyName": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindEmptyName",
+        "result": "PASS",
+        "time": 0.000142836,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupEmptyName": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupEmptyName",
+        "result": "PASS",
+        "time": 0.000464568,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InitialContextTestCase.testRegisterURLSchemeHandler": {
+        "name": "org.jboss.as.naming.InitialContextTestCase.testRegisterURLSchemeHandler",
+        "result": "PASS",
+        "time": 0.073449985,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListNameNotFound": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListNameNotFound",
+        "result": "PASS",
+        "time": 0.000101027,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testLookupEmptyName": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testLookupEmptyName",
+        "result": "PASS",
+        "time": 0.000431408,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindAndLookup": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindAndLookup",
+        "result": "PASS",
+        "time": 4.3004e-05,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testCompositeBindingUpdate": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testCompositeBindingUpdate",
+        "result": "PASS",
+        "time": 0.013496152,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupWitResolveResult": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupWitResolveResult",
+        "result": "PASS",
+        "time": 0.001153936,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testListBindings": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testListBindings",
+        "result": "PASS",
+        "time": 0.000752662,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireAllEvent": {
+        "name": "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireAllEvent",
+        "result": "PASS",
+        "time": 0.000268973,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupLink": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupLink",
+        "result": "PASS",
+        "time": 0.001511014,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ExternalContextsNavigableSetTestCase.testGetParentContext": {
+        "name": "org.jboss.as.naming.ExternalContextsNavigableSetTestCase.testGetParentContext",
+        "result": "PASS",
+        "time": 0.001273064,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListBindings": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListBindings",
+        "result": "PASS",
+        "time": 0.00177413,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBindingUsingNestedContext": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBindingUsingNestedContext",
+        "result": "PASS",
+        "time": 0.001315785,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListBindingsNameNotFound": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testListBindingsNameNotFound",
+        "result": "PASS",
+        "time": 0.002727922,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupContextLink": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupContextLink",
+        "result": "PASS",
+        "time": 0.00071119,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InitialContextFactoryTestCase.testInitialFactory": {
+        "name": "org.jboss.as.naming.InitialContextFactoryTestCase.testInitialFactory",
+        "result": "PASS",
+        "time": 0.023289522,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InitialContextFactoryTestCase.testJavaContext": {
+        "name": "org.jboss.as.naming.InitialContextFactoryTestCase.testJavaContext",
+        "result": "PASS",
+        "time": 0.000195535,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testBind": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testBind",
+        "result": "PASS",
+        "time": 0.000789817,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndLookup": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testBindAndLookup",
+        "result": "PASS",
+        "time": 4.4122e-05,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testAutoRemove": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testAutoRemove",
+        "result": "PASS",
+        "time": 0.000370409,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testStoredContext": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testStoredContext",
+        "result": "PASS",
+        "time": 0.001973176,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupReference": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupReference",
+        "result": "PASS",
+        "time": 0.001240973,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testOnlyExternalContextAllowsCache": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testOnlyExternalContextAllowsCache",
+        "result": "PASS",
+        "time": 0.024599871,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testCreateSubContextNoOwner": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testCreateSubContextNoOwner",
+        "result": "PASS",
+        "time": 0.001031945,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testList": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testList",
+        "result": "PASS",
+        "time": 0.003390535,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ObjectFactoryTestCase.testBindAndRetrieveObjectFactoryFromNamingContext": {
+        "name": "org.jboss.as.naming.ObjectFactoryTestCase.testBindAndRetrieveObjectFactoryFromNamingContext",
+        "result": "PASS",
+        "time": 9.0927e-05,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testRebind": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testRebind",
+        "result": "PASS",
+        "time": 0.000451919,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBinding": {
+        "name": "org.jboss.as.naming.ServiceBasedNamingStoreTestCase.testLookupBinding",
+        "result": "PASS",
+        "time": 0.187759244,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindInvalidContext": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testRebindInvalidContext",
+        "result": "PASS",
+        "time": 0.000102448,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testList": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testList",
+        "result": "PASS",
+        "time": 0.000550599,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testListBindingsNameNotFound": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testListBindingsNameNotFound",
+        "result": "PASS",
+        "time": 0.000727873,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireSubTreeEvent": {
+        "name": "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireSubTreeEvent",
+        "result": "PASS",
+        "time": 0.011362511,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireMultiLevelEvent": {
+        "name": "org.jboss.as.naming.NamingEventCoordinatorTestCase.testFireMultiLevelEvent",
+        "result": "PASS",
+        "time": 0.001052438,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testList": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testList",
+        "result": "PASS",
+        "time": 0.000338905,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testUnbindNotFound": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testUnbindNotFound",
+        "result": "PASS",
+        "time": 0.000475083,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testLookupWithContinuation": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testLookupWithContinuation",
+        "result": "PASS",
+        "time": 0.001016574,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.ObjectFactoryTestCase.testBindAndRetrieveObjectFactoryFromInitialContext": {
+        "name": "org.jboss.as.naming.ObjectFactoryTestCase.testBindAndRetrieveObjectFactoryFromInitialContext",
+        "result": "PASS",
+        "time": 0.00054729,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.InMemoryNamingStoreTestCase.testLookupNameNotFound": {
+        "name": "org.jboss.as.naming.InMemoryNamingStoreTestCase.testLookupNameNotFound",
+        "result": "PASS",
+        "time": 9.3072e-05,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testRejectionsEAP7": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testRejectionsEAP7",
+        "result": "PASS",
+        "time": 0.316798479,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testRejectionsEAP6": {
+        "name": "org.jboss.as.naming.subsystem.NamingSubsystemTestCase.testRejectionsEAP6",
+        "result": "PASS",
+        "time": 0.349251475,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testRebindNoOwner": {
+        "name": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testRebindNoOwner",
+        "result": "PASS",
+        "time": 0.003238895,
+        "stackTrace": []
+      },
+      "org.jboss.as.naming.NamingContextTestCase.testCreateSubcontext": {
+        "name": "org.jboss.as.naming.NamingContextTestCase.testCreateSubcontext",
+        "result": "PASS",
+        "time": 0.000822628,
+        "stackTrace": []
+      }
+    }
+  },
+  "expected": "PASS",
+  "dependentTest": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testPermissions",
+  "polluters": [
+    {
+      "time": {
+        "startTime": 1716586760303,
+        "endTime": 1716586769125,
+        "elapsedSeconds": 8.82200002670288
+      },
+      "index": 0,
+      "deps": [
+        "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testBindNested"
+      ],
+      "cleanerData": {
+        "dependentTest": "org.jboss.as.naming.WritableServiceBasedNamingStoreTestCase.testPermissions",
+        "time": {
+          "addTime": {
+            "startTime": 1716586769127,
+            "endTime": 1716586769127,
+            "elapsedSeconds": 0
+          },
+          "totalTime": {
+            "startTime": 1716586769127,
+            "endTime": 1716586769127,
+            "elapsedSeconds": 0
+          }
+        },
+        "expected": "PASS",
+        "isolationResult": "ERROR",
+        "cleaners": []
+      }
+    }
+  ],
+  "hash": "c494a241f11c551779bc1904fa47348e",
+  "flakyClass": "OD"
+}

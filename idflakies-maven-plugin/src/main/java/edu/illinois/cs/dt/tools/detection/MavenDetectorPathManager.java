@@ -162,6 +162,31 @@ public class MavenDetectorPathManager extends PathManager {
     }
 
     @Override
+    protected Path fixerPathInstance() {
+        return pathInstance(PathManager.FIXER);
+    }
+
+    @Override
+    protected Path fixerPathInstance(final Path relative) {
+        return pathInstance(PathManager.FIXER.resolve(relative));
+    }
+
+    @Override
+    protected Path fixerPathInstance(final String dependentTest) {
+        return fixerPathInstance(Paths.get(dependentTest));
+    }
+
+    @Override
+    protected Path compiledPathInstance(final Path sourcePath) {
+        final Path testSrcDir = Paths.get(mavenProject.getBuild().getTestSourceDirectory());
+        final Path testBinDir = Paths.get(mavenProject.getBuild().getTestOutputDirectory());
+
+        final Path relative = testSrcDir.relativize(sourcePath.toAbsolutePath());
+
+        return testBinDir.resolve(changeExtension(relative, "class"));
+    }
+
+    @Override
     protected Path parentPath() {
         return getMavenProjectParent(mavenProject).getBasedir().toPath();
     }

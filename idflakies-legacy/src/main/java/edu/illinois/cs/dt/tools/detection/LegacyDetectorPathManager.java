@@ -149,6 +149,32 @@ public class LegacyDetectorPathManager extends PathManager {
     }
 
     @Override
+    protected Path fixerPathInstance() {
+        return pathInstance(PathManager.FIXER);
+    }
+
+    @Override
+    protected Path fixerPathInstance(final Path relative) {
+        return pathInstance(PathManager.FIXER.resolve(relative));
+    }
+
+    @Override
+    protected Path fixerPathInstance(final String dependentTest) {
+        return fixerPathInstance(Paths.get(dependentTest));
+    }
+
+    @Override
+    protected Path compiledPathInstance(final Path sourcePath) {
+        // For now, only have it work for Maven projects
+        final Path testSrcDir = Paths.get(TestPluginUtil.project.getBasedir() + "src/main/java/");          // TODO: Big assumption on being Maven project
+        final Path testBinDir = Paths.get(TestPluginUtil.project.getBuildTestOutputDirectories().get(0));   //TODO: Big assumption on being just one output directory
+
+        final Path relative = testSrcDir.relativize(sourcePath.toAbsolutePath());
+
+        return testBinDir.resolve(changeExtension(relative, "class"));
+    }
+
+    @Override
     protected Path parentPath() {
         return getProjectParent(TestPluginUtil.project).getBasedir().toPath();
     }

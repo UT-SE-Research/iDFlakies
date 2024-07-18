@@ -1,10 +1,13 @@
 package edu.illinois.cs.dt.tools.utility;
 
 import com.google.common.base.Preconditions;
+
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -23,11 +26,15 @@ public abstract class PathManager {
     public static final Path ORIGINAL_ORDER = Paths.get("original-order");
     public static final Path SELECTED_TESTS = Paths.get("selected-tests");
     public static final Path MINIMIZED = Paths.get("minimized");
+    public static final Path FIXER = Paths.get("fixer");
     public static final Path TIME = Paths.get("time");
     public static final Path ERROR = Paths.get("error");
     public static final Path ORIGINAL_RESULTS_LOG = Paths.get("original-results-ids");
     public static final Path MVN_TEST_LOG = Paths.get("mvn-test.log");
     public static final Path MVN_TEST_TIME_LOG = Paths.get("mvn-test-time.log");
+
+    public static final String BACKUP_EXTENSION = ".orig";
+    public static final String PATCH_EXTENSION = ".patch";
 
     public static PathManager getInstance() { return instance; }
     
@@ -109,6 +116,36 @@ public abstract class PathManager {
         return getInstance().minimizedPathInstance(dependentTest, hash, expected);
     }
 
+    public static Path fixerPath() {
+        return getInstance().fixerPathInstance();
+    }
+
+    public static Path fixerPath(final Path relative) {
+        return getInstance().fixerPathInstance(relative);
+    }
+
+    public static Path fixerPath(final String dependentTest) {
+        return getInstance().fixerPathInstance(dependentTest);
+    }
+
+    public static Path compiledPath(final Path sourcePath) {
+        return getInstance().compiledPathInstance(sourcePath);
+    }
+
+    public static Path backupPath(final Path path) {
+        if (path.getParent() == null) {
+            return Paths.get(path.getFileName().toString() + BACKUP_EXTENSION);
+        } else {
+            return path.getParent().resolve(path.getFileName().toString() + BACKUP_EXTENSION);
+        }
+    }
+
+    public static Path changeExtension(final Path path, final String newExtension) {
+        final String extToAdd = newExtension.startsWith(".") ? newExtension : "." + newExtension;
+
+        return path.toAbsolutePath().getParent().resolve(FilenameUtils.removeExtension(path.getFileName().toString()) + extToAdd);
+    }
+
     protected abstract Path detectionResultsInstance();
 
     protected abstract Path detectionFileInstance();
@@ -152,4 +189,12 @@ public abstract class PathManager {
     protected abstract Path minimizedPathInstance(final Path relative);
 
     protected abstract Path minimizedPathInstance(final String dependentTest, final String hash, final Result expected);
+
+    protected abstract Path fixerPathInstance();
+
+    protected abstract Path fixerPathInstance(final Path relative);
+
+    protected abstract Path fixerPathInstance(final String dependentTest);
+
+    protected abstract Path compiledPathInstance(final Path sourcePath);
 }
