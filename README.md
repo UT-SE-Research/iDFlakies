@@ -134,6 +134,8 @@ iFixFlakies provides two new goals: `minimize` and `fix`.
 
 ### Minimize
 
+Minimize aims to determine the minimal set of tests that can make the order-dependent test pass/fail.
+It also searches for cleaners in the case of polluter/victim.
 Assuming the iDFlakies plugin is included in the Maven project, use command:
 
 ```shell
@@ -146,6 +148,7 @@ The JSON file contains information pertaining to the polluters, state-setters, a
 
 ### Fix
 
+Fix aims to generate a patch to be added to the order-dependent test so it can pass in different orders.
 Use command:
 
 ```shell
