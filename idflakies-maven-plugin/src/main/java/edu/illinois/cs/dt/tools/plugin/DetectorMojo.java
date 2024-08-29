@@ -27,6 +27,7 @@ import org.apache.maven.project.MavenProject;
 
 import scala.collection.JavaConverters;
 
+import java.util.stream.Collectors;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,7 +47,10 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-@Mojo(name = "detect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
+
+@Mojo(name = "detect", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST)
+
+//@Mojo(name = "detect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class DetectorMojo extends AbstractIDFlakiesMojo {
 
     protected Path outputPath;
@@ -278,9 +282,12 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     protected List<String> getTests(
-            final MavenProject project,
-            TestFramework testFramework) throws IOException {
-        return getOriginalOrder(project, testFramework);
+				    final MavenProject project,
+				    TestFramework testFramework) throws IOException {
+	// Retrieve only IT tests
+	List<String> integrationTests = getOriginalOrder(project, testFramework);
+
+	return integrationTests;
     }
 
     protected Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
@@ -302,24 +309,52 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     private static List<String> locateTests(MavenProject project, TestFramework testFramework) {
-        int id = Objects.hash(project, testFramework);
-        if (!locateTestList.containsKey(id)) {
-            Logger.getGlobal().log(Level.INFO, "Locating tests...");
-            try {
-                locateTestList.put(id, OperationTime.runOperation(() -> {
-                    List<String> tests = new ArrayList<>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
-                    Collections.sort(tests);
-                    return tests;
-                }, (tests, time) -> {
-                    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
-                    return tests;
-                }));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return locateTestList.get(id);
+	int id = Objects.hash(project, testFramework);
+	if (!locateTestList.containsKey(id)) {
+	    Logger.getGlobal().log(Level.INFO, "Locating tests...");
+	    try {
+		locateTestList.put(id, OperationTime.runOperation(() -> {
+			    List<String> tests = new ArrayList<>(JavaConverters.bufferAsJavaList(
+												 TestLocator.tests(project, testFramework).toBuffer()));
+			    Logger.getGlobal().log(Level.INFO, "Located tests before filtering: " + tests);
+
+
+			    List<String> itTests = tests.stream()
+				.filter(test -> {
+					// Identify the class name by checking the last separator (either # or .)
+					int separatorIndex = Math.max(test.lastIndexOf('#'), test.lastIndexOf('.'));
+
+					if (separatorIndex == -1) {
+					    return false; // Invalid format, skip this entry
+					}
+
+					// Extract the class name (everything before the separator)
+					String className = test.substring(0, separatorIndex);
+
+					// Check if the class name ends with "IT"
+					return className.endsWith("IT");
+				    })
+				.collect(Collectors.toList());
+
+			    Collections.sort(itTests);
+
+			    // Log the located tests
+			    Logger.getGlobal().log(Level.INFO, "Located the following IT tests for framework " + testFramework + ":");
+			    for (String test : itTests) {
+				Logger.getGlobal().log(Level.INFO, "  - " + test);
+			    }
+			    return itTests;
+			}, (tests, time) -> {
+			    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " IT tests. Time taken: " + time.elapsedSeconds() + " seconds");
+			    return tests;
+			}));
+	    } catch (Exception e) {
+		throw new RuntimeException(e);
+	    }
+	}
+	return locateTestList.get(id);
     }
+
 
     public static List<String> getOriginalOrder(
             final MavenProject project,
@@ -336,7 +371,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             List<String> originalOrder = null;
             try {
-                final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("surefire-reports");
+                final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("failsafe-reports");
                 final Path mvnTestLog = PathManager.testLog();
                 if (Files.exists(mvnTestLog) && Files.exists(surefireReportsPath)) {
                     final List<TestClassData> testClassData = new GetMavenTestOrder(surefireReportsPath, mvnTestLog).testClassDataList();
@@ -368,6 +403,22 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         } else {
             return Files.readAllLines(PathManager.originalOrderPath());
         }
+    }
+
+    private static List<String> locateITTests(MavenProject project, TestFramework testFramework) {
+	// Locate all the tests using the given test framework
+	List<String> tests = locateTests(project, testFramework);
+
+	// Filter to include only tests from classes that end with "IT"
+	List<String> itTests = tests.stream()
+	    .filter(test -> {
+		    // Split the test string into class name and method name based on the delimiter
+		    String className = test.split(testFramework.getDelimiter())[0];
+		    return className.endsWith("IT");
+		})
+	    .collect(Collectors.toList());
+
+	return itTests;
     }
 
     private static List<Runner> removeZombieRunners(

@@ -39,6 +39,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import java.util.Arrays;
+
 // TODO: would probably be better to have these insert methods in their respective classes with some
 //       interface or something...
 public class Analysis extends StandardMain {
@@ -487,15 +489,17 @@ public class Analysis extends StandardMain {
     private TestRunResult passingRun(final List<String> originalOrder) {
         final Map<String, TestResult> testOutcomes = new HashMap<>();
 
-        for (final String testName : originalOrder) {
-            testOutcomes.put(testName, new TestResult(testName, Result.PASS, -1, new StackTraceElement[0]));
-        }
+	for (final String testName : originalOrder) {
+	    // Convert StackTraceElement[] to String[]
+	    String[] stackTraceAsStringArray = Arrays.stream(new StackTraceElement[0])
+		.map(element -> element.toString())
+		.toArray(String[]::new);
+	    testOutcomes.put(testName, new TestResult(testName, Result.PASS, -1, stackTraceAsStringArray));
+	}
 
-        return new TestRunResult("the id is unimportant and should never be referenced",
-                originalOrder,
-                testOutcomes);
+
+        return new TestRunResult("id doesnt matter", originalOrder, testOutcomes);
     }
-
     private void insertDetectionRound(final String name, final String roundType,
                                        final int roundNumber, final DetectionRound round)
             throws IOException, SQLException {
@@ -601,3 +605,4 @@ public class Analysis extends StandardMain {
         });
     }
 }
+
