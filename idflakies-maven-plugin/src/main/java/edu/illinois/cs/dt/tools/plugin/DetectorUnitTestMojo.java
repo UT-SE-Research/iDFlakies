@@ -27,7 +27,6 @@ import org.apache.maven.project.MavenProject;
 
 import scala.collection.JavaConverters;
 
-import java.util.stream.Collectors;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,11 +46,10 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import java.util.stream.Collectors;
 
-@Mojo(name = "detect", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST)
-
-//@Mojo(name = "detect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
-public class DetectorMojo extends AbstractIDFlakiesMojo {
+@Mojo(name = "detect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
+public class DetectorUnitTestMojo extends AbstractIDFlakiesMojo {
 
     protected Path outputPath;
     protected String coordinates;
@@ -282,12 +280,9 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     protected List<String> getTests(
-				    final MavenProject project,
-				    TestFramework testFramework) throws IOException {
-	// Retrieve only IT tests
-	List<String> integrationTests = getOriginalOrder(project, testFramework);
-
-	return integrationTests;
+            final MavenProject project,
+            TestFramework testFramework) throws IOException {
+        return getOriginalOrder(project, testFramework);
     }
 
     protected Void detectorExecute(final ErrorLogger logger, final MavenProject mavenProject, final int rounds) throws IOException {
@@ -318,8 +313,8 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 												 TestLocator.tests(project, testFramework).toBuffer()));
 			    Logger.getGlobal().log(Level.INFO, "Located tests before filtering: " + tests);
 
-
-			    List<String> itTests = tests.stream()
+			    // Filter out tests from classes that end with "IT"
+			    List<String> unitTests = tests.stream()
 				.filter(test -> {
 					// Identify the class name by checking the last separator (either # or .)
 					int separatorIndex = Math.max(test.lastIndexOf('#'), test.lastIndexOf('.'));
@@ -331,21 +326,21 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 					// Extract the class name (everything before the separator)
 					String className = test.substring(0, separatorIndex);
 
-					// Check if the class name ends with "IT"
-					return className.endsWith("IT");
+					// Exclude classes that end with "IT"
+					return !className.endsWith("IT");
 				    })
 				.collect(Collectors.toList());
 
-			    Collections.sort(itTests);
+			    Collections.sort(unitTests);
 
 			    // Log the located tests
-			    Logger.getGlobal().log(Level.INFO, "Located the following IT tests for framework " + testFramework + ":");
-			    for (String test : itTests) {
+			    Logger.getGlobal().log(Level.INFO, "Located the following unit tests for framework " + testFramework + ":");
+			    for (String test : unitTests) {
 				Logger.getGlobal().log(Level.INFO, "  - " + test);
 			    }
-			    return itTests;
+			    return unitTests;
 			}, (tests, time) -> {
-			    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " IT tests. Time taken: " + time.elapsedSeconds() + " seconds");
+			    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " unit tests. Time taken: " + time.elapsedSeconds() + " seconds");
 			    return tests;
 			}));
 	    } catch (Exception e) {
@@ -371,7 +366,7 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
 
             List<String> originalOrder = null;
             try {
-                final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("failsafe-reports");
+                final Path surefireReportsPath = Paths.get(project.getBuild().getDirectory()).resolve("surefire-reports");
                 final Path mvnTestLog = PathManager.testLog();
                 if (Files.exists(mvnTestLog) && Files.exists(surefireReportsPath)) {
                     final List<TestClassData> testClassData = new GetMavenTestOrder(surefireReportsPath, mvnTestLog).testClassDataList();
@@ -403,22 +398,6 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         } else {
             return Files.readAllLines(PathManager.originalOrderPath());
         }
-    }
-
-    private static List<String> locateITTests(MavenProject project, TestFramework testFramework) {
-	// Locate all the tests using the given test framework
-	List<String> tests = locateTests(project, testFramework);
-
-	// Filter to include only tests from classes that end with "IT"
-	List<String> itTests = tests.stream()
-	    .filter(test -> {
-		    // Split the test string into class name and method name based on the delimiter
-		    String className = test.split(testFramework.getDelimiter())[0];
-		    return className.endsWith("IT");
-		})
-	    .collect(Collectors.toList());
-
-	return itTests;
     }
 
     private static List<Runner> removeZombieRunners(

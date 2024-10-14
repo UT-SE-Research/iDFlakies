@@ -47,8 +47,8 @@ import java.util.Set;
 
 import static edu.illinois.starts.helpers.ZLCHelper.STAR_FILE;
 
-@Mojo(name = "incdetect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
-public class IncDetectorMojo extends DetectorMojo {
+@Mojo(name = "incdetect-unit", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
+public class IncDetectorUnitMojo extends DetectorUnitTestMojo {
 
     protected static String CLASSES = "classes";
     protected static String EQUAL = "=";
@@ -98,6 +98,11 @@ public class IncDetectorMojo extends DetectorMojo {
 
     @Override
     public void execute() {
+
+	 // Set the property to true for detecting unit tests
+        System.setProperty("detectUnitTest", "true");
+        System.setProperty("detectITTest", "false");
+	
         superExecute();
 
         final ErrorLogger logger = new ErrorLogger();

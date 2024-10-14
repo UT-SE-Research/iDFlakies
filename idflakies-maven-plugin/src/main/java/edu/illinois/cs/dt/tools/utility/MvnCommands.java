@@ -30,7 +30,7 @@ public class MvnCommands extends BuildCommands {
     // Running mvn install, just to build and compile code (no running tests)
     @Override
     public void install() {
-	     // Check which argument is provided
+	/*	     // Check which argument is provided
         boolean detectUnitTest = Boolean.parseBoolean(System.getProperty("detectUnitTest", "true"));
         boolean detectITTest = Boolean.parseBoolean(System.getProperty("detectITTest", "false"));
 
@@ -43,7 +43,30 @@ public class MvnCommands extends BuildCommands {
         } else if (detectITTest) {
             // Use the goal for the IT test-specific Mojo
             mojoGoal = "detect-it"; 
-        }
+	    }
+	*/
+
+	// By default, the system should run unit tests (detect)
+	boolean detectITTest = false;
+
+	// If running the 'detect-it' goal, set the flag to true
+	String mojoGoal = System.getProperty("maven.goal", "detect");
+
+	if (mojoGoal.equals("detect-it")) {
+	    detectITTest = true;
+	}
+
+	// Set the correct system property based on the goal
+	System.setProperty("detectITTest", Boolean.toString(detectITTest));
+	System.setProperty("detectUnitTest", Boolean.toString(!detectITTest));
+
+	// Choose the goal to proceed with
+	if (detectITTest) {
+	    mojoGoal = "detect-it";
+	} else {
+	    mojoGoal = "detect";  // Default is unit tests
+	}
+	
 
         // TODO: Maybe support custom command lines/options?
         final InvocationRequest request = new DefaultInvocationRequest();
