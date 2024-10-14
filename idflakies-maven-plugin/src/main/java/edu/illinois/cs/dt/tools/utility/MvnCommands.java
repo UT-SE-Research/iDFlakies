@@ -30,10 +30,49 @@ public class MvnCommands extends BuildCommands {
     // Running mvn install, just to build and compile code (no running tests)
     @Override
     public void install() {
+	/*	     // Check which argument is provided
+        boolean detectUnitTest = Boolean.parseBoolean(System.getProperty("detectUnitTest", "true"));
+        boolean detectITTest = Boolean.parseBoolean(System.getProperty("detectITTest", "false"));
+
+        // Choose the corresponding goal based on the argument
+        String mojoGoal = "install"; // default
+
+        if (detectUnitTest) {
+            // Use the goal for the unit test-specific Mojo
+            mojoGoal = "detect"; 
+        } else if (detectITTest) {
+            // Use the goal for the IT test-specific Mojo
+            mojoGoal = "detect-it"; 
+	    }
+	*/
+
+	// By default, the system should run unit tests (detect)
+	boolean detectITTest = false;
+
+	// If running the 'detect-it' goal, set the flag to true
+	String mojoGoal = System.getProperty("maven.goal", "detect");
+
+	if (mojoGoal.equals("detect-it")) {
+	    detectITTest = true;
+	}
+
+	// Set the correct system property based on the goal
+	System.setProperty("detectITTest", Boolean.toString(detectITTest));
+	System.setProperty("detectUnitTest", Boolean.toString(!detectITTest));
+
+	// Choose the goal to proceed with
+	if (detectITTest) {
+	    mojoGoal = "detect-it";
+	} else {
+	    mojoGoal = "detect";  // Default is unit tests
+	}
+	
+
         // TODO: Maybe support custom command lines/options?
         final InvocationRequest request = new DefaultInvocationRequest();
-        request.setGoals(Arrays.asList("install"));
-        request.setPomFile(project.getFile());
+        //request.setGoals(Arrays.asList("install"));
+	request.setGoals(Arrays.asList(mojoGoal));
+	request.setPomFile(project.getFile());
         request.setProperties(new Properties());
         request.getProperties().setProperty("skipTests", "true");
         request.getProperties().setProperty("rat.skip", "true");

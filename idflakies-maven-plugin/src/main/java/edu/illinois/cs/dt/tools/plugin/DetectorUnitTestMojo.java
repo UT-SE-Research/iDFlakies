@@ -46,8 +46,10 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import java.util.stream.Collectors;
+
 @Mojo(name = "detect", defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST)
-public class DetectorMojo extends AbstractIDFlakiesMojo {
+public class DetectorUnitTestMojo extends AbstractIDFlakiesMojo {
 
     protected Path outputPath;
     protected String coordinates;
@@ -302,24 +304,52 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
     }
 
     private static List<String> locateTests(MavenProject project, TestFramework testFramework) {
-        int id = Objects.hash(project, testFramework);
-        if (!locateTestList.containsKey(id)) {
-            Logger.getGlobal().log(Level.INFO, "Locating tests...");
-            try {
-                locateTestList.put(id, OperationTime.runOperation(() -> {
-                    List<String> tests = new ArrayList<>(JavaConverters.bufferAsJavaList(TestLocator.tests(project, testFramework).toBuffer()));
-                    Collections.sort(tests);
-                    return tests;
-                }, (tests, time) -> {
-                    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " tests. Time taken: " + time.elapsedSeconds() + " seconds");
-                    return tests;
-                }));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return locateTestList.get(id);
+	int id = Objects.hash(project, testFramework);
+	if (!locateTestList.containsKey(id)) {
+	    Logger.getGlobal().log(Level.INFO, "Locating tests...");
+	    try {
+		locateTestList.put(id, OperationTime.runOperation(() -> {
+			    List<String> tests = new ArrayList<>(JavaConverters.bufferAsJavaList(
+												 TestLocator.tests(project, testFramework).toBuffer()));
+			    Logger.getGlobal().log(Level.INFO, "Located tests before filtering: " + tests);
+
+			    // Filter out tests from classes that end with "IT"
+			    List<String> unitTests = tests.stream()
+				.filter(test -> {
+					// Identify the class name by checking the last separator (either # or .)
+					int separatorIndex = Math.max(test.lastIndexOf('#'), test.lastIndexOf('.'));
+
+					if (separatorIndex == -1) {
+					    return false; // Invalid format, skip this entry
+					}
+
+					// Extract the class name (everything before the separator)
+					String className = test.substring(0, separatorIndex);
+
+					// Exclude classes that end with "IT"
+					return !className.endsWith("IT");
+				    })
+				.collect(Collectors.toList());
+
+			    Collections.sort(unitTests);
+
+			    // Log the located tests
+			    Logger.getGlobal().log(Level.INFO, "Located the following unit tests for framework " + testFramework + ":");
+			    for (String test : unitTests) {
+				Logger.getGlobal().log(Level.INFO, "  - " + test);
+			    }
+			    return unitTests;
+			}, (tests, time) -> {
+			    Logger.getGlobal().log(Level.INFO, "Located " + tests.size() + " unit tests. Time taken: " + time.elapsedSeconds() + " seconds");
+			    return tests;
+			}));
+	    } catch (Exception e) {
+		throw new RuntimeException(e);
+	    }
+	}
+	return locateTestList.get(id);
     }
+
 
     public static List<String> getOriginalOrder(
             final MavenProject project,

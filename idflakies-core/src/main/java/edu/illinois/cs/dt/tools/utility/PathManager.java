@@ -64,6 +64,18 @@ public abstract class PathManager {
         return getInstance().originalOrderPathInstance();
     }
 
+
+    //NEW
+
+    public static Path originalOrderITPath() {
+	return getInstance().originalOrderITPathInstance();
+    }
+
+    public static Path originalOrderUnitPath() {
+	return getInstance().originalOrderUnitPathInstance();
+    }
+
+
     public static Path selectedTestPath() { return getInstance().selectedTestPathInstance(); }
 
     public static Path timePath() { return getInstance().timePathInstance(); }
@@ -157,6 +169,12 @@ public abstract class PathManager {
     protected abstract Path filterPathInstance(final String detectorType, final String filterType, final int absoluteRound);
 
     protected abstract Path originalOrderPathInstance();
+
+    //NEW
+
+    protected abstract Path originalOrderITPathInstance();
+
+    protected abstract Path originalOrderUnitPathInstance();
 
     protected abstract Path selectedTestPathInstance();
 

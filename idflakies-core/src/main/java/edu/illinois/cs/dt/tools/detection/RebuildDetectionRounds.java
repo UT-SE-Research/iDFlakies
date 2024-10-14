@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import java.util.Arrays;
+
 public class RebuildDetectionRounds extends StandardMain {
     private final Path results;
 
@@ -94,10 +96,11 @@ public class RebuildDetectionRounds extends StandardMain {
     private TestRunResult makeOriginalResults(final List<String> originalOrder) {
         final Map<String, TestResult> testResults = new HashMap<>();
 
-        for (final String testName : originalOrder) {
-            testResults.put(testName, new TestResult(testName, Result.PASS, 0, new StackTraceElement[0]));
-        }
-
+    	for (final String testName : originalOrder) {
+	    // Convert StackTraceElement[] to String[]
+	    String[] stackTraceAsStringArray = Arrays.stream(new StackTraceElement[0]).map(element -> element.toString()).toArray(String[]::new);
+	    testResults.put(testName, new TestResult(testName, Result.PASS, 0, stackTraceAsStringArray));
+	}
         return new TestRunResult("id doesnt matter", originalOrder, testResults);
     }
 
@@ -154,3 +157,5 @@ public class RebuildDetectionRounds extends StandardMain {
         return new Gson().fromJson(contents, TestRunResult.class);
     }
 }
+
+

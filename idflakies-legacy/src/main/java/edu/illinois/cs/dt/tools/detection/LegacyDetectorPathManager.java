@@ -48,7 +48,7 @@ public class LegacyDetectorPathManager extends PathManager {
         return detectionRoundPathInstance(detectorType + "-" + filterType, absoluteRound);
     }
 
-    @Override
+    /*    @Override
     public Path originalOrderPathInstance() {
 	String originalOrderPath = Configuration.config().properties().getProperty("dt.original.order", "");
 	Path originalOrderPathObj;
@@ -57,6 +57,55 @@ public class LegacyDetectorPathManager extends PathManager {
         } else {
             originalOrderPathObj = Paths.get(originalOrderPath);
         }
+	Logger.getGlobal().log(Level.INFO, "Using original order in path: " + originalOrderPathObj);
+	return originalOrderPathObj;
+    }
+    */
+
+    @Override
+    public Path originalOrderITPathInstance() {
+	String originalOrderITPath = Configuration.config().properties().getProperty("dt.original.order.IT", "");
+	Path originalOrderITPathObj;
+	if (originalOrderITPath.isEmpty()) {
+	    originalOrderITPathObj = pathInstance(Paths.get("original-order-IT"));
+	} else {
+	    originalOrderITPathObj = Paths.get(originalOrderITPath);
+	}
+	Logger.getGlobal().log(Level.INFO, "Using original order for IT tests in path: " + originalOrderITPathObj);
+	return originalOrderITPathObj;
+    }
+
+    @Override
+    public Path originalOrderUnitPathInstance() {
+	String originalOrderUnitPath = Configuration.config().properties().getProperty("dt.original.order.unit", "");
+	Path originalOrderUnitPathObj;
+	if (originalOrderUnitPath.isEmpty()) {
+	    originalOrderUnitPathObj = pathInstance(Paths.get("original-order-unit"));
+	} else {
+	    originalOrderUnitPathObj = Paths.get(originalOrderUnitPath);
+	}
+	Logger.getGlobal().log(Level.INFO, "Using original order for Unit tests in path: " + originalOrderUnitPathObj);
+	return originalOrderUnitPathObj;
+    }
+
+    @Override
+    public Path originalOrderPathInstance() {
+	// Determine if we're handling IT or Unit tests based on system properties
+
+	boolean detectITTest = Boolean.parseBoolean(System.getProperty("detectITTest", "false"));
+	boolean detectUnitTest = Boolean.parseBoolean(System.getProperty("detectUnitTest", "true"));
+
+	Path originalOrderPathObj;
+
+	if (detectITTest && !detectUnitTest) {
+	    // Use path for IT tests
+	    originalOrderPathObj = originalOrderITPathInstance();
+	} else {
+	    // Fallback to Unit tests by default
+	    originalOrderPathObj = originalOrderUnitPathInstance();
+	}
+
+
 	Logger.getGlobal().log(Level.INFO, "Using original order in path: " + originalOrderPathObj);
 	return originalOrderPathObj;
     }
