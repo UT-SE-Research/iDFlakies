@@ -27,7 +27,7 @@ jobs:
 
       - name: Save all relevant files
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: test-many-projects_ARTIFACT_1
          path: scripts/testing-script-results/ARTIFACTS
@@ -55,7 +55,7 @@ jobs:
 
       - name: Save all relevant files
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: test-many-projects_ARTIFACT_2
          path: scripts/testing-script-results/ARTIFACTS
@@ -83,7 +83,7 @@ jobs:
 
       - name: Save all relevant files
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: test-many-projects_ARTIFACT_3
          path: scripts/testing-script-results/ARTIFACTS
@@ -111,7 +111,7 @@ jobs:
 
       - name: Save all relevant files
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: test-many-projects_ARTIFACT_4
          path: scripts/testing-script-results/ARTIFACTS

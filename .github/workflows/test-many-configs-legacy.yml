@@ -27,7 +27,7 @@ jobs:
 
       - name: Save all relevant files
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: test-many-configs_ARTIFACT
          path: scripts/MC-script-results/ARTIFACTS
