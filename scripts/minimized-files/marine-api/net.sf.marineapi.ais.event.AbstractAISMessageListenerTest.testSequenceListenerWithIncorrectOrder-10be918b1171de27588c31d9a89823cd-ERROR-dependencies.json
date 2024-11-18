@@ -1523,7 +1523,6 @@
           "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
           "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
           "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
-          }
         ]
       },
       "net.sf.marineapi.nmea.parser.ZDATest.testGetYear": {
