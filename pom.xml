@@ -46,6 +46,7 @@
     </scm>
 
     <modules>
+        <module>idflakies-testrunner</module>
         <module>idflakies-core</module>
         <module>idflakies-maven-plugin</module>
         <module>idflakies-legacy</module>
@@ -98,11 +99,6 @@
                 <groupId>com.reedoei</groupId>
                 <artifactId>eunomia</artifactId>
                 <version>1.4.1</version>
-            </dependency>
-            <dependency>
-                <groupId>edu.illinois.cs</groupId>
-                <artifactId>testrunner-running</artifactId>
-                <version>1.3</version>
             </dependency>
             <dependency>
                 <groupId>edu.illinois.cs</groupId>

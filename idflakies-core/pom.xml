@@ -59,7 +59,8 @@
     <dependencies>
         <dependency>
             <groupId>edu.illinois.cs</groupId>
-            <artifactId>testrunner-running</artifactId>
+            <artifactId>idflakies-testrunner</artifactId>
+            <version>2.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.opencsv</groupId>
