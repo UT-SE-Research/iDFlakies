@@ -95,7 +95,7 @@ public class RebuildDetectionRounds extends StandardMain {
         final Map<String, TestResult> testResults = new HashMap<>();
 
         for (final String testName : originalOrder) {
-            testResults.put(testName, new TestResult(testName, Result.PASS, 0, new StackTraceElement[0]));
+            testResults.put(testName, new TestResult(testName, Result.PASS, 0, new String[0]));
         }
 
         return new TestRunResult("id doesnt matter", originalOrder, testResults);

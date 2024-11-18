@@ -694,234 +694,45 @@
         "result": "ERROR",
         "time": 0.000234676,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.parser.AISMessageFactoryTest",
-            "methodName": "<init>",
-            "fileName": "AISMessageFactoryTest.java",
-            "lineNumber": 24
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.parser.AISMessageFactoryTest.<init>(AISMessageFactoryTest.java:24)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.APBTest.testIsBearingPositionToDestinationTrue": {
@@ -1373,234 +1184,45 @@
         "result": "ERROR",
         "time": 0.000246564,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.RMCTest.testGetCourse": {
@@ -2058,234 +1680,45 @@
         "result": "ERROR",
         "time": 0.000371999,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.GSVTest.testParserGlonassGSV": {
@@ -2683,234 +2116,45 @@
         "result": "ERROR",
         "time": 0.000377128,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.HTDTest.testGetSteeringMode": {
@@ -2996,234 +2240,45 @@
         "result": "ERROR",
         "time": 0.00023803,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.TXTTest.testGetMessageCount": {
@@ -3333,234 +2388,45 @@
         "result": "ERROR",
         "time": 0.000225812,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.parser.AISMessageFactoryTest",
-            "methodName": "<init>",
-            "fileName": "AISMessageFactoryTest.java",
-            "lineNumber": 24
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.parser.AISMessageFactoryTest.<init>(AISMessageFactoryTest.java:24)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.HTDTest.testGetOffTrackStatus": {
@@ -3712,234 +2578,45 @@
         "result": "ERROR",
         "time": 0.000345286,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.sentence.TalkerIdTest.testParse": {
@@ -4247,234 +2924,45 @@
         "result": "ERROR",
         "time": 0.000506829,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.SentenceParserTest.testSetFieldCountHigherByOne": {
@@ -4830,234 +3318,45 @@
         "result": "ERROR",
         "time": 0.00070952,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.SentenceFactoryTest.testUnregisterParser": {
@@ -5167,234 +3466,45 @@
         "result": "ERROR",
         "time": 0.001188053,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.nmea.parser.VLWTest.testSetTotal": {
@@ -5438,234 +3548,45 @@
         "result": "ERROR",
         "time": 0.000661229,
         "stackTrace": [
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParserImpl",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 243
-          },
-          {
-            "declaringClass": "net.sf.marineapi.nmea.parser.SentenceFactory",
-            "methodName": "createParser",
-            "fileName": "SentenceFactory.java",
-            "lineNumber": 101
-          },
-          {
-            "declaringClass": "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest",
-            "methodName": "<init>",
-            "fileName": "AbstractAISMessageListenerTest.java",
-            "lineNumber": 21
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance0",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": -2
-          },
-          {
-            "declaringClass": "sun.reflect.NativeConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "NativeConstructorAccessorImpl.java",
-            "lineNumber": 62
-          },
-          {
-            "declaringClass": "sun.reflect.DelegatingConstructorAccessorImpl",
-            "methodName": "newInstance",
-            "fileName": "DelegatingConstructorAccessorImpl.java",
-            "lineNumber": 45
-          },
-          {
-            "declaringClass": "java.lang.reflect.Constructor",
-            "methodName": "newInstance",
-            "fileName": "Constructor.java",
-            "lineNumber": 423
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "createTest",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 217
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner$1",
-            "methodName": "runReflectiveCall",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 266
-          },
-          {
-            "declaringClass": "org.junit.internal.runners.model.ReflectiveCallable",
-            "methodName": "run",
-            "fileName": "ReflectiveCallable.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "methodBlock",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 263
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 78
-          },
-          {
-            "declaringClass": "org.junit.runners.BlockJUnit4ClassRunner",
-            "methodName": "runChild",
-            "fileName": "BlockJUnit4ClassRunner.java",
-            "lineNumber": 57
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 128
-          },
-          {
-            "declaringClass": "org.junit.runners.Suite",
-            "methodName": "runChild",
-            "fileName": "Suite.java",
-            "lineNumber": 27
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$3",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 290
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$1",
-            "methodName": "schedule",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 71
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "runChildren",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 288
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "access$000",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 58
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner$2",
-            "methodName": "evaluate",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 268
-          },
-          {
-            "declaringClass": "org.junit.runners.ParentRunner",
-            "methodName": "run",
-            "fileName": "ParentRunner.java",
-            "lineNumber": 363
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 137
-          },
-          {
-            "declaringClass": "org.junit.runner.JUnitCore",
-            "methodName": "run",
-            "fileName": "JUnitCore.java",
-            "lineNumber": 115
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "execute",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 246
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "executeWithJUnit4Runner",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 315
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.JUnitTestExecutor",
-            "methodName": "runOrder",
-            "fileName": "JUnitTestExecutor.java",
-            "lineNumber": 46
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "$anonfun$run$1",
-            "fileName": "Executor.scala",
-            "lineNumber": 30
-          },
-          {
-            "declaringClass": "scala.runtime.java8.JFunction0$mcV$sp",
-            "methodName": "apply",
-            "fileName": "JFunction0$mcV$sp.java",
-            "lineNumber": 12
-          },
-          {
-            "declaringClass": "scala.util.Try$",
-            "methodName": "apply",
-            "fileName": "Try.scala",
-            "lineNumber": 209
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "run",
-            "fileName": "Executor.scala",
-            "lineNumber": 28
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor$",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": 18
-          },
-          {
-            "declaringClass": "edu.illinois.cs.testrunner.execution.Executor",
-            "methodName": "main",
-            "fileName": "Executor.scala",
-            "lineNumber": -1
-          }
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParserImpl(SentenceFactory.java:243)",
+          "net.sf.marineapi.nmea.parser.SentenceFactory.createParser(SentenceFactory.java:101)",
+          "net.sf.marineapi.ais.event.AbstractAISMessageListenerTest.<init>(AbstractAISMessageListenerTest.java:21)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+          "sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)",
+          "sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:423)",
+          "org.junit.runners.BlockJUnit4ClassRunner.createTest(BlockJUnit4ClassRunner.java:217)",
+          "org.junit.runners.BlockJUnit4ClassRunner$1.runReflectiveCall(BlockJUnit4ClassRunner.java:266)",
+          "org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+          "org.junit.runners.BlockJUnit4ClassRunner.methodBlock(BlockJUnit4ClassRunner.java:263)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)",
+          "org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runners.Suite.runChild(Suite.java:128)",
+          "org.junit.runners.Suite.runChild(Suite.java:27)",
+          "org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)",
+          "org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)",
+          "org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)",
+          "org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)",
+          "org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)",
+          "org.junit.runners.ParentRunner.run(ParentRunner.java:363)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:137)",
+          "org.junit.runner.JUnitCore.run(JUnitCore.java:115)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeHelper(JUnitTestExecutor.java:262)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.execute(JUnitTestExecutor.java:315)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.executeWithJUnit4Runner(JUnitTestExecutor.java:343)",
+          "edu.illinois.cs.testrunner.execution.JUnitTestExecutor.runOrder(JUnitTestExecutor.java:53)",
+          "edu.illinois.cs.testrunner.execution.Executor$.$anonfun$run$1(Executor.scala:30)",
+          "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)",
+          "scala.util.Try$.apply(Try.scala:209)",
+          "edu.illinois.cs.testrunner.execution.Executor$.run(Executor.scala:28)",
+          "edu.illinois.cs.testrunner.execution.Executor$.main(Executor.scala:18)",
+          "edu.illinois.cs.testrunner.execution.Executor.main(Executor.scala)"
         ]
       },
       "net.sf.marineapi.ais.parser.AISPositionReportBParserTest.hasLatitude": {
