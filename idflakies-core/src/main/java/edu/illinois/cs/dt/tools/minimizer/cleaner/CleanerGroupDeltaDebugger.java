@@ -5,9 +5,10 @@ import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
 import edu.illinois.cs.testrunner.runner.SmartRunner;
 
+import scala.util.Try;
+
 import java.util.ArrayList;
 import java.util.List;
-import scala.util.Try;
 
 public class CleanerGroupDeltaDebugger extends DeltaDebugger<String> {
 
@@ -31,7 +32,7 @@ public class CleanerGroupDeltaDebugger extends DeltaDebugger<String> {
 
         final Try<TestRunResult> testRunResultTry = this.runner.runList(tests);
 
-        return testRunResultTry.isSuccess() &&
-               testRunResultTry.get().results().get(this.dependentTest).result().equals(this.isolationResult);
+        return testRunResultTry.isSuccess()
+            && testRunResultTry.get().results().get(this.dependentTest).result().equals(this.isolationResult);
     }
 }

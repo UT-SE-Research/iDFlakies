@@ -1,10 +1,5 @@
 package edu.illinois.cs.dt.tools.detection;
 
-import com.google.common.collect.Lists;
-import com.google.common.math.IntMath;
-import com.google.gson.Gson;
-import com.reedoei.eunomia.collections.ListUtil;
-import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
@@ -13,6 +8,12 @@ import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.dt.tools.utility.Tuscan;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
+
+import com.google.common.collect.Lists;
+import com.google.common.math.IntMath;
+import com.google.gson.Gson;
+import com.reedoei.eunomia.collections.ListUtil;
+import com.reedoei.eunomia.io.files.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +30,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TestShuffler {
-    public static String className(final String testName) {
-        return testName.substring(0, testName.lastIndexOf('.'));
-    }
-
     private final HashMap<String, List<String>> classToMethods;
 
     private final String type;
@@ -69,6 +66,10 @@ public class TestShuffler {
         this.random = new Random(seed);
     }
 
+    public static String className(final String testName) {
+        return testName.substring(0, testName.lastIndexOf('.'));
+    }
+
     private String historicalType() {
         if (type.equals("random")) {
             return Configuration.config().getProperty("detector.random.historical_type", "random-class");
@@ -77,16 +78,16 @@ public class TestShuffler {
         }
     }
 
-    public List<String> shuffledOrder(final int i,
+    public List<String> shuffledOrder(final int index,
                                       final TestRunResult lastRandomResult,
                                       final boolean useRevPassing) {
         if (useRevPassing) {
-            return shuffledOrder(i);
+            return shuffledOrder(index);
         } else {
             List<String> revPassingOrder = Lists.reverse(lastRandomResult.testOrder());
             String md5 = MD5.md5(String.join("", revPassingOrder));
             if (alreadySeenOrders.contains(md5)) {
-                return shuffledOrder(i);
+                return shuffledOrder(index);
             } else {
                 alreadySeenOrders.add(md5);
                 return revPassingOrder;
@@ -94,12 +95,12 @@ public class TestShuffler {
         }
     }
 
-    public List<String> shuffledOrder(final int i) {
+    public List<String> shuffledOrder(final int index) {
         if (type.startsWith("reverse")) {
             return reverseOrder();
         }
 
-        final Path historicalRun = PathManager.detectionRoundPath(historicalType(), i);
+        final Path historicalRun = PathManager.detectionRoundPath(historicalType(), index);
 
         try {
             // look up whether a previous execution of the plugin generated orders for this round already
@@ -107,7 +108,9 @@ public class TestShuffler {
             if (Files.exists(historicalRun)) {
                 return generateHistorical(readHistorical(historicalRun));
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 
         return generateShuffled();
     }
@@ -115,7 +118,8 @@ public class TestShuffler {
     private List<String> reverseOrder() {
         if ("reverse-class".equals(type)) {
             final List<String> reversedClassNames =
-                    Lists.reverse(ListUtil.map(TestShuffler::className, tests).stream().distinct().collect(Collectors.toList()));
+                    Lists.reverse(ListUtil.map(TestShuffler::className, tests)
+                        .stream().distinct().collect(Collectors.toList()));
 
             return reversedClassNames.stream().flatMap(c -> classToMethods.get(c).stream()).collect(Collectors.toList());
         } else {
@@ -203,7 +207,7 @@ public class TestShuffler {
             return alphabeticalAndTuscanOrder(round, false);
         }
     }
-    
+
     private List<String> alphabeticalClassMethodOrder() {
         final List<String> fullTestOrder = new ArrayList<>();
         for (String className : classToMethods.keySet()) {
@@ -218,8 +222,8 @@ public class TestShuffler {
         Collections.sort(classes);
         final List<String> fullTestOrder = new ArrayList<>();
         if (isTuscan) {
-            int n = classes.size();
-            int[][] res = Tuscan.generateTuscanPermutations(n);
+            int numClasses = classes.size();
+            int[][] res = Tuscan.generateTuscanPermutations(numClasses);
             List<String> permClasses = new ArrayList<String>();
             for (int i = 0; i < res[count].length - 1; i++) {
                 permClasses.add(classes.get(res[count][i]));

@@ -15,8 +15,8 @@ public class ErrorLogger {
     public <T> Optional<T> runAndLogError(final Callable<T> callable) {
         try {
             return Optional.ofNullable(callable.call());
-        } catch (Throwable t) {
-            writeError(t);
+        } catch (Throwable th) {
+            writeError(th);
         } finally {
             System.out.println("TRY_COPY_ALL_FAILING_TEST_OUTPUT");
             try {
@@ -28,34 +28,35 @@ public class ErrorLogger {
                             final Path dest = PathManager.cachePath().resolve(path.getFileName());
 
                             if (Files.exists(dest)) {
-                                Files.copy(path, PathManager.cachePath().resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                                Files.copy(path, PathManager.cachePath().resolve(path.getFileName()),
+                                    StandardCopyOption.REPLACE_EXISTING);
                             } else {
                                 Files.copy(path, PathManager.cachePath().resolve(path.getFileName()));
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        } catch (IOException ioe) {
+                            ioe.printStackTrace();
                         }
                     }
                 });
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
             }
         }
 
         return Optional.empty();
     }
 
-    public void writeError(final Throwable t) {
+    public void writeError(final Throwable th) {
         try {
             System.out.println("---------------------------------------------------");
-            t.printStackTrace();
+            th.printStackTrace();
 
-            t.printStackTrace(new PrintStream(new FileOutputStream(String.valueOf(PathManager.errorPath()))));
-        } catch (IOException e) {
+            th.printStackTrace(new PrintStream(new FileOutputStream(String.valueOf(PathManager.errorPath()))));
+        } catch (IOException ioe) {
             System.out.println("ERROR (FAIL_OUTPUT_ERR_THROWABLE): Failed to output error!");
-            e.printStackTrace();
+            ioe.printStackTrace();
             System.out.println("---------------------------------------------------");
-            t.printStackTrace();
+            th.printStackTrace();
         }
     }
 
@@ -66,9 +67,9 @@ public class ErrorLogger {
             System.out.println(msg);
 
             Files.write(PathManager.errorPath(), (msg + "\n").getBytes());
-        } catch (IOException e) {
+        } catch (IOException ioe) {
             System.out.println("ERROR (FAIL_OUTPUT_ERR_STRING): Failed to output error!");
-            e.printStackTrace();
+            ioe.printStackTrace();
             System.out.println("---------------------------------------------------");
             System.out.println("Message was:");
             System.out.println(msg);

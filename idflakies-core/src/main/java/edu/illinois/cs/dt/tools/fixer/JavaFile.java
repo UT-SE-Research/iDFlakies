@@ -1,5 +1,7 @@
 package edu.illinois.cs.dt.tools.fixer;
 
+import edu.illinois.cs.dt.tools.utility.PathManager;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.CompilationUnit;
@@ -14,14 +16,6 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.google.common.base.Preconditions;
 
-import edu.illinois.cs.dt.tools.utility.PathManager;
-
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,19 +31,17 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 /**
  * A basic Java file which supports compiling/removing methods.
  */
 public class JavaFile {
-    public static JavaFile loadFile(final Path path, final String classpath, final Path compiledOutputDir) throws IOException {
-        return new JavaFile(path, classpath, compiledOutputDir).loadClassList();
-    }
-
-    public static int countDiagnostics(final DiagnosticCollector<JavaFileObject> diagnostics,
-                                        final Diagnostic.Kind kind) {
-        return Math.toIntExact(diagnostics.getDiagnostics().stream().filter(diag -> diag.getKind().equals(kind)).count());
-    }
 
     private CompilationUnit compilationUnit;
     private List<ClassOrInterfaceDeclaration> classList = new ArrayList<>();
@@ -63,6 +55,16 @@ public class JavaFile {
         this.path = path;
         this.classPath = classPath;
         this.compiledOutputDir = compiledOutputDir;
+    }
+
+    public static JavaFile loadFile(final Path path, final String classpath,
+            final Path compiledOutputDir) throws IOException {
+        return new JavaFile(path, classpath, compiledOutputDir).loadClassList();
+    }
+
+    public static int countDiagnostics(final DiagnosticCollector<JavaFileObject> diagnostics,
+                                        final Diagnostic.Kind kind) {
+        return Math.toIntExact(diagnostics.getDiagnostics().stream().filter(diag -> diag.getKind().equals(kind)).count());
     }
 
     public List<Diagnostic<? extends JavaFileObject>> compile() throws Exception {
@@ -96,16 +98,15 @@ public class JavaFile {
 
         classToMethods.clear();
         for (final ClassOrInterfaceDeclaration classDec : classList) {
-           final List<MethodDeclaration> methods = classDec.findAll(MethodDeclaration.class);
-           classToMethods.put(classDec, methods);
+            final List<MethodDeclaration> methods = classDec.findAll(MethodDeclaration.class);
+            classToMethods.put(classDec, methods);
         }
 
         classToTestMethods.clear();
         classToMethods.forEach((classDec, methods) -> {
             final List<MethodDeclaration> testMethods = new ArrayList<>();
             for (final MethodDeclaration method : methods) {
-                if (areJUnitAnnotations(method.getAnnotations()) ||
-                        method.getNameAsString().startsWith("test")) {
+                if (areJUnitAnnotations(method.getAnnotations()) || method.getNameAsString().startsWith("test")) {
                     testMethods.add(method);
                 }
             }
@@ -145,8 +146,10 @@ public class JavaFile {
             for (final BodyDeclaration bodyDeclaration : classDeclaration.getMembers()) {
                 if (bodyDeclaration instanceof MethodDeclaration) {
                     final MethodDeclaration method = (MethodDeclaration)bodyDeclaration;
-                    final Position begin = method.getBegin().orElseThrow(() -> new RuntimeException("Cannot get start line for " + method.getSignature()));
-                    final Position end = method.getEnd().orElseThrow(() -> new RuntimeException("Cannot get end line for " + method.getSignature()));
+                    final Position begin = method.getBegin().orElseThrow(
+                        () -> new RuntimeException("Cannot get start line for " + method.getSignature()));
+                    final Position end = method.getEnd().orElseThrow(
+                        () -> new RuntimeException("Cannot get end line for " + method.getSignature()));
 
                     if (begin.line <= line && end.line >= line) {
                         return method;
@@ -195,7 +198,8 @@ public class JavaFile {
     private String getFullyQualifiedMethodName(MethodDeclaration method, ClassOrInterfaceDeclaration classDec) {
         final Optional<PackageDeclaration> packageDec = compilationUnit.getPackageDeclaration();
 
-        Preconditions.checkArgument(packageDec.isPresent(), "No package declaration found for class: " + classDec.getNameAsString());
+        Preconditions.checkArgument(packageDec.isPresent(), "No package declaration found for class: "
+            + classDec.getNameAsString());
 
         return String.format("%s.%s.%s",
                 packageDec.get().getName().toString(),
@@ -217,7 +221,8 @@ public class JavaFile {
             final Optional<PackageDeclaration> packageDec = compilationUnit.getPackageDeclaration();
 
             if (remover.succeeded()) {
-                return createRemovedMethodString(packageDec.map(PackageDeclaration::getNameAsString).orElse(""), classDeclaration, method);
+                return createRemovedMethodString(packageDec.map(PackageDeclaration::getNameAsString).orElse(""),
+                    classDeclaration, method);
             }
         }
 
@@ -265,22 +270,18 @@ public class JavaFile {
         return null;
     }
 
-    /**
-     * @return The fully qualified name of this method: packageName.className.methodName(paramNames)
-     */
+    // Computes the fully qualified name of this method: packageName.className.methodName(paramNames)
     private static String createRemovedMethodString(final String packageName,
-                                                    final ClassOrInterfaceDeclaration classDeclaration,
-                                                    final MethodDeclaration method) {
+            final ClassOrInterfaceDeclaration classDeclaration,
+            final MethodDeclaration method) {
         // Not using .getDeclarationAsString because it includes the return type, which wouldn't work with concatting below
         final String methodName = method.getName() + "(" + getParametersAsString(method) + ")";
 
         return packageName + classDeclaration.getName() + "." + methodName;
     }
 
-    /**
-     * Ex: For int f(int a, int b), returns "int a, int b"
-     * @return A string containing the parameters separated by commas.
-     */
+     // Computes a string containing the parameters separated by commas
+     // Ex: For int f(int a, int b), returns "int a, int b"
     private static String getParametersAsString(final MethodDeclaration method) {
         StringBuilder result = new StringBuilder();
 
@@ -297,9 +298,7 @@ public class JavaFile {
         return result.toString();
     }
 
-    /**
-     * Writes the file to the output path, then tries to compile the output file.
-     */
+    // Writes the file to the output path, then tries to compile the output file
     private DiagnosticCollector<JavaFileObject> tryCompile() throws IOException {
         writeAndReloadCompilationUnit();
         return runCompilation();
@@ -374,14 +373,14 @@ public class JavaFile {
         }
 
         @Override
-        public Visitable visit(MethodDeclaration n, Void arg) {
-            if (n.getSignature().equals(method.getSignature())) {
+        public Visitable visit(MethodDeclaration md, Void arg) {
+            if (md.getSignature().equals(method.getSignature())) {
                 this.found = true;
 
                 return null;
             }
 
-            return super.visit(n, arg);
+            return super.visit(md, arg);
         }
 
         boolean succeeded() {

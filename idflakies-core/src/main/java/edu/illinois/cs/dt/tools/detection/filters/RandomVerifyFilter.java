@@ -22,7 +22,8 @@ public class RandomVerifyFilter implements Filter {
     public boolean keep(final DependentTest dependentTest, final int absoluteRound) {
         // Only confirm in percentage% of the runs
         if (new Random().nextDouble() < percentage) {
-            return dependentTest.verify(runner, PathManager.filterPath(detectorType, "confirmation-sampling", absoluteRound));
+            return dependentTest.verify(runner,
+                PathManager.filterPath(detectorType, "confirmation-sampling", absoluteRound));
         }
 
         return true;

@@ -1,6 +1,10 @@
 package edu.illinois.cs.dt.tools.utility;
 
+@SuppressWarnings({"checkstyle:LocalVariableName", "checkstyle:ParameterName"})
 public class Tuscan {
+
+    private static int[][] r;
+
     public static int[][] generateTuscanPermutations(int arg) {
         if (arg == 3) {
             generateThree();
@@ -11,8 +15,6 @@ public class Tuscan {
         }
         return r;
     }
-    
-    private static int[][] r;
 
     private static void helper(int[] a, int i) {
         System.arraycopy(a, 0, r[i], 0, a.length);
@@ -52,7 +54,10 @@ public class Tuscan {
                         ((i == 3 * k + 2) ? 4 * k : 2 * k)));
                 int[] a = new int[n];
                 for (int j = 0; j < n; j++) {
-                    a[(j < p) ? n + j - p : j - p] = (j == 0) ? (n - 1) : (i + ((j % 2 == 0) ? (j / 2) : (n - 1 - (j - 1) / 2))) % (n - 1);
+                    a[(j < p) ? n + j - p
+                        : j - p] = (j == 0) ? (n - 1)
+                            : (i + ((j % 2 == 0) ? (j / 2)
+                                : (n - 1 - (j - 1) / 2))) % (n - 1);
                 }
                 b[a[n - 1]] = a[0];
                 helper(a, i);
@@ -64,7 +69,7 @@ public class Tuscan {
             }
             helper(t, n - 1);
         } else if (n == 9) {
-            int[][] t = { 
+            int[][] t = {
                 { 0, 1, 7, 2, 6, 3, 5, 4, 8 },
                 { 3, 7, 4, 6, 5, 8, 1, 2, 0 },
                 { 1, 4, 0, 5, 7, 6, 8, 2, 3 },
@@ -73,7 +78,7 @@ public class Tuscan {
                 { 7, 3, 0, 2, 1, 8, 5, 6, 4 },
                 { 5, 0, 4, 1, 3, 2, 8, 6, 7 },
                 { 4, 3, 8, 7, 0, 6, 1, 5, 2 },
-                { 8, 0, 3, 1, 6, 2, 4, 7, 5 } 
+                { 8, 0, 3, 1, 6, 2, 4, 7, 5 }
             };
             for (int i = 0; i < 9; i++) {
                 helper(t[i], i);
@@ -85,7 +90,7 @@ public class Tuscan {
         while (nn != n) {
             // https://ww.sciencedirect.com/science/article/pii/0095895680900441
             n = n * 2 - 1;
-	        int h = (n + 1) / 2;
+            int h = (n + 1) / 2;
             for (int i = 0; i < h; i++) {
                 for (int j = 0; j < h; j++) {
                     r[i][n - j] = r[i][j] + h;
@@ -103,7 +108,9 @@ public class Tuscan {
             for (int i = 0; i < n; i++) {
                 int l = 0;
                 for (; l < n; l++) {
-                    if (r[i][l] == n) break;
+                    if (r[i][l] == n) {
+                        break;
+                    }
                 }
                 int[] t = new int[n];
                 System.arraycopy(r[i], l + 1, t, 0, n - l);

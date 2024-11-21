@@ -1,9 +1,5 @@
 package edu.illinois.cs.dt.tools.detection;
 
-import com.google.gson.Gson;
-import com.reedoei.eunomia.collections.ListEx;
-import com.reedoei.eunomia.io.files.FileUtil;
-import com.reedoei.eunomia.util.StandardMain;
 import edu.illinois.cs.dt.tools.analysis.ResultDirVisitor;
 import edu.illinois.cs.dt.tools.runner.RunnerPathManager;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
@@ -11,6 +7,11 @@ import edu.illinois.cs.dt.tools.utility.PathManager;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
+
+import com.google.gson.Gson;
+import com.reedoei.eunomia.collections.ListEx;
+import com.reedoei.eunomia.io.files.FileUtil;
+import com.reedoei.eunomia.util.StandardMain;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,8 +38,8 @@ public class RebuildDetectionRounds extends StandardMain {
     public static void main(final String[] args) {
         try {
             new RebuildDetectionRounds(args).run();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
 
             System.exit(1);
         }
@@ -53,7 +54,8 @@ public class RebuildDetectionRounds extends StandardMain {
 
         for (int i = 0; i < allResultsFolders.size(); i++) {
             final Path resultsFolder = allResultsFolders.get(i);
-            System.out.println("[INFO] Rebuilding rounds in " + resultsFolder + " (" + i + " of " + allResultsFolders.size() + ")");
+            System.out.println("[INFO] Rebuilding rounds in " + resultsFolder
+                + " (" + i + " of " + allResultsFolders.size() + ")");
 
             final Path testRuns = resultsFolder.resolve(RunnerPathManager.TEST_RUNS);
             final Path originalOrderPath = resultsFolder.resolve(PathManager.ORIGINAL_ORDER);
@@ -78,7 +80,8 @@ public class RebuildDetectionRounds extends StandardMain {
             final TestRunResult originalResults = makeOriginalResults(originalOrder);
 
             // To make sure we don't refind flaky tests
-            final Set<String> knownFlaky = rebuildRounds(originalOrder, originalResults, resultsFolder, "flaky", new HashSet<>());
+            final Set<String> knownFlaky = rebuildRounds(originalOrder, originalResults, resultsFolder,
+                "flaky", new HashSet<>());
             rebuildRounds(originalOrder, originalResults, resultsFolder, "random", knownFlaky);
             rebuildRounds(originalOrder, originalResults, resultsFolder, "random-class", knownFlaky);
             rebuildRounds(originalOrder, originalResults, resultsFolder, "reverse", knownFlaky);
@@ -116,7 +119,8 @@ public class RebuildDetectionRounds extends StandardMain {
             final List<Path> roundPaths = list.collect(Collectors.toList());
 
             for (final Path roundPath : roundPaths) {
-                final DetectionRound detectionRound = new Gson().fromJson(FileUtil.readFile(roundPath), DetectionRound.class);
+                final DetectionRound detectionRound =
+                    new Gson().fromJson(FileUtil.readFile(roundPath), DetectionRound.class);
 
                 final List<DependentTest> allDts = new ArrayList<>();
 
@@ -124,7 +128,8 @@ public class RebuildDetectionRounds extends StandardMain {
                     allDts.addAll(dtsInTestRun(originalResults, resultsPath, newKnownFlaky, testRunId));
                 }
 
-                final DetectionRound newRound = new DetectionRound(detectionRound.testRunIds(), allDts, allDts, detectionRound.roundTime());
+                final DetectionRound newRound = new DetectionRound(detectionRound.testRunIds(),
+                    allDts, allDts, detectionRound.roundTime());
 
                 Files.write(roundPath, new Gson().toJson(newRound).getBytes());
             }
@@ -149,7 +154,8 @@ public class RebuildDetectionRounds extends StandardMain {
     }
 
     private TestRunResult readTestRunResult(final Path resultsPath, final String id) throws IOException {
-        final String contents = FileUtil.readFile(resultsPath.resolve(RunnerPathManager.TEST_RUNS).resolve("results").resolve(id));
+        final String contents = FileUtil.readFile(resultsPath.resolve(RunnerPathManager.TEST_RUNS)
+            .resolve("results").resolve(id));
 
         return new Gson().fromJson(contents, TestRunResult.class);
     }

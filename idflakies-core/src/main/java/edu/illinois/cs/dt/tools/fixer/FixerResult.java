@@ -1,9 +1,10 @@
 package edu.illinois.cs.dt.tools.fixer;
 
-import com.google.gson.Gson;
-import com.reedoei.eunomia.io.files.FileUtil;
 import edu.illinois.cs.dt.tools.utility.OperationTime;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+
+import com.google.gson.Gson;
+import com.reedoei.eunomia.io.files.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,19 +18,20 @@ public class FixerResult {
     private final String dependentTest;
     private final List<PatchResult> patchResults;
 
+    public FixerResult(final OperationTime time, final FixStatus status, final String dependentTest,
+            final List<PatchResult> patchResults) {
+        this.time = time;
+        this.status = status;
+        this.dependentTest = dependentTest;
+        this.patchResults = patchResults;
+    }
+
     public static FixerResult fromPath(final Path path) throws IOException {
         return fromString(FileUtil.readFile(path));
     }
 
     public static FixerResult fromString(final String jsonString) {
         return new Gson().fromJson(jsonString, FixerResult.class);
-    }
-
-    public FixerResult(final OperationTime time, final FixStatus status, final String dependentTest, final List<PatchResult> patchResults) {
-        this.time = time;
-        this.status = status;
-        this.dependentTest = dependentTest;
-        this.patchResults = patchResults;
     }
 
     public OperationTime time() {
@@ -59,8 +61,8 @@ public class FixerResult {
         try {
             Files.createDirectories(outputPath.getParent());
             Files.write(outputPath, toString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 
