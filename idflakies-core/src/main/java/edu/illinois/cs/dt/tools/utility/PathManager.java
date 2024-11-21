@@ -1,12 +1,11 @@
 package edu.illinois.cs.dt.tools.utility;
 
-import com.google.common.base.Preconditions;
-
-import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.Result;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.project.MavenProject;
 
@@ -150,7 +149,8 @@ public abstract class PathManager {
     public static Path changeExtension(final Path path, final String newExtension) {
         final String extToAdd = newExtension.startsWith(".") ? newExtension : "." + newExtension;
 
-        return path.toAbsolutePath().getParent().resolve(FilenameUtils.removeExtension(path.getFileName().toString()) + extToAdd);
+        return path.toAbsolutePath().getParent()
+            .resolve(FilenameUtils.removeExtension(path.getFileName().toString()) + extToAdd);
     }
 
     protected abstract Path detectionResultsInstance();

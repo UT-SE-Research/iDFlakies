@@ -1,5 +1,7 @@
 package edu.illinois.cs.dt.tools.fixer;
 
+import edu.illinois.cs.dt.tools.utility.PathManager;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -10,8 +12,6 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.apache.commons.io.FilenameUtils;
-
-import edu.illinois.cs.dt.tools.utility.PathManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,24 @@ import java.util.List;
 import java.util.Optional;
 
 public class JavaMethod {
+
+    private final String methodName;
+    private final JavaFile javaFile;
+    private final MethodDeclaration method;
+    private final BlockStmt body;
+    private final int beginLine;
+    private final int endLine;
+
+    private JavaMethod(final String methodName, final JavaFile javaFile, final MethodDeclaration method) {
+        this.methodName = methodName;
+        this.javaFile = javaFile;
+        this.method = method;
+        this.body = method().getBody()
+                .orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " has no body!"));
+        this.beginLine = body.getRange().get().begin.line;
+        this.endLine = body.getRange().get().end.line;
+    }
+
     public static Optional<JavaMethod> find(final String methodName, final List<Path> files,
                                             final String classpath)
             throws IOException {
@@ -82,23 +100,6 @@ public class JavaMethod {
         }
 
         return Optional.empty();
-    }
-
-    private final String methodName;
-    private final JavaFile javaFile;
-    private final MethodDeclaration method;
-    private final BlockStmt body;
-    private final int beginLine;
-    private final int endLine;
-
-    private JavaMethod(final String methodName, final JavaFile javaFile, final MethodDeclaration method) {
-        this.methodName = methodName;
-        this.javaFile = javaFile;
-        this.method = method;
-        this.body = method().getBody()
-                .orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " has no body!"));
-        this.beginLine = body.getRange().get().begin.line;
-        this.endLine = body.getRange().get().end.line;
     }
 
     public JavaFile javaFile() {

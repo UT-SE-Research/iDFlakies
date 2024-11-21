@@ -1,5 +1,7 @@
 package edu.illinois.cs.dt.tools.fixer;
 
+import edu.illinois.cs.dt.tools.utility.PathManager;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -7,8 +9,6 @@ import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import edu.illinois.cs.dt.tools.utility.PathManager;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -116,7 +116,8 @@ public class Patch {
     }
 
     private ExpressionStmt getHelperCallStmt(JavaMethod cleanerMethod) {
-        Expression objectCreation = new ObjectCreationExpr(null, new ClassOrInterfaceType(null, cleanerMethod.getClassName()), NodeList.nodeList());
+        Expression objectCreation = new ObjectCreationExpr(null,
+            new ClassOrInterfaceType(null, cleanerMethod.getClassName()), NodeList.nodeList());
         Expression helperCall = new MethodCallExpr(objectCreation, "cleanerHelper");
         ExpressionStmt helperCallStmt = new ExpressionStmt(helperCall);
         return helperCallStmt;
