@@ -1,7 +1,10 @@
 package edu.illinois.cs.dt.tools.minimizer.ranking;
 
 import edu.illinois.cs.testrunner.data.results.Result;
+import org.junit.Assume;
 import org.junit.Test;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +92,21 @@ public class RankFOScorerTest {
         assertEquals(1, result.size());
         assertEquals(P, result.get(0).getTestName());
         assertEquals(1.0, result.get(0).getPolluterScore(), DELTA);
+    }
+
+    @Test
+    public void loader_parses_real_dtfixingtools_without_throwing() throws Exception {
+        // Points to lib/.dtfixingtools which has actual test-run results from a previous detect run
+        Path dtDir = Paths.get(
+            "/media/iit/01DAF7B03B5CE760/UIUC++/SummerProject/iDFlakies/http-request/lib/.dtfixingtools"
+        );
+        Assume.assumeTrue(
+            "Skip: run mvn idflakies:detect on http-request/ first",
+            dtDir.toFile().exists()
+        );
+        // Load with a dummy target (may return empty, but must not throw)
+        List<TestOrderRecord> records = DetectionResultsLoader.load(dtDir, "dummy.Target#test", 5);
+        assertTrue("load() must return non-null", records != null);
     }
 
     @Test
