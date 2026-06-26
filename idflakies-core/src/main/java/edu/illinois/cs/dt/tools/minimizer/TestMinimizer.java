@@ -11,6 +11,7 @@ import com.reedoei.eunomia.util.Util;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerData;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerFinder;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerGroup;
+import edu.illinois.cs.dt.tools.minimizer.ranking.RankFOCandidateReorderer;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.MD5;
@@ -44,6 +45,8 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     private final String CUSTOM_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.custom", "");
     // FIND_ALL only for cleaners, not for polluters
     private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
+    // Phase 3: reorder candidates by RankFO polluter score before delta debugging
+    private static final boolean RANKFO_ENABLE = Configuration.config().getProperty("dt.rankfo.enable", false);
 
     protected final Path path;
 
@@ -58,19 +61,25 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     }
 
     public TestMinimizer(final List<String> testOrder, final SmartRunner runner, final String dependentTest) {
-        // Only take the tests that come before the dependent test
         this.fullTestOrder = testOrder;
-        this.testOrder = testOrder.contains(dependentTest) ? ListUtil.before(testOrder, dependentTest) : testOrder;
         this.dependentTest = dependentTest;
-
         this.runner = runner;
 
-        // Run in given order to determine what the result should be.
+        // Compute the prefix (tests strictly before dependentTest) as a local variable so
+        // it can be optionally reordered by RankFO after isolationResult is available.
+        final List<String> prefix = testOrder.contains(dependentTest)
+                ? ListUtil.before(testOrder, dependentTest) : testOrder;
+
         debug("Getting expected result for: " + dependentTest);
         this.expectedRun = runResult(testOrder);
         this.expected = expectedRun.results().get(dependentTest).result();
         this.isolationResult = result(Collections.singletonList(dependentTest));
         debug("Expected: " + expected);
+
+        // Phase 3: reorder prefix by RankFO polluter score when dt.rankfo.enable=true
+        this.testOrder = RANKFO_ENABLE
+                ? RankFOCandidateReorderer.reorder(prefix, dependentTest, isolationResult)
+                : prefix;
 
         this.path = PathManager.minimizedPath(dependentTest, MD5.hashOrder(expectedRun.testOrder()), expected);
     }
