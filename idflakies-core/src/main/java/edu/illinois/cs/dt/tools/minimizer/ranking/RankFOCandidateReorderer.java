@@ -18,74 +18,107 @@ public class RankFOCandidateReorderer {
     static final int MAX_ORDERS = 20;
 
     /**
-     * Returns a reordering of {@code prefix} where candidates with a higher RankFO
-     * polluter score come first. Candidates not seen in any detection run keep their
-     * original relative order and appear at the end.
-     *
-     * <p>Never throws: any failure (no detection results, bad heuristic name, I/O error)
-     * causes a FINE-level log and returns {@code prefix} unchanged.
-     *
-     * @param prefix          candidate tests strictly before the target in the failing order
-     * @param targetTest      fully-qualified name of the victim/brittle test
-     * @param isolationResult result of running targetTest alone (PASS → victim; else → brittle)
-     * @return reordered list, or {@code prefix} unchanged if reordering is not possible
+     * Public entry point. Delegates to the package-private overload using
+     * the project's real {@code .dtfixingtools/} directory.
      */
     public static List<String> reorder(
             List<String> prefix,
             String targetTest,
             Result isolationResult) {
+        return reorder(prefix, targetTest, isolationResult, PathManager.cachePath());
+    }
+
+    /**
+     * Package-private overload that accepts an explicit {@code dtDir} so tests
+     * can supply a temp directory without touching {@link PathManager}.
+     *
+     * <p>Scores are cached in {@code <dtDir>/rankfo-scores/} and reused on
+     * subsequent calls as long as the detection results directory has not been
+     * modified (i.e., no new {@code detect} run has added data). If the cache
+     * is stale or absent, scores are recomputed and persisted.
+     *
+     * <p>Never throws: any failure causes a FINE-level log and returns
+     * {@code prefix} unchanged.
+     */
+    static List<String> reorder(
+            List<String> prefix,
+            String targetTest,
+            Result isolationResult,
+            Path dtDir) {
 
         try {
-            Path dtDir = PathManager.cachePath();
-            List<TestOrderRecord> orderings =
-                DetectionResultsLoader.load(dtDir, targetTest, MAX_ORDERS);
-
-            if (orderings.isEmpty()) {
-                Logger.getGlobal().log(Level.FINE,
-                    "[RankFO] No detection results found for " + targetTest
-                        + "; using original candidate order.");
-                return prefix;
-            }
-
             OdType odType = (isolationResult == Result.PASS)
-                ? OdType.VICTIM_POLLUTER
-                : OdType.BRITTLE_STATESETTER;
+                    ? OdType.VICTIM_POLLUTER
+                    : OdType.BRITTLE_STATESETTER;
 
             String heuristicName = Configuration.config()
-                .getProperty("dt.rankfo.heuristic", "DISTANCE_TO_VICTIM");
+                    .getProperty("dt.rankfo.heuristic", "DISTANCE");
             HeuristicType hType = HeuristicType.valueOf(heuristicName);
 
+            // ── cache lookup ──────────────────────────────────────────────
             List<ScoredCandidate> ranked =
-                new RankFOScorer(RankingHeuristic.of(hType)).score(targetTest, orderings, odType);
+                    RankFOScoreCache.load(dtDir, targetTest, hType, odType);
 
-            // Build score lookup: test name → polluterScore
+            if (ranked == null) {
+                // Cache miss: load detection results and score candidates
+                long startMs = System.currentTimeMillis();
+
+                List<TestOrderRecord> orderings =
+                        DetectionResultsLoader.load(dtDir, targetTest, MAX_ORDERS);
+
+                if (orderings.isEmpty()) {
+                    Logger.getGlobal().log(Level.FINE,
+                            "[RankFO] No detection results found for " + targetTest
+                                    + "; using original candidate order.");
+                    return prefix;
+                }
+
+                ranked = new RankFOScorer(hType)
+                        .score(targetTest, orderings, odType);
+
+                long elapsedMs = System.currentTimeMillis() - startMs;
+                Logger.getGlobal().log(Level.INFO,
+                        "[RankFO] Scored " + ranked.size() + " candidates for "
+                                + targetTest + " in " + elapsedMs + "ms"
+                                + " (heuristic=" + heuristicName + ")");
+
+                RankFOScoreCache.save(dtDir, targetTest, hType, odType, ranked);
+            } else {
+                Logger.getGlobal().log(Level.INFO,
+                        "[RankFO] Loaded scores from cache for " + targetTest
+                                + " (heuristic=" + heuristicName + ")");
+            }
+
+            // ── sort prefix by polluter score DESC ────────────────────────
             Map<String, Double> scoreMap = new LinkedHashMap<>();
             for (ScoredCandidate sc : ranked) {
                 scoreMap.put(sc.getTestName(), sc.getPolluterScore());
             }
 
-            // Stable sort: higher polluterScore first; unscored candidates go to the end
             List<String> reordered = new ArrayList<>(prefix);
             reordered.sort(Comparator.comparingDouble(
-                (String t) -> scoreMap.getOrDefault(t, Double.NEGATIVE_INFINITY)
+                    (String t) -> scoreMap.getOrDefault(t, Double.NEGATIVE_INFINITY)
             ).reversed());
 
             Logger.getGlobal().log(Level.INFO,
-                "[RankFO] Reordered " + reordered.size() + " candidates for " + targetTest
-                    + " using " + heuristicName + " heuristic."
-                    + " Top candidate: " + (reordered.isEmpty() ? "none" : reordered.get(0)));
+                    "[RankFO] Reordered " + reordered.size() + " candidates for "
+                            + targetTest + " using " + heuristicName + " heuristic."
+                            + " Top candidate: "
+                            + (reordered.isEmpty() ? "none" : reordered.get(0)));
 
             return reordered;
 
         } catch (IllegalArgumentException e) {
             Logger.getGlobal().log(Level.FINE,
-                "[RankFO] Unknown heuristic '" + Configuration.config()
-                    .getProperty("dt.rankfo.heuristic", "DISTANCE_TO_VICTIM")
-                    + "'; using original candidate order.");
+                    "[RankFO] Unknown heuristic '"
+                            + Configuration.config()
+                                    .getProperty("dt.rankfo.heuristic", "DISTANCE")
+                            + "'; using original candidate order.");
             return prefix;
         } catch (Exception e) {
             Logger.getGlobal().log(Level.FINE,
-                "[RankFO] Reordering failed (" + e.getMessage() + "); using original candidate order.");
+                    "[RankFO] Reordering failed (" + e.getMessage()
+                            + "); using original candidate order.");
             return prefix;
         }
     }

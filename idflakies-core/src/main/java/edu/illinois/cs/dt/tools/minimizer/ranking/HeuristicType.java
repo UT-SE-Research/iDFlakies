@@ -1,7 +1,9 @@
 package edu.illinois.cs.dt.tools.minimizer.ranking;
 
 public enum HeuristicType {
-    SIMPLE_VOTE,
-    METHODS_BEFORE_VICTIM,
-    DISTANCE_TO_VICTIM
+    PLUS_ONE,
+    METHODS,
+    DISTANCE,
+    COMBINED_PLUS_ONE_DISTANCE,
+    COMBINED_METHODS_DISTANCE
 }

@@ -1,10 +1,17 @@
 package edu.illinois.cs.dt.tools.minimizer.ranking;
 
 import edu.illinois.cs.testrunner.data.results.Result;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +44,11 @@ public class RankFOCandidateReordererTest {
             ? OdType.VICTIM_POLLUTER
             : OdType.BRITTLE_STATESETTER;
 
-        String heuristicName = System.getProperty("dt.rankfo.heuristic", "DISTANCE_TO_VICTIM");
+        String heuristicName = System.getProperty("dt.rankfo.heuristic", "DISTANCE");
         HeuristicType hType = HeuristicType.valueOf(heuristicName);
 
         List<ScoredCandidate> ranked =
-            new RankFOScorer(RankingHeuristic.of(hType)).score(target, orderings, odType);
+            new RankFOScorer(hType).score(target, orderings, odType);
 
         java.util.Map<String, Double> scoreMap = new java.util.LinkedHashMap<>();
         for (ScoredCandidate sc : ranked) {
@@ -122,6 +129,98 @@ public class RankFOCandidateReordererTest {
         List<String> result = reorderWith(prefix, B, Result.FAILURE, Arrays.asList(ord0, ord1));
 
         assertEquals("Setter must be ranked first", S, result.get(0));
+    }
+
+    // ── cache integration ─────────────────────────────────────────────────
+
+    private Path tmpDir;
+
+    @Before
+    public void setUpTmpDir() throws IOException {
+        tmpDir = Files.createTempDirectory("rankfo-reorderer-cache-test");
+        Path resultsDir = tmpDir.resolve("test-runs").resolve("results");
+        Files.createDirectories(resultsDir);
+        // Old mtime so cached entries are fresh
+        Files.setLastModifiedTime(resultsDir, FileTime.fromMillis(System.currentTimeMillis() - 10_000));
+    }
+
+    @After
+    public void tearDownTmpDir() throws IOException {
+        if (tmpDir != null) {
+            Files.walk(tmpDir)
+                 .sorted(Comparator.reverseOrder())
+                 .forEach(p -> { try { Files.delete(p); } catch (IOException ignored) {} });
+        }
+    }
+
+    @Test
+    public void reorder_usesCachedScores_whenCacheIsValid() throws IOException {
+        // Pre-populate cache: P has a high polluter score
+        List<ScoredCandidate> cached = Arrays.asList(
+                new ScoredCandidate(P, 10.0, -1.0),
+                new ScoredCandidate(N, 0.0, 0.0));
+        RankFOScoreCache.save(tmpDir, V, HeuristicType.DISTANCE,
+                OdType.VICTIM_POLLUTER, cached);
+
+        // No real detection results exist in tmpDir — must use cache
+        List<String> prefix = Arrays.asList(N, P);
+        List<String> result = RankFOCandidateReorderer.reorder(prefix, V, Result.PASS, tmpDir);
+
+        assertEquals("P should be first because cache ranks it highest", P, result.get(0));
+        assertEquals("N should be second", N, result.get(1));
+    }
+
+    @Test
+    public void reorder_fallsBackToOriginalOrder_whenCacheAbsentAndNoDetectionResults() {
+        // tmpDir has results dir but no files, no cache
+        List<String> prefix = Arrays.asList(N, P, X);
+        List<String> result = RankFOCandidateReorderer.reorder(prefix, V, Result.PASS, tmpDir);
+
+        assertEquals("Prefix must be returned unchanged when no data available", prefix, result);
+    }
+
+    @Test
+    public void reorder_writesCache_afterComputingFromDetectionResults() throws IOException {
+        // Build two detection result files for target V
+        Path resultsDir = tmpDir.resolve("test-runs").resolve("results");
+        writeDetectionResult(resultsDir, "ord0.json", Arrays.asList(P, V, N),
+                P, "PASS", V, "FAILURE", N, "PASS");
+        writeDetectionResult(resultsDir, "ord1.json", Arrays.asList(P, V, N),
+                P, "PASS", V, "FAILURE", N, "PASS");
+        // Refresh results dir mtime to NOW so cache (not yet written) is considered stale
+        Files.setLastModifiedTime(resultsDir, FileTime.fromMillis(System.currentTimeMillis() - 1_000));
+
+        System.setProperty("dt.rankfo.heuristic", "DISTANCE");
+        try {
+            RankFOCandidateReorderer.reorder(Arrays.asList(N, P), V, Result.PASS, tmpDir);
+        } finally {
+            System.clearProperty("dt.rankfo.heuristic");
+        }
+
+        // Cache file should now exist
+        Path cacheDir = tmpDir.resolve("rankfo-scores");
+        assertTrue("Cache directory should be created after scoring", Files.isDirectory(cacheDir));
+        assertTrue("At least one cache file should be written",
+                Files.list(cacheDir).findAny().isPresent());
+    }
+
+    private void writeDetectionResult(Path dir, String filename, List<String> order,
+                                      Object... resultPairs) throws IOException {
+        // DetectionResultsLoader expects: {"testOrder":[...], "results":{"name":{"result":"PASS"}}}
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"testOrder\":[");
+        for (int i = 0; i < order.size(); i++) {
+            if (i > 0) sb.append(",");
+            sb.append("\"").append(order.get(i)).append("\"");
+        }
+        sb.append("],\"results\":{");
+        for (int i = 0; i < resultPairs.length; i += 2) {
+            if (i > 0) sb.append(",");
+            sb.append("\"").append(resultPairs[i]).append("\":{\"result\":\"")
+              .append(resultPairs[i + 1]).append("\"}");
+        }
+        sb.append("}}");
+        Files.write(dir.resolve(filename), sb.toString().getBytes());
     }
 
     @Test

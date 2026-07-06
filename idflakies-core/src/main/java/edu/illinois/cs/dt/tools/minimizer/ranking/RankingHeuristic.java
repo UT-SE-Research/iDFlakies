@@ -13,9 +13,11 @@ public interface RankingHeuristic {
 
     static RankingHeuristic of(HeuristicType type) {
         switch (type) {
-            case SIMPLE_VOTE:            return new SimpleVoteHeuristic();
-            case METHODS_BEFORE_VICTIM:  return new MethodsBeforeVictimHeuristic();
-            case DISTANCE_TO_VICTIM:     return new DistanceToVictimHeuristic();
+            case PLUS_ONE:                    return new PlusOneHeuristic();
+            case METHODS:                     return new MethodsHeuristic();
+            case DISTANCE:                    return new DistanceHeuristic();
+            case COMBINED_PLUS_ONE_DISTANCE:  return new PlusOneHeuristic();
+            case COMBINED_METHODS_DISTANCE:   return new MethodsHeuristic();
             default: throw new IllegalArgumentException("Unknown heuristic: " + type);
         }
     }

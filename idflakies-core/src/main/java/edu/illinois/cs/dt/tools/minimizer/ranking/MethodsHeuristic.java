@@ -1,9 +1,10 @@
 package edu.illinois.cs.dt.tools.minimizer.ranking;
 
-public class DistanceToVictimHeuristic implements RankingHeuristic {
+public class MethodsHeuristic implements RankingHeuristic {
     @Override
     public double scoreDelta(boolean orderIsRelevant, int testsBeforeTarget, int distanceToTarget) {
-        double delta = 1.0 / Math.max(1, distanceToTarget);
+        if (testsBeforeTarget == 0) return 0.0;
+        double delta = 1.0 / testsBeforeTarget;
         return orderIsRelevant ? delta : -delta;
     }
 }

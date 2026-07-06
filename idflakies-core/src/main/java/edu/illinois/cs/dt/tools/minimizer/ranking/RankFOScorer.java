@@ -10,21 +10,26 @@ import java.util.Map;
 import java.util.Set;
 
 public class RankFOScorer {
+    private final HeuristicType heuristicType;
     private final RankingHeuristic heuristic;
     private final int maxOrders;
 
-    public RankFOScorer(RankingHeuristic heuristic) {
-        this(heuristic, 20);
+    public RankFOScorer(HeuristicType heuristicType) {
+        this(heuristicType, 20);
     }
 
-    public RankFOScorer(RankingHeuristic heuristic, int maxOrders) {
-        this.heuristic = heuristic;
+    public RankFOScorer(HeuristicType heuristicType, int maxOrders) {
+        this.heuristicType = heuristicType;
+        this.heuristic = RankingHeuristic.of(heuristicType);
         this.maxOrders = maxOrders;
     }
 
     /**
      * Ports RankF_O generateRanks() + getClassScores().
-     * Returns candidates sorted by polluterScore descending; ties preserve insertion order.
+     * Returns candidates sorted by polluterScore descending.
+     * For Combined (+1,D) and Combined (#M,D): ties in polluterScore are broken by
+     * distance to victim in the last valid ordering (closer = higher rank), matching
+     * the paper's Figure 4 description.
      */
     public List<ScoredCandidate> score(
             String targetTest,
@@ -33,7 +38,6 @@ public class RankFOScorer {
 
         int limit = Math.min(maxOrders, orderings.size());
 
-        // Collect all candidates (union of testsBeforeTarget across orderings, insertion order kept)
         Set<String> candidates = new LinkedHashSet<>();
         for (int i = 0; i < limit; i++) {
             candidates.addAll(orderings.get(i).testsBeforeTarget(targetTest));
@@ -51,7 +55,7 @@ public class RankFOScorer {
 
         for (int i = 0; i < limit; i++) {
             TestOrderRecord rec = orderings.get(i);
-            if (rec.getResult(targetTest) == null) continue; // target not in this round
+            if (rec.getResult(targetTest) == null) continue;
 
             Map<String, Double> previousRank = new HashMap<>(currentRank);
 
@@ -65,9 +69,7 @@ public class RankFOScorer {
                 double delta = heuristic.scoreDelta(relevant, count, dist);
                 currentRank.put(c, currentRank.get(c) + delta);
             }
-            // Candidates not in subOrder keep their current rank (intentional)
 
-            // Accumulate class scores starting from first consecutive pair (i > 0)
             if (i > 0) {
                 for (String c : candidates) {
                     double curr = currentRank.get(c);
@@ -86,9 +88,45 @@ public class RankFOScorer {
         for (String c : candidates) {
             result.add(new ScoredCandidate(c, polluterScore.get(c), nonPolluterScore.get(c)));
         }
-        // Stable sort: ties preserve insertion order (matches Python sort behavior)
-        result.sort((a, b) -> Double.compare(b.getPolluterScore(), a.getPolluterScore()));
+
+        if (isCombined()) {
+            // Paper Fig 4: ties in polluterScore broken by distance to victim in last ordering.
+            // Smaller distance (count - idx) = closer to victim = higher rank.
+            final Map<String, Integer> lastDist = lastOrderDistances(targetTest, orderings, limit);
+            result.sort((a, b) -> {
+                int cmp = Double.compare(b.getPolluterScore(), a.getPolluterScore());
+                if (cmp != 0) return cmp;
+                int da = lastDist.getOrDefault(a.getTestName(), Integer.MAX_VALUE);
+                int db = lastDist.getOrDefault(b.getTestName(), Integer.MAX_VALUE);
+                return Integer.compare(da, db); // ASC: smaller dist (closer) ranks first
+            });
+        } else {
+            result.sort((a, b) -> Double.compare(b.getPolluterScore(), a.getPolluterScore()));
+        }
         return result;
+    }
+
+    private boolean isCombined() {
+        return heuristicType == HeuristicType.COMBINED_PLUS_ONE_DISTANCE
+            || heuristicType == HeuristicType.COMBINED_METHODS_DISTANCE;
+    }
+
+    /** Distance from each candidate to victim in the last ordering that contains the victim. */
+    private Map<String, Integer> lastOrderDistances(String targetTest,
+            List<TestOrderRecord> orderings, int limit) {
+        for (int i = limit - 1; i >= 0; i--) {
+            TestOrderRecord rec = orderings.get(i);
+            if (rec.getResult(targetTest) != null) {
+                List<String> subOrder = rec.testsBeforeTarget(targetTest);
+                int count = subOrder.size();
+                Map<String, Integer> dist = new HashMap<>();
+                for (int idx = 0; idx < count; idx++) {
+                    dist.put(subOrder.get(idx), count - idx); // paper's indexOf(ot)-indexOf(gt)
+                }
+                return dist;
+            }
+        }
+        return Collections.emptyMap();
     }
 
     private boolean isRelevant(TestOrderRecord rec, String targetTest, OdType odType) {
