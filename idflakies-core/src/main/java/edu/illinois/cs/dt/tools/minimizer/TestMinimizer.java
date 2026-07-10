@@ -47,6 +47,8 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
     // Phase 3: reorder candidates by RankFO polluter score before delta debugging
     private static final boolean RANKFO_ENABLE = Configuration.config().getProperty("dt.rankfo.enable", false);
+    // OBO baseline: try each candidate one-by-one before the victim; stop at first confirmation
+    private static final boolean OBO_ENABLE = Configuration.config().getProperty("dt.minimizer.obo", false);
 
     protected final Path path;
 
@@ -214,16 +216,24 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     }
 
     private List<String> run(List<String> order) throws Exception {
-        final List<String> deps = new ArrayList<>();
-
         if (order.isEmpty()) {
             debug("Order is empty, so it is already minimized!");
-            return deps;
+            return new ArrayList<>();
         }
 
+        if (OBO_ENABLE) {
+            for (final String candidate : order) {
+                final List<String> singleton = Collections.singletonList(candidate);
+                if (result(singleton) == expected) {
+                    return new ArrayList<>(singleton);
+                }
+            }
+            return new ArrayList<>();
+        }
+
+        final List<String> deps = new ArrayList<>();
         TestMinimizerDeltaDebugger debugger = new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
         deps.addAll(debugger.deltaDebug(order, 2));
-
         return deps;
     }
 
