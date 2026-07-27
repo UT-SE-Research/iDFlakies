@@ -106,11 +106,12 @@ public class RankFOCandidateReordererTest {
 
     @Test
     public void single_ordering_produces_zero_class_scores_so_order_is_stable() {
-        // With only one ordering, no consecutive pair → polluterScore=0 for all → original order
+        // With only one ordering, no consecutive pair → polluterScore=0 for all.
+        // reorderWith() uses a stable sort by polluterScore, so prefix order is preserved.
         TestOrderRecord ord0 = order(Arrays.asList(P, N, V), P, "PASS", N, "PASS", V, "FAILURE");
         List<String> prefix = Arrays.asList(N, P);
         List<String> result = reorderWith(prefix, V, Result.PASS, Collections.singletonList(ord0));
-        // All polluterScores == 0.0; stable sort preserves input order
+        // Stable sort on equal scores preserves prefix order [N, P]
         assertEquals(Arrays.asList(N, P), result);
     }
 
@@ -181,13 +182,23 @@ public class RankFOCandidateReordererTest {
 
     @Test
     public void reorder_writesCache_afterComputingFromDetectionResults() throws IOException {
-        // Build two detection result files for target V
+        // DetectionResultsLoader now reads round files from detection-results/random-class-method/
+        // and follows testRunIds to test-runs/results/.  Build that structure:
+        //   detection-results/random-class-method/round0.json  → {"testRunIds":["run0","run1"]}
+        //   test-runs/results/run0                             → ordering with P,V,N
+        //   test-runs/results/run1                             → ordering with P,V,N
+        Path detectionDir = tmpDir.resolve("detection-results").resolve("random-class-method");
+        Files.createDirectories(detectionDir);
+        Files.write(detectionDir.resolve("round0.json"),
+                "{\"testRunIds\":[\"run0\",\"run1\"]}".getBytes());
+
         Path resultsDir = tmpDir.resolve("test-runs").resolve("results");
-        writeDetectionResult(resultsDir, "ord0.json", Arrays.asList(P, V, N),
+        Files.createDirectories(resultsDir);
+        writeDetectionResult(resultsDir, "run0", Arrays.asList(P, V, N),
                 P, "PASS", V, "FAILURE", N, "PASS");
-        writeDetectionResult(resultsDir, "ord1.json", Arrays.asList(P, V, N),
+        writeDetectionResult(resultsDir, "run1", Arrays.asList(P, V, N),
                 P, "PASS", V, "FAILURE", N, "PASS");
-        // Refresh results dir mtime to NOW so cache (not yet written) is considered stale
+        // Mark results dir as recently modified so cache is considered stale
         Files.setLastModifiedTime(resultsDir, FileTime.fromMillis(System.currentTimeMillis() - 1_000));
 
         System.setProperty("dt.rankfo.heuristic", "DISTANCE");
@@ -206,7 +217,7 @@ public class RankFOCandidateReordererTest {
 
     private void writeDetectionResult(Path dir, String filename, List<String> order,
                                       Object... resultPairs) throws IOException {
-        // DetectionResultsLoader expects: {"testOrder":[...], "results":{"name":{"result":"PASS"}}}
+        // test-runs/results files have no extension; format: {"testOrder":[...],"results":{...}}
         StringBuilder sb = new StringBuilder();
         sb.append("{\"testOrder\":[");
         for (int i = 0; i < order.size(); i++) {

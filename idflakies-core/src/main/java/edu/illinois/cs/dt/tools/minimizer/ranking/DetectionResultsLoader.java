@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,66 +16,88 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Loads test-ordering data from iDFlakies' .dtfixingtools/test-runs/results/ directory.
+ * Loads test-ordering data from iDFlakies' .dtfixingtools directory.
  *
- * <p>Each file in that directory is a serialized TestRunResult produced by the testrunner
- * framework. Its JSON shape is:
- * <pre>
- * {
- *   "id": "...",
- *   "testOrder": ["com.example.A#a", "com.example.B#b", ...],
- *   "results": {
- *     "com.example.A#a": { "name": "...", "result": "PASS", "time": ..., "stackTrace": [] },
- *     ...
- *   }
- * }
- * </pre>
- *
- * <p>File names are timestamp-prefixed UUIDs (e.g. {@code 1781558382115-ae26398c-...}), so
- * lexicographic sort gives chronological order.
+ * <p>The loader follows two-level indirection:
+ * <ol>
+ *   <li>Read {@code detection-results/random-class-method/roundN.json} files (sorted by round
+ *       number) to get the {@code testRunIds} that belong to a detection run.</li>
+ *   <li>For each {@code testRunId}, look up the corresponding file in
+ *       {@code test-runs/results/} and parse it as a {@link TestOrderRecord}.</li>
+ * </ol>
+ * Only orderings in which {@code targetTest} was actually run are returned.
  */
 public class DetectionResultsLoader {
 
     private static final Gson GSON = new Gson();
 
     /**
-     * Reads TestRunResult JSON files from {@code .dtfixingtools/test-runs/results/} in
-     * lexicographic (i.e. chronological) order. Returns at most {@code maxOrders}
-     * {@link TestOrderRecord}s. Skips files that are missing, malformed, or have no testOrder.
+     * Returns at most {@code maxOrders} {@link TestOrderRecord}s that contain {@code targetTest},
+     * sourced exclusively from the detection rounds recorded in
+     * {@code detection-results/random-class-method/roundN.json}.
      *
      * @param dtfixingtoolsDir path to the {@code .dtfixingtools} directory
-     * @param targetTest       fully-qualified test name (used by caller; not filtered here)
+     * @param targetTest       fully-qualified test name; only orderings containing this test are returned
      * @param maxOrders        maximum number of records to return
      * @return list of parsed records, never null
-     * @throws IOException if the directory cannot be listed
+     * @throws IOException if a directory cannot be listed
      */
     public static List<TestOrderRecord> load(
             Path dtfixingtoolsDir,
             String targetTest,
             int maxOrders) throws IOException {
 
+        // Step 1: collect testRunIds from detection round files
+        Path detectionDir = dtfixingtoolsDir
+                .resolve("detection-results")
+                .resolve("random-class-method");
+        if (!Files.exists(detectionDir)) return Collections.emptyList();
+
+        List<Path> roundFiles;
+        try (Stream<Path> stream = Files.list(detectionDir)) {
+            roundFiles = stream
+                .filter(p -> p.getFileName().toString().matches("round\\d+\\.json"))
+                .sorted(Comparator.comparingInt(p -> roundNumber(p.getFileName().toString())))
+                .collect(Collectors.toList());
+        }
+        if (roundFiles.isEmpty()) return Collections.emptyList();
+
+        List<String> testRunIds = new ArrayList<>();
+        for (Path roundFile : roundFiles) {
+            try (FileReader reader = new FileReader(roundFile.toFile())) {
+                DetectionRoundJson round = GSON.fromJson(reader, DetectionRoundJson.class);
+                if (round != null && round.testRunIds != null) {
+                    testRunIds.addAll(round.testRunIds);
+                }
+            } catch (Exception ignored) {}
+        }
+        if (testRunIds.isEmpty()) return Collections.emptyList();
+
+        // Step 2: load and filter by targetTest
         Path resultsDir = dtfixingtoolsDir.resolve("test-runs").resolve("results");
         if (!Files.exists(resultsDir)) return Collections.emptyList();
 
-        List<Path> resultFiles;
-        try (Stream<Path> stream = Files.list(resultsDir)) {
-            resultFiles = stream
-                .filter(Files::isRegularFile)
-                .sorted((a, b) -> a.getFileName().toString().compareTo(b.getFileName().toString()))
-                .collect(Collectors.toList());
-        }
-
         List<TestOrderRecord> records = new ArrayList<>();
-        for (Path f : resultFiles) {
+        for (String runId : testRunIds) {
             if (records.size() >= maxOrders) break;
+            Path resultFile = resultsDir.resolve(runId);
+            if (!Files.exists(resultFile)) continue;
             try {
-                TestOrderRecord rec = parse(f);
-                if (rec != null) records.add(rec);
-            } catch (Exception ignored) {
-                // Skip unreadable / malformed files silently
-            }
+                TestOrderRecord rec = parse(resultFile);
+                if (rec != null && rec.getResult(targetTest) != null) {
+                    records.add(rec);
+                }
+            } catch (Exception ignored) {}
         }
         return records;
+    }
+
+    private static int roundNumber(String filename) {
+        try {
+            return Integer.parseInt(filename.replace("round", "").replace(".json", ""));
+        } catch (NumberFormatException e) {
+            return Integer.MAX_VALUE;
+        }
     }
 
     /**
@@ -101,6 +124,11 @@ public class DetectionResultsLoader {
             }
             return new TestOrderRecord(raw.testOrder, results);
         }
+    }
+
+    // detection-results/random-class-method/roundN.json structure.
+    private static class DetectionRoundJson {
+        List<String> testRunIds;
     }
 
     // Mirrors TestRunResult JSON structure confirmed from .dtfixingtools/test-runs/results/ files.

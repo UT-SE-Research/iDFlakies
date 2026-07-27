@@ -8,10 +8,9 @@ import edu.illinois.cs.testrunner.data.results.Result;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class RankFOCandidateReorderer {
 
@@ -100,15 +99,26 @@ public class RankFOCandidateReorderer {
                                 + " (heuristic=" + hType + ")");
             }
 
-            Map<String, Double> scoreMap = new LinkedHashMap<>();
+            // Preserve the scorer's ordering (which already encodes heuristic tie-breaking).
+            // Scored candidates come first in ranked order; unscored candidates follow in
+            // their original prefix order.
+            Set<String> prefixSet = new LinkedHashSet<>(prefix);
+            Set<String> scoredSet = new LinkedHashSet<>();
             for (ScoredCandidate sc : ranked) {
-                scoreMap.put(sc.getTestName(), sc.getPolluterScore());
+                scoredSet.add(sc.getTestName());
             }
 
-            List<String> reordered = new ArrayList<>(prefix);
-            reordered.sort(Comparator.comparingDouble(
-                    (String t) -> scoreMap.getOrDefault(t, Double.NEGATIVE_INFINITY)
-            ).reversed());
+            List<String> reordered = new ArrayList<>(prefix.size());
+            for (ScoredCandidate sc : ranked) {
+                if (prefixSet.contains(sc.getTestName())) {
+                    reordered.add(sc.getTestName());
+                }
+            }
+            for (String t : prefix) {
+                if (!scoredSet.contains(t)) {
+                    reordered.add(t);
+                }
+            }
 
             Logger.getGlobal().log(Level.INFO,
                     "[RankFO] Reordered " + reordered.size() + " candidates for "

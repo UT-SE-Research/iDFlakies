@@ -73,9 +73,10 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         this.isolationResult = result(Collections.singletonList(dependentTest));
         debug("Expected: " + expected);
 
-        this.testOrder = STRATEGY.isRankFO()
-                ? RankFOCandidateReorderer.reorder(prefix, dependentTest, isolationResult, STRATEGY.heuristic())
-                : prefix;
+        // Always keep testOrder as the original unmodified prefix so that the
+        // result(order) guard in getPolluters() runs the original sequence.
+        // RankFO reordering happens per-call inside run() using the cached scores.
+        this.testOrder = prefix;
 
         this.path = PathManager.minimizedPath(dependentTest, MD5.hashOrder(expectedRun.testOrder()), expected);
     }
@@ -216,7 +217,10 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         }
 
         if (STRATEGY.isRankFO()) {
-            for (final String candidate : order) {
+            // Rank the current candidate set; cache means repeated calls are fast.
+            final List<String> ranked = RankFOCandidateReorderer.reorder(
+                    order, dependentTest, isolationResult, STRATEGY.heuristic());
+            for (final String candidate : ranked) {
                 final List<String> singleton = Collections.singletonList(candidate);
                 if (result(singleton) == expected) {
                     return new ArrayList<>(singleton);

@@ -55,7 +55,8 @@ public class RankFOScorer {
 
         for (int i = 0; i < limit; i++) {
             TestOrderRecord rec = orderings.get(i);
-            if (rec.getResult(targetTest) == null) continue;
+            Result victimResult = rec.getResult(targetTest);
+            if (victimResult == null || victimResult == Result.SKIPPED) continue;
 
             Map<String, Double> previousRank = new HashMap<>(currentRank);
 
@@ -65,7 +66,7 @@ public class RankFOScorer {
             for (int idx = 0; idx < count; idx++) {
                 String c = subOrder.get(idx);
                 if (!currentRank.containsKey(c)) continue;
-                int dist = count - 1 - idx; // tests strictly between candidate and target
+                int dist = count - idx; // tests between candidate and target (inclusive of distance 1 for immediate predecessor)
                 double delta = heuristic.scoreDelta(relevant, count, dist);
                 currentRank.put(c, currentRank.get(c) + delta);
             }
@@ -90,11 +91,13 @@ public class RankFOScorer {
         }
 
         if (isCombined()) {
-            // Paper Fig 4: ties in polluterScore broken by distance to victim in last ordering.
-            // Smaller distance (count - idx) = closer to victim = higher rank.
+            // Combined strategies sort by (polluterScore - nonPolluterScore) per Python reference.
+            // Ties broken by distance to victim in last ordering: closer (smaller dist) ranks first.
             final Map<String, Integer> lastDist = lastOrderDistances(targetTest, orderings, limit);
             result.sort((a, b) -> {
-                int cmp = Double.compare(b.getPolluterScore(), a.getPolluterScore());
+                double aCombined = a.getPolluterScore() - a.getNonPolluterScore();
+                double bCombined = b.getPolluterScore() - b.getNonPolluterScore();
+                int cmp = Double.compare(bCombined, aCombined);
                 if (cmp != 0) return cmp;
                 int da = lastDist.getOrDefault(a.getTestName(), Integer.MAX_VALUE);
                 int db = lastDist.getOrDefault(b.getTestName(), Integer.MAX_VALUE);
@@ -133,7 +136,7 @@ public class RankFOScorer {
         Result r = rec.getResult(targetTest);
         if (r == null) return false;
         switch (odType) {
-            case VICTIM_POLLUTER:     return r == Result.FAILURE;
+            case VICTIM_POLLUTER:     return r == Result.FAILURE || r == Result.ERROR;
             case BRITTLE_STATESETTER: return r == Result.PASS;
             default: return false;
         }
