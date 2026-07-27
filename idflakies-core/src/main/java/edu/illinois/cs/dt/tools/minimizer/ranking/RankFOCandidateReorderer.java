@@ -17,50 +17,62 @@ public class RankFOCandidateReorderer {
 
     static final int MAX_ORDERS = 20;
 
+    // ── Public entry points ─────────────────────────────────────────────────
+
     /**
-     * Public entry point. Delegates to the package-private overload using
-     * the project's real {@code .dtfixingtools/} directory.
+     * Phase 4 entry point: heuristic is supplied explicitly by {@link
+     * edu.illinois.cs.dt.tools.minimizer.MinimizerStrategy#heuristic()}.
+     * No system-property reads.
      */
     public static List<String> reorder(
             List<String> prefix,
             String targetTest,
-            Result isolationResult) {
-        return reorder(prefix, targetTest, isolationResult, PathManager.cachePath());
+            Result isolationResult,
+            HeuristicType heuristic) {
+        return core(prefix, targetTest, isolationResult, PathManager.cachePath(), heuristic);
     }
 
+    // ── Package-private (tests supply an explicit dtDir) ────────────────────
+
     /**
-     * Package-private overload that accepts an explicit {@code dtDir} so tests
-     * can supply a temp directory without touching {@link PathManager}.
-     *
-     * <p>Scores are cached in {@code <dtDir>/rankfo-scores/} and reused on
-     * subsequent calls as long as the detection results directory has not been
-     * modified (i.e., no new {@code detect} run has added data). If the cache
-     * is stale or absent, scores are recomputed and persisted.
-     *
-     * <p>Never throws: any failure causes a FINE-level log and returns
-     * {@code prefix} unchanged.
+     * Package-private: reads {@code dt.rankfo.heuristic} property (default DISTANCE).
+     * Used by existing cache/reorder unit tests that inject a temp directory.
      */
     static List<String> reorder(
             List<String> prefix,
             String targetTest,
             Result isolationResult,
             Path dtDir) {
+        String heuristicName = Configuration.config()
+                .getProperty("dt.rankfo.heuristic", "DISTANCE");
+        try {
+            return core(prefix, targetTest, isolationResult, dtDir,
+                    HeuristicType.valueOf(heuristicName));
+        } catch (IllegalArgumentException e) {
+            Logger.getGlobal().log(Level.FINE,
+                    "[RankFO] Unknown heuristic '" + heuristicName
+                            + "'; using original candidate order.");
+            return prefix;
+        }
+    }
 
+    // ── Core implementation ─────────────────────────────────────────────────
+
+    private static List<String> core(
+            List<String> prefix,
+            String targetTest,
+            Result isolationResult,
+            Path dtDir,
+            HeuristicType hType) {
         try {
             OdType odType = (isolationResult == Result.PASS)
                     ? OdType.VICTIM_POLLUTER
                     : OdType.BRITTLE_STATESETTER;
 
-            String heuristicName = Configuration.config()
-                    .getProperty("dt.rankfo.heuristic", "DISTANCE");
-            HeuristicType hType = HeuristicType.valueOf(heuristicName);
-
-            // ── cache lookup ──────────────────────────────────────────────
             List<ScoredCandidate> ranked =
                     RankFOScoreCache.load(dtDir, targetTest, hType, odType);
 
             if (ranked == null) {
-                // Cache miss: load detection results and score candidates
                 long startMs = System.currentTimeMillis();
 
                 List<TestOrderRecord> orderings =
@@ -73,23 +85,21 @@ public class RankFOCandidateReorderer {
                     return prefix;
                 }
 
-                ranked = new RankFOScorer(hType)
-                        .score(targetTest, orderings, odType);
+                ranked = new RankFOScorer(hType).score(targetTest, orderings, odType);
 
                 long elapsedMs = System.currentTimeMillis() - startMs;
                 Logger.getGlobal().log(Level.INFO,
                         "[RankFO] Scored " + ranked.size() + " candidates for "
                                 + targetTest + " in " + elapsedMs + "ms"
-                                + " (heuristic=" + heuristicName + ")");
+                                + " (heuristic=" + hType + ")");
 
                 RankFOScoreCache.save(dtDir, targetTest, hType, odType, ranked);
             } else {
                 Logger.getGlobal().log(Level.INFO,
                         "[RankFO] Loaded scores from cache for " + targetTest
-                                + " (heuristic=" + heuristicName + ")");
+                                + " (heuristic=" + hType + ")");
             }
 
-            // ── sort prefix by polluter score DESC ────────────────────────
             Map<String, Double> scoreMap = new LinkedHashMap<>();
             for (ScoredCandidate sc : ranked) {
                 scoreMap.put(sc.getTestName(), sc.getPolluterScore());
@@ -102,19 +112,12 @@ public class RankFOCandidateReorderer {
 
             Logger.getGlobal().log(Level.INFO,
                     "[RankFO] Reordered " + reordered.size() + " candidates for "
-                            + targetTest + " using " + heuristicName + " heuristic."
+                            + targetTest + " using " + hType + " heuristic."
                             + " Top candidate: "
                             + (reordered.isEmpty() ? "none" : reordered.get(0)));
 
             return reordered;
 
-        } catch (IllegalArgumentException e) {
-            Logger.getGlobal().log(Level.FINE,
-                    "[RankFO] Unknown heuristic '"
-                            + Configuration.config()
-                                    .getProperty("dt.rankfo.heuristic", "DISTANCE")
-                            + "'; using original candidate order.");
-            return prefix;
         } catch (Exception e) {
             Logger.getGlobal().log(Level.FINE,
                     "[RankFO] Reordering failed (" + e.getMessage()

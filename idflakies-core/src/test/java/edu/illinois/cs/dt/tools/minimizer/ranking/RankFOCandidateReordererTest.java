@@ -223,28 +223,4 @@ public class RankFOCandidateReordererTest {
         Files.write(dir.resolve(filename), sb.toString().getBytes());
     }
 
-    @Test
-    public void reorder_public_api_falls_through_gracefully_with_bad_heuristic() {
-        // Temporarily set an invalid heuristic via system property
-        String prev = System.getProperty("dt.rankfo.heuristic");
-        System.setProperty("dt.rankfo.heuristic", "INVALID_HEURISTIC");
-        try {
-            // reorder() catches IllegalArgumentException and returns prefix unchanged.
-            // We can't call the real static method without PathManager, but we can verify
-            // that HeuristicType.valueOf("INVALID_HEURISTIC") throws as expected.
-            boolean threw = false;
-            try {
-                HeuristicType.valueOf("INVALID_HEURISTIC");
-            } catch (IllegalArgumentException e) {
-                threw = true;
-            }
-            assertTrue("Bad heuristic name must throw IllegalArgumentException", threw);
-        } finally {
-            if (prev == null) {
-                System.clearProperty("dt.rankfo.heuristic");
-            } else {
-                System.setProperty("dt.rankfo.heuristic", prev);
-            }
-        }
-    }
 }

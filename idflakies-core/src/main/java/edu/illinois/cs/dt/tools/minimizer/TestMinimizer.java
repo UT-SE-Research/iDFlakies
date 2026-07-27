@@ -45,10 +45,7 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     private final String CUSTOM_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.custom", "");
     // FIND_ALL only for cleaners, not for polluters
     private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
-    // Phase 3: reorder candidates by RankFO polluter score; OBO confirms from rank 1
-    private static final boolean RANKFO_ENABLE = Configuration.config().getProperty("dt.rankfo.enable", false);
-    // OBO baseline: try each candidate one-by-one before the victim; stop at first confirmation
-    private static final boolean OBO_ENABLE = Configuration.config().getProperty("dt.minimizer.obo", false);
+    private static final MinimizerStrategy STRATEGY = MinimizerStrategy.fromProperty();
 
     protected final Path path;
 
@@ -67,8 +64,6 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         this.dependentTest = dependentTest;
         this.runner = runner;
 
-        // Compute the prefix (tests strictly before dependentTest) as a local variable so
-        // it can be optionally reordered by RankFO after isolationResult is available.
         final List<String> prefix = testOrder.contains(dependentTest)
                 ? ListUtil.before(testOrder, dependentTest) : testOrder;
 
@@ -78,9 +73,8 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         this.isolationResult = result(Collections.singletonList(dependentTest));
         debug("Expected: " + expected);
 
-        // Phase 3: reorder prefix by RankFO polluter score when dt.rankfo.enable=true
-        this.testOrder = RANKFO_ENABLE
-                ? RankFOCandidateReorderer.reorder(prefix, dependentTest, isolationResult)
+        this.testOrder = STRATEGY.isRankFO()
+                ? RankFOCandidateReorderer.reorder(prefix, dependentTest, isolationResult, STRATEGY.heuristic())
                 : prefix;
 
         this.path = PathManager.minimizedPath(dependentTest, MD5.hashOrder(expectedRun.testOrder()), expected);
@@ -221,7 +215,7 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             return new ArrayList<>();
         }
 
-        if (OBO_ENABLE || RANKFO_ENABLE) {
+        if (STRATEGY.isRankFO()) {
             for (final String candidate : order) {
                 final List<String> singleton = Collections.singletonList(candidate);
                 if (result(singleton) == expected) {
@@ -231,10 +225,27 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             return new ArrayList<>();
         }
 
-        final List<String> deps = new ArrayList<>();
-        TestMinimizerDeltaDebugger debugger = new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
-        deps.addAll(debugger.deltaDebug(order, 2));
-        return deps;
+        if (STRATEGY == MinimizerStrategy.DD_HALF_SPLIT) {
+            final List<String> deps = new ArrayList<>();
+            TestMinimizerDeltaDebugger debugger =
+                new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
+            deps.addAll(debugger.deltaDebug(order, 2));
+            return deps;
+        }
+
+        switch (STRATEGY) {
+            case DD_HIERARCHICAL_SPLIT:
+                throw new UnsupportedOperationException(
+                    "DD_HIERARCHICAL_SPLIT not yet ported to Java — coming in a future PR");
+            case DD_HISTORICAL_INFO_SPLIT:
+                throw new UnsupportedOperationException(
+                    "DD_HISTORICAL_INFO_SPLIT not yet ported to Java — coming in a future PR");
+            case DD_NLP_SPLIT:
+                throw new UnsupportedOperationException(
+                    "DD_NLP_SPLIT not yet ported to Java — coming in a future PR");
+            default:
+                throw new IllegalStateException("Unhandled strategy: " + STRATEGY);
+        }
     }
 
     public String getDependentTest() {
