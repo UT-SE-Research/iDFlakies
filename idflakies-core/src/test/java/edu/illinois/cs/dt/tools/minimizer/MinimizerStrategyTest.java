@@ -2,9 +2,6 @@ package edu.illinois.cs.dt.tools.minimizer;
 
 import edu.illinois.cs.dt.tools.minimizer.ranking.HeuristicType;
 import edu.illinois.cs.dt.tools.minimizer.splitting.HalfSplitStrategy;
-import edu.illinois.cs.dt.tools.minimizer.splitting.HierarchicalSplitStrategy;
-import edu.illinois.cs.dt.tools.minimizer.splitting.HistoricalRankFSplitStrategy;
-import edu.illinois.cs.dt.tools.minimizer.splitting.TFIDFSplitStrategy;
 import org.junit.After;
 import org.junit.Test;
 
@@ -78,8 +75,6 @@ public class MinimizerStrategyTest {
         }
     }
 
-    // ── DDSplittingStrategy implementations ─────────────────────────────────
-
     @Test
     public void halfSplitPartitionsEvenly() {
         HalfSplitStrategy s = new HalfSplitStrategy();
@@ -97,18 +92,4 @@ public class MinimizerStrategyTest {
         assertEquals(Arrays.asList("A"), parts.get(0));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void hierarchicalStubThrows() {
-        new HierarchicalSplitStrategy().partition(Arrays.asList("A"), 2);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void historicalRankFStubThrows() {
-        new HistoricalRankFSplitStrategy().partition(Arrays.asList("A"), 2);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void tfidfStubThrows() {
-        new TFIDFSplitStrategy().partition(Arrays.asList("A"), 2);
-    }
 }

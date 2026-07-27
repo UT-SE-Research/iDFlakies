@@ -73,9 +73,8 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
         this.isolationResult = result(Collections.singletonList(dependentTest));
         debug("Expected: " + expected);
 
-        // Always keep testOrder as the original unmodified prefix so that the
-        // result(order) guard in getPolluters() runs the original sequence.
-        // RankFO reordering happens per-call inside run() using the cached scores.
+        // result(order) guard in getPolluters() requires the original prefix; RankFO
+        // reordering happens per-call in run() where the disk cache keeps it cheap.
         this.testOrder = prefix;
 
         this.path = PathManager.minimizedPath(dependentTest, MD5.hashOrder(expectedRun.testOrder()), expected);

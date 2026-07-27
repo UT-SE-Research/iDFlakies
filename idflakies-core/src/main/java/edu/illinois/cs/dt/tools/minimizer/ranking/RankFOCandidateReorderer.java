@@ -16,13 +16,6 @@ public class RankFOCandidateReorderer {
 
     static final int MAX_ORDERS = 20;
 
-    // ── Public entry points ─────────────────────────────────────────────────
-
-    /**
-     * Phase 4 entry point: heuristic is supplied explicitly by {@link
-     * edu.illinois.cs.dt.tools.minimizer.MinimizerStrategy#heuristic()}.
-     * No system-property reads.
-     */
     public static List<String> reorder(
             List<String> prefix,
             String targetTest,
@@ -31,12 +24,7 @@ public class RankFOCandidateReorderer {
         return core(prefix, targetTest, isolationResult, PathManager.cachePath(), heuristic);
     }
 
-    // ── Package-private (tests supply an explicit dtDir) ────────────────────
-
-    /**
-     * Package-private: reads {@code dt.rankfo.heuristic} property (default DISTANCE).
-     * Used by existing cache/reorder unit tests that inject a temp directory.
-     */
+    // Package-private: used by unit tests to inject a temp directory.
     static List<String> reorder(
             List<String> prefix,
             String targetTest,
@@ -54,8 +42,6 @@ public class RankFOCandidateReorderer {
             return prefix;
         }
     }
-
-    // ── Core implementation ─────────────────────────────────────────────────
 
     private static List<String> core(
             List<String> prefix,
@@ -99,9 +85,7 @@ public class RankFOCandidateReorderer {
                                 + " (heuristic=" + hType + ")");
             }
 
-            // Preserve the scorer's ordering (which already encodes heuristic tie-breaking).
-            // Scored candidates come first in ranked order; unscored candidates follow in
-            // their original prefix order.
+            // Scored candidates in ranked order, then unscored in original prefix order.
             Set<String> prefixSet = new LinkedHashSet<>(prefix);
             Set<String> scoredSet = new LinkedHashSet<>();
             for (ScoredCandidate sc : ranked) {

@@ -24,13 +24,6 @@ public class RankFOScorer {
         this.maxOrders = maxOrders;
     }
 
-    /**
-     * Ports RankF_O generateRanks() + getClassScores().
-     * Returns candidates sorted by polluterScore descending.
-     * For Combined (+1,D) and Combined (#M,D): ties in polluterScore are broken by
-     * distance to victim in the last valid ordering (closer = higher rank), matching
-     * the paper's Figure 4 description.
-     */
     public List<ScoredCandidate> score(
             String targetTest,
             List<TestOrderRecord> orderings,
@@ -66,7 +59,7 @@ public class RankFOScorer {
             for (int idx = 0; idx < count; idx++) {
                 String c = subOrder.get(idx);
                 if (!currentRank.containsKey(c)) continue;
-                int dist = count - idx; // tests between candidate and target (inclusive of distance 1 for immediate predecessor)
+                int dist = count - idx;
                 double delta = heuristic.scoreDelta(relevant, count, dist);
                 currentRank.put(c, currentRank.get(c) + delta);
             }
@@ -91,17 +84,16 @@ public class RankFOScorer {
         }
 
         if (isCombined()) {
-            // Combined strategies sort by (polluterScore - nonPolluterScore) per Python reference.
-            // Ties broken by distance to victim in last ordering: closer (smaller dist) ranks first.
+            // Combined heuristics rank by (polluterScore - nonPolluterScore); distance breaks ties.
             final Map<String, Integer> lastDist = lastOrderDistances(targetTest, orderings, limit);
             result.sort((a, b) -> {
-                double aCombined = a.getPolluterScore() - a.getNonPolluterScore();
-                double bCombined = b.getPolluterScore() - b.getNonPolluterScore();
-                int cmp = Double.compare(bCombined, aCombined);
+                int cmp = Double.compare(
+                    b.getPolluterScore() - b.getNonPolluterScore(),
+                    a.getPolluterScore() - a.getNonPolluterScore());
                 if (cmp != 0) return cmp;
-                int da = lastDist.getOrDefault(a.getTestName(), Integer.MAX_VALUE);
-                int db = lastDist.getOrDefault(b.getTestName(), Integer.MAX_VALUE);
-                return Integer.compare(da, db); // ASC: smaller dist (closer) ranks first
+                return Integer.compare(
+                    lastDist.getOrDefault(a.getTestName(), Integer.MAX_VALUE),
+                    lastDist.getOrDefault(b.getTestName(), Integer.MAX_VALUE));
             });
         } else {
             result.sort((a, b) -> Double.compare(b.getPolluterScore(), a.getPolluterScore()));
@@ -114,7 +106,6 @@ public class RankFOScorer {
             || heuristicType == HeuristicType.COMBINED_METHODS_DISTANCE;
     }
 
-    /** Distance from each candidate to victim in the last ordering that contains the victim. */
     private Map<String, Integer> lastOrderDistances(String targetTest,
             List<TestOrderRecord> orderings, int limit) {
         for (int i = limit - 1; i >= 0; i--) {
@@ -124,7 +115,7 @@ public class RankFOScorer {
                 int count = subOrder.size();
                 Map<String, Integer> dist = new HashMap<>();
                 for (int idx = 0; idx < count; idx++) {
-                    dist.put(subOrder.get(idx), count - idx); // paper's indexOf(ot)-indexOf(gt)
+                    dist.put(subOrder.get(idx), count - idx);
                 }
                 return dist;
             }

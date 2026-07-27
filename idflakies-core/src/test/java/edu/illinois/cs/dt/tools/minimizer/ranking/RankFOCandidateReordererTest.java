@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,13 +51,13 @@ public class RankFOCandidateReordererTest {
         List<ScoredCandidate> ranked =
             new RankFOScorer(hType).score(target, orderings, odType);
 
-        java.util.Map<String, Double> scoreMap = new java.util.LinkedHashMap<>();
+        Map<String, Double> scoreMap = new HashMap<>();
         for (ScoredCandidate sc : ranked) {
             scoreMap.put(sc.getTestName(), sc.getPolluterScore());
         }
 
-        List<String> reordered = new java.util.ArrayList<>(prefix);
-        reordered.sort(java.util.Comparator.comparingDouble(
+        List<String> reordered = new ArrayList<>(prefix);
+        reordered.sort(Comparator.comparingDouble(
             (String t) -> scoreMap.getOrDefault(t, Double.NEGATIVE_INFINITY)
         ).reversed());
         return reordered;

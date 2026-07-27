@@ -9,28 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.List;
 
-/**
- * Disk cache for RankFO scored candidates.
- *
- * Cache files live in {@code <dtDir>/rankfo-scores/}.
- * A cache entry is valid when the detection results directory has NOT been
- * modified since the entry was written — i.e., no new {@code detect} run has
- * produced new data. If it has been modified, the entry is treated as stale
- * and the caller must recompute.
- *
- * Each (targetTest, heuristic, odType) triple gets its own file so that
- * switching heuristics or re-detecting does not cross-contaminate entries.
- */
+// Invalidated when test-runs/results/ mtime advances past the cache file.
 class RankFOScoreCache {
 
     private static final Gson GSON = new GsonBuilder().create();
     static final String SUBDIR = "rankfo-scores";
 
-    /**
-     * Returns the cached ranking for the given key, or {@code null} on cache miss.
-     * A miss occurs when: the cache file doesn't exist, the detection results
-     * directory is newer than the cache file, or the file can't be parsed.
-     */
     static List<ScoredCandidate> load(Path dtDir, String targetTest,
                                        HeuristicType heuristic, OdType odType) {
         Path cacheFile = cacheFile(dtDir, targetTest, heuristic, odType);
@@ -53,10 +37,6 @@ class RankFOScoreCache {
         }
     }
 
-    /**
-     * Persists the ranked candidates to disk. Silently no-ops on I/O failure
-     * (the caller will just recompute next time).
-     */
     static void save(Path dtDir, String targetTest,
                      HeuristicType heuristic, OdType odType,
                      List<ScoredCandidate> candidates) {
@@ -83,8 +63,6 @@ class RankFOScoreCache {
     static Path resultsDir(Path dtDir) {
         return dtDir.resolve("test-runs").resolve("results");
     }
-
-    // ── inner DTO ─────────────────────────────────────────────────────────
 
     private static final class CacheEntry {
         String targetTest;
