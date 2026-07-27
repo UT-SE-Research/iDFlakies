@@ -45,7 +45,7 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     private final String CUSTOM_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.custom", "");
     // FIND_ALL only for cleaners, not for polluters
     private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
-    // Phase 3: reorder candidates by RankFO polluter score before delta debugging
+    // Phase 3: reorder candidates by RankFO polluter score; OBO confirms from rank 1
     private static final boolean RANKFO_ENABLE = Configuration.config().getProperty("dt.rankfo.enable", false);
     // OBO baseline: try each candidate one-by-one before the victim; stop at first confirmation
     private static final boolean OBO_ENABLE = Configuration.config().getProperty("dt.minimizer.obo", false);
@@ -221,7 +221,7 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             return new ArrayList<>();
         }
 
-        if (OBO_ENABLE) {
+        if (OBO_ENABLE || RANKFO_ENABLE) {
             for (final String candidate : order) {
                 final List<String> singleton = Collections.singletonList(candidate);
                 if (result(singleton) == expected) {
