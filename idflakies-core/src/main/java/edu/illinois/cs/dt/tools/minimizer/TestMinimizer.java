@@ -11,6 +11,7 @@ import com.reedoei.eunomia.util.Util;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerData;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerFinder;
 import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerGroup;
+import edu.illinois.cs.dt.tools.minimizer.ranking.RankFOCandidateReorderer;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.MD5;
@@ -44,6 +45,7 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     private final String CUSTOM_POLLUTERS = Configuration.config().getProperty("dt.minimizer.polluters.custom", "");
     // FIND_ALL only for cleaners, not for polluters
     private static final boolean FIND_ALL = Configuration.config().getProperty("dt.find_all", true);
+    private static final MinimizerStrategy STRATEGY = MinimizerStrategy.fromProperty();
 
     protected final Path path;
 
@@ -58,19 +60,22 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     }
 
     public TestMinimizer(final List<String> testOrder, final SmartRunner runner, final String dependentTest) {
-        // Only take the tests that come before the dependent test
         this.fullTestOrder = testOrder;
-        this.testOrder = testOrder.contains(dependentTest) ? ListUtil.before(testOrder, dependentTest) : testOrder;
         this.dependentTest = dependentTest;
-
         this.runner = runner;
 
-        // Run in given order to determine what the result should be.
+        final List<String> prefix = testOrder.contains(dependentTest)
+                ? ListUtil.before(testOrder, dependentTest) : testOrder;
+
         debug("Getting expected result for: " + dependentTest);
         this.expectedRun = runResult(testOrder);
         this.expected = expectedRun.results().get(dependentTest).result();
         this.isolationResult = result(Collections.singletonList(dependentTest));
         debug("Expected: " + expected);
+
+        // result(order) guard in getPolluters() requires the original prefix; RankFO
+        // reordering happens per-call in run() where the disk cache keeps it cheap.
+        this.testOrder = prefix;
 
         this.path = PathManager.minimizedPath(dependentTest, MD5.hashOrder(expectedRun.testOrder()), expected);
     }
@@ -205,16 +210,29 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
     }
 
     private List<String> run(List<String> order) throws Exception {
-        final List<String> deps = new ArrayList<>();
-
         if (order.isEmpty()) {
             debug("Order is empty, so it is already minimized!");
-            return deps;
+            return new ArrayList<>();
         }
 
-        TestMinimizerDeltaDebugger debugger = new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
-        deps.addAll(debugger.deltaDebug(order, 2));
+        if (STRATEGY != null) {
+            // RankFO + OBO: rank candidates by heuristic score then confirm one-by-one.
+            final List<String> ranked = RankFOCandidateReorderer.reorder(
+                    order, dependentTest, isolationResult, STRATEGY.heuristic());
+            for (final String candidate : ranked) {
+                final List<String> singleton = Collections.singletonList(candidate);
+                if (result(singleton) == expected) {
+                    return new ArrayList<>(singleton);
+                }
+            }
+            return new ArrayList<>();
+        }
 
+        // Original iFixFlakies behavior: delta debugging with binary half-split.
+        final List<String> deps = new ArrayList<>();
+        TestMinimizerDeltaDebugger debugger =
+            new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
+        deps.addAll(debugger.deltaDebug(order, 2));
         return deps;
     }
 

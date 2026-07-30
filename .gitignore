@@ -7,3 +7,8 @@ target/
 *Zone.Identifier
 .idea/
 *.iml
+.claude/
+.dtfixingtools/
+**/.dtfixingtools/
+http-request/
+CODE_EXPLANATION.md
