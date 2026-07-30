@@ -9,15 +9,7 @@ public enum MinimizerStrategy {
     RANKFO_METHODS,
     RANKFO_DISTANCE_D,
     RANKFO_COMBINED_P1_D,
-    RANKFO_COMBINED_M_D,
-    DD_HALF_SPLIT,
-    DD_HIERARCHICAL_SPLIT,
-    DD_HISTORICAL_INFO_SPLIT,
-    DD_NLP_SPLIT;
-
-    public boolean isRankFO() {
-        return name().startsWith("RANKFO_");
-    }
+    RANKFO_COMBINED_M_D;
 
     public HeuristicType heuristic() {
         switch (this) {
@@ -27,13 +19,14 @@ public enum MinimizerStrategy {
             case RANKFO_COMBINED_P1_D:  return HeuristicType.COMBINED_PLUS_ONE_DISTANCE;
             case RANKFO_COMBINED_M_D:   return HeuristicType.COMBINED_METHODS_DISTANCE;
             default:
-                throw new IllegalStateException(
-                    "heuristic() called on non-RankFO strategy: " + this);
+                throw new IllegalStateException("Unhandled strategy: " + this);
         }
     }
 
+    // Returns null when the property is not set — callers fall through to original behavior.
     public static MinimizerStrategy fromProperty() {
-        String val = System.getProperty("dt.minimizer.strategy", "DD_HALF_SPLIT");
+        String val = System.getProperty("dt.minimizer.strategy");
+        if (val == null || val.isEmpty()) return null;
         try {
             return valueOf(val.toUpperCase());
         } catch (IllegalArgumentException e) {

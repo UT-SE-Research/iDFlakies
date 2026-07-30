@@ -1,16 +1,11 @@
 package edu.illinois.cs.dt.tools.minimizer;
 
 import edu.illinois.cs.dt.tools.minimizer.ranking.HeuristicType;
-import edu.illinois.cs.dt.tools.minimizer.splitting.HalfSplitStrategy;
 import org.junit.After;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 public class MinimizerStrategyTest {
 
@@ -20,26 +15,9 @@ public class MinimizerStrategyTest {
     }
 
     @Test
-    public void defaultStrategyIsHalfSplit() {
+    public void fromPropertyReturnsNullWhenNotSet() {
         System.clearProperty("dt.minimizer.strategy");
-        assertEquals(MinimizerStrategy.DD_HALF_SPLIT, MinimizerStrategy.fromProperty());
-    }
-
-    @Test
-    public void rankfoStrategiesReportIsRankFOTrue() {
-        assertTrue(MinimizerStrategy.RANKFO_PLUS_ONE.isRankFO());
-        assertTrue(MinimizerStrategy.RANKFO_METHODS.isRankFO());
-        assertTrue(MinimizerStrategy.RANKFO_DISTANCE_D.isRankFO());
-        assertTrue(MinimizerStrategy.RANKFO_COMBINED_P1_D.isRankFO());
-        assertTrue(MinimizerStrategy.RANKFO_COMBINED_M_D.isRankFO());
-    }
-
-    @Test
-    public void ddStrategiesReportIsRankFOFalse() {
-        assertFalse(MinimizerStrategy.DD_HALF_SPLIT.isRankFO());
-        assertFalse(MinimizerStrategy.DD_HIERARCHICAL_SPLIT.isRankFO());
-        assertFalse(MinimizerStrategy.DD_HISTORICAL_INFO_SPLIT.isRankFO());
-        assertFalse(MinimizerStrategy.DD_NLP_SPLIT.isRankFO());
+        assertNull(MinimizerStrategy.fromProperty());
     }
 
     @Test
@@ -56,11 +34,6 @@ public class MinimizerStrategyTest {
                      MinimizerStrategy.RANKFO_COMBINED_M_D.heuristic());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void heuristicThrowsForDdStrategy() {
-        MinimizerStrategy.DD_HALF_SPLIT.heuristic();
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void fromPropertyThrowsForUnknownValue() {
         System.setProperty("dt.minimizer.strategy", "INVALID_STRATEGY");
@@ -73,23 +46,6 @@ public class MinimizerStrategyTest {
             System.setProperty("dt.minimizer.strategy", expected.name());
             assertEquals(expected, MinimizerStrategy.fromProperty());
         }
-    }
-
-    @Test
-    public void halfSplitPartitionsEvenly() {
-        HalfSplitStrategy s = new HalfSplitStrategy();
-        List<List<String>> parts = s.partition(Arrays.asList("A", "B", "C", "D"), 2);
-        assertEquals(2, parts.size());
-        assertEquals(Arrays.asList("A", "B"), parts.get(0));
-        assertEquals(Arrays.asList("C", "D"), parts.get(1));
-    }
-
-    @Test
-    public void halfSplitSingleElementReturnsOneChunk() {
-        HalfSplitStrategy s = new HalfSplitStrategy();
-        List<List<String>> parts = s.partition(Arrays.asList("A"), 2);
-        assertEquals(1, parts.size());
-        assertEquals(Arrays.asList("A"), parts.get(0));
     }
 
 }

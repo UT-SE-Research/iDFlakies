@@ -215,8 +215,8 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             return new ArrayList<>();
         }
 
-        if (STRATEGY.isRankFO()) {
-            // Rank the current candidate set; cache means repeated calls are fast.
+        if (STRATEGY != null) {
+            // RankFO + OBO: rank candidates by heuristic score then confirm one-by-one.
             final List<String> ranked = RankFOCandidateReorderer.reorder(
                     order, dependentTest, isolationResult, STRATEGY.heuristic());
             for (final String candidate : ranked) {
@@ -228,27 +228,12 @@ public class TestMinimizer extends FileCache<MinimizeTestsResult> {
             return new ArrayList<>();
         }
 
-        if (STRATEGY == MinimizerStrategy.DD_HALF_SPLIT) {
-            final List<String> deps = new ArrayList<>();
-            TestMinimizerDeltaDebugger debugger =
-                new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
-            deps.addAll(debugger.deltaDebug(order, 2));
-            return deps;
-        }
-
-        switch (STRATEGY) {
-            case DD_HIERARCHICAL_SPLIT:
-                throw new UnsupportedOperationException(
-                    "DD_HIERARCHICAL_SPLIT not yet ported to Java — coming in a future PR");
-            case DD_HISTORICAL_INFO_SPLIT:
-                throw new UnsupportedOperationException(
-                    "DD_HISTORICAL_INFO_SPLIT not yet ported to Java — coming in a future PR");
-            case DD_NLP_SPLIT:
-                throw new UnsupportedOperationException(
-                    "DD_NLP_SPLIT not yet ported to Java — coming in a future PR");
-            default:
-                throw new IllegalStateException("Unhandled strategy: " + STRATEGY);
-        }
+        // Original iFixFlakies behavior: delta debugging with binary half-split.
+        final List<String> deps = new ArrayList<>();
+        TestMinimizerDeltaDebugger debugger =
+            new TestMinimizerDeltaDebugger(this.runner, this.dependentTest, this.expected);
+        deps.addAll(debugger.deltaDebug(order, 2));
+        return deps;
     }
 
     public String getDependentTest() {
