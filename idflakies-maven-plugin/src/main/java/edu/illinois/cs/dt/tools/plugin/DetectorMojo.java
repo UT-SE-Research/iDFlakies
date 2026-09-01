@@ -148,7 +148,11 @@ public class DetectorMojo extends AbstractIDFlakiesMojo {
         final boolean hasRounds = Configuration.config().properties().getProperty("dt.randomize.rounds") != null;
         final boolean hasTimeout = Configuration.config().properties().getProperty("detector.timeout") != null;
 
-        final int roundNum = Configuration.config().getProperty("dt.randomize.rounds", 20);
+        int initRoundNum = 20;
+        if (DetectorFactory.detectorType().startsWith("tuscan")) {
+            initRoundNum = Integer.MAX_VALUE;
+        }
+        final int roundNum = Configuration.config().getProperty("dt.randomize.rounds", initRoundNum);
 
         final int timeoutRounds;
         if (hasTimeout) {

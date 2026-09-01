@@ -73,6 +73,16 @@ public class LegacyDetectorPathManager extends PathManager {
     }
 
     @Override
+    public Path numOfOrdersPathInstance() {
+        return pathInstance(PathManager.NUM_OF_ORDER);
+    }
+
+    @Override
+    public Path ordersPathInstance() {
+        return pathInstance(PathManager.ORDERS);
+    }
+
+    @Override
     public Path originalResultsLogInstance() {
         return detectionResultsInstance().resolve(PathManager.ORIGINAL_RESULTS_LOG);
     }

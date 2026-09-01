@@ -29,6 +29,8 @@ public abstract class PathManager {
     public static final Path FIXER = Paths.get("fixer");
     public static final Path TIME = Paths.get("time");
     public static final Path ERROR = Paths.get("error");
+    public static final Path NUM_OF_ORDER = Paths.get("num-of-orders");
+    public static final Path ORDERS = Paths.get("orders");
     public static final Path ORIGINAL_RESULTS_LOG = Paths.get("original-results-ids");
     public static final Path MVN_TEST_LOG = Paths.get("mvn-test.log");
     public static final Path MVN_TEST_TIME_LOG = Paths.get("mvn-test-time.log");
@@ -70,6 +72,14 @@ public abstract class PathManager {
 
     public static Path errorPath() {
         return getInstance().errorPathInstance();
+    }
+
+    public static Path numOfOrdersPath() {
+        return getInstance().numOfOrdersPathInstance();
+    }
+
+    public static Path ordersPath() {
+        return getInstance().ordersPathInstance();
     }
 
     public static Path originalResultsLog() {
@@ -163,6 +173,10 @@ public abstract class PathManager {
     protected abstract Path timePathInstance();
 
     protected abstract Path errorPathInstance();
+
+    protected abstract Path numOfOrdersPathInstance();
+
+    protected abstract Path ordersPathInstance();
 
     protected abstract Path originalResultsLogInstance();
 
