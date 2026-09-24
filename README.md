@@ -4,6 +4,70 @@ This repository contains tools for detecting/classifying flaky tests.
 
 More details about iDFlakies can be found in its [paper](http://mir.cs.illinois.edu/winglam/publications/2019/LamETAL19iDFlakies.pdf) and [website](https://sites.google.com/view/flakytestdataset).
 
+## RankFO Integration
+
+This branch adds a Java port of the RankF_O ordinal heuristics to the iDFlakies minimize pipeline.
+Candidate polluters are ranked by heuristic score derived from detection-round orderings, then confirmed one-by-one (OBO) rather than via binary delta-debugging.
+When no strategy flag is set, the original iFixFlakies delta-debugger is used.
+
+**Prerequisites:** Java 8+, Maven 3.6+, Python 3
+
+### Build
+
+```bash
+git clone https://github.com/Md-Arif-Hasan/iDFlakies-RankFO-Integration.git
+cd iDFlakies-RankFO-Integration
+git checkout phase2/rankfo-validation
+mvn install -DskipTests -q
+```
+
+### End-to-end validation
+
+Runs `idflakies:minimize` on a minimal built-in project with a known polluter/victim pair, for all 5 RankFO heuristics, and verifies both the identified polluter and the individual candidate scores in `rankfo-scores/*.json` against independently-computed expected values:
+
+```bash
+bash scripts/rankfo-validation/validate-rankfo.sh
+```
+
+Expected output: `VALIDATION PASSED`
+
+### Running on a real project
+
+First, detect order-dependent tests:
+
+```bash
+cd /path/to/target-project
+bash /path/to/iDFlakies-RankFO-Integration/pom-modify/modify-project.sh . idflakies-maven-plugin 2.0.1-SNAPSHOT
+mvn idflakies:detect -Ddetector.detector_type=random-class-method -Ddt.randomize.rounds=20
+```
+
+Then run minimize for each strategy:
+
+```bash
+# Baseline (original delta-debugging, no flag)
+mvn idflakies:minimize
+
+# RankFO strategies
+mvn idflakies:minimize -Ddt.minimizer.strategy=RANKFO_PLUS_ONE
+mvn idflakies:minimize -Ddt.minimizer.strategy=RANKFO_METHODS
+mvn idflakies:minimize -Ddt.minimizer.strategy=RANKFO_DISTANCE_D
+mvn idflakies:minimize -Ddt.minimizer.strategy=RANKFO_COMBINED_P1_D
+mvn idflakies:minimize -Ddt.minimizer.strategy=RANKFO_COMBINED_M_D
+```
+
+Results are written to `.dtfixingtools/minimized/`. The log line `FIRST POLLUTER: Found first polluter [...] in X seconds` reports time-to-first-polluter per strategy. Add `-Ddt.verify=true` to enable polluter verification.
+
+### Strategy reference
+
+| Flag value | Heuristic | Scoring formula |
+|---|---|---|
+| *(none)* | DD | Binary halving (baseline) |
+| `RANKFO_PLUS_ONE` | P1 | +1 per revealing order |
+| `RANKFO_METHODS` | M | 1 / (prefix size) per revealing order |
+| `RANKFO_DISTANCE_D` | D | 1 / (distance to victim) per revealing order |
+| `RANKFO_COMBINED_P1_D` | P1+D | P1 score; distance breaks ties |
+| `RANKFO_COMBINED_M_D` | M+D | M score; distance breaks ties |
+
 # OS
 Linux based systems only (in Windows system there are some problems).
 

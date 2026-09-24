@@ -213,7 +213,6 @@ public class MinimizerMojo extends AbstractIDFlakiesMojo {
         return fromDtList(dtFile, project).flatMap(minimizer -> {
             try {
                 final MinimizeTestsResult result = minimizer.get();
-                result.save();
                 return Stream.of(result);
             } catch (Exception e) {
                 e.printStackTrace();
