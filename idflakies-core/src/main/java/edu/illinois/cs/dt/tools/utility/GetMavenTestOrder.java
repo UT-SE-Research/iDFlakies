@@ -1,5 +1,7 @@
 package edu.illinois.cs.dt.tools.utility;
 
+import edu.illinois.cs.testrunner.configuration.Configuration;
+
 import com.reedoei.eunomia.util.StandardMain;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -7,9 +9,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,12 +20,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import edu.illinois.cs.testrunner.configuration.Configuration;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class GetMavenTestOrder extends StandardMain {
 
-    private boolean mvnTestMustPass = Boolean.parseBoolean(Configuration.config().getProperty("dt.mvn_test.must_pass","true"));
-    
+    private boolean mvnTestMustPass =
+        Boolean.parseBoolean(Configuration.config().getProperty("dt.mvn_test.must_pass","true"));
+
+    private final Path mvnTestLog;
+    private final Path sureFireDirectory;
+
+    public GetMavenTestOrder(final Path sureFireDirectory, final Path mvnTestLog) {
+        super(new String[0]);
+
+        this.sureFireDirectory = sureFireDirectory;
+        this.mvnTestLog = mvnTestLog;
+    }
+
+    private GetMavenTestOrder(final String[] args) {
+        super(args);
+
+        this.sureFireDirectory = Paths.get(getArgRequired("sureFireDirectory")).toAbsolutePath();
+        this.mvnTestLog = Paths.get(getArgRequired("mvnTestLog")).toAbsolutePath();
+    }
+
     @Override
     protected void run() throws Exception {
         final List<String> classOrder = getClassOrder(mvnTestLog.toFile());
@@ -70,21 +89,22 @@ public class GetMavenTestOrder extends StandardMain {
         }
     }
 
-    private TreeMap<Long, List<TestClassData>> testClassDataMap() throws IOException, ParserConfigurationException, SAXException {
+    private TreeMap<Long, List<TestClassData>> testClassDataMap()
+            throws IOException, ParserConfigurationException, SAXException {
         final List<Path> allResultsFolders = Files.walk(sureFireDirectory)
                 .filter(path -> path.toString().contains("TEST-"))
                 .collect(Collectors.toList());
 
         TreeMap<Long, List<TestClassData>> timeToTestClass = new TreeMap<>();
         for (final Path p : allResultsFolders) {
-            File f = p.toFile();
-            long time = f.lastModified();
+            File file = p.toFile();
+            long time = file.lastModified();
 
             List<TestClassData> currentList = timeToTestClass.get(time);
             if (currentList == null) {
                 currentList = new ArrayList<>();
             }
-            currentList.add(parseXML(f));
+            currentList.add(parseXML(file));
 
             timeToTestClass.put(time, currentList);
         }
@@ -141,10 +161,10 @@ public class GetMavenTestOrder extends StandardMain {
         sb.setLength(0);
     }
 
-    private List<String> getClassOrder(File f) {
+    private List<String> getClassOrder(File file) {
         List<String> classNames = new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader(f);
+            FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -154,8 +174,8 @@ public class GetMavenTestOrder extends StandardMain {
                 }
             }
             fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
         return classNames;
     }
@@ -165,8 +185,8 @@ public class GetMavenTestOrder extends StandardMain {
         String className = "";
         double testTime = 0;
 
-        DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = dBuilder.parse(xmlFile);
+        DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = docBuilder.parse(xmlFile);
 
         Element rootElement = doc.getDocumentElement();
         rootElement.normalize();
@@ -174,32 +194,32 @@ public class GetMavenTestOrder extends StandardMain {
         int errors = Integer.parseInt(rootElement.getAttribute("errors"));
         int failures = Integer.parseInt(rootElement.getAttribute("failures"));
 
-	if (mvnTestMustPass){
-	    if (errors != 0 || failures != 0) {
-		// errors/failures found in the test suite from running mvn test.
-		// this test suite should not proceed to use detectors
-		throw new RuntimeException("Failures or errors occurred in mvn test");
-	    }
-	}
+        if (mvnTestMustPass) {
+            if (errors != 0 || failures != 0) {
+                // errors/failures found in the test suite from running mvn test.
+                // this test suite should not proceed to use detectors
+                throw new RuntimeException("Failures or errors occurred in mvn test");
+            }
+        }
 
         className = rootElement.getAttribute("name");
         testTime = Double.parseDouble(rootElement.getAttribute("time"));
 
-        NodeList nList = doc.getElementsByTagName("testcase");
-        for (int temp = 0; temp < nList.getLength(); temp++) {
-            Node nNode = nList.item(temp);
+        NodeList nodeList = doc.getElementsByTagName("testcase");
+        for (int temp = 0; temp < nodeList.getLength(); temp++) {
+            Node node = nodeList.item(temp);
 
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
 
-                Element eElement = (Element) nNode;
+                Element element = (Element) node;
 
-                if (eElement.getElementsByTagName("skipped").getLength() != 0) {
+                if (element.getElementsByTagName("skipped").getLength() != 0) {
                     // this test case was marked as skip and therefore should not be ran by us
                     // TODO
                     continue;
                 }
 
-                String testName = eElement.getAttribute("name");
+                String testName = element.getAttribute("name");
                 testNames.add(testName);
             }
         }
@@ -207,30 +227,13 @@ public class GetMavenTestOrder extends StandardMain {
         return new TestClassData(className, testNames, testTime);
     }
 
-    private final Path mvnTestLog;
-    private final Path sureFireDirectory;
-
-    public GetMavenTestOrder(final Path sureFireDirectory, final Path mvnTestLog) {
-        super(new String[0]);
-
-        this.sureFireDirectory = sureFireDirectory;
-        this.mvnTestLog = mvnTestLog;
-    }
-
-    private GetMavenTestOrder(final String[] args) {
-        super(args);
-
-        this.sureFireDirectory = Paths.get(getArgRequired("sureFireDirectory")).toAbsolutePath();
-        this.mvnTestLog = Paths.get(getArgRequired("mvnTestLog")).toAbsolutePath();
-    }
-
     public static void main(final String[] args) {
         try {
             new GetMavenTestOrder(args).run();
 
             System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         System.exit(1);

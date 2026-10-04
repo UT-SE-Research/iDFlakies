@@ -36,15 +36,15 @@ public class SQLite {
     public void save() throws SQLException {
         System.out.println("[INFO] Writing database to: " + db.toAbsolutePath());
 
-        connection.createStatement().executeUpdate("backup to "+ db.toAbsolutePath());
+        connection.createStatement().executeUpdate("backup to " + db.toAbsolutePath());
     }
 
     public Procedure statement(final Path path) {
         final PreparedStatement ps = statements.computeIfAbsent(path, p -> {
             try {
                 return connection.prepareStatement(FileUtil.readFile(p));
-            } catch (SQLException | IOException e) {
-                throw new RuntimeException(e);
+            } catch (SQLException | IOException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
@@ -71,8 +71,8 @@ public class SQLite {
             if (!trimmed.isEmpty()) {
                 try {
                     return Stream.of(new Procedure(connection, connection.prepareStatement(trimmed)));
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                } catch (SQLException sqle) {
+                    sqle.printStackTrace();
                 }
             }
 
@@ -84,8 +84,8 @@ public class SQLite {
         statements(path).forEach(ps -> {
             try {
                 ps.execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (SQLException sqle) {
+                throw new RuntimeException(sqle);
             }
         });
     }

@@ -1,12 +1,13 @@
 package edu.illinois.cs.dt.tools.fixer;
 
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.stmt.Statement;
+import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.dt.tools.utility.BuildCommands;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.deltadebug.DeltaDebugger;
-import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.stmt.Statement;
 
 import java.io.IOException;
 import java.util.HashSet;

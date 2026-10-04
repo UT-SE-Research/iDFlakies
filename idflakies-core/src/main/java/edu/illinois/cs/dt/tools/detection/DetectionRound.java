@@ -1,13 +1,14 @@
 package edu.illinois.cs.dt.tools.detection;
 
-import com.google.gson.Gson;
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.DependentTestList;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 
 /**
- * Simple wrapper around the results of each round run by an ExecutingDetector
+ * Simple wrapper around the results of each round run by an ExecutingDetector.
  */
 public class DetectionRound {
     private final List<String> testRunIds;
@@ -16,7 +17,8 @@ public class DetectionRound {
     private final DependentTestList filteredTests;
     private final double roundTime;
 
-    public DetectionRound(final List<String> testRunIds, final List<DependentTest> unfiltered, final List<DependentTest> filtered, final double roundTime) {
+    public DetectionRound(final List<String> testRunIds, final List<DependentTest> unfiltered,
+            final List<DependentTest> filtered, final double roundTime) {
         this.testRunIds = testRunIds;
         this.unfilteredTests = new DependentTestList(unfiltered);
         this.filteredTests = new DependentTestList(filtered);

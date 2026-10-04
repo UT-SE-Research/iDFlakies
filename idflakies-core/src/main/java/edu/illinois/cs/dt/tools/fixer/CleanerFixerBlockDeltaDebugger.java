@@ -1,11 +1,12 @@
 package edu.illinois.cs.dt.tools.fixer;
 
+import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+import edu.illinois.cs.dt.tools.utility.BuildCommands;
+import edu.illinois.cs.dt.tools.utility.deltadebug.DeltaDebugger;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import edu.illinois.cs.dt.tools.utility.BuildCommands;
-import edu.illinois.cs.dt.tools.utility.deltadebug.DeltaDebugger;
-import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class CleanerFixerBlockDeltaDebugger extends CleanerFixerDeltaDebugger {
         this.stmtsToRun = stmtsToRun;
     }
 
-    // Delta debugging statements within the relevant block in relation to rest of statements that contain the block, along with failing test order
+    // Delta debugging statements within the relevant block in relation to rest of statements that contain the block,
+    // along with failing test order
     @Override
     public boolean checkValid(List<Statement> statements) {
         // Save original statements from block

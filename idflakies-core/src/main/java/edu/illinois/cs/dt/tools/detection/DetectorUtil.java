@@ -2,10 +2,10 @@ package edu.illinois.cs.dt.tools.detection;
 
 import edu.illinois.cs.dt.tools.runner.data.DependentTest;
 import edu.illinois.cs.dt.tools.runner.data.TestRun;
-import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
 import edu.illinois.cs.dt.tools.utility.PathManager;
+import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestResult;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
@@ -36,8 +36,10 @@ public class DetectorUtil {
 
             try {
                 Files.write(PathManager.originalResultsLog(), (origResult.id() + "\n").getBytes(),
-                        Files.exists(PathManager.originalResultsLog()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
-            } catch (IOException ignored) {}
+                    Files.exists(PathManager.originalResultsLog()) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
 
             if (allPass(origResult)) {
                 allPassing = true;
@@ -49,7 +51,8 @@ public class DetectorUtil {
             if (allMustPass) {
                 throw new NoPassingOrderException("No passing order for tests (" + originalOrderTries + " runs)");
             } else {
-                Logger.getGlobal().log(Level.INFO, "No passing order for tests (" + originalOrderTries + " runs). Continuing anyway with last run.");
+                Logger.getGlobal().log(Level.INFO, "No passing order for tests (" + originalOrderTries
+                    + " runs). Continuing anyway with last run.");
             }
         }
 
@@ -62,11 +65,11 @@ public class DetectorUtil {
                 .allMatch(tr -> tr.result().equals(Result.PASS) || tr.result().equals(Result.SKIPPED));
     }
 
-    private static <T> List<T> before(final List<T> ts, final T t) {
-        final int i = ts.indexOf(t);
+    private static <T> List<T> before(final List<T> tests, final T test) {
+        final int index = tests.indexOf(test);
 
-        if (i != -1) {
-            return new ArrayList<>(ts.subList(0, Math.min(ts.size(), i)));
+        if (index != -1) {
+            return new ArrayList<>(tests.subList(0, Math.min(tests.size(), index)));
         } else {
             return new ArrayList<>();
         }

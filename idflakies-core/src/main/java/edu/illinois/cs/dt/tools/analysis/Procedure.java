@@ -16,29 +16,29 @@ public class Procedure {
         this.statement = statement;
     }
 
-    public Procedure param(final double d) throws SQLException {
-        statement.setDouble(index, d);
+    public Procedure param(final double value) throws SQLException {
+        statement.setDouble(index, value);
         index++;
 
         return this;
     }
 
-    public Procedure param(final int i) throws SQLException {
-        statement.setInt(index, i);
+    public Procedure param(final int value) throws SQLException {
+        statement.setInt(index, value);
         index++;
 
         return this;
     }
 
-    public Procedure param(final String s) throws SQLException {
-        statement.setString(index, s);
+    public Procedure param(final String value) throws SQLException {
+        statement.setString(index, value);
         index++;
 
         return this;
     }
 
-    public Procedure param(final float f) throws SQLException {
-        statement.setFloat(index, f);
+    public Procedure param(final float value) throws SQLException {
+        statement.setFloat(index, value);
         index++;
 
         return this;

@@ -1,8 +1,9 @@
 package edu.illinois.cs.dt.tools.runner.data;
 
-import com.google.gson.Gson;
 import edu.illinois.cs.testrunner.configuration.Configuration;
 import edu.illinois.cs.testrunner.runner.Runner;
+
+import com.google.gson.Gson;
 
 import java.nio.file.Path;
 

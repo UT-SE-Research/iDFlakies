@@ -1,26 +1,22 @@
 package edu.illinois.cs.dt.tools.utility;
 
-import com.google.common.base.Preconditions;
-
-import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.dt.tools.utility.Level;
 import edu.illinois.cs.dt.tools.utility.Logger;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.Result;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public abstract class PathManager {
 
-    private static PathManager instance;
-    
     public static final Path DETECTION_RESULTS = Paths.get("detection-results");
     public static final Path FLAKY_LIST_PATH = Paths.get("flaky-lists.json");
     public static final Path ORIGINAL_ORDER = Paths.get("original-order");
@@ -36,10 +32,16 @@ public abstract class PathManager {
     public static final String BACKUP_EXTENSION = ".orig";
     public static final String PATCH_EXTENSION = ".patch";
 
-    public static PathManager getInstance() { return instance; }
-    
-    public static void setInstance(PathManager dm) { instance = dm; }
-    
+    private static PathManager instance;
+
+    public static PathManager getInstance() {
+        return instance;
+    }
+
+    public static void setInstance(PathManager dm) {
+        instance = dm;
+    }
+
     public static Path detectionResults() {
         return getInstance().detectionResultsInstance();
     }
@@ -64,9 +66,13 @@ public abstract class PathManager {
         return getInstance().originalOrderPathInstance();
     }
 
-    public static Path selectedTestPath() { return getInstance().selectedTestPathInstance(); }
+    public static Path selectedTestPath() {
+        return getInstance().selectedTestPathInstance();
+    }
 
-    public static Path timePath() { return getInstance().timePathInstance(); }
+    public static Path timePath() {
+        return getInstance().timePathInstance();
+    }
 
     public static Path errorPath() {
         return getInstance().errorPathInstance();
@@ -83,9 +89,9 @@ public abstract class PathManager {
     public static Path testTimeLog() {
         return getInstance().testTimeLogInstance();
     }
-    
+
     public static Path modulePath() {
-	    return getInstance().modulePathInstance();
+        return getInstance().modulePathInstance();
     }
 
     public static Path cachePath() {
@@ -143,7 +149,8 @@ public abstract class PathManager {
     public static Path changeExtension(final Path path, final String newExtension) {
         final String extToAdd = newExtension.startsWith(".") ? newExtension : "." + newExtension;
 
-        return path.toAbsolutePath().getParent().resolve(FilenameUtils.removeExtension(path.getFileName().toString()) + extToAdd);
+        return path.toAbsolutePath().getParent()
+            .resolve(FilenameUtils.removeExtension(path.getFileName().toString()) + extToAdd);
     }
 
     protected abstract Path detectionResultsInstance();
@@ -171,17 +178,17 @@ public abstract class PathManager {
     protected abstract Path testTimeLogInstance();
 
     protected abstract Path parentPath();
-    
+
     protected abstract Path parentPath(final Path relative);
-    
+
     protected abstract Path cachePathInstance();
 
     protected abstract Path startsPathInstance();
 
     protected abstract Path ekstaziPathInstance();
-    
+
     protected abstract Path pathInstance(final Path relative);
-    
+
     protected abstract Path modulePathInstance();
 
     protected abstract Path minimizedPathInstance();

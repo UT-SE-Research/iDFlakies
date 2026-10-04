@@ -21,7 +21,8 @@ public class SQLStatements {
     public static final Path INSERT_FLAKY_TEST_LIST = Paths.get("src/main/sql/build/flaky_test_list_insert.sql");
     public static final Path INSERT_FLAKY_TEST = Paths.get("src/main/sql/build/flaky_test_insert.sql");
     public static final Path INSERT_DETECTION_ROUND = Paths.get("src/main/sql/build/detection_round_insert.sql");
-    public static final Path INSERT_DETECTION_ROUND_TEST_RUN = Paths.get("src/main/sql/build/detection_round_insert_test_run.sql");
+    public static final Path INSERT_DETECTION_ROUND_TEST_RUN =
+        Paths.get("src/main/sql/build/detection_round_insert_test_run.sql");
 
     public static final Path INSERT_VERIFICATION_ROUND = Paths.get("src/main/sql/build/verify_round_insert.sql");
 
@@ -55,7 +56,8 @@ public class SQLStatements {
     public static final Path COUNT_PROJECT_FLAKY_TESTS = Paths.get("src/main/sql/figures/count_project_flaky_test.sql") ;
     public static final Path COUNT_MODULE_FLAKY_TESTS = Paths.get("src/main/sql/figures/count_module_flaky_test.sql");
     public static final Path FLAKY_TEST_BY_TECHNIQUE = Paths.get("src/main/sql/tables/flaky_test_by_technique.sql");
-    public static final Path FAILURE_PROB_PER_TEST_PER_RUN = Paths.get("src/main/sql/tables/failure_prob_per_test_per_run.sql");
+    public static final Path FAILURE_PROB_PER_TEST_PER_RUN =
+        Paths.get("src/main/sql/tables/failure_prob_per_test_per_run.sql");
     public static final Path FAILURE_PROB_BY_ROUND = Paths.get("src/main/sql/tables/failure_prob_by_round.sql");
 
     public static final Path PERC_RUN_FAIL_OD = Paths.get("src/main/sql/figures/perc_run_fail_od.sql");
@@ -118,9 +120,9 @@ public class SQLStatements {
         ensureExists(PERC_FAIL_FLAKY_TESTS);
     }
 
-    private static void ensureExists(final Path p) {
-        if (!Files.exists(p)) {
-            throw new IllegalStateException(p + " does not exist!");
+    private static void ensureExists(final Path path) {
+        if (!Files.exists(path)) {
+            throw new IllegalStateException(path + " does not exist!");
         }
     }
 }

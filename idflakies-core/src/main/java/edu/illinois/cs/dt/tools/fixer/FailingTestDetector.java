@@ -3,6 +3,7 @@ package edu.illinois.cs.dt.tools.fixer;
 import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
 import edu.illinois.cs.testrunner.data.results.Result;
 import edu.illinois.cs.testrunner.data.results.TestRunResult;
+
 import scala.util.Try;
 
 import java.util.HashSet;

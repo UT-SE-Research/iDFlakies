@@ -1,5 +1,20 @@
 package edu.illinois.cs.dt.tools.fixer;
 
+import edu.illinois.cs.dt.tools.minimizer.FlakyClass;
+import edu.illinois.cs.dt.tools.minimizer.MinimizeTestsResult;
+import edu.illinois.cs.dt.tools.minimizer.PolluterData;
+import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerGroup;
+import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
+import edu.illinois.cs.dt.tools.utility.BuildCommands;
+import edu.illinois.cs.dt.tools.utility.ErrorLogger;
+import edu.illinois.cs.dt.tools.utility.Level;
+import edu.illinois.cs.dt.tools.utility.Logger;
+import edu.illinois.cs.dt.tools.utility.OperationTime;
+import edu.illinois.cs.dt.tools.utility.PathManager;
+import edu.illinois.cs.testrunner.configuration.Configuration;
+import edu.illinois.cs.testrunner.data.results.Result;
+import edu.illinois.cs.testrunner.runner.Runner;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -16,24 +31,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
 import com.google.gson.JsonSyntaxException;
-
-import edu.illinois.cs.dt.tools.minimizer.FlakyClass;
-import edu.illinois.cs.dt.tools.minimizer.MinimizeTestsResult;
-import edu.illinois.cs.dt.tools.minimizer.PolluterData;
-import edu.illinois.cs.dt.tools.minimizer.cleaner.CleanerGroup;
-import edu.illinois.cs.dt.tools.runner.InstrumentingSmartRunner;
-import edu.illinois.cs.dt.tools.utility.BuildCommands;
-import edu.illinois.cs.dt.tools.utility.ErrorLogger;
-import edu.illinois.cs.dt.tools.utility.Level;
-import edu.illinois.cs.dt.tools.utility.Logger;
-import edu.illinois.cs.dt.tools.utility.OperationTime;
-import edu.illinois.cs.dt.tools.utility.PathManager;
-import edu.illinois.cs.testrunner.configuration.Configuration;
-import edu.illinois.cs.testrunner.data.results.Result;
-import edu.illinois.cs.testrunner.runner.Runner;
-
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import scala.Option;
 
@@ -74,7 +72,8 @@ public class CleanerFixer {
     private long startTime;
     private boolean foundFirst;
 
-    public CleanerFixer(final InstrumentingSmartRunner runner, final List<Path> testSources, final String classpath, final BuildCommands buildCommands) {
+    public CleanerFixer(final InstrumentingSmartRunner runner, final List<Path> testSources, final String classpath,
+            final BuildCommands buildCommands) {
         this.runner = runner;
         this.testSources = testSources;
         this.classpath = classpath;
@@ -130,15 +129,16 @@ public class CleanerFixer {
                 FixerResult fixerResult = OperationTime.runOperation(() -> {
                     return setupAndApplyFix(minimized);
                 }, (patchResults, time) -> {
-                    // Determine overall status by looking through result of each patch result
-                    FixStatus overallStatus = FixStatus.NOD;    // Start with "lowest" enum, gets overriden by better fixes
-                    for (PatchResult res : patchResults) {
-                        if (res.status().ordinal() > overallStatus.ordinal()) {
-                            overallStatus = res.status();
+                        // Determine overall status by looking through result of each patch result
+                        // Start with "lowest" enum, gets overriden by better fixes
+                        FixStatus overallStatus = FixStatus.NOD;
+                        for (PatchResult res : patchResults) {
+                            if (res.status().ordinal() > overallStatus.ordinal()) {
+                                overallStatus = res.status();
+                            }
                         }
-                    }
-                    return new FixerResult(time, overallStatus, minimized.dependentTest(), patchResults);
-                });
+                        return new FixerResult(time, overallStatus, minimized.dependentTest(), patchResults);
+                    });
                 fixerResult.save();
             }
             return null;
@@ -158,7 +158,8 @@ public class CleanerFixer {
                         // Consider whether user configured to fix only a single test
                         String dependentTest = Configuration.config().getProperty("dt.minimizer.dependent.test", null);
                         if (dependentTest != null) {
-                            Logger.getGlobal().log(Level.INFO, "Filtering dependent test list to run only for: " + dependentTest);
+                            Logger.getGlobal().log(Level.INFO,
+                                "Filtering dependent test list to run only for: " + dependentTest);
                             if (res.dependentTest().equals(dependentTest)) {
                                 results.add(res);
                                 return results; // Only consider this one dependent test and return
@@ -169,7 +170,8 @@ public class CleanerFixer {
                     } catch (IOException ioe) {
                         Logger.getGlobal().log(Level.WARNING, "Exception in opening file");
                     } catch (JsonSyntaxException jse) {
-                        Logger.getGlobal().log(Level.WARNING, "Encountered non-JSON file under " + PathManager.minimizedPath());
+                        Logger.getGlobal().log(Level.WARNING,
+                            "Encountered non-JSON file under " + PathManager.minimizedPath());
                     }
                 }
             }
@@ -191,7 +193,8 @@ public class CleanerFixer {
         // Check that the minimized is not some NOD, in which case we do not proceed
         if (minimized.flakyClass() == FlakyClass.NOD) {
             Logger.getGlobal().log(Level.INFO, "Will not patch discovered NOD test " + minimized.dependentTest());
-            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NOD, minimized.dependentTest(), "N/A", "N/A", 0, null));
+            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NOD, minimized.dependentTest(),
+                "N/A", "N/A", 0, null));
             return patchResults;
         }
 
@@ -201,7 +204,8 @@ public class CleanerFixer {
         // All minimized orders passed in should have some polluters before (or setters in the case of the order passing)
         if (minimized.polluters().isEmpty()) {
             Logger.getGlobal().log(Level.SEVERE, "No polluters for: " + minimized.dependentTest());
-            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NO_DEPS, minimized.dependentTest(), "N/A", "N/A", 0, null));
+            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NO_DEPS, minimized.dependentTest(),
+                "N/A", "N/A", 0, null));
             return patchResults;
         }
 
@@ -210,7 +214,8 @@ public class CleanerFixer {
         List<PolluterData> polluterDataOrder = new ArrayList<PolluterData>();
         boolean prepend;
 
-        // If in a passing order and there are multiple potential setters, then prioritize the one in the same test class as dependent test
+        // If in a passing order and there are multiple potential setters,
+        // then prioritize the one in the same test class as dependent test
         if (minimized.expected().equals(Result.PASS)) {
             Set<PolluterData> pdWithSameTestClass = new HashSet<>();
             Set<PolluterData> pdWithDiffTestClass = new HashSet<>();
@@ -241,7 +246,10 @@ public class CleanerFixer {
                 // Consider if has a cleaner
                 if (!pd.cleanerData().cleaners().isEmpty()) {
                     pdWithCleaner.add(pd);
-                    String polluter = pd.deps().get(pd.deps().size() - 1);  // If we're going to modify polluter, do it with the last one
+
+                    // If we're going to modify polluter, do it with the last one
+                    String polluter = pd.deps().get(pd.deps().size() - 1);
+
                     // Would be best to have a cleaner group that is only one test
                     for (CleanerGroup cleanerGroup : pd.cleanerData().cleaners()) {
                         if (cleanerGroup.cleanerTests().size() == 1) {
@@ -306,7 +314,8 @@ public class CleanerFixer {
         if (!victimMethodOpt.isPresent()) {
             Logger.getGlobal().log(Level.SEVERE, "Could not find victim method " + victimTestName);
             Logger.getGlobal().log(Level.SEVERE, "Tried looking in: " + testFiles);
-            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.MISSING_METHOD, victimTestName, "N/A", "N/A", 0, null));
+            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.MISSING_METHOD, victimTestName,
+                "N/A", "N/A", 0, null));
             return patchResults;
         }
 
@@ -315,30 +324,29 @@ public class CleanerFixer {
             // Failing order has both the dependent test and the dependencies
             failingOrder = polluterData.withDeps(minimized.dependentTest());
 
-            polluterTestName = polluterData.deps().get(polluterData.deps().size() - 1); // If more than one polluter, want to potentially modify last one
+            // If more than one polluter, want to potentially modify last one
+            polluterTestName = polluterData.deps().get(polluterData.deps().size() - 1);
             polluterMethodOpt = JavaMethod.find(polluterTestName, testFiles, this.classpath);
 
             if (polluterData.cleanerData().cleaners().isEmpty()) {
                 Logger.getGlobal().log(Level.INFO, "Found polluters for " + victimTestName + " but no cleaners.");
-                /*TestPluginPlugin.info("Trying prior patches to see if now is fixed.");
-                if (applyPatchesAndRun(failingOrder, victimMethodOpt.get(), polluterMethodOpt.get())) {
-                    TestPluginPlugin.info("Dependent test " + victimTestName + " can pass with patches from before.");
-                } else {
-                    TestPluginPlugin.info("Prior patches do not allow " + victimTestName + " to pass.");
-                    writePatch(victimMethodOpt.get(), 0, null, 0, null, null, polluterMethodOpt.orElse(null), 0, "NO CLEANERS");
-                }*/
-                Path patch = writePatch(victimMethodOpt.get(), 0, null, 0, null, null, polluterMethodOpt.orElse(null), 0, "NO CLEANERS");
-                patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NO_CLEANER, victimTestName, polluterMethodOpt.isPresent() ? polluterMethodOpt.get().methodName() : "N/A", "N/A", 0, patch.toString()));
+                Path patch = writePatch(victimMethodOpt.get(), 0, null, 0, null, null, polluterMethodOpt.orElse(null),
+                    0, "NO CLEANERS");
+                patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NO_CLEANER, victimTestName,
+                    polluterMethodOpt.isPresent() ? polluterMethodOpt.get().methodName() : "N/A",
+                    "N/A", 0, patch.toString()));
                 return patchResults;
             }
 
             for (CleanerGroup cleanerGroup : polluterData.cleanerData().cleaners()) {
                 // Only handle cleaner groups that have one test each
                 if (cleanerGroup.cleanerTests().size() == 1) {
-                    cleanerTestNames.add(cleanerGroup.cleanerTests().get(0));   // TODO: Handle cleaner group with more than one test
+                    // TODO: Handle cleaner group with more than one test
+                    cleanerTestNames.add(cleanerGroup.cleanerTests().get(0));
                 }
             }
-            fullFailingOrder = minimized.expectedRun().testOrder(); // Also grab the full failing order from the expected run's test order
+            // Also grab the full failing order from the expected run's test order
+            fullFailingOrder = minimized.expectedRun().testOrder();
 
 
         } else {
@@ -346,7 +354,8 @@ public class CleanerFixer {
             // TODO: Handle group of setters with more than one test
             if (polluterData.deps().size() > 1) {
                 Logger.getGlobal().log(Level.SEVERE, "There is more than one setter test (currently unsupported)");
-                patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.UNSUPPORTED, victimTestName, "N/A", "N/A", 0, null));
+                patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.UNSUPPORTED, victimTestName,
+                    "N/A", "N/A", 0, null));
                 return patchResults;
             }
             polluterTestName = null;    // No polluter if minimized order is passing
@@ -362,14 +371,16 @@ public class CleanerFixer {
         if (polluterTestName != null && !polluterMethodOpt.isPresent()) {
             Logger.getGlobal().log(Level.SEVERE, "Could not find polluter method " + polluterTestName);
             Logger.getGlobal().log(Level.SEVERE, "Tried looking in: " + testFiles);
-            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.MISSING_METHOD, victimTestName, polluterTestName, "N/A", 0, null));
+            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.MISSING_METHOD, victimTestName,
+                polluterTestName, "N/A", 0, null));
             return patchResults;
         }
 
         // Give up if cannot find valid cleaner (single test that makes the order pass)
         if (cleanerTestNames.isEmpty()) {
             Logger.getGlobal().log(Level.SEVERE, "Could not get a valid cleaner for " + victimTestName);
-            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NO_CLEANER, victimTestName, polluterTestName, "N/A", 0, null));
+            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NO_CLEANER, victimTestName,
+                polluterTestName, "N/A", 0, null));
             return patchResults;
         }
 
@@ -377,8 +388,10 @@ public class CleanerFixer {
         Logger.getGlobal().log(Level.INFO, "Running victim test with polluter before adding code from cleaner.");
         if (testOrderPasses(failingOrder)) {
             Logger.getGlobal().log(Level.SEVERE, "Failing order doesn't fail.");
-            Path patch = writePatch(victimMethodOpt.get(), 0, null, 0, null, null, polluterMethodOpt.orElse(null), 0, "NOT FAILING ORDER");
-            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NOT_FAILING, victimTestName, polluterTestName, "N/A", 0, patch.toString()));
+            Path patch = writePatch(victimMethodOpt.get(), 0, null, 0, null, null, polluterMethodOpt.orElse(null), 0,
+                "NOT FAILING ORDER");
+            patchResults.add(new PatchResult(OperationTime.instantaneous(), FixStatus.NOT_FAILING, victimTestName,
+                polluterTestName, "N/A", 0, patch.toString()));
             return patchResults;
         }
 
@@ -395,14 +408,17 @@ public class CleanerFixer {
                 Logger.getGlobal().log(Level.SEVERE, "Tried looking in: " + testFiles);
                 continue;
             }
-            Logger.getGlobal().log(Level.INFO, "Applying code from " + cleanerMethodOpt.get().methodName() + " to make " + victimMethodOpt.get().methodName() + " pass.");
-            PatchResult patchResult = applyFix(failingOrder, fullFailingOrder, polluterMethodOpt.orElse(null), cleanerMethodOpt.get(), victimMethodOpt.get(), prepend);
+            Logger.getGlobal().log(Level.INFO, "Applying code from " + cleanerMethodOpt.get().methodName() + " to make "
+                + victimMethodOpt.get().methodName() + " pass.");
+            PatchResult patchResult = applyFix(failingOrder, fullFailingOrder, polluterMethodOpt.orElse(null),
+                cleanerMethodOpt.get(), victimMethodOpt.get(), prepend);
             patchResults.add(patchResult);
             // A successful patch means we do not need to try all the remaining cleaners for this ordering
             if (!foundFirst && (patchResult.status().ordinal() > FixStatus.FIX_INVALID.ordinal())) {
                 //return patchResults;
                 double elapsedSeconds = System.currentTimeMillis() / 1000.0 - startTime / 1000.0;
-                Logger.getGlobal().log(Level.INFO, "FIRST PATCH: Found first patch for dependent test " + victimMethodOpt.get().methodName() + " in " + elapsedSeconds + " seconds.");
+                Logger.getGlobal().log(Level.INFO, "FIRST PATCH: Found first patch for dependent test "
+                    + victimMethodOpt.get().methodName() + " in " + elapsedSeconds + " seconds.");
                 foundFirst = true;
             }
         }
@@ -419,7 +435,8 @@ public class CleanerFixer {
         Files.copy(path, javaFile.path(), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private NodeList<Statement> getCodeFromAnnotatedMethod(final String testClassName, final JavaFile javaFile, final String annotation) throws Exception {
+    private NodeList<Statement> getCodeFromAnnotatedMethod(final String testClassName, final JavaFile javaFile,
+            final String annotation) throws Exception {
         NodeList<Statement> stmts = NodeList.nodeList();
 
         // Determine super classes, to be used for later looking up helper methods
@@ -439,7 +456,8 @@ public class CleanerFixer {
                 break;
             }
         }
-        // In JUnit 3 mode, try to get statements in setUp/tearDown only if in local class; otherwise put in a call to method if in superclass
+        // In JUnit 3 mode, try to get statements in setUp/tearDown only if in local class;
+        // otherwise put in a call to method if in superclass
         if (isJUnit3) {
             // Check if the test class had defined a setUp/tearDown
             String methName = "";
@@ -464,7 +482,8 @@ public class CleanerFixer {
                         // Wrap the body inside a big try statement to suppress any exceptions
                         ClassOrInterfaceType exceptionType = new ClassOrInterfaceType().setName(new SimpleName("Throwable"));
                         CatchClause catchClause = new CatchClause(new Parameter(exceptionType, "ex"), new BlockStmt());
-                        stmts.add(new TryStmt(new BlockStmt(body.get().getStatements()), NodeList.nodeList(catchClause), new BlockStmt()));
+                        stmts.add(new TryStmt(new BlockStmt(body.get().getStatements()), NodeList.nodeList(catchClause),
+                            new BlockStmt()));
                     } else {
                         stmts.addAll(body.get().getStatements());
                     }
@@ -523,7 +542,8 @@ public class CleanerFixer {
                         // Wrap the body inside a big try statement to suppress any exceptions
                         ClassOrInterfaceType exceptionType = new ClassOrInterfaceType().setName(new SimpleName("Throwable"));
                         CatchClause catchClause = new CatchClause(new Parameter(exceptionType, "ex"), new BlockStmt());
-                        stmts.add(new TryStmt(new BlockStmt(body.get().getStatements()), NodeList.nodeList(catchClause), new BlockStmt()));
+                        stmts.add(new TryStmt(new BlockStmt(body.get().getStatements()), NodeList.nodeList(catchClause),
+                            new BlockStmt()));
                     } else {
                         stmts.addAll(body.get().getStatements());
                     }
@@ -539,7 +559,8 @@ public class CleanerFixer {
                         // Wrap the body inside a big try statement to suppress any exceptions
                         ClassOrInterfaceType exceptionType = new ClassOrInterfaceType().setName(new SimpleName("Throwable"));
                         CatchClause catchClause = new CatchClause(new Parameter(exceptionType, "ex"), new BlockStmt());
-                        stmts.add(new TryStmt(new BlockStmt(body.get().getStatements()), NodeList.nodeList(catchClause), new BlockStmt()));
+                        stmts.add(new TryStmt(new BlockStmt(body.get().getStatements()), NodeList.nodeList(catchClause),
+                            new BlockStmt()));
                     } else {
                         stmts.addAll(body.get().getStatements());
                     }
@@ -570,7 +591,9 @@ public class CleanerFixer {
                 Logger.getGlobal().log(Level.INFO, "Failing order no longer fails after patches.");
                 // If this is a new dependent test and the patches fix it, then save a file for it
                 // just to help indicate that the test has been fixed
-                writePatch(victimMethod, 0, null, 0, null, null, polluterMethod, 0, "PRIOR PATCH FIXED (DEPENDENT=" + patch.victimMethod().methodName() + ",CLEANER=" + patch.cleanerMethod().methodName() + ", MODIFIED=" + patch.methodToPatch().methodName() + ")");
+                writePatch(victimMethod, 0, null, 0, null, null, polluterMethod, 0, "PRIOR PATCH FIXED (DEPENDENT="
+                    + patch.victimMethod().methodName() + ",CLEANER=" + patch.cleanerMethod().methodName() + ", MODIFIED="
+                    + patch.methodToPatch().methodName() + ")");
                 return true;
             }
         }
@@ -613,14 +636,16 @@ public class CleanerFixer {
     private ExpressionStmt getHelperCallStmt(JavaMethod cleanerMethod, boolean newTestClass) {
         Expression objectCreation = null;
         if (newTestClass) {
-            objectCreation = new ObjectCreationExpr(null, new ClassOrInterfaceType(null, cleanerMethod.getClassName()), NodeList.nodeList());
+            objectCreation = new ObjectCreationExpr(null, new ClassOrInterfaceType(null, cleanerMethod.getClassName()),
+                NodeList.nodeList());
         }
         Expression helperCall = new MethodCallExpr(objectCreation, "cleanerHelper");
         ExpressionStmt helperCallStmt = new ExpressionStmt(helperCall);
         return helperCallStmt;
     }
 
-    private JavaMethod addHelperMethod(JavaMethod cleanerMethod, JavaMethod methodToModify, boolean newTestClass, boolean prepend) throws Exception {
+    private JavaMethod addHelperMethod(JavaMethod cleanerMethod, JavaMethod methodToModify, boolean newTestClass,
+            boolean prepend) throws Exception {
         // The modification is to modify the cleaner class to add a helper, then have the other method call the helper
         ExpressionStmt helperCallStmt = getHelperCallStmt(cleanerMethod, newTestClass);
         if (prepend) {
@@ -631,24 +656,24 @@ public class CleanerFixer {
         methodToModify.javaFile().writeAndReloadCompilationUnit();
 
         String helperName = cleanerMethod.getClassName() + ".cleanerHelper";
-        cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
+        cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload
         cleanerMethod.javaFile().addMethod(helperName, "org.junit.Test");
         cleanerMethod.javaFile().writeAndReloadCompilationUnit();
         JavaMethod helperMethod = JavaMethod.find(helperName, this.testSources, this.classpath).get();
         helperMethod.javaFile().writeAndReloadCompilationUnit();
 
-        methodToModify = JavaMethod.find(methodToModify.methodName(), this.testSources, this.classpath).get();   // Reload, just in case
+        methodToModify = JavaMethod.find(methodToModify.methodName(), this.testSources, this.classpath).get();   // Reload
 
         return helperMethod;
     }
 
-    private FixStatus checkCleanerRemoval(List<String> failingOrder, JavaMethod cleanerMethod, NodeList<Statement> cleanerStmts) throws Exception {
+    private FixStatus checkCleanerRemoval(List<String> failingOrder, JavaMethod cleanerMethod,
+            NodeList<Statement> cleanerStmts) throws Exception {
         try {
             // Try to modify the cleanerMethod to remove the cleaner statements
             NodeList<Statement> allStatements = cleanerMethod.body().getStatements();
             NodeList<Statement> strippedStatements = NodeList.nodeList();
             NodeList<Statement> otherCleanerStmts = NodeList.nodeList(cleanerStmts);
-            int j = 0;
             for (int i = 0; i < allStatements.size(); i++) {
                 // Do not include the statement if we see it from the cleaner statements
                 if (otherCleanerStmts.contains(allStatements.get(i))) {
@@ -658,7 +683,8 @@ public class CleanerFixer {
                 }
             }
 
-            // If the stripped statements is still the same as all statements, then the cleaner statements must all be in @Before/After
+            // If the stripped statements is still the same as all statements,
+            // then the cleaner statements must all be in @Before/After
             if (strippedStatements.equals(allStatements)) {
                 Logger.getGlobal().log(Level.INFO, "All cleaner statements must be in setup/teardown.");
                 return FixStatus.FIX_INLINE_SETUPTEARDOWN;  // Indicating statements were in setup/teardown
@@ -666,25 +692,19 @@ public class CleanerFixer {
 
             // Set the cleaner method body to be the stripped version
             restore(cleanerMethod.javaFile());
-            cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
+            cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();
             cleanerMethod.method().setBody(new BlockStmt(strippedStatements));
             cleanerMethod.javaFile().writeAndReloadCompilationUnit();
             try {
                 this.buildCommands.install();
             } catch (Exception ex) {
                 Logger.getGlobal().log(Level.FINE, "Error building the code after stripping statements, does not compile");
-                //// Restore the state
-                //restore(cleanerMethod.javaFile());
-                //cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
                 return FixStatus.NOD;   // Indicating did not work (TODO: Make it more clear)
             }
             // First try running in isolation
             List<String> isolationOrder = Collections.singletonList(cleanerMethod.methodName());
             if (!testOrderPasses(isolationOrder)) {
                 Logger.getGlobal().log(Level.INFO, "Running cleaner by itself after removing statements does not pass.");
-                //// Restore the state
-                //restore(cleanerMethod.javaFile());
-                //cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
                 return FixStatus.NOD;   // Indicating did not work (TODO: Make it more clear)
             }
             // Then try running with the failing order, replacing the last test with this one
@@ -693,20 +713,14 @@ public class CleanerFixer {
             newFailingOrder.add(cleanerMethod.methodName());
             if (testOrderPasses(newFailingOrder)) {
                 Logger.getGlobal().log(Level.INFO, "Running cleaner in failing order after polluter still passes.");
-                //// Restore the state
-                //restore(cleanerMethod.javaFile());
-                //cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
                 return FixStatus.NOD;   // Indicating did not work (TODO: Make it more clear)
             }
 
-            //// Restore the state
-            //restore(cleanerMethod.javaFile());
-            //cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
             return FixStatus.FIX_INLINE_CANREMOVE;  // Indicating statements can be removed
         } finally {
             // Restore the state
             restore(cleanerMethod.javaFile());
-            cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();    // Reload, just in case
+            cleanerMethod = JavaMethod.find(cleanerMethod.methodName(), this.testSources, this.classpath).get();
             this.buildCommands.install();
         }
     }
@@ -730,24 +744,30 @@ public class CleanerFixer {
         boolean isSameTestClass = sameTestClass(cleanerMethod.methodName(), methodToModify.methodName());
 
         final NodeList<Statement> cleanerStmts = NodeList.nodeList();
-        // Note: consider both standard imported version (e.g., @Before) and weird non-imported version (e.g., @org.junit.Before)
+        // Note: consider both standard imported version (e.g., @Before)
+        //     and weird non-imported version (e.g., @org.junit.Before)
         // Only include BeforeClass and Before if in separate classes (for both victim and polluter(s))
         if (!isSameTestClass) {
-            cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(), "@org.junit.BeforeClass")));
+            cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(),
+                "@org.junit.BeforeClass")));
         }
-        cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(), "@org.junit.Before")));
+        cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(),
+            "@org.junit.Before")));
         if (!expected) {
             cleanerStmts.addAll(cleanerMethod.body().getStatements());
         } else {
             // Wrap the body inside a big try statement to suppress any exceptions
             ClassOrInterfaceType exceptionType = new ClassOrInterfaceType().setName(new SimpleName("Throwable"));
             CatchClause catchClause = new CatchClause(new Parameter(exceptionType, "ex"), new BlockStmt());
-            cleanerStmts.add(new TryStmt(new BlockStmt(cleanerMethod.body().getStatements()), NodeList.nodeList(catchClause), new BlockStmt()));
+            cleanerStmts.add(new TryStmt(new BlockStmt(cleanerMethod.body().getStatements()), NodeList.nodeList(catchClause),
+                new BlockStmt()));
         }
         // Only include AfterClass and After if in separate classes (for both victim and polluter(s))
-        cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(), "@org.junit.After")));
+        cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(),
+            "@org.junit.After")));
         if (!isSameTestClass) {
-            cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(), "@org.junit.AfterClass")));
+            cleanerStmts.add(new BlockStmt(getCodeFromAnnotatedMethod(cleanerMethod.getClassName(), cleanerMethod.javaFile(),
+                "@org.junit.AfterClass")));
         }
 
         return cleanerStmts;
@@ -793,7 +813,8 @@ public class CleanerFixer {
 
                 // Check if applying these cleaners on the method suffices
                 Logger.getGlobal().log(Level.INFO, "Applying code from cleaner and recompiling.");
-                CleanerFixerDeltaDebugger debugger = new CleanerFixerDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder, prepend);
+                CleanerFixerDeltaDebugger debugger = new CleanerFixerDeltaDebugger(this.buildCommands, this.runner,
+                    helperMethod, failingOrder, prepend);
                 if (debugger.checkValid(cleanerStmts, false)) {
                     returnValues[0] = methodToModify;
                     //returnValues[1] = auxiliaryMethodToModify;
@@ -803,7 +824,8 @@ public class CleanerFixer {
                     returnValues[4] = prepend;
                     return returnValues;
                 }
-                Logger.getGlobal().log(Level.SEVERE, "Applying all of cleaner " + cleanerMethod.methodName() + " to " + methodToModify.methodName() + " does not fix!");
+                Logger.getGlobal().log(Level.SEVERE, "Applying all of cleaner " + cleanerMethod.methodName() + " to "
+                    + methodToModify.methodName() + " does not fix!");
                 restore(methodToModify.javaFile());
                 restore(helperMethod.javaFile());
                 this.buildCommands.install();
@@ -840,8 +862,10 @@ public class CleanerFixer {
             restore(cleanerMethod.javaFile());
             this.buildCommands.install();
             NodeList<Statement> initialCleanerStmts = makeCleanerStatements(cleanerMethod, victimMethod);
-            Path patch = writePatch(victimMethod, 0, new BlockStmt(initialCleanerStmts), statementsSize(initialCleanerStmts), null, cleanerMethod, polluterMethod, 0, "CLEANER DOES NOT FIX");
-            return new PatchResult(OperationTime.instantaneous(), FixStatus.CLEANER_FAIL, victimMethod.methodName(), "N/A", cleanerMethod.methodName(), 0, patch.toString());
+            Path patch = writePatch(victimMethod, 0, new BlockStmt(initialCleanerStmts), statementsSize(initialCleanerStmts),
+                null, cleanerMethod, polluterMethod, 0, "CLEANER DOES NOT FIX");
+            return new PatchResult(OperationTime.instantaneous(), FixStatus.CLEANER_FAIL, victimMethod.methodName(), "N/A",
+                cleanerMethod.methodName(), 0, patch.toString());
         }
         final JavaMethod auxiliaryMethodToModify = (JavaMethod)startingValues[1];
         final JavaMethod finalHelperMethod = (JavaMethod)startingValues[2];
@@ -849,10 +873,12 @@ public class CleanerFixer {
         final boolean finalPrepend = ((Boolean)startingValues[4]).booleanValue();
 
         // Minimizing cleaner code, which includes setup and teardown
-        Logger.getGlobal().log(Level.INFO, "Going to modify " + methodToModify.methodName() + " to make failing order pass.");
+        Logger.getGlobal().log(Level.INFO, "Going to modify " + methodToModify.methodName()
+            + " to make failing order pass.");
         final List<OperationTime> elapsedTime = new ArrayList<>();
         int originalsize = statementsSize(cleanerStmts);
-        final CleanerFixerDeltaDebugger finalDebugger = new CleanerFixerDeltaDebugger(this.buildCommands, this.runner, finalHelperMethod, failingOrder, finalPrepend);
+        final CleanerFixerDeltaDebugger finalDebugger = new CleanerFixerDeltaDebugger(this.buildCommands, this.runner,
+            finalHelperMethod, failingOrder, finalPrepend);
         final NodeList<Statement> minimalCleanerStmts = OperationTime.runOperation(() -> {
             // Cleaner is good, so now we can start delta debugging
             NodeList<Statement> interCleanerStmts = NodeList.nodeList(cleanerStmts);
@@ -863,7 +889,8 @@ public class CleanerFixer {
                 interCleanerStmts.addAll(finalDebugger.deltaDebug(currentInterCleanerStmts, 2));
 
                 // Debug each statement further if they contain blocks, so debug within statements in that block(s)
-                interCleanerStmts = debugFurther(interCleanerStmts, finalHelperMethod, failingOrder, finalPrepend, interCleanerStmts);
+                interCleanerStmts = debugFurther(interCleanerStmts, finalHelperMethod, failingOrder, finalPrepend,
+                    interCleanerStmts);
 
                 // "Unravel" any blocks and potentially debug some more
                 NodeList<Statement> unraveledCleanerStmts = NodeList.nodeList();
@@ -897,13 +924,13 @@ public class CleanerFixer {
                 interCleanerStmts = unraveledCleanerStmts;
             // Continually loop and try to minimize more, until reach fixpoint
             // Can end up minimizing more after unraveling blocks and such, revealing more opportunities to minimize
-            } while(!interCleanerStmts.equals(currentInterCleanerStmts));
+            } while (!interCleanerStmts.equals(currentInterCleanerStmts));
 
             return interCleanerStmts;
         }, (finalCleanerStmts, time) -> {
-            elapsedTime.add(time);
-            return finalCleanerStmts;
-        });
+                elapsedTime.add(time);
+                return finalCleanerStmts;
+            });
 
         int iterations = finalDebugger.getIterations();
 
@@ -915,17 +942,22 @@ public class CleanerFixer {
             restore(methodToModify.javaFile());
             restore(finalHelperMethod.javaFile());
             this.buildCommands.install();
-            Path patch = writePatch(victimMethod, 0, patchedBlock, originalsize, methodToModify, cleanerMethod, polluterMethod, elapsedTime.get(0).elapsedSeconds(), "BROKEN MINIMAL");
-            return new PatchResult(elapsedTime.get(0), FixStatus.FIX_INVALID, victimMethod.methodName(), polluterMethod != null ? polluterMethod.methodName() : "N/A", cleanerMethod.methodName(), iterations, patch.toString());
+            Path patch = writePatch(victimMethod, 0, patchedBlock, originalsize, methodToModify, cleanerMethod,
+                polluterMethod, elapsedTime.get(0).elapsedSeconds(), "BROKEN MINIMAL");
+            return new PatchResult(elapsedTime.get(0), FixStatus.FIX_INVALID, victimMethod.methodName(),
+                polluterMethod != null ? polluterMethod.methodName() : "N/A", cleanerMethod.methodName(),
+                iterations, patch.toString());
         }
 
         // Try to inline these statements into the method
         restore(methodToModify.javaFile());
-        methodToModify = JavaMethod.find(methodToModify.methodName(), this.testSources, this.classpath).get();   // Reload, just in case
-        CleanerFixerDeltaDebugger debugger = new CleanerFixerDeltaDebugger(this.buildCommands, this.runner, methodToModify, failingOrder, finalPrepend);
+        methodToModify = JavaMethod.find(methodToModify.methodName(), this.testSources, this.classpath).get();   // Reload
+        CleanerFixerDeltaDebugger debugger = new CleanerFixerDeltaDebugger(this.buildCommands, this.runner, methodToModify,
+            failingOrder, finalPrepend);
         boolean inlineSuccessful = debugger.checkValid(minimalCleanerStmts, false);
         if (!inlineSuccessful) {
-            Logger.getGlobal().log(Level.INFO, "Inlining patch into " + methodToModify.methodName() + " not good enough to run.");
+            Logger.getGlobal().log(Level.INFO, "Inlining patch into " + methodToModify.methodName()
+                + " not good enough to run.");
         }
 
         // Do the check of removing cleaner statements from cleaner itself and see if the cleaner now starts failing
@@ -966,12 +998,15 @@ public class CleanerFixer {
         } else {
             startingLine = methodToModify.endLine() - 1;    // Shift one, patch starts before end of method
         }
-        Path patchFile = writePatch(victimMethod, startingLine, patchedBlock, originalsize, methodToModify, cleanerMethod, polluterMethod, elapsedTime.get(0).elapsedSeconds(), status);
+        Path patchFile = writePatch(victimMethod, startingLine, patchedBlock, originalsize, methodToModify, cleanerMethod,
+            polluterMethod, elapsedTime.get(0).elapsedSeconds(), status);
 
-        patches.add(new Patch(methodToModify, patchedBlock, finalPrepend, cleanerMethod, victimMethod, this.testSources, this.classpath, inlineSuccessful));
+        patches.add(new Patch(methodToModify, patchedBlock, finalPrepend, cleanerMethod, victimMethod, this.testSources,
+            this.classpath, inlineSuccessful));
 
         // Report successful patching, report where the patch is
-        Logger.getGlobal().log(Level.INFO, "Patching successful, patch file for " + victimMethod.methodName() + " found at: " + patchFile);
+        Logger.getGlobal().log(Level.INFO, "Patching successful, patch file for " + victimMethod.methodName()
+            + " found at: " + patchFile);
 
         // Restore the original file
         restore(methodToModify.javaFile());
@@ -979,12 +1014,14 @@ public class CleanerFixer {
         // Final compile to get state to right place
         this.buildCommands.install();
 
-        return new PatchResult(elapsedTime.get(0), fixStatus, victimMethod.methodName(), polluterMethod != null ? polluterMethod.methodName() : "N/A", cleanerMethod.methodName(), iterations, patchFile.toString());
+        return new PatchResult(elapsedTime.get(0), fixStatus, victimMethod.methodName(),
+            polluterMethod != null ? polluterMethod.methodName() : "N/A", cleanerMethod.methodName(), iterations,
+            patchFile.toString());
     }
 
     // Debug list of statements even further, if any statement contains blocks
     private NodeList<Statement> debugFurther(NodeList<Statement> stmts, JavaMethod helperMethod,
-                                             List<String> failingOrder, boolean prepend, NodeList<Statement> stmtsToRun) {
+            List<String> failingOrder, boolean prepend, NodeList<Statement> stmtsToRun) {
         CleanerFixerBlockDeltaDebugger debugger;
 
         // Iterate through all statements and try to debug further if contain block
@@ -994,7 +1031,8 @@ public class CleanerFixer {
             if (stmt instanceof BlockStmt) {
                 BlockStmt blockStmt = (BlockStmt)stmt;
 
-                debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder, prepend, blockStmt, stmtsToRun);
+                debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder,
+                    prepend, blockStmt, stmtsToRun);
                 NodeList<Statement> minimalBlockStmts = NodeList.nodeList();
                 minimalBlockStmts.addAll(debugger.deltaDebug(blockStmt.getStatements(), 2));
                 blockStmt.setStatements(minimalBlockStmts);
@@ -1006,7 +1044,8 @@ public class CleanerFixer {
                 TryStmt tryStmt = (TryStmt)stmt;
 
                 // Do the try block part
-                debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder, prepend, tryStmt.getTryBlock(), stmtsToRun);
+                debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder,
+                    prepend, tryStmt.getTryBlock(), stmtsToRun);
                 NodeList<Statement> minimalBlockStmts = NodeList.nodeList();
                 minimalBlockStmts.addAll(debugger.deltaDebug(tryStmt.getTryBlock().getStatements(), 2));
                 tryStmt.setTryBlock(new BlockStmt(minimalBlockStmts));
@@ -1017,7 +1056,8 @@ public class CleanerFixer {
 
                 // If has finally block, do that
                 if (tryStmt.getFinallyBlock().isPresent()) {
-                    debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder, prepend, tryStmt.getFinallyBlock().get(), stmtsToRun);
+                    debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod,
+                        failingOrder, prepend, tryStmt.getFinallyBlock().get(), stmtsToRun);
                     minimalBlockStmts = NodeList.nodeList();
                     minimalBlockStmts.addAll(debugger.deltaDebug(tryStmt.getFinallyBlock().get().getStatements(), 2));
                     tryStmt.setFinallyBlock(new BlockStmt(minimalBlockStmts));
@@ -1043,7 +1083,8 @@ public class CleanerFixer {
                     stmts.remove(i + 1);
 
                     // Use debugger to just check if things work with this block instead of try
-                    debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod, failingOrder, prepend, blockStmt, stmtsToRun);
+                    debugger = new CleanerFixerBlockDeltaDebugger(this.buildCommands, this.runner, helperMethod,
+                        failingOrder, prepend, blockStmt, stmtsToRun);
                     if (!debugger.checkValid(blockStmt.getStatements())) {
                         // If invalid, we should set the try statement back in
                         stmts.add(i, tryStmt);
@@ -1059,9 +1100,8 @@ public class CleanerFixer {
     // Helper method to create a patch file adding in the passed in block
     // Includes a bunch of extra information that may be useful
     private Path writePatch(JavaMethod victimMethod, int begin, BlockStmt blockStmt, int originalsize,
-                            JavaMethod modifiedMethod, JavaMethod cleanerMethod,
-                            JavaMethod polluterMethod,
-                            double elapsedTime, String status) throws IOException {
+            JavaMethod modifiedMethod, JavaMethod cleanerMethod, JavaMethod polluterMethod,
+            double elapsedTime, String status) throws IOException {
         List<String> patchLines = new ArrayList<>();
         patchLines.add("STATUS: " + status);
         patchLines.add("MODIFIED: " + (modifiedMethod == null ? "N/A" : modifiedMethod.methodName()));
@@ -1071,19 +1111,21 @@ public class CleanerFixer {
         patchLines.add("POLLUTER: " + (polluterMethod == null ? "N/A" : polluterMethod.methodName()));
         patchLines.add("POLLUTER FILE: " + (polluterMethod == null ? "N/A" : polluterMethod.javaFile().path()));
         patchLines.add("ORIGINAL CLEANER SIZE: " + (originalsize == 0 ? "N/A" : String.valueOf(originalsize)));
-        patchLines.add("NEW CLEANER SIZE: " + (blockStmt != null ? String.valueOf(statementsSize(blockStmt.getStatements())) : "N/A"));
+        patchLines.add("NEW CLEANER SIZE: " + (blockStmt != null ? String.valueOf(statementsSize(blockStmt.getStatements()))
+            : "N/A"));
         patchLines.add("ELAPSED TIME: " + elapsedTime);
 
         // If there is a block to add (where it might not be if in error state and need to just output empty)
         if (blockStmt != null) {
             patchLines.add(PATCH_LINE_SEP);
             String[] lines = blockStmt.toString().split("\n");
-            patchLines.add("@@ -" + begin +",0 +" + begin + "," + lines.length + " @@");
+            patchLines.add("@@ -" + begin + ",0 +" + begin + "," + lines.length + " @@");
             for (String line : lines) {
                 patchLines.add("+ " + line);
             }
         }
-        Path patchFile = PathManager.fixerPath().resolve(victimMethod.methodName() + ".patch");  // The patch file is based on the dependent test
+        // The patch file is based on the dependent test
+        Path patchFile = PathManager.fixerPath().resolve(victimMethod.methodName() + ".patch");
         Files.createDirectories(patchFile.getParent());
 
         // If the file exists, then need to give it a new name

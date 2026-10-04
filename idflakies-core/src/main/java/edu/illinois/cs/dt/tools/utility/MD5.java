@@ -19,7 +19,9 @@ public class MD5 {
             }
 
             return sb.toString();
-        } catch (NoSuchAlgorithmException ignored) {}
+        } catch (NoSuchAlgorithmException nsae) {
+            nsae.printStackTrace();
+        }
         return "";
     }
 
